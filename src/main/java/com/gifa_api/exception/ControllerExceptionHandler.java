@@ -14,6 +14,6 @@ public class ControllerExceptionHandler {
                 .message(e.getMessage())
                 .status(HttpStatus.INTERNAL_SERVER_ERROR.value())
                 .build();
-        return ResponseEntity.status(apiError.getStatus()).body(apiError);
+       return ResponseEntity.status(apiError.getStatus()).body(apiError);
     }
 }
