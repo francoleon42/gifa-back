@@ -41,10 +41,11 @@ jobs:
           key: ${{ secrets.EC2_SSH_KEY }}
           port: 22
           script: |
+            aws ecr get-login-password --region ${{ secrets.AWS_REGION }} | docker login --username AWS --password-stdin ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.${{ secrets.AWS_REGION }}.amazonaws.com
             docker pull 778425189746.dkr.ecr.us-east-1.amazonaws.com/hola-mundo-repo:back_latest
-            docker stop my-running-container || true
-            docker rm my-running-container || true
-            docker run -d --name my-running-container -p 8080:8080 778425189746.dkr.ecr.us-east-1.amazonaws.com/hola-mundo-repo:back_latest
+            docker stop JavaBackend || true
+            docker rm JavaBackend || true
+            docker run -d --name JavaBackend -p 8080:8080 778425189746.dkr.ecr.us-east-1.amazonaws.com/hola-mundo-repo:back_latest
 
       - name: executing remote ssh commands using password
         uses: appleboy/ssh-action@v1.0.3
@@ -54,8 +55,9 @@ jobs:
           key: ${{ secrets.EC2_SSH_KEY }}
           port: 22
           script: |
+            aws ecr get-login-password --region ${{ secrets.AWS_REGION }} | docker login --username AWS --password-stdin ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.${{ secrets.AWS_REGION }}.amazonaws.com
             docker pull 778425189746.dkr.ecr.us-east-1.amazonaws.com/hola-mundo-repo:back_latest
-            docker stop my-running-container || true
-            docker rm my-running-container || true
-            docker run -d --name my-running-container -p 8080:8080 778425189746.dkr.ecr.us-east-1.amazonaws.com/hola-mundo-repo:back_latest
+            docker stop JavaBackend || true
+            docker rm JavaBackend || true
+            docker run -d --name JavaBackend -p 8080:8080 778425189746.dkr.ecr.us-east-1.amazonaws.com/hola-mundo-repo:back_latest
 
