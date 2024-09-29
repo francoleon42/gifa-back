@@ -9,13 +9,14 @@ import java.time.LocalDate;
 @Getter
 @Setter
 @Entity
+@Table(name = "parte_de_vehiculo")
 public class ParteDeVehiculo {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
     private Integer id;
 
-    @Column(name = "fechaVencimiento")
+    @Column(name = "fecha_vencimiento")
     private LocalDate fechaVencimiento;
 
     @ManyToOne(fetch = FetchType.LAZY)
@@ -23,7 +24,7 @@ public class ParteDeVehiculo {
     private Vehiculo vehiculo;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "parte_id")
-    private Parte parte;
+    @JoinColumn(name = "item_de_inventario_id")
+    private ItemDeInventario itemDeInventario;
 
 }

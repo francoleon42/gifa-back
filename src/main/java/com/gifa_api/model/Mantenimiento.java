@@ -4,37 +4,39 @@ import com.gifa_api.enums.EstadoMantenimiento;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
-import org.antlr.v4.runtime.misc.NotNull;
 
 import java.time.LocalDate;
 
 @Getter
 @Setter
 @Entity
+@Table(name = "mantenimiento")
 public class Mantenimiento {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
     private Integer id;
 
-    @Column(name = "fechaInicio")
+    @Column(name = "fecha_inicio")
     private LocalDate fechaInicio;
 
-    @Column(name = "fechaFinalizacion")
+    @Column(name = "fecha_finalizacion")
     private LocalDate fechaFinalizacion;
 
     @Column(name = "asunto")
     private String asunto;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "repuestoUtilizado")
-    private Parte repuestoUtilizado;
+    @JoinColumn(name = "repuesto_utilizado")
+    private ItemDeInventario repuestoUtilizado;
 
-    @NotNull
     @Enumerated(EnumType.STRING)
-    @Column(name = "estadoMantenimiento", nullable = false)
+    @Column(name = "estado_mantenimiento", nullable = false)
     private EstadoMantenimiento estadoMantenimiento;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "operador_id")
+    private Usuario operador;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "vehiculo_id")
@@ -43,9 +45,5 @@ public class Mantenimiento {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "ubicacion_id")
     private Ubicacion ubicacion;
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "operador_id")
-    private Usuario operador;
 
 }

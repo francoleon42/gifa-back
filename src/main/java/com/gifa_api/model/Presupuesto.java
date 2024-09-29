@@ -7,19 +7,18 @@ import lombok.Setter;
 @Getter
 @Setter
 @Entity
-@Table(name = "proveedor_de_parte")
-public class ProveedorDeParte {
+@Table(name = "presupuesto")
+public class Presupuesto {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
     private Integer id;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "item_de_inventario_id")
-    private ItemDeInventario itemDeInventario;
+    @Column(name = "monto")
+    private Float monto;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "proveedor_id")
-    private Proveedor proveedor;
+    @JoinColumn(name = "gerente_id")
+    private Usuario gerente;
 
 }

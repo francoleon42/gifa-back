@@ -7,13 +7,14 @@ import lombok.Setter;
 @Getter
 @Setter
 @Entity
+@Table(name = "tarjeta")
 public class Tarjeta {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
     private Integer id;
 
-    @Column(name = "CVU", length = 100)
+    @Column(name = "cvu", length = 100)
     private String cvu;
 
     @Column(name = "monto")

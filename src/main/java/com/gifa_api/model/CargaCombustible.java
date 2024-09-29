@@ -9,17 +9,24 @@ import java.time.LocalDate;
 @Getter
 @Setter
 @Entity
+@Table(name = "carga_combustible")
 public class CargaCombustible {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
     private Integer id;
 
-    @Column(name = "litros")
-    private Integer litros;
+    @Column(name = "cantidad_litros")
+    private Integer cantidadLitros;
 
-    @Column(name = "fecha")
-    private LocalDate fecha;
+    @Column(name = "fecha_hora")
+    private LocalDate fechaHora;
+
+    @Column(name = "precio_por_litro")
+    private Float precioPorLitro;
+
+    @Column(name = "costo_total")
+    private Float costoTotal;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "vehiculo_id")

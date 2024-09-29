@@ -4,12 +4,10 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
-import java.util.LinkedHashSet;
-import java.util.Set;
-
 @Getter
 @Setter
 @Entity
+@Table(name = "parte")
 public class Parte {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -24,17 +22,5 @@ public class Parte {
 
     @Column(name = "stock")
     private Integer stock;
-
-    @OneToMany(mappedBy = "repuestoUtilizado")
-    private Set<Mantenimiento> mantenimientos = new LinkedHashSet<>();
-
-    @OneToMany(mappedBy = "parte")
-    private Set<ParteDeVehiculo> parteDeVehiculos = new LinkedHashSet<>();
-
-    @OneToMany(mappedBy = "parte")
-    private Set<Pedido> pedidos = new LinkedHashSet<>();
-
-    @OneToMany(mappedBy = "parte")
-    private Set<ProveedorDeParte> proveedorDePartes = new LinkedHashSet<>();
 
 }
