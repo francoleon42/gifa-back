@@ -13,7 +13,6 @@ import lombok.NoArgsConstructor;
 public class RegistarVehiculoDTO {
     private Integer id;
     private String patente;
-    private String chasis;
     private Integer antiguedad;
     private Integer kilometraje;
     private Integer litrosDeTanque;

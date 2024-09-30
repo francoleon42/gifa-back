@@ -1,16 +1,18 @@
 package com.gifa_api.model;
 
 import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 import java.util.LinkedHashSet;
 import java.util.Set;
 
+@Builder
 @Getter
 @Setter
 @Entity
 @Table(name = "item_de_inventario")
+@NoArgsConstructor
+@AllArgsConstructor
 public class ItemDeInventario {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -37,5 +39,9 @@ public class ItemDeInventario {
 
     @OneToMany(mappedBy = "itemDeInventario")
     private Set<ProveedorDeParte> proveedorDePartes = new LinkedHashSet<>();
+
+    public void desminuirStock() {
+        this.stock -= 1;
+    }
 
 }

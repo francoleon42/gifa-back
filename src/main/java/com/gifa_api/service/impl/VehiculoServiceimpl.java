@@ -1,4 +1,4 @@
-package com.gifa_api.service;
+package com.gifa_api.service.impl;
 
 import com.gifa_api.dto.RegistarVehiculoDTO;
 import com.gifa_api.enums.EstadoDeHabilitacion;
@@ -7,6 +7,7 @@ import com.gifa_api.model.Tarjeta;
 import com.gifa_api.model.Vehiculo;
 import com.gifa_api.repository.ChoferRepository;
 import com.gifa_api.repository.VehiculoRepository;
+import com.gifa_api.service.IVehiculoService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -29,7 +30,6 @@ public class VehiculoServiceimpl implements IVehiculoService {
         Vehiculo vehiculo = Vehiculo
                 .builder()
                 .patente(vehiculoDTO.getPatente())
-                .chasis(vehiculoDTO.getChasis())
                 .antiguedad(vehiculoDTO.getAntiguedad())
                 .kilometraje(vehiculoDTO.getKilometraje())
                 .litrosDeTanque(0)

@@ -24,9 +24,6 @@ public class Vehiculo {
     @Column(name = "patente", nullable = false, length = 10)
     private String patente;
 
-    @Column(name = "chasis", nullable = false, length = 50)
-    private String chasis;
-
     @Column(name = "antiguedad")
     private Integer antiguedad;
 
