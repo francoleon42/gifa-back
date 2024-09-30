@@ -3,16 +3,18 @@ package com.gifa_api.model;
 import com.gifa_api.enums.EstadoDeHabilitacion;
 import com.gifa_api.enums.EstadoVehiculo;
 import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 import java.util.LinkedHashSet;
 import java.util.Set;
 
+@Builder
 @Getter
 @Setter
 @Entity
 @Table(name = "vehiculo")
+@NoArgsConstructor
+@AllArgsConstructor
 public class Vehiculo {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -43,13 +45,10 @@ public class Vehiculo {
 
     @Enumerated(EnumType.STRING)
     @Column(name = "habilitado", nullable = false)
-    private EstadoDeHabilitacion habilitado;
+    private EstadoDeHabilitacion estadoDeHabilitacion;
 
     @Column(name = "qr")
     private byte[] qr;
-
-    @Column(name = "numero_tarjeta", length = 50)
-    private String numeroTarjeta;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "chofer_id")
@@ -57,9 +56,6 @@ public class Vehiculo {
 
     @OneToMany(mappedBy = "vehiculo")
     private Set<CargaCombustible> cargaCombustibles = new LinkedHashSet<>();
-
-    @OneToMany(mappedBy = "vehiculo")
-    private Set<GpsDatum> gpsData = new LinkedHashSet<>();
 
     @OneToMany(mappedBy = "vehiculo")
     private Set<KilometrajeVehiculo> kilometrajeVehiculos = new LinkedHashSet<>();
@@ -70,7 +66,12 @@ public class Vehiculo {
     @OneToMany(mappedBy = "vehiculo")
     private Set<ParteDeVehiculo> parteDeVehiculos = new LinkedHashSet<>();
 
+
     @OneToMany(mappedBy = "vehiculo")
-    private Set<Tarjeta> tarjetas = new LinkedHashSet<>();
+    private Set<GpsDatum> gpsData = new LinkedHashSet<>();
+
+    @OneToOne(mappedBy = "vehiculo")
+    private Tarjeta tarjeta;
+
 
 }
