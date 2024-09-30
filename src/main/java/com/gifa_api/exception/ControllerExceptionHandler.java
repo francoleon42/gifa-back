@@ -16,4 +16,14 @@ public class ControllerExceptionHandler {
                 .build();
        return ResponseEntity.status(apiError.getStatus()).body(apiError);
     }
+
+    @ExceptionHandler(RegisterException.class)
+    protected ResponseEntity<ApiError> handleUnknownException(RegisterException e){
+        ApiError apiError = ApiError.builder()
+                .error("bad_request")
+                .message(e.getMessage())
+                .status(HttpStatus.BAD_REQUEST.value())
+                .build();
+        return ResponseEntity.status(apiError.getStatus()).body(apiError);
+    }
 }

@@ -2,17 +2,24 @@ package com.gifa_api.model;
 
 import com.gifa_api.enums.Rol;
 import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 
+import java.util.Collection;
 import java.util.LinkedHashSet;
+import java.util.List;
 import java.util.Set;
 
+@Builder
 @Getter
 @Setter
 @Entity
 @Table(name = "usuario")
-public class Usuario {
+@NoArgsConstructor
+@AllArgsConstructor
+public class Usuario implements UserDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
@@ -34,4 +41,38 @@ public class Usuario {
     @OneToMany(mappedBy = "gerente")
     private Set<Presupuesto> presupuestos = new LinkedHashSet<>();
 
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return List.of(new SimpleGrantedAuthority("ROL_" + rol.name()));
+    }
+
+    @Override
+    public String getPassword() {
+        return this.contrasena;
+    }
+
+    @Override
+    public String getUsername() {
+        return this.usuario;
+    }
+
+    @Override
+    public boolean isAccountNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isAccountNonLocked() {
+        return true;
+    }
+
+    @Override
+    public boolean isCredentialsNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isEnabled() {
+        return true;
+    }
 }
