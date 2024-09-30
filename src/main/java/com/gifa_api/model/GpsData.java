@@ -5,13 +5,12 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.time.Instant;
-import java.time.LocalDateTime;
 
 @Getter
 @Setter
 @Entity
 @Table(name = "gps_data")
-public class GpsDatum {
+public class GpsData {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
@@ -24,7 +23,7 @@ public class GpsDatum {
     private Float longitud;
 
     @Column(name = "fecha_hora")
-    private LocalDateTime fechaHora;
+    private Instant fechaHora;
 
     @Column(name = "distancia_desde_ultima_posicion")
     private Float distanciaDesdeUltimaPosicion;

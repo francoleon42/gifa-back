@@ -58,6 +58,9 @@ public class Vehiculo {
     private Set<CargaCombustible> cargaCombustibles = new LinkedHashSet<>();
 
     @OneToMany(mappedBy = "vehiculo")
+    private Set<GpsData> gpsData = new LinkedHashSet<>();
+
+    @OneToMany(mappedBy = "vehiculo")
     private Set<KilometrajeVehiculo> kilometrajeVehiculos = new LinkedHashSet<>();
 
     @OneToMany(mappedBy = "vehiculo")
@@ -66,12 +69,8 @@ public class Vehiculo {
     @OneToMany(mappedBy = "vehiculo")
     private Set<ParteDeVehiculo> parteDeVehiculos = new LinkedHashSet<>();
 
-
-    @OneToMany(mappedBy = "vehiculo")
-    private Set<GpsDatum> gpsData = new LinkedHashSet<>();
-
-    @OneToOne(mappedBy = "vehiculo")
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "tarjeta_id")
     private Tarjeta tarjeta;
-
 
 }

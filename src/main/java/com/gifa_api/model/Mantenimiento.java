@@ -42,8 +42,7 @@ public class Mantenimiento {
     @JoinColumn(name = "vehiculo_id")
     private Vehiculo vehiculo;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "ubicacion_id")
-    private Ubicacion ubicacion;
+    @Column(name = "ubicacion_id")
+    private Integer ubicacionId;
 
 }

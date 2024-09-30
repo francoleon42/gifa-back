@@ -30,6 +30,6 @@ public class CargaCombustible {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "vehiculo_id")
-    private Vehiculo vehiculo;
+    private com.gifa_api.model.Vehiculo vehiculo;
 
 }
