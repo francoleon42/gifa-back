@@ -73,4 +73,12 @@ public class Vehiculo {
     @JoinColumn(name = "tarjeta_id")
     private Tarjeta tarjeta;
 
+
+    public void inhabilitar(){
+        this.estadoDeHabilitacion= EstadoDeHabilitacion.INHABILITADO;
+    }
+    public void habilitar(){
+        this.estadoDeHabilitacion= EstadoDeHabilitacion.HABILITADO;
+    }
+
 }

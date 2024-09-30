@@ -1,8 +1,10 @@
 package com.gifa_api.service;
 
-import com.gifa_api.dto.VehiculoDTO;
+import com.gifa_api.dto.RegistarVehiculoDTO;
 
 public interface IVehiculoService {
 
-    void registrarVehiculo(VehiculoDTO vehiculoDTO) throws Exception;
+    void registrar(RegistarVehiculoDTO registarVehiculoDTO) throws Exception;
+    void inhabilitar(Integer idVehiculoToInhabilitar) throws Exception;
+    void habilitar(Integer idVehiculoToInhabilitar) throws Exception;
 }

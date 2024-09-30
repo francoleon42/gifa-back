@@ -1,6 +1,6 @@
 package com.gifa_api.service;
 
-import com.gifa_api.dto.VehiculoDTO;
+import com.gifa_api.dto.RegistarVehiculoDTO;
 import com.gifa_api.enums.EstadoDeHabilitacion;
 import com.gifa_api.model.Chofer;
 import com.gifa_api.model.Tarjeta;
@@ -20,7 +20,7 @@ public class VehiculoServiceimpl implements IVehiculoService {
 
 
     @Override
-    public void registrarVehiculo(VehiculoDTO vehiculoDTO) throws Exception {
+    public void registrar(RegistarVehiculoDTO vehiculoDTO) throws Exception {
 
         Optional<Chofer> chofer = choferRepository.findById(vehiculoDTO.getChoferId());
         if (!chofer.isPresent()) {
@@ -42,5 +42,24 @@ public class VehiculoServiceimpl implements IVehiculoService {
 
         vehiculoRepository.save(vehiculo);
 
+    }
+
+    @Override
+    public void inhabilitar(Integer idVehiculoToInhabilitar) throws Exception {
+        Optional<Vehiculo> vehiculo = vehiculoRepository.findById(idVehiculoToInhabilitar);
+        if (!vehiculo.isPresent()) {
+            throw new Exception();
+        }
+        vehiculo.get().inhabilitar();
+        vehiculoRepository.save(vehiculo.get());
+    }
+    @Override
+    public void habilitar(Integer idVehiculoToInhabilitar) throws Exception {
+        Optional<Vehiculo> vehiculo = vehiculoRepository.findById(idVehiculoToInhabilitar);
+        if (!vehiculo.isPresent()) {
+            throw new Exception();
+        }
+        vehiculo.get().habilitar();
+        vehiculoRepository.save(vehiculo.get());
     }
 }

@@ -1,13 +1,9 @@
 package com.gifa_api.controller;
 
-import com.gifa_api.dto.VehiculoDTO;
+import com.gifa_api.dto.RegistarVehiculoDTO;
 import com.gifa_api.service.IVehiculoService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/vehiculo")
@@ -16,8 +12,20 @@ public class VehiculoController {
     IVehiculoService   vehiculoService;
 
     @PostMapping("/registrar")
-    public String registrar(@RequestBody VehiculoDTO vehiculoDTO) throws Exception {
-       vehiculoService.registrarVehiculo(vehiculoDTO);
+    public String registrar(@RequestBody RegistarVehiculoDTO registarVehiculoDTO) throws Exception {
+       vehiculoService.registrar(registarVehiculoDTO);
        return "Vehiculo registrado con exito";
     }
+
+    @PatchMapping ("/inhabilitar/{id}")
+    public String inhabilitar(@PathVariable Integer id) throws Exception {
+        vehiculoService.inhabilitar(id);
+        return "Vehiculo inhabilitado con exito";
+    }
+    @PatchMapping ("/habilitar/{id}")
+    public String habilitar(@PathVariable Integer id) throws Exception {
+        vehiculoService.inhabilitar(id);
+        return "Vehiculo inhabilitado con exito";
+    }
+
 }
