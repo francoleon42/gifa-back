@@ -1,9 +1,18 @@
 package com.gifa_api.service.impl;
 
+import com.gifa_api.model.Mantenimiento;
+import com.gifa_api.repository.MantenimientoRepository;
 import com.gifa_api.service.IMantenimientoService;
 
-public class MantenimientoService implements IMantenimientoService {
+import java.util.List;
 
+public class MantenimientoService implements IMantenimientoService {
+    MantenimientoRepository mantenimientoRepository;
+
+    @Override
+    public List<Mantenimiento> verMantenimientos(Integer id) {
+        return mantenimientoRepository.findByVehiculoId(id);
+    }
 
     @Override
     public void registrarMantenimientoManualmente(Integer id) {
