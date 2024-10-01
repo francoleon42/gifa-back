@@ -45,4 +45,7 @@ public class Mantenimiento {
     @Column(name = "ubicacion_id")
     private Integer ubicacionId;
 
+    public void finalizar() {
+        this.estadoMantenimiento = EstadoMantenimiento.FINALIZADO;
+    }
 }

@@ -1,9 +1,12 @@
 package com.gifa_api.controller;
 
 import com.gifa_api.dto.RegistarVehiculoDTO;
+import com.gifa_api.model.Vehiculo;
 import com.gifa_api.service.IVehiculoService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/vehiculo")
@@ -11,6 +14,10 @@ import org.springframework.web.bind.annotation.*;
 public class VehiculoController {
     private final IVehiculoService vehiculoService;
 
+    @GetMapping("/verAll")
+    public List<Vehiculo> verVehiculos() {
+        return vehiculoService.getVehiculos();
+    }
     @PostMapping("/registrar")
     public String registrar(@RequestBody RegistarVehiculoDTO registarVehiculoDTO) throws Exception {
        vehiculoService.registrar(registarVehiculoDTO);
