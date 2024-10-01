@@ -1,6 +1,7 @@
 package com.gifa_api.service.impl;
 
 import com.gifa_api.dto.RegistrarItemDeInventarioDTO;
+import com.gifa_api.exception.NotFoundException;
 import com.gifa_api.model.ItemDeInventario;
 import com.gifa_api.repository.ItemDeInventarioRepository;
 import com.gifa_api.service.IItemDeIventarioService;
@@ -27,11 +28,13 @@ public class ItemDeInventarioServiceImpl implements IItemDeIventarioService {
     }
 
     @Override
-    public void utilizarItem(Integer id) {
-        Optional<ItemDeInventario> itemIventario = itemDeInventarioRepository.findById(id);
-        if(itemIventario.get().getUmbral() <  itemIventario.get().getStock() - 1 ){
-            itemIventario.get().desminuirStock();
+    public void utilizarItem(Integer itemId) {
+        ItemDeInventario itemIventario = itemDeInventarioRepository.findById(itemId)
+                .orElseThrow(() -> new NotFoundException("No se encontró el item con id: " + itemId));
+
+        if(itemIventario.getUmbral() <  itemIventario.getStock() - 1 ){
+            itemIventario.desminuirStock();
         }
-        itemDeInventarioRepository.save(itemIventario.get());
+        itemDeInventarioRepository.save(itemIventario);
     }
 }

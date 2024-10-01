@@ -2,6 +2,7 @@ package com.gifa_api.service.impl;
 
 import com.gifa_api.dto.RegistarVehiculoDTO;
 import com.gifa_api.enums.EstadoDeHabilitacion;
+import com.gifa_api.exception.NotFoundException;
 import com.gifa_api.model.Chofer;
 import com.gifa_api.model.Tarjeta;
 import com.gifa_api.model.Vehiculo;
@@ -23,10 +24,9 @@ public class VehiculoServiceImpl implements IVehiculoService {
     @Override
     public void registrar(RegistarVehiculoDTO vehiculoDTO) throws Exception {
 
-        Optional<Chofer> chofer = choferRepository.findById(vehiculoDTO.getChoferId());
-        if (!chofer.isPresent()) {
-            throw new Exception();
-        }
+        Chofer chofer = choferRepository.findById(vehiculoDTO.getChoferId())
+                .orElseThrow(() -> new NotFoundException("No se encontró el chofer con id: " + vehiculoDTO.getChoferId()));
+
         Vehiculo vehiculo = Vehiculo
                 .builder()
                 .patente(vehiculoDTO.getPatente())
@@ -35,7 +35,7 @@ public class VehiculoServiceImpl implements IVehiculoService {
                 .litrosDeTanque(0)
                 .modelo(vehiculoDTO.getModelo())
                 .estadoDeHabilitacion(EstadoDeHabilitacion.HABILITADO)
-                .chofer(chofer.get())
+                .chofer(chofer)
                 .tarjeta(Tarjeta.builder().build())
                 .build();
 
@@ -45,21 +45,20 @@ public class VehiculoServiceImpl implements IVehiculoService {
     }
 
     @Override
-    public void inhabilitar(Integer idVehiculoToInhabilitar) throws Exception {
-        Optional<Vehiculo> vehiculo = vehiculoRepository.findById(idVehiculoToInhabilitar);
-        if (!vehiculo.isPresent()) {
-            throw new Exception();
-        }
-        vehiculo.get().inhabilitar();
-        vehiculoRepository.save(vehiculo.get());
+    public void inhabilitar(Integer vehiculoId) throws Exception {
+        Vehiculo vehiculo = vehiculoRepository.findById(vehiculoId)
+                .orElseThrow(() -> new NotFoundException("No se encontró el vehiculo con id: " + vehiculoId));
+
+        vehiculo.inhabilitar();
+        vehiculoRepository.save(vehiculo);
     }
+
     @Override
-    public void habilitar(Integer idVehiculoToInhabilitar) throws Exception {
-        Optional<Vehiculo> vehiculo = vehiculoRepository.findById(idVehiculoToInhabilitar);
-        if (!vehiculo.isPresent()) {
-            throw new Exception();
-        }
-        vehiculo.get().habilitar();
-        vehiculoRepository.save(vehiculo.get());
+    public void habilitar(Integer vehiculoId) throws Exception {
+        Vehiculo vehiculo = vehiculoRepository.findById(vehiculoId)
+                .orElseThrow(() -> new NotFoundException("No se encontró el vehiculo con id: " + vehiculoId));
+
+        vehiculo.habilitar();
+        vehiculoRepository.save(vehiculo);
     }
 }
