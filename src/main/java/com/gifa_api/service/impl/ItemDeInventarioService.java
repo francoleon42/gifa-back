@@ -11,7 +11,7 @@ import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
-public class ItemDeInventarioServiceService implements InteItemDeIventarioService {
+public class ItemDeInventarioService implements InteItemDeIventarioService {
 
     private final ItemDeInventarioRepository itemDeInventarioRepository;
 
