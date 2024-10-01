@@ -17,5 +17,4 @@ public class RegistarVehiculoDTO {
     private Integer kilometraje;
     private Integer litrosDeTanque;
     private String modelo;
-    private Integer choferId;
 }

@@ -47,9 +47,9 @@ public class Vehiculo {
     @Column(name = "qr")
     private byte[] qr;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "chofer_id")
-    private Chofer chofer;
+//    @ManyToOne(fetch = FetchType.LAZY)
+//    @JoinColumn(name = "chofer_id")
+//    private Chofer chofer;
 
     @OneToMany(mappedBy = "vehiculo")
     private Set<CargaCombustible> cargaCombustibles = new LinkedHashSet<>();
