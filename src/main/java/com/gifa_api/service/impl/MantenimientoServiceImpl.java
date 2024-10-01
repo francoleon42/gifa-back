@@ -6,7 +6,7 @@ import com.gifa_api.service.IMantenimientoService;
 
 import java.util.List;
 
-public class MantenimientoService implements IMantenimientoService {
+public class MantenimientoServiceImpl implements IMantenimientoService {
     MantenimientoRepository mantenimientoRepository;
 
     @Override

@@ -3,7 +3,7 @@ package com.gifa_api.service.impl;
 import com.gifa_api.dto.RegistrarItemDeInventarioDTO;
 import com.gifa_api.model.ItemDeInventario;
 import com.gifa_api.repository.ItemDeInventarioRepository;
-import com.gifa_api.service.InteItemDeIventarioService;
+import com.gifa_api.service.IItemDeIventarioService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -11,7 +11,7 @@ import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
-public class ItemDeInventarioService implements InteItemDeIventarioService {
+public class ItemDeInventarioServiceImpl implements IItemDeIventarioService {
 
     private final ItemDeInventarioRepository itemDeInventarioRepository;
 

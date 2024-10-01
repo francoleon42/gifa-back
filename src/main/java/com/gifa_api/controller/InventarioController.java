@@ -1,7 +1,7 @@
 package com.gifa_api.controller;
 
 import com.gifa_api.dto.RegistrarItemDeInventarioDTO;
-import com.gifa_api.service.InteItemDeIventarioService;
+import com.gifa_api.service.IItemDeIventarioService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/inventario")
 @RequiredArgsConstructor
 public class InventarioController {
-    private InteItemDeIventarioService itemDeIventarioService;
+    private final IItemDeIventarioService itemDeIventarioService;
 
     @PostMapping("/registrarItem")
     public String registrarItem(@RequestBody RegistrarItemDeInventarioDTO registrarItemDeInventarioDTO){

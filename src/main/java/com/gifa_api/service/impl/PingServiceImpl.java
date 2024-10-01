@@ -7,7 +7,7 @@ import com.gifa_api.service.IPingService;
 
 @Service
 @RequiredArgsConstructor
-public class PingService implements IPingService {
+public class PingServiceImpl implements IPingService {
     private final IPingRepository pingRepository;
 
     @Override
