@@ -15,9 +15,9 @@ import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
-public class VehiculoServiceimpl implements IVehiculoService {
-    final ChoferRepository choferRepository;
-   final VehiculoRepository vehiculoRepository;
+public class VehiculoService implements IVehiculoService {
+    private final ChoferRepository choferRepository;
+    private final VehiculoRepository vehiculoRepository;
 
 
     @Override

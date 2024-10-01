@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/vehiculo")
 @RequiredArgsConstructor
 public class VehiculoController {
-    IVehiculoService   vehiculoService;
+    private final IVehiculoService vehiculoService;
 
     @PostMapping("/registrar")
     public String registrar(@RequestBody RegistarVehiculoDTO registarVehiculoDTO) throws Exception {
