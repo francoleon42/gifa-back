@@ -10,14 +10,12 @@ import com.gifa_api.model.Vehiculo;
 import com.gifa_api.repository.IParteDeVehiculoRepository;
 import com.gifa_api.repository.IVehiculoRepository;
 import com.gifa_api.repository.ItemDeInventarioRepository;
-import com.gifa_api.service.IItemDeIventarioService;
 import com.gifa_api.service.IVehiculoService;
 import com.gifa_api.utils.enums.EstadoDeHabilitacion;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor

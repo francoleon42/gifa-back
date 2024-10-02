@@ -26,4 +26,24 @@ public class ControllerExceptionHandler {
                 .build();
         return ResponseEntity.status(apiError.getStatus()).body(apiError);
     }
+
+    @ExceptionHandler(NotFoundException.class)
+    protected ResponseEntity<ApiError> handleNotFoundException(NotFoundException e){
+        ApiError apiError = ApiError.builder()
+                .error("bad_request")
+                .message(e.getMessage())
+                .status(HttpStatus.NOT_FOUND.value())
+                .build();
+        return ResponseEntity.status(apiError.getStatus()).body(apiError);
+    }
+
+    @ExceptionHandler(BadRoleException.class)
+    protected ResponseEntity<ApiError> handleNotFoundException(BadRoleException e){
+        ApiError apiError = ApiError.builder()
+                .error("bad_request")
+                .message(e.getMessage())
+                .status(HttpStatus.BAD_REQUEST.value())
+                .build();
+        return ResponseEntity.status(apiError.getStatus()).body(apiError);
+    }
 }

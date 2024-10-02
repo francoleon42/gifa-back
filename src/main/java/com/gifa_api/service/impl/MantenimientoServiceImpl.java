@@ -9,7 +9,6 @@ import com.gifa_api.model.Mantenimiento;
 import com.gifa_api.model.Usuario;
 import com.gifa_api.repository.IMantenimientoRepository;
 import com.gifa_api.repository.IUsuarioRepository;
-import com.gifa_api.repository.IVehiculoRepository;
 import com.gifa_api.service.IMantenimientoService;
 import com.gifa_api.utils.enums.EstadoMantenimiento;
 import com.gifa_api.utils.enums.EstadoVehiculo;
