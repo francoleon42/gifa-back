@@ -1,7 +1,7 @@
 package com.gifa_api.model;
 
-import com.gifa_api.enums.EstadoDeHabilitacion;
-import com.gifa_api.enums.EstadoVehiculo;
+import com.gifa_api.utils.enums.EstadoDeHabilitacion;
+import com.gifa_api.utils.enums.EstadoVehiculo;
 import jakarta.persistence.*;
 import lombok.*;
 

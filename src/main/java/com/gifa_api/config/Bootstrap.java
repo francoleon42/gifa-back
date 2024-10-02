@@ -1,8 +1,8 @@
 package com.gifa_api.config;
 
-import com.gifa_api.enums.Rol;
+import com.gifa_api.utils.enums.Rol;
 import com.gifa_api.model.Usuario;
-import com.gifa_api.repository.IUserRepository;
+import com.gifa_api.repository.IUsuarioRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
@@ -11,7 +11,7 @@ import org.springframework.stereotype.Component;
 @Component
 @RequiredArgsConstructor
 public class Bootstrap implements ApplicationRunner {
-    private final IUserRepository userRepository;
+    private final IUsuarioRepository userRepository;
 
     @Override
     public void run(ApplicationArguments args) throws Exception {

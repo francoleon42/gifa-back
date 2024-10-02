@@ -1,9 +1,12 @@
 package com.gifa_api.controller;
 
-import com.gifa_api.dto.RegistarVehiculoDTO;
+import com.gifa_api.dto.vehiculo.AsignarParteRequestDTO;
+import com.gifa_api.dto.vehiculo.RegistarVehiculoDTO;
 import com.gifa_api.model.Vehiculo;
 import com.gifa_api.service.IVehiculoService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -19,23 +22,26 @@ public class VehiculoController {
         return vehiculoService.getVehiculos();
     }
     @PostMapping("/registrar")
-    public String registrar(@RequestBody RegistarVehiculoDTO registarVehiculoDTO) throws Exception {
+    public ResponseEntity<?> registrar(@RequestBody RegistarVehiculoDTO registarVehiculoDTO) {
        vehiculoService.registrar(registarVehiculoDTO);
-       return "Vehiculo registrado con exito";
+        return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
     @PatchMapping ("/inhabilitar/{id}")
-    public String inhabilitar(@PathVariable Integer id) throws Exception {
+    public ResponseEntity<?> inhabilitar(@PathVariable Integer id) {
         vehiculoService.inhabilitar(id);
-        return "Vehiculo inhabilitado con exito";
+        return new ResponseEntity<>(HttpStatus.OK);
     }
+
     @PatchMapping ("/habilitar/{id}")
-    public String habilitar(@PathVariable Integer id) throws Exception {
-        vehiculoService.inhabilitar(id);
-        return "Vehiculo inhabilitado con exito";
+    public ResponseEntity<?> habilitar(@PathVariable Integer id) {
+        vehiculoService.habilitar(id);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 
-
-
-
+    @PostMapping("/asignar")
+    public ResponseEntity<?> asignarParte(@RequestBody AsignarParteRequestDTO asignarParteRequestDTO) {
+        vehiculoService.asignarParte(asignarParteRequestDTO);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
 }

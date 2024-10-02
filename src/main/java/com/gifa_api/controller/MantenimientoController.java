@@ -1,8 +1,13 @@
 package com.gifa_api.controller;
 
+import com.gifa_api.dto.mantenimiento.AsignarMantenimientoRequestDTO;
+import com.gifa_api.dto.mantenimiento.MantenimientosPendientesResponseDTO;
+import com.gifa_api.dto.mantenimiento.MantenimientosResponseDTO;
 import com.gifa_api.model.Mantenimiento;
 import com.gifa_api.service.IMantenimientoService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -13,13 +18,31 @@ import java.util.List;
 public class MantenimientoController {
     IMantenimientoService mantenimientoService;
 
-    @GetMapping("ver_mantenimientos/{id}")
-    public List<Mantenimiento> verMantenimientos(@PathVariable Integer id) {
-        return mantenimientoService.verMantenimientos(id);
+    @GetMapping("/{id}")
+    public List<Mantenimiento> verMantenimientoPorId(@PathVariable Integer id){
+        return mantenimientoService.verMantenimientosPorId(id);
     }
 
-    @PatchMapping("finalizar_mantenimiento/{id}")
-    public void finalizarMantenimiento(@PathVariable Integer id) {
-        mantenimientoService.finalizarMantenimiento(id);
+    @GetMapping("/")
+    public ResponseEntity<MantenimientosResponseDTO> verMantenimientos(){
+        return new ResponseEntity<>(mantenimientoService.verMantenimientos(), HttpStatus.OK);
+    }
+
+    @GetMapping("/pendientes")
+    public ResponseEntity<MantenimientosPendientesResponseDTO> verMantenimientosPendientes(){
+        return new ResponseEntity<>(mantenimientoService.verMantenimientosPendientes(), HttpStatus.OK);
+    }
+
+    @PatchMapping("/asignar/{id}")
+    public ResponseEntity<?> asignarMantenimiento(@PathVariable Integer mantenimientoId,
+                                                  @RequestBody AsignarMantenimientoRequestDTO asignarMantenimientoRequestDTO){
+        mantenimientoService.asignarMantenimiento(mantenimientoId, asignarMantenimientoRequestDTO);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    @PatchMapping("/finalizar/{id}")
+    public ResponseEntity<?> finalizarMantenimiento(@PathVariable Integer mantenimientoId){
+        mantenimientoService.finalizarMantenimiento(mantenimientoId);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 }

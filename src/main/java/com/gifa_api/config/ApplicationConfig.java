@@ -1,6 +1,6 @@
 package com.gifa_api.config;
 
-import com.gifa_api.repository.IUserRepository;
+import com.gifa_api.repository.IUsuarioRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -18,7 +18,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 @RequiredArgsConstructor
 public class ApplicationConfig {
 
-    private final IUserRepository iUserRepository;
+    private final IUsuarioRepository iUsuarioRepository;
 
     @Bean
     public AuthenticationManager authenticationManager(AuthenticationConfiguration config) throws Exception {
@@ -40,7 +40,7 @@ public class ApplicationConfig {
 
     @Bean
     public UserDetailsService userDetailsService() {
-        return username -> (UserDetails) iUserRepository.findByUsuario(username)
+        return username -> (UserDetails) iUsuarioRepository.findByUsuario(username)
                 .orElseThrow(()-> new UsernameNotFoundException("User not found"));
     }
 }

@@ -1,4 +1,4 @@
-package com.gifa_api.dto;
+package com.gifa_api.dto.vehiculo;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

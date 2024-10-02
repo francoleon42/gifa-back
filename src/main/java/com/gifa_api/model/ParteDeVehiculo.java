@@ -1,15 +1,17 @@
 package com.gifa_api.model;
 
 import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 import java.time.LocalDate;
 
+@Builder
+@AllArgsConstructor
 @Getter
 @Setter
 @Entity
 @Table(name = "parte_de_vehiculo")
+@NoArgsConstructor
 public class ParteDeVehiculo {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

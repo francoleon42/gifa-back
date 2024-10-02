@@ -1,6 +1,6 @@
 package com.gifa_api.model;
 
-import com.gifa_api.enums.EstadoMantenimiento;
+import com.gifa_api.utils.enums.EstadoMantenimiento;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;

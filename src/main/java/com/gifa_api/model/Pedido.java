@@ -1,6 +1,6 @@
 package com.gifa_api.model;
 
-import com.gifa_api.enums.EstadoPedido;
+import com.gifa_api.utils.enums.EstadoPedido;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;

@@ -1,13 +1,16 @@
 package com.gifa_api.service;
 
-import com.gifa_api.dto.RegistarVehiculoDTO;
+import com.gifa_api.dto.vehiculo.AsignarParteRequestDTO;
+import com.gifa_api.dto.vehiculo.RegistarVehiculoDTO;
 import com.gifa_api.model.Vehiculo;
 
 import java.util.List;
 
 public interface IVehiculoService {
+
     List<Vehiculo> getVehiculos();
-    void registrar(RegistarVehiculoDTO registarVehiculoDTO) throws Exception;
-    void inhabilitar(Integer idVehiculoToInhabilitar) throws Exception;
-    void habilitar(Integer idVehiculoToInhabilitar) throws Exception;
+    void registrar(RegistarVehiculoDTO registarVehiculoDTO);
+    void inhabilitar(Integer idVehiculoToInhabilitar);
+    void habilitar(Integer idVehiculoToInhabilitar);
+    void asignarParte(AsignarParteRequestDTO asignarParteRequestDTO);
 }

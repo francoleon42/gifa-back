@@ -1,6 +1,6 @@
 package com.gifa_api.model;
 
-import com.gifa_api.enums.Rol;
+import com.gifa_api.utils.enums.Rol;
 import jakarta.persistence.*;
 import lombok.*;
 import org.springframework.security.core.GrantedAuthority;

@@ -3,6 +3,8 @@ package com.gifa_api.controller;
 import com.gifa_api.dto.RegistrarItemDeInventarioDTO;
 import com.gifa_api.service.IItemDeIventarioService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -12,15 +14,14 @@ public class InventarioController {
     private final IItemDeIventarioService itemDeIventarioService;
 
     @PostMapping("/registrarItem")
-    public String registrarItem(@RequestBody RegistrarItemDeInventarioDTO registrarItemDeInventarioDTO){
+    public ResponseEntity<?> registrarItem(@RequestBody RegistrarItemDeInventarioDTO registrarItemDeInventarioDTO){
         itemDeIventarioService.registrar(registrarItemDeInventarioDTO);
-        return "Registro con exito del item";
+        return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
     @PatchMapping("/utilizarItem/{id}")
-    public String utilizarItem(@PathVariable Integer id){
+    public ResponseEntity<?> utilizarItem(@PathVariable Integer id){
         itemDeIventarioService.utilizarItem(id);
-        return "se disminuyo el stock con exito";
+        return new ResponseEntity<>(HttpStatus.OK);
     }
-
 }

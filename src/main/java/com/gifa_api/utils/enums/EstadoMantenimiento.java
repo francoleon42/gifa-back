@@ -1,4 +1,4 @@
-package com.gifa_api.enums;
+package com.gifa_api.utils.enums;
 
 public enum EstadoMantenimiento {
     APROBADO,

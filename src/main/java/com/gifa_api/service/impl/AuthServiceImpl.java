@@ -4,10 +4,10 @@ import com.gifa_api.config.jwt.JwtService;
 import com.gifa_api.dto.login.LoginRequestDTO;
 import com.gifa_api.dto.login.LoginResponseDTO;
 import com.gifa_api.dto.login.RegisterRequestDTO;
-import com.gifa_api.enums.Rol;
+import com.gifa_api.utils.enums.Rol;
 import com.gifa_api.exception.RegisterException;
 import com.gifa_api.model.Usuario;
-import com.gifa_api.repository.IUserRepository;
+import com.gifa_api.repository.IUsuarioRepository;
 import com.gifa_api.service.IAuthService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -18,7 +18,7 @@ import org.springframework.stereotype.Service;
 @Service
 @RequiredArgsConstructor
 public class AuthServiceImpl implements IAuthService {
-    private final IUserRepository userRepository;
+    private final IUsuarioRepository userRepository;
     private final JwtService jwtService;
     private final PasswordEncoder passwordEncoder;
     private final AuthenticationManager authenticationManager;
