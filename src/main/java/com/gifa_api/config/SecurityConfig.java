@@ -60,11 +60,15 @@ public class SecurityConfig {
                 .requestMatchers(HttpMethod.POST, "/inventario/registrarItem").hasRole(administrador) // 1.2 Registrar una parte para el inventario
                 .requestMatchers(HttpMethod.POST, "/vehiculo/asignar").hasRole(administrador) // 1.3 Asignar una parte al vehículo
                 .requestMatchers(HttpMethod.PATCH, "/vehiculo/habilitar/{id}", "/vehiculo/inhabilitar/{id}").hasRole(administrador) // 1.4 Habilitar/inhabilitar colectivo
-                .requestMatchers(HttpMethod.GET, "/vehiculo/verAll").hasRole(administrador); // 1.5 Visibilizar los mantenimientos de un colectivo
+                .requestMatchers(HttpMethod.GET, "/vehiculo/verAll").hasRole(administrador)
+                .requestMatchers(HttpMethod.GET, "/mantenimiento/por-vehiculo/{id}").hasRole(administrador);
     }
+
 
     private void configureSupervisorEndpoints(AuthorizeHttpRequestsConfigurer<HttpSecurity>.AuthorizationManagerRequestMatcherRegistry authRequest) {
         String supervisor = Rol.SUPERVISOR.toString();
+        authRequest
+        .requestMatchers(HttpMethod.POST, "/mantenimiento/crear-manualmente").hasRole(supervisor);
     }
 
     private void configureGerenteEndpoints(AuthorizeHttpRequestsConfigurer<HttpSecurity>.AuthorizationManagerRequestMatcherRegistry authRequest) {

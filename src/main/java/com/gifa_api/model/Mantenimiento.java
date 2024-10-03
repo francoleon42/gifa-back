@@ -2,15 +2,17 @@ package com.gifa_api.model;
 
 import com.gifa_api.utils.enums.EstadoMantenimiento;
 import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 import java.time.LocalDate;
 
+@Builder
 @Getter
 @Setter
 @Entity
 @Table(name = "mantenimiento")
+@NoArgsConstructor
+@AllArgsConstructor
 public class Mantenimiento {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

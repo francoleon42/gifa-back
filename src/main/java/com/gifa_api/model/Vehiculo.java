@@ -5,6 +5,7 @@ import com.gifa_api.utils.enums.EstadoVehiculo;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.time.LocalDate;
 import java.util.Date;
 import java.util.LinkedHashSet;
 import java.util.Set;
@@ -49,7 +50,7 @@ public class Vehiculo {
     private byte[] qr;
 
     @Column(name = "fecha_vencimiento")
-    private Date fechaVencimiento;
+    private LocalDate fechaVencimiento;
 
 
     @OneToMany(mappedBy = "vehiculo")

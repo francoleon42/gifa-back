@@ -3,6 +3,7 @@ package com.gifa_api.controller;
 import com.gifa_api.dto.mantenimiento.AsignarMantenimientoRequestDTO;
 import com.gifa_api.dto.mantenimiento.MantenimientosPendientesResponseDTO;
 import com.gifa_api.dto.mantenimiento.MantenimientosResponseDTO;
+import com.gifa_api.dto.mantenimiento.RegistrarMantenimientoDTO;
 import com.gifa_api.model.Mantenimiento;
 import com.gifa_api.service.IMantenimientoService;
 import lombok.RequiredArgsConstructor;
@@ -18,7 +19,13 @@ import java.util.List;
 public class MantenimientoController {
     IMantenimientoService mantenimientoService;
 
-    @GetMapping("/{id}")
+
+    @PostMapping("/crear-manualmente")
+    public String cargarMantenimientoManualmente(RegistrarMantenimientoDTO registrarMantenimientoDTO){
+        mantenimientoService.crearMantenimiento(registrarMantenimientoDTO);
+        return "Mantenimiento creada correctamente";
+    }
+    @GetMapping("por-vehiculo/{id}")
     public List<Mantenimiento> verMantenimientoPorVehiculo(@PathVariable Integer id){
         return mantenimientoService.verMantenimientosPorVehiculo(id);
     }
