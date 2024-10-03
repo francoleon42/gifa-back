@@ -5,6 +5,8 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.Date;
+
 
 @Data
 @Builder
@@ -17,4 +19,5 @@ public class RegistarVehiculoDTO {
     private Integer kilometraje;
     private Integer litrosDeTanque;
     private String modelo;
+    private Date fechaRevision;
 }

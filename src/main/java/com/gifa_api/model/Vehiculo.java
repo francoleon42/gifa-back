@@ -5,6 +5,7 @@ import com.gifa_api.utils.enums.EstadoVehiculo;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.util.Date;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
@@ -47,9 +48,9 @@ public class Vehiculo {
     @Column(name = "qr")
     private byte[] qr;
 
-//    @ManyToOne(fetch = FetchType.LAZY)
-//    @JoinColumn(name = "chofer_id")
-//    private Chofer chofer;
+    @Column(name = "fecha_vencimiento")
+    private Date fechaVencimiento;
+
 
     @OneToMany(mappedBy = "vehiculo")
     private Set<CargaCombustible> cargaCombustibles = new LinkedHashSet<>();
@@ -62,9 +63,6 @@ public class Vehiculo {
 
     @OneToMany(mappedBy = "vehiculo")
     private Set<Mantenimiento> mantenimientos = new LinkedHashSet<>();
-
-    @OneToMany(mappedBy = "vehiculo")
-    private Set<ParteDeVehiculo> parteDeVehiculos = new LinkedHashSet<>();
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "tarjeta_id")

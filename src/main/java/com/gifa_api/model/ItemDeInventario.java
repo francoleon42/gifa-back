@@ -31,9 +31,6 @@ public class ItemDeInventario {
     @OneToMany(mappedBy = "repuestoUtilizado")
     private Set<Mantenimiento> mantenimientos = new LinkedHashSet<>();
 
-    @OneToMany(mappedBy = "itemDeInventario")
-    private Set<ParteDeVehiculo> parteDeVehiculos = new LinkedHashSet<>();
-
     @OneToMany(mappedBy = "item")
     private Set<Pedido> pedidos = new LinkedHashSet<>();
 

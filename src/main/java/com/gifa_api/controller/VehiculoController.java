@@ -39,9 +39,4 @@ public class VehiculoController {
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
-    @PostMapping("/asignar")
-    public ResponseEntity<?> asignarParte(@RequestBody AsignarParteRequestDTO asignarParteRequestDTO) {
-        vehiculoService.asignarParte(asignarParteRequestDTO);
-        return new ResponseEntity<>(HttpStatus.OK);
-    }
 }

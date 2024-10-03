@@ -12,5 +12,4 @@ public interface IVehiculoService {
     void registrar(RegistarVehiculoDTO registarVehiculoDTO);
     void inhabilitar(Integer idVehiculoToInhabilitar);
     void habilitar(Integer idVehiculoToInhabilitar);
-    void asignarParte(AsignarParteRequestDTO asignarParteRequestDTO);
 }
