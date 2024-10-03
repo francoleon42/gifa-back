@@ -1,5 +1,6 @@
 package com.gifa_api.service.impl;
 
+import com.gifa_api.controller.MantenimientoController;
 import com.gifa_api.dto.mantenimiento.AsignarMantenimientoRequestDTO;
 import com.gifa_api.dto.mantenimiento.MantenimientosPendientesResponseDTO;
 import com.gifa_api.dto.mantenimiento.MantenimientosResponseDTO;
@@ -17,6 +18,8 @@ import com.gifa_api.utils.mappers.MantenimientoMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
+import java.util.Date;
 import java.util.List;
 
 @Service
@@ -24,15 +27,17 @@ public class MantenimientoServiceImpl implements IMantenimientoService {
     private final IMantenimientoRepository IMantenimientoRepository;
     private final IUsuarioRepository IUsuarioRepository;
     private final MantenimientoMapper mantenimientoMapper;
+    private final MantenimientoController mantenimientoController;
 
-    public MantenimientoServiceImpl(@Autowired IMantenimientoRepository IMantenimientoRepository, IUsuarioRepository iUsuarioRepository) {
+    public MantenimientoServiceImpl(@Autowired IMantenimientoRepository IMantenimientoRepository, IUsuarioRepository iUsuarioRepository, MantenimientoController mantenimientoController) {
         this.IMantenimientoRepository = IMantenimientoRepository;
         IUsuarioRepository = iUsuarioRepository;
         this.mantenimientoMapper = new MantenimientoMapper();
+        this.mantenimientoController = mantenimientoController;
     }
 
     @Override
-    public List<Mantenimiento> verMantenimientosPorId(Integer id) {
+    public List<Mantenimiento> verMantenimientosPorVehiculo(Integer id) {
         return IMantenimientoRepository.findByVehiculoId(id);
     }
 
@@ -67,11 +72,15 @@ public class MantenimientoServiceImpl implements IMantenimientoService {
                 .orElseThrow(() -> new NotFoundException("No se encontró el mantenimiento con id: " + mantenimientoId));
     }
 
+    // fix para que si utilizo un respuesto que se agrege a respuestosUtilizado.
     @Override
     public void finalizarMantenimiento(Integer mantenimientoId) {
         Mantenimiento mantenimiento = findById(mantenimientoId);
         mantenimiento.setEstadoMantenimiento(EstadoMantenimiento.FINALIZADO);
         mantenimiento.getVehiculo().setEstadoVehiculo(EstadoVehiculo.REPARADO);
+        mantenimiento.setFechaFinalizacion(LocalDate.now());
         IMantenimientoRepository.save(mantenimiento);
     }
+
+
 }

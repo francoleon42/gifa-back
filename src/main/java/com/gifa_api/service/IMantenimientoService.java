@@ -9,7 +9,7 @@ import java.util.List;
 
 public interface IMantenimientoService {
 
-    List<Mantenimiento> verMantenimientosPorId(Integer id);
+    List<Mantenimiento> verMantenimientosPorVehiculo(Integer id);
 
     void registrarMantenimientoManualmente(Integer id);
 
@@ -20,4 +20,5 @@ public interface IMantenimientoService {
     void asignarMantenimiento(Integer mantenimientoId, AsignarMantenimientoRequestDTO asignarMantenimientoRequestDTO);
 
     void finalizarMantenimiento(Integer mantenimientoId);
+
 }

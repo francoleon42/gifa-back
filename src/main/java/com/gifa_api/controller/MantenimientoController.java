@@ -19,8 +19,8 @@ public class MantenimientoController {
     IMantenimientoService mantenimientoService;
 
     @GetMapping("/{id}")
-    public List<Mantenimiento> verMantenimientoPorId(@PathVariable Integer id){
-        return mantenimientoService.verMantenimientosPorId(id);
+    public List<Mantenimiento> verMantenimientoPorVehiculo(@PathVariable Integer id){
+        return mantenimientoService.verMantenimientosPorVehiculo(id);
     }
 
     @GetMapping("/")

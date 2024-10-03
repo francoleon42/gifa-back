@@ -42,8 +42,6 @@ public class Mantenimiento {
     @JoinColumn(name = "vehiculo_id")
     private Vehiculo vehiculo;
 
-    @Column(name = "ubicacion_id")
-    private Integer ubicacionId;
 
     public void finalizar() {
         this.estadoMantenimiento = EstadoMantenimiento.FINALIZADO;
