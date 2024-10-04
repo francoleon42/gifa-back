@@ -50,8 +50,9 @@ public class MantenimientoServiceImpl implements IMantenimientoService {
     }
 
     @Override
-    public List<Mantenimiento> verMantenimientosPorVehiculo(Integer id) {
-        return IMantenimientoRepository.findByVehiculoId(id);
+    public MantenimientosResponseDTO verMantenimientosPorVehiculo(Integer id) {
+        return mantenimientoMapper.mapListToMantenimientosDTO(IMantenimientoRepository.findByVehiculoId(id));
+
     }
 
 

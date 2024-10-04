@@ -11,7 +11,7 @@ import java.util.List;
 public interface IMantenimientoService {
 
     void crearMantenimiento(RegistrarMantenimientoDTO registrarMantenimientoDTO);
-    List<Mantenimiento> verMantenimientosPorVehiculo(Integer id);
+    MantenimientosResponseDTO verMantenimientosPorVehiculo(Integer id);
 
     MantenimientosPendientesResponseDTO verMantenimientosPendientes();
 
