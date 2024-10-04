@@ -43,6 +43,7 @@ public class MantenimientoServiceImpl implements IMantenimientoService {
                 .builder()
                 .asunto(registrarMantenimientoDTO.getAsunto())
                 .estadoMantenimiento(EstadoMantenimiento.PENDIENTE)
+                .fechaInicio(LocalDate.now())
                 .vehiculo(vehiculo)
                 .build();
 
