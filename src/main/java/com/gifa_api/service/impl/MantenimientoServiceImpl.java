@@ -7,6 +7,7 @@ import com.gifa_api.dto.mantenimiento.MantenimientosResponseDTO;
 import com.gifa_api.dto.mantenimiento.RegistrarMantenimientoDTO;
 import com.gifa_api.exception.BadRoleException;
 import com.gifa_api.exception.NotFoundException;
+import com.gifa_api.model.ItemDeInventario;
 import com.gifa_api.model.Mantenimiento;
 import com.gifa_api.model.Usuario;
 import com.gifa_api.model.Vehiculo;
@@ -93,6 +94,14 @@ public class MantenimientoServiceImpl implements IMantenimientoService {
                     mantenimiento.setFechaFinalizacion(LocalDate.now());
         IMantenimientoRepository.save(mantenimiento);
     }
+
+    @Override
+    public void agregaritemUtilizadoEnMantenimiento(ItemDeInventario itemIventario, Integer idMantenimiento) {
+        Mantenimiento  mantenimiento = findById(idMantenimiento);
+        mantenimiento.setRepuestoUtilizado(itemIventario);
+    }
+
+
 
 
 }

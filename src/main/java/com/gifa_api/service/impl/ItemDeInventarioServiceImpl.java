@@ -5,6 +5,7 @@ import com.gifa_api.exception.NotFoundException;
 import com.gifa_api.model.ItemDeInventario;
 import com.gifa_api.repository.ItemDeInventarioRepository;
 import com.gifa_api.service.IItemDeIventarioService;
+import com.gifa_api.service.IMantenimientoService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -13,6 +14,7 @@ import org.springframework.stereotype.Service;
 public class ItemDeInventarioServiceImpl implements IItemDeIventarioService {
 
     private final ItemDeInventarioRepository itemDeInventarioRepository;
+    private final IMantenimientoService iMantenimientoService;
 
     @Override
     public void registrar(RegistrarItemDeInventarioDTO registrarItemDeInventarioDTO) {
@@ -33,6 +35,8 @@ public class ItemDeInventarioServiceImpl implements IItemDeIventarioService {
         if(itemIventario.getUmbral() <  itemIventario.getStock() - 1 ){
             itemIventario.desminuirStock();
         }
+
         itemDeInventarioRepository.save(itemIventario);
+
     }
 }
