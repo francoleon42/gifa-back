@@ -146,17 +146,16 @@ public class Bootstrap implements ApplicationRunner {
 
         proveedorRepository.saveAll(List.of(proveedor1, proveedor2));
 
-        ProveedorDeParte proveedorDeParte1 = ProveedorDeParte.builder()
-                .itemDeInventario(item1)
+        ProveedorDeItem proveedorDeItem1 = ProveedorDeItem.builder()
+
                 .proveedor(proveedor1)
                 .build();
 
-        ProveedorDeParte proveedorDeParte2 = ProveedorDeParte.builder()
-                .itemDeInventario(item2)
+        ProveedorDeItem proveedorDeItem2 = ProveedorDeItem.builder()
                 .proveedor(proveedor2)
                 .build();
 
-        proveedorDeParteRepository.saveAll(List.of(proveedorDeParte1, proveedorDeParte2));
+        proveedorDeParteRepository.saveAll(List.of(proveedorDeItem1, proveedorDeItem2));
 
         // Crear pedidos con builder
         Pedido pedido1 = Pedido.builder()
@@ -164,7 +163,6 @@ public class Bootstrap implements ApplicationRunner {
                 .cantidad(5)
                 .motivo("Reponer stock")
                 .item(item1)
-                .proveedor(proveedor1)
                 .estadoPedido(EstadoPedido.PENDIENTE)
                 .build();
 
@@ -173,7 +171,6 @@ public class Bootstrap implements ApplicationRunner {
                 .cantidad(3)
                 .motivo("Reemplazo de neumático")
                 .item(item2)
-                .proveedor(proveedor2)
                 .estadoPedido(EstadoPedido.PENDIENTE)
                 .build();
 

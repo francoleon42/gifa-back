@@ -16,8 +16,11 @@ import java.util.Set;
 public class Tarjeta {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "numero", nullable = false)
-    private Integer numero ;
+    @Column(name = "id", nullable = false)
+    private Integer id;
+
+    @Column(name = "numero")
+    private Integer numero;
 
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "vehiculo_id")

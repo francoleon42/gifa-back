@@ -51,17 +51,6 @@ public class Vehiculo {
     @Column(name = "fecha_vencimiento")
     private LocalDate fechaVencimiento;
 
-    @OneToMany(mappedBy = "vehiculo")
-    private Set<CargaCombustible> cargaCombustibles = new LinkedHashSet<>();
-
-    @OneToMany(mappedBy = "vehiculo")
-    private Set<GpsData> gpsData = new LinkedHashSet<>();
-
-    @OneToMany(mappedBy = "vehiculo")
-    private Set<KilometrajeVehiculo> kilometrajeVehiculos = new LinkedHashSet<>();
-
-    @OneToMany(mappedBy = "vehiculo")
-    private Set<Mantenimiento> mantenimientos = new LinkedHashSet<>();
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "tarjeta_id")

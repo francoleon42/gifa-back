@@ -46,10 +46,6 @@ public class MantenimientoServiceImpl implements IMantenimientoService {
                 .vehiculo(vehiculo)
                 .build();
 
-
-        // mejorar la bidireccion de las relaciones.
-        vehiculo.getMantenimientos().add(mantenimiento);
-        iVehiculoRepository.save(vehiculo);
         IMantenimientoRepository.save(mantenimiento);
     }
 

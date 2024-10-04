@@ -25,10 +25,8 @@ public class Proveedor {
     @Column(name = "email", length = 100)
     private String email;
 
-    @OneToMany(mappedBy = "proveedor")
-    private Set<Pedido> pedidos = new LinkedHashSet<>();
 
     @OneToMany(mappedBy = "proveedor")
-    private Set<ProveedorDeParte> proveedorDePartes = new LinkedHashSet<>();
+    private Set<ProveedorDeItem> proveedorDeItems = new LinkedHashSet<>();
 
 }

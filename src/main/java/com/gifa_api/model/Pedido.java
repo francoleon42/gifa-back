@@ -31,11 +31,7 @@ public class Pedido {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "item_id")
     private ItemDeInventario item;
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "proveedor_id")
-    private Proveedor proveedor;
-
+    
     @Enumerated(EnumType.STRING)
     @Column(name = "estado_pedido", nullable = false)
     private EstadoPedido estadoPedido;

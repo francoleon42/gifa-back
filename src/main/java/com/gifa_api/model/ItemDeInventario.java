@@ -1,6 +1,5 @@
 package com.gifa_api.model;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.*;
@@ -37,8 +36,9 @@ public class ItemDeInventario {
     @OneToMany(mappedBy = "item")
     private Set<Pedido> pedidos = new LinkedHashSet<>();
 
-    @OneToMany(mappedBy = "itemDeInventario")
-    private Set<ProveedorDeParte> proveedorDePartes = new LinkedHashSet<>();
+    @ManyToOne
+    @JoinColumn(name = "proveedor_de_item_id", nullable = false)
+    private ProveedorDeItem proveedorDeItem;
 
     public void desminuirStock() {
         this.stock -= 1;
