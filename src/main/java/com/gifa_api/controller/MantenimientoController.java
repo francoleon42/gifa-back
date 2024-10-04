@@ -2,6 +2,7 @@ package com.gifa_api.controller;
 
 import com.gifa_api.dto.mantenimiento.*;
 import com.gifa_api.service.IMantenimientoService;
+import com.gifa_api.service.IitemUsadoMantenimientoService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -12,6 +13,7 @@ import org.springframework.web.bind.annotation.*;
 @RequiredArgsConstructor
 public class MantenimientoController {
     private final IMantenimientoService mantenimientoService;
+    private final IitemUsadoMantenimientoService itemUsadoMantenimientoService;
 
     @PostMapping("/crear-manualmente")
     public ResponseEntity<?> cargarMantenimientoManualmente(@RequestBody RegistrarMantenimientoDTO registrarMantenimientoDTO){
@@ -41,8 +43,9 @@ public class MantenimientoController {
     }
 
     @PatchMapping("/finalizar/{mantenimientoId}")
-    public ResponseEntity<?> finalizarMantenimiento(@PathVariable Integer mantenimientoId){
-        mantenimientoService.finalizarMantenimiento(mantenimientoId);
+    public ResponseEntity<?> finalizarMantenimiento(@PathVariable Integer mantenimientoId, FinalizarMantenimientoDTO finalizarMantenimientoDTO){
+        mantenimientoService.finalizarMantenimiento(mantenimientoId,finalizarMantenimientoDTO);
+        itemUsadoMantenimientoService.agregaritemUtilizadoEnMantenimiento(finalizarMantenimientoDTO.getIdItem(), mantenimientoId,finalizarMantenimientoDTO.getCantidad());
         return new ResponseEntity<>(HttpStatus.OK);
     }
 }

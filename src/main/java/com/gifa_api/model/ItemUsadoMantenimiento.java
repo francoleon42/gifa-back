@@ -18,13 +18,13 @@ public class ItemUsadoMantenimiento {
     private Integer id;
 
     @Column(name = "cantidad", nullable = false, length = 10)
-    private String cantidad;
+    private Integer cantidad;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "id_mantenimiento")
     private Mantenimiento mantenimiento;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "id_item_de_inventario")
+    @JoinColumn(name = "item_de_inventario")
     private ItemDeInventario itemDeInventario;
 }

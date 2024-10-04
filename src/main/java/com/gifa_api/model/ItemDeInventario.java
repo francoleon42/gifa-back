@@ -36,7 +36,7 @@ public class ItemDeInventario {
     @JoinColumn(name = "proveedor_de_item_id")
     private Set<ProveedorDeItem> proveedorDeItems;
 
-    @OneToMany(mappedBy = "mantenimiento", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "itemDeInventario", cascade = CascadeType.ALL)
     private Set<ItemUsadoMantenimiento> itemUsadoMantenimientos;
 
     public void desminuirStock() {
