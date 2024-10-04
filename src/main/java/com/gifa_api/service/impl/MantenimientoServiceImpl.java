@@ -28,19 +28,10 @@ import java.util.List;
 @Service
 @RequiredArgsConstructor
 public class MantenimientoServiceImpl implements IMantenimientoService {
-    private  IMantenimientoRepository IMantenimientoRepository;
-    private  IUsuarioRepository IUsuarioRepository;
-    private  MantenimientoMapper mantenimientoMapper;
-    private  IVehiculoRepository iVehiculoRepository;
-    private  MantenimientoController mantenimientoController;
-
-    public MantenimientoServiceImpl(@Autowired IMantenimientoRepository IMantenimientoRepository, IUsuarioRepository iUsuarioRepository, IVehiculoRepository iVehiculoRepository, MantenimientoController mantenimientoController) {
-        this.IMantenimientoRepository = IMantenimientoRepository;
-        IUsuarioRepository = iUsuarioRepository;
-        this.iVehiculoRepository = iVehiculoRepository;
-        this.mantenimientoMapper = new MantenimientoMapper();
-        this.mantenimientoController = mantenimientoController;
-    }
+    private final IMantenimientoRepository IMantenimientoRepository;
+    private final IUsuarioRepository IUsuarioRepository;
+    private final MantenimientoMapper mantenimientoMapper;
+    private final IVehiculoRepository iVehiculoRepository;
 
 
 

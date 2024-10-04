@@ -16,6 +16,6 @@ public interface IMantenimientoRepository extends JpaRepository<Mantenimiento, I
 
     List<Mantenimiento> findAllByEstadoMantenimiento(EstadoMantenimiento estadoMantenimiento);
 
-    @EntityGraph(attributePaths = {"mantenimiento", "mantenimiento.vehiculo"})
+    @EntityGraph(attributePaths = {"vehiculo"})
     Optional<Mantenimiento> findById(Integer id);
 }

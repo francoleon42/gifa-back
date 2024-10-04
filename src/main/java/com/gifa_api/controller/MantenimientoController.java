@@ -17,13 +17,12 @@ import java.util.List;
 @RequestMapping("/mantenimiento")
 @RequiredArgsConstructor
 public class MantenimientoController {
-     IMantenimientoService mantenimientoService;
-
+    private final IMantenimientoService mantenimientoService;
 
     @PostMapping("/crear-manualmente")
-    public String cargarMantenimientoManualmente(RegistrarMantenimientoDTO registrarMantenimientoDTO){
+    public ResponseEntity<?> cargarMantenimientoManualmente(@RequestBody RegistrarMantenimientoDTO registrarMantenimientoDTO){
         mantenimientoService.crearMantenimiento(registrarMantenimientoDTO);
-        return "Mantenimiento creada correctamente";
+        return new ResponseEntity<>(HttpStatus.CREATED);
     }
     @GetMapping("por-vehiculo/{id}")
     public List<Mantenimiento> verMantenimientoPorVehiculo(@PathVariable Integer id){
@@ -40,14 +39,14 @@ public class MantenimientoController {
         return new ResponseEntity<>(mantenimientoService.verMantenimientosPendientes(), HttpStatus.OK);
     }
 
-    @PatchMapping("/asignar/{id}")
+    @PatchMapping("/asignar/{mantenimientoId}")
     public ResponseEntity<?> asignarMantenimiento(@PathVariable Integer mantenimientoId,
                                                   @RequestBody AsignarMantenimientoRequestDTO asignarMantenimientoRequestDTO){
         mantenimientoService.asignarMantenimiento(mantenimientoId, asignarMantenimientoRequestDTO);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
-    @PatchMapping("/finalizar/{id}")
+    @PatchMapping("/finalizar/{mantenimientoId}")
     public ResponseEntity<?> finalizarMantenimiento(@PathVariable Integer mantenimientoId){
         mantenimientoService.finalizarMantenimiento(mantenimientoId);
         return new ResponseEntity<>(HttpStatus.OK);

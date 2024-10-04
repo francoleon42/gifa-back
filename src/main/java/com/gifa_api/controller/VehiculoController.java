@@ -1,15 +1,12 @@
 package com.gifa_api.controller;
 
-import com.gifa_api.dto.vehiculo.AsignarParteRequestDTO;
+import com.gifa_api.dto.vehiculo.ListaVehiculosResponseDTO;
 import com.gifa_api.dto.vehiculo.RegistarVehiculoDTO;
-import com.gifa_api.model.Vehiculo;
 import com.gifa_api.service.IVehiculoService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @RestController
 @RequestMapping("/vehiculo")
@@ -18,8 +15,8 @@ public class VehiculoController {
     private final IVehiculoService vehiculoService;
 
     @GetMapping("/verAll")
-    public List<Vehiculo> verVehiculos() {
-        return vehiculoService.getVehiculos();
+    public ResponseEntity<ListaVehiculosResponseDTO> verVehiculos() {
+        return new ResponseEntity<>(vehiculoService.getVehiculos(), HttpStatus.OK);
     }
     @PostMapping("/registrar")
     public ResponseEntity<?> registrar(@RequestBody RegistarVehiculoDTO registarVehiculoDTO) {

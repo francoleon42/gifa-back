@@ -6,17 +6,16 @@ import jakarta.persistence.*;
 import lombok.*;
 
 import java.time.LocalDate;
-import java.util.Date;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
-@Builder
 @Getter
 @Setter
-@Entity
-@Table(name = "vehiculo")
+@Builder
 @NoArgsConstructor
 @AllArgsConstructor
+@Entity
+@Table(name = "vehiculo")
 public class Vehiculo {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -51,7 +50,6 @@ public class Vehiculo {
 
     @Column(name = "fecha_vencimiento")
     private LocalDate fechaVencimiento;
-
 
     @OneToMany(mappedBy = "vehiculo")
     private Set<CargaCombustible> cargaCombustibles = new LinkedHashSet<>();

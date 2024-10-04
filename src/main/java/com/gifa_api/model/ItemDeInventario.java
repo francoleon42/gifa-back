@@ -1,18 +1,20 @@
 package com.gifa_api.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.*;
 
 import java.util.LinkedHashSet;
 import java.util.Set;
 
-@Builder
 @Getter
 @Setter
-@Entity
-@Table(name = "item_de_inventario")
+@Builder
 @NoArgsConstructor
 @AllArgsConstructor
+@Entity
+@Table(name = "item_de_inventario")
 public class ItemDeInventario {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -28,6 +30,7 @@ public class ItemDeInventario {
     @Column(name = "stock")
     private Integer stock;
 
+    @JsonManagedReference
     @OneToMany(mappedBy = "repuestoUtilizado")
     private Set<Mantenimiento> mantenimientos = new LinkedHashSet<>();
 

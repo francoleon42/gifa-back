@@ -1,13 +1,16 @@
 package com.gifa_api.model;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 import java.time.LocalDate;
 
 @Getter
 @Setter
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 @Entity
 @Table(name = "kilometraje_vehiculo")
 public class KilometrajeVehiculo {
@@ -25,9 +28,11 @@ public class KilometrajeVehiculo {
     @Column(name = "kilometro_inicio_trayecto")
     private Float kilometroInicioTrayecto;
 
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
     @Column(name = "fecha_inicio")
     private LocalDate fechaInicio;
 
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
     @Column(name = "fecha_fin")
     private LocalDate fechaFin;
 

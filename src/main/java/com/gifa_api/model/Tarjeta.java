@@ -6,13 +6,13 @@ import lombok.*;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
-@Builder
 @Getter
 @Setter
-@Entity
-@Table(name = "tarjeta")
+@Builder
 @NoArgsConstructor
 @AllArgsConstructor
+@Entity
+@Table(name = "tarjeta")
 public class Tarjeta {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

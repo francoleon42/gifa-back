@@ -2,13 +2,15 @@ package com.gifa_api.model;
 
 import com.gifa_api.utils.enums.EstadoPedido;
 import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 import java.time.LocalDate;
 
 @Getter
 @Setter
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 @Entity
 @Table(name = "pedido")
 public class Pedido {

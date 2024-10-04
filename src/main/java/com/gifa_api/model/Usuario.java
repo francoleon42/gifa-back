@@ -1,5 +1,6 @@
 package com.gifa_api.model;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.gifa_api.utils.enums.Rol;
 import jakarta.persistence.*;
 import lombok.*;
@@ -12,13 +13,13 @@ import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
 
-@Builder
 @Getter
 @Setter
-@Entity
-@Table(name = "usuario")
+@Builder
 @NoArgsConstructor
 @AllArgsConstructor
+@Entity
+@Table(name = "usuario")
 public class Usuario implements UserDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -35,6 +36,7 @@ public class Usuario implements UserDetails {
     @Column(name = "rol", nullable = false)
     private Rol rol;
 
+    @JsonManagedReference
     @OneToMany(mappedBy = "operador")
     private Set<Mantenimiento> mantenimientos = new LinkedHashSet<>();
 

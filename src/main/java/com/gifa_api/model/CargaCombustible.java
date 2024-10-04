@@ -1,13 +1,16 @@
 package com.gifa_api.model;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 import java.time.LocalDate;
 
 @Getter
 @Setter
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 @Entity
 @Table(name = "carga_combustible")
 public class CargaCombustible {
@@ -19,6 +22,7 @@ public class CargaCombustible {
     @Column(name = "cantidad_litros")
     private Integer cantidadLitros;
 
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
     @Column(name = "fecha_hora")
     private LocalDate fechaHora;
 
