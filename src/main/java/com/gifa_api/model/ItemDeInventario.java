@@ -36,9 +36,9 @@ public class ItemDeInventario {
     @OneToMany(mappedBy = "item")
     private Set<Pedido> pedidos = new LinkedHashSet<>();
 
-    @ManyToOne
-    @JoinColumn(name = "proveedor_de_item_id", nullable = false)
-    private ProveedorDeItem proveedorDeItem;
+    @OneToMany
+    @JoinColumn(name = "proveedor_de_item_id")
+    private Set<ProveedorDeItem> proveedorDeItems;
 
     public void desminuirStock() {
         this.stock -= 1;
