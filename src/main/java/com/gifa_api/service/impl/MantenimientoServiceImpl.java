@@ -98,7 +98,7 @@ public class MantenimientoServiceImpl implements IMantenimientoService {
     @Override
     public void agregaritemUtilizadoEnMantenimiento(ItemDeInventario itemIventario, Integer idMantenimiento) {
         Mantenimiento  mantenimiento = findById(idMantenimiento);
-        mantenimiento.setRepuestoUtilizado(itemIventario);
+//        mantenimiento.setRepuestoUtilizado(itemIventario);
     }
 
 

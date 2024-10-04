@@ -44,8 +44,8 @@ public class MantenimientoMapper {
                 .fechaInicio(mantenimiento.getFechaInicio())
                 .fechaFinalizacion(mantenimiento.getFechaFinalizacion())
                 .asunto(mantenimiento.getAsunto())
-                .repuestoUtilizado(mantenimiento.getRepuestoUtilizado() != null ?
-                        mantenimiento.getRepuestoUtilizado().getNombre() : null)
+//                .repuestoUtilizado(mantenimiento.getRepuestoUtilizado() != null ?
+//                        mantenimiento.getRepuestoUtilizado().getNombre() : null)
                 .estadoMantenimiento(mantenimiento.getEstadoMantenimiento().name())
                 .build();
 

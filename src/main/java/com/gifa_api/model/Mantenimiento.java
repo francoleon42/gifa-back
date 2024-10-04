@@ -6,6 +6,7 @@ import jakarta.persistence.*;
 import lombok.*;
 
 import java.time.LocalDate;
+import java.util.Set;
 
 @Getter
 @Setter
@@ -31,10 +32,6 @@ public class Mantenimiento {
     @Column(name = "asunto")
     private String asunto;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "repuesto_utilizado")
-    private ItemDeInventario repuestoUtilizado;
-
     @Enumerated(EnumType.STRING)
     @Column(name = "estado_mantenimiento", nullable = false)
     private EstadoMantenimiento estadoMantenimiento;
@@ -46,6 +43,9 @@ public class Mantenimiento {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "vehiculo_id")
     private Vehiculo vehiculo;
+
+    @OneToMany(mappedBy = "mantenimiento",  cascade = CascadeType.ALL)
+    private Set<ItemUsadoMantenimiento> itemUsadoMantenimientos;
 
 
     public void finalizar() {

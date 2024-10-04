@@ -29,16 +29,15 @@ public class ItemDeInventario {
     @Column(name = "stock")
     private Integer stock;
 
-    @JsonManagedReference
-    @OneToMany(mappedBy = "repuestoUtilizado")
-    private Set<Mantenimiento> mantenimientos = new LinkedHashSet<>();
-
     @OneToMany(mappedBy = "item")
     private Set<Pedido> pedidos = new LinkedHashSet<>();
 
     @OneToMany
     @JoinColumn(name = "proveedor_de_item_id")
     private Set<ProveedorDeItem> proveedorDeItems;
+
+    @OneToMany(mappedBy = "mantenimiento", cascade = CascadeType.ALL)
+    private Set<ItemUsadoMantenimiento> itemUsadoMantenimientos;
 
     public void desminuirStock() {
         this.stock -= 1;
