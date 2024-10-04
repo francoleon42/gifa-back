@@ -26,7 +26,5 @@ public class Tarjeta {
     @JoinColumn(name = "vehiculo_id")
     private Vehiculo vehiculo;
 
-    @OneToMany(mappedBy = "tarjeta")
-    private Set<Vehiculo> vehiculos = new LinkedHashSet<>();
 
 }

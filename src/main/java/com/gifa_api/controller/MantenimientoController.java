@@ -17,7 +17,7 @@ import java.util.List;
 @RequestMapping("/mantenimiento")
 @RequiredArgsConstructor
 public class MantenimientoController {
-    IMantenimientoService mantenimientoService;
+     IMantenimientoService mantenimientoService;
 
 
     @PostMapping("/crear-manualmente")

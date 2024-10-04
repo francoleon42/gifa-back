@@ -18,6 +18,7 @@ import com.gifa_api.utils.enums.EstadoMantenimiento;
 import com.gifa_api.utils.enums.EstadoVehiculo;
 import com.gifa_api.utils.enums.Rol;
 import com.gifa_api.utils.mappers.MantenimientoMapper;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -25,12 +26,13 @@ import java.time.LocalDate;
 import java.util.List;
 
 @Service
+@RequiredArgsConstructor
 public class MantenimientoServiceImpl implements IMantenimientoService {
-    private final IMantenimientoRepository IMantenimientoRepository;
-    private final IUsuarioRepository IUsuarioRepository;
-    private final MantenimientoMapper mantenimientoMapper;
-    private final IVehiculoRepository iVehiculoRepository;
-    private final MantenimientoController mantenimientoController;
+    private  IMantenimientoRepository IMantenimientoRepository;
+    private  IUsuarioRepository IUsuarioRepository;
+    private  MantenimientoMapper mantenimientoMapper;
+    private  IVehiculoRepository iVehiculoRepository;
+    private  MantenimientoController mantenimientoController;
 
     public MantenimientoServiceImpl(@Autowired IMantenimientoRepository IMantenimientoRepository, IUsuarioRepository iUsuarioRepository, IVehiculoRepository iVehiculoRepository, MantenimientoController mantenimientoController) {
         this.IMantenimientoRepository = IMantenimientoRepository;

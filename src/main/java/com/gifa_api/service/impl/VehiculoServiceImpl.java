@@ -21,8 +21,8 @@ import java.util.List;
 @RequiredArgsConstructor
 public class VehiculoServiceImpl implements IVehiculoService {
     private final IVehiculoRepository vehiculoRepository;
-    private final ItemDeInventarioRepository itemDeInventarioRepository;
-    private final IMantenimientoService iMantenimientoService;
+    private   ItemDeInventarioRepository itemDeInventarioRepository;
+    private  IMantenimientoService iMantenimientoService;
 
 
     @Override
