@@ -1,12 +1,13 @@
 package com.gifa_api.dto.vehiculo;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDate;
 import java.util.Date;
-
 
 @Data
 @Builder
@@ -19,5 +20,6 @@ public class RegistarVehiculoDTO {
     private Integer kilometraje;
     private Integer litrosDeTanque;
     private String modelo;
-    private Date fechaRevision;
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd/MM/yyyy")
+    private LocalDate fechaRevision;
 }
