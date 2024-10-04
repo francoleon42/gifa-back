@@ -13,8 +13,6 @@ public interface IMantenimientoService {
     void crearMantenimiento(RegistrarMantenimientoDTO registrarMantenimientoDTO);
     List<Mantenimiento> verMantenimientosPorVehiculo(Integer id);
 
-    void registrarMantenimientoManualmente(Integer id);
-
     MantenimientosPendientesResponseDTO verMantenimientosPendientes();
 
     MantenimientosResponseDTO verMantenimientos();

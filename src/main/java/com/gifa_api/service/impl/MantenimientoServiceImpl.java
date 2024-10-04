@@ -42,8 +42,15 @@ public class MantenimientoServiceImpl implements IMantenimientoService {
         Mantenimiento mantenimiento = Mantenimiento
                 .builder()
                 .asunto(registrarMantenimientoDTO.getAsunto())
+                .estadoMantenimiento(EstadoMantenimiento.PENDIENTE)
                 .vehiculo(vehiculo)
                 .build();
+
+
+        // mejorar la bidireccion de las relaciones.
+        vehiculo.getMantenimientos().add(mantenimiento);
+        iVehiculoRepository.save(vehiculo);
+        IMantenimientoRepository.save(mantenimiento);
     }
 
     @Override
@@ -51,10 +58,6 @@ public class MantenimientoServiceImpl implements IMantenimientoService {
         return IMantenimientoRepository.findByVehiculoId(id);
     }
 
-    @Override
-    public void registrarMantenimientoManualmente(Integer id) {
-
-    }
 
     @Override
     public MantenimientosResponseDTO verMantenimientos() {
