@@ -1,9 +1,11 @@
 package com.gifa_api.service.impl;
 
+import com.gifa_api.model.GestorDePedidos;
 import com.gifa_api.model.ItemDeInventario;
 import com.gifa_api.model.Pedido;
 import com.gifa_api.repository.IPedidoRepository;
 import com.gifa_api.repository.ItemDeInventarioRepository;
+import com.gifa_api.service.IGestorDePedidosService;
 import com.gifa_api.service.IPedidoService;
 import com.gifa_api.utils.enums.EstadoPedido;
 import lombok.RequiredArgsConstructor;
@@ -18,7 +20,7 @@ import java.util.List;
 public class PedidoServiceImpl implements IPedidoService {
     private final IPedidoRepository pedidoRepository;
     private final ItemDeInventarioRepository itemDeInventarioRepository;
-
+    private final IGestorDePedidosService gestorDePedidosService;
 
     @Override
     public void createPedido(ItemDeInventario itemDeInventario, Integer cantidad) {
@@ -35,11 +37,16 @@ public class PedidoServiceImpl implements IPedidoService {
 
     @Scheduled(fixedRate = 86400000)  // Ejecuta cada 24 horas (86400000 milisegundos)
     public void hacerPedidos() {
+
         List<ItemDeInventario> itemsDeInventario = itemDeInventarioRepository.findAll();
+        GestorDePedidos gestorDePedidos = gestorDePedidosService.obtenerGestorDePedidos();
+
         for (ItemDeInventario item : itemsDeInventario) {
             if(item.getUmbral() >  item.getStock()  ){
-                int cantidadMinima = (item.getUmbral() - item.getStock()) + item.getStock();;
-                createPedido(item,cantidadMinima + 50 );
+                int cantidadMinima = (item.getUmbral() - item.getStock()) + item.getStock();
+                int cantidad = gestorDePedidos.getCantDePedidoAutomatico() + cantidadMinima;
+                // seleccionar el proveer mas barato y ver si me alcanza
+                        createPedido(item,cantidad);
             }
         }
 

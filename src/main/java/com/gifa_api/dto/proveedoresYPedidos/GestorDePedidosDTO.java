@@ -12,7 +12,7 @@ import java.math.BigDecimal;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class ActualizarGestorDePedidosDTO {
+public class GestorDePedidosDTO {
 
     Double presupuesto;
     Integer cantDePedidoAutomatico;
