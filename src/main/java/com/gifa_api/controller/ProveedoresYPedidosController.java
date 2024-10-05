@@ -1,11 +1,9 @@
 package com.gifa_api.controller;
 
-import com.gifa_api.dto.mantenimiento.RegistrarMantenimientoDTO;
 import com.gifa_api.dto.proveedoresYPedidos.AsociacionProveedorDeITemDTO;
 import com.gifa_api.dto.proveedoresYPedidos.GestorDePedidosDTO;
+import com.gifa_api.dto.proveedoresYPedidos.PedidoDTO;
 import com.gifa_api.dto.proveedoresYPedidos.RegistroProveedorRequestDTO;
-import com.gifa_api.model.GestorDePedidos;
-import com.gifa_api.model.ProveedorDeItem;
 import com.gifa_api.service.IGestorDePedidosService;
 import com.gifa_api.service.IPedidoService;
 import com.gifa_api.service.IProvedorService;
@@ -14,6 +12,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/pedido")
@@ -46,10 +46,10 @@ public class ProveedoresYPedidosController {
         gestorDePedidosService.actualizarGestorDePedidos(gestorDePedidosDTO);
         return ResponseEntity.ok(HttpStatus.OK);
     }
-//    @GetMapping("/verPedidos")
-//    public PedidosDTO verPedidos(){
-//        return pedidoService.obtenerPedidos();
-//    }
+    @GetMapping("/verPedidos")
+    public List<PedidoDTO> verPedidos(){
+        return pedidoService.obtenerPedidos();
+    }
 
 
 

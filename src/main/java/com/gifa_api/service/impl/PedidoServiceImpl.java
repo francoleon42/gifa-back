@@ -1,6 +1,7 @@
 package com.gifa_api.service.impl;
 
 import com.gifa_api.dto.proveedoresYPedidos.GestorDePedidosDTO;
+import com.gifa_api.dto.proveedoresYPedidos.PedidoDTO;
 import com.gifa_api.model.*;
 import com.gifa_api.repository.IPedidoRepository;
 import com.gifa_api.repository.ItemDeInventarioRepository;
@@ -8,6 +9,7 @@ import com.gifa_api.service.IGestorDePedidosService;
 import com.gifa_api.service.IPedidoService;
 import com.gifa_api.service.IProveedorDeItemService;
 import com.gifa_api.utils.enums.EstadoPedido;
+import com.gifa_api.utils.mappers.PedidosMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
@@ -22,26 +24,22 @@ public class PedidoServiceImpl implements IPedidoService {
     private final ItemDeInventarioRepository itemDeInventarioRepository;
     private final IGestorDePedidosService gestorDePedidosService;
     private final IProveedorDeItemService proveedorDeItemService;
+    private final PedidosMapper pedidosMapper;
 
     @Override
     public void createPedido(ItemDeInventario itemDeInventario, Integer cantidad) {
 
-            Pedido pedido = Pedido
-                    .builder()
-                    .estadoPedido(EstadoPedido.PENDIENTE)
-                    .item(itemDeInventario)
-                    .cantidad(cantidad)
-                    .fecha(LocalDate.now())
-                    .motivo("Solcitud de stock ")
-                    .build();
-            pedidoRepository.save(pedido);
+        Pedido pedido = Pedido
+                .builder()
+                .estadoPedido(EstadoPedido.PENDIENTE)
+                .item(itemDeInventario)
+                .cantidad(cantidad)
+                .fecha(LocalDate.now())
+                .motivo("Solcitud de stock ")
+                .build();
+        pedidoRepository.save(pedido);
 
     }
-
-//    @Override
-//    public PedidosDTO obtenerPedidos() {
-//        return null;
-//    }
 
 
     //    @Scheduled(fixedRate = 1000, initialDelay = 30000)
@@ -60,7 +58,7 @@ public class PedidoServiceImpl implements IPedidoService {
                 ProveedorDeItem proveerDeItemMasEconomico = proveedorDeItemService.proveedorMasEconomico(item.getId());
                 if ((proveerDeItemMasEconomico.getPrecio() * cantidad) < gestorDePedidos.getPresupuesto()) {
 
-                    if (!existeElPedidoByItemId(item)){
+                    if (!existeElPedidoByItemId(item)) {
                         createPedido(item, cantidad);
                     }
 
@@ -70,9 +68,15 @@ public class PedidoServiceImpl implements IPedidoService {
 
     }
 
-    public boolean existeElPedidoByItemId(ItemDeInventario item){
+    public boolean existeElPedidoByItemId(ItemDeInventario item) {
         return pedidoRepository.existsByItemId(item.getId());
     }
+
+    @Override
+    public List<PedidoDTO> obtenerPedidos() {
+       return  pedidosMapper.mapToPedidoDTO(pedidoRepository.findAll());
+    }
 }
+
 
 
