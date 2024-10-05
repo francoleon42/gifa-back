@@ -5,6 +5,10 @@ import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
+import jakarta.annotation.PostConstruct;
+import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
@@ -12,12 +16,16 @@ import java.security.Key;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 import java.util.function.Function;
 
 @Service
 public class JwtService {
-
     private static final String SECRET_KEY = System.getenv("JWT_SECRET_KEY");
+    private Map<String, Date> blacklist = new HashMap<>();
+    private ScheduledExecutorService scheduler;
 
     public String getToken(UserDetails user) {
         return getToken(new HashMap<>(), user);
@@ -44,7 +52,9 @@ public class JwtService {
 
     public boolean isTokenValid(String token, UserDetails userDetails) {
         String username = getUsernameFromToken(token);
-        return (username.equals(userDetails.getUsername())&& !isTokenExpired(token));
+        return (username.equals(userDetails.getUsername())
+                && !isTokenExpired(token)
+                && !isTokenBlacklisted(token));
     }
 
     private Claims getAllClaims(String token){
@@ -67,5 +77,34 @@ public class JwtService {
 
     private boolean isTokenExpired(String token){
         return getExpiration(token).before(new Date());
+    }
+
+    public void addToBlacklist(String token) {
+        Date expiration = getExpiration(token);
+        blacklist.put(token, expiration);
+    }
+
+    public boolean isTokenBlacklisted(String token) {
+        if (blacklist.containsKey(token)) {
+            Date expiration = blacklist.get(token);
+            if (expiration.before(new Date())) {
+                blacklist.remove(token);
+                return false;
+            }
+            return true;
+        }
+        return false;
+    }
+
+    public void cleanExpiredTokens() {
+        Date now = new Date();
+        blacklist.entrySet().removeIf(entry -> entry.getValue().before(now));
+    }
+
+    // Cada 1 día borra los tokens de la blacklist
+    @PostConstruct
+    public void scheduleTokenCleanup() {
+        scheduler = Executors.newScheduledThreadPool(1);
+        scheduler.scheduleAtFixedRate(this::cleanExpiredTokens, 0, 1, TimeUnit.DAYS);
     }
 }

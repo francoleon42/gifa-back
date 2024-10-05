@@ -7,4 +7,5 @@ import com.gifa_api.dto.login.RegisterRequestDTO;
 public interface IAuthService {
     LoginResponseDTO login(LoginRequestDTO userDto);
     LoginResponseDTO register(RegisterRequestDTO userToRegisterDto);
+    void logout(String token);
 }

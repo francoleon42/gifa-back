@@ -60,4 +60,10 @@ public class AuthServiceImpl implements IAuthService {
                 .role(user.getRol())
                 .build();
     }
+
+    @Override
+    public void logout(String token) {
+        String jwt = token.substring(7);
+        jwtService.addToBlacklist(jwt);
+    }
 }

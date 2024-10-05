@@ -108,6 +108,6 @@ public class SecurityConfig {
 
     private void configureAuthenticatedEndpoints(AuthorizeHttpRequestsConfigurer<HttpSecurity>.AuthorizationManagerRequestMatcherRegistry authRequest) {
         authRequest
-                .anyRequest().authenticated();
+                .requestMatchers(HttpMethod.POST, "/auth/logout").authenticated();
     }
 }
