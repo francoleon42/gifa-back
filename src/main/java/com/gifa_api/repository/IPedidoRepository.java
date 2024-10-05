@@ -5,8 +5,9 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
+import java.util.List;
+
 public interface IPedidoRepository extends JpaRepository<Pedido, Integer> {
-    @Query("SELECT p FROM Pedido p WHERE p.item.id = :itemId")
-    boolean findByItemId(@Param("itemId") Integer itemId);
+    boolean existsByItemId(Integer itemId);
 
 }

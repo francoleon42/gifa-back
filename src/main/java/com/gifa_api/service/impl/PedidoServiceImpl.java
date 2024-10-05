@@ -34,34 +34,40 @@ public class PedidoServiceImpl implements IPedidoService {
                     .fecha(LocalDate.now())
                     .motivo("Solcitud de stock ")
                     .build();
-            pedidoRepository.save(pedido) ;
-
+            pedidoRepository.save(pedido);
 
     }
 
-    //fix para que no se repita
-//    @Scheduled(fixedRate = 86400000)  // Ejecuta cada 24 horas (86400000 milisegundos)
-@Scheduled(fixedRate = 1000, initialDelay = 30000)
-public void hacerPedidos() {
+
+//    @Scheduled(fixedRate = 1000, initialDelay = 30000)
+    @Scheduled(fixedRate = 86400000)  // Ejecuta cada 24 horas (86400000 milisegundos)
+    public void hacerPedidos() {
 
         List<ItemDeInventario> itemsDeInventario = itemDeInventarioRepository.findAll();
         GestorDePedidos gestorDePedidos = gestorDePedidosService.getGestorDePedidos();
 
 
         for (ItemDeInventario item : itemsDeInventario) {
-            if(item.getUmbral() >  item.getStock()  ){
+            if (item.getUmbral() > item.getStock()) {
                 int cantidadMinima = (item.getUmbral() - item.getStock()) + item.getStock();
                 int cantidad = gestorDePedidos.getCantDePedidoAutomatico() + cantidadMinima;
                 // seleccionar el proveer mas barato y ver si me alcanza
-                ProveedorDeItem proveerDeItemMasEconomico=  proveedorDeItemService.proveedorMasEconomico(item.getId());
-                if((proveerDeItemMasEconomico.getPrecio() * cantidad) < gestorDePedidos.getPresupuesto()){
-                    createPedido(item,cantidad);
+                ProveedorDeItem proveerDeItemMasEconomico = proveedorDeItemService.proveedorMasEconomico(item.getId());
+                if ((proveerDeItemMasEconomico.getPrecio() * cantidad) < gestorDePedidos.getPresupuesto()) {
+
+                    if (!existeElPedidoByItemId(item)){
+                        createPedido(item, cantidad);
+                    }
+
                 }
             }
         }
 
     }
 
-
-
+    public boolean existeElPedidoByItemId(ItemDeInventario item){
+        return pedidoRepository.existsByItemId(item.getId());
+    }
 }
+
+
