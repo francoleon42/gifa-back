@@ -36,14 +36,20 @@ public class ItemDeInventarioServiceImpl implements IItemDeIventarioService {
 
     @Override
     public void utilizarItem(Integer itemId) {
-        ItemDeInventario itemIventario = itemDeInventarioRepository.findById(itemId)
-                .orElseThrow(() -> new NotFoundException("No se encontró el item con id: " + itemId));
+        ItemDeInventario itemIventario = obtenerById(itemId);
 
         if(itemIventario.getUmbral() <  itemIventario.getStock() - 1 ){
             itemIventario.desminuirStock();
         }
         itemDeInventarioRepository.save(itemIventario);
 
+    }
+
+    @Override
+    public ItemDeInventario obtenerById(Integer id) {
+         ItemDeInventario itemIventario = itemDeInventarioRepository.findById(id)
+                .orElseThrow(() -> new NotFoundException("No se encontró el item con id: " + id));
+         return itemIventario;
     }
 
 
