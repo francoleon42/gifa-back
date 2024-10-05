@@ -1,5 +1,6 @@
 package com.gifa_api.service.impl;
 
+import com.gifa_api.dto.proveedoresYPedidos.GestorDePedidosDTO;
 import com.gifa_api.model.GestorDePedidos;
 import com.gifa_api.model.ItemDeInventario;
 import com.gifa_api.model.Pedido;
@@ -39,7 +40,7 @@ public class PedidoServiceImpl implements IPedidoService {
     public void hacerPedidos() {
 
         List<ItemDeInventario> itemsDeInventario = itemDeInventarioRepository.findAll();
-        GestorDePedidos gestorDePedidos = gestorDePedidosService.obtenerGestorDePedidos();
+        GestorDePedidos gestorDePedidos = gestorDePedidosService.getGestorDePedidos();
 
         for (ItemDeInventario item : itemsDeInventario) {
             if(item.getUmbral() >  item.getStock()  ){
