@@ -38,8 +38,13 @@ public class PedidoServiceImpl implements IPedidoService {
 
     }
 
+//    @Override
+//    public PedidosDTO obtenerPedidos() {
+//        return null;
+//    }
 
-//    @Scheduled(fixedRate = 1000, initialDelay = 30000)
+
+    //    @Scheduled(fixedRate = 1000, initialDelay = 30000)
     @Scheduled(fixedRate = 86400000)  // Ejecuta cada 24 horas (86400000 milisegundos)
     public void hacerPedidos() {
 

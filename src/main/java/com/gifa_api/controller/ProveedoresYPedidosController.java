@@ -46,7 +46,10 @@ public class ProveedoresYPedidosController {
         gestorDePedidosService.actualizarGestorDePedidos(gestorDePedidosDTO);
         return ResponseEntity.ok(HttpStatus.OK);
     }
-
+//    @GetMapping("/verPedidos")
+//    public PedidosDTO verPedidos(){
+//        return pedidoService.obtenerPedidos();
+//    }
 
 
 
