@@ -35,6 +35,7 @@ public class AuthServiceImpl implements IAuthService {
                 .builder()
                 .username(userDto.getUsername())
                 .token(token)
+                .role(user.getRol())
                 .build();
     }
 
@@ -56,6 +57,7 @@ public class AuthServiceImpl implements IAuthService {
                 .builder()
                 .username(user.getUsuario())
                 .token(jwtService.getToken(user))
+                .role(user.getRol())
                 .build();
     }
 }
