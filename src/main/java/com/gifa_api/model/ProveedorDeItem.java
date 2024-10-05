@@ -3,6 +3,7 @@ package com.gifa_api.model;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 @Getter
@@ -18,8 +19,15 @@ public class ProveedorDeItem {
     @Column(name = "id", nullable = false)
     private Integer id;
 
+    @Column(name="precio")
+    private BigDecimal precio;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "proveedor_id")
     private Proveedor proveedor;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "itemDeInventario_id")
+    private ItemDeInventario itemDeInventario;
 
 }

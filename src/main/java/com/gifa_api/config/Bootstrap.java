@@ -8,8 +8,10 @@ import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
 import org.springframework.stereotype.Component;
 
+import java.math.BigDecimal;
 import java.time.Instant;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 
 @Component
@@ -134,6 +136,7 @@ public class Bootstrap implements ApplicationRunner {
 
         itemDeInventarioRepository.saveAll(List.of(item1, item2));
 
+
         // Crear proveedores con builder y relaciones con ítems
         Proveedor proveedor1 = Proveedor.builder()
                 .nombre("Proveedor1")
@@ -150,10 +153,14 @@ public class Bootstrap implements ApplicationRunner {
         ProveedorDeItem proveedorDeItem1 = ProveedorDeItem.builder()
 
                 .proveedor(proveedor1)
+                .precio(BigDecimal.valueOf(100))
+                .itemDeInventario(item2)
                 .build();
 
         ProveedorDeItem proveedorDeItem2 = ProveedorDeItem.builder()
                 .proveedor(proveedor2)
+                .precio(BigDecimal.valueOf(100))
+                .itemDeInventario(item1)
                 .build();
 
         proveedorDeParteRepository.saveAll(List.of(proveedorDeItem1, proveedorDeItem2));
