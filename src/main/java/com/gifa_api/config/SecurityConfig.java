@@ -55,12 +55,11 @@ public class SecurityConfig {
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
-        configuration.setAllowedOrigins(List.of("http://localhost:5173"));  // Cambiar al dominio de producción cuando sea necesario
+        configuration.setAllowedOrigins(List.of("http://localhost:5173"));
         configuration.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS", "PATCH"));
         configuration.setAllowedHeaders(List.of("Authorization", "Content-Type"));
-        configuration.setAllowCredentials(true);  // Permitir cookies, Authorization headers, etc.
+        configuration.setAllowCredentials(true);
 
-        // Registrar la configuración para todas las rutas
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", configuration);
         return source;
@@ -78,19 +77,20 @@ public class SecurityConfig {
         String administrador = Rol.ADMINISTRADOR.toString();
         authRequest
                 .requestMatchers(HttpMethod.POST, "/auth/register").hasRole(administrador)
-                .requestMatchers(HttpMethod.POST, "/vehiculo/registrar").hasRole(administrador) // 1.1 Registrar colectivo
-                .requestMatchers(HttpMethod.POST, "/inventario/registrarItem").hasRole(administrador) // 1.2 Registrar una parte para el inventario
-                .requestMatchers(HttpMethod.POST, "/vehiculo/asignar").hasRole(administrador) // 1.3 Asignar una parte al vehículo
-                .requestMatchers(HttpMethod.PATCH, "/vehiculo/habilitar/{id}", "/vehiculo/inhabilitar/{id}").hasRole(administrador) // 1.4 Habilitar/inhabilitar colectivo
-                .requestMatchers(HttpMethod.GET, "/vehiculo/verAll").hasRole(administrador)
-                .requestMatchers(HttpMethod.GET, "/mantenimiento/por-vehiculo/{id}").hasRole(administrador);
+                .requestMatchers(HttpMethod.POST, "/vehiculo/registrar").hasRole(administrador)
+                .requestMatchers(HttpMethod.POST, "/pedido/registrarProveedor").hasRole(administrador)
+                .requestMatchers(HttpMethod.POST, "/pedido/asociarProveedor").hasRole(administrador)
+                .requestMatchers(HttpMethod.POST, "/inventario/registrarItem").hasRole(administrador)
+                .requestMatchers(HttpMethod.PATCH, "/vehiculo/habilitar/{id}", "/vehiculo/inhabilitar/{id}").hasRole(administrador)
+                .requestMatchers(HttpMethod.PATCH, "/pedido/actualizarGestor").hasRole(administrador)
+                .requestMatchers(HttpMethod.GET, "/vehiculo/verAll").hasRole(administrador);
     }
 
 
     private void configureSupervisorEndpoints(AuthorizeHttpRequestsConfigurer<HttpSecurity>.AuthorizationManagerRequestMatcherRegistry authRequest) {
         String supervisor = Rol.SUPERVISOR.toString();
         authRequest
-        .requestMatchers(HttpMethod.POST, "/mantenimiento/crear-manualmente").hasRole(supervisor);
+                .requestMatchers(HttpMethod.POST, "/mantenimiento/crearManual").hasRole(supervisor);
     }
 
     private void configureGerenteEndpoints(AuthorizeHttpRequestsConfigurer<HttpSecurity>.AuthorizationManagerRequestMatcherRegistry authRequest) {
@@ -100,10 +100,10 @@ public class SecurityConfig {
     private void configureOperadorEndpoints(AuthorizeHttpRequestsConfigurer<HttpSecurity>.AuthorizationManagerRequestMatcherRegistry authRequest) {
         String operador = Rol.OPERADOR.toString();
         authRequest
-                .requestMatchers(HttpMethod.GET, "/mantenimiento/pendientes").hasRole(operador) // 1.6 Visibilizar mantenimientos pendientes
-                .requestMatchers(HttpMethod.PATCH, "/mantenimiento/asignar/{id}").hasRole(operador) // 1.7 Asignar mantenimiento
-                .requestMatchers(HttpMethod.PATCH, "/mantenimiento/finalizar/{id}").hasRole(operador) // 1.8 Finalizar mantenimiento
-                .requestMatchers(HttpMethod.PATCH, "/inventario/utilizarItem/{id}").hasRole(operador); // 1.9 Utilizar repuesto
+                .requestMatchers(HttpMethod.GET, "/mantenimiento/pendientes").hasRole(operador)
+                .requestMatchers(HttpMethod.PATCH, "/mantenimiento/asignar/{mantenimientoId}").hasRole(operador)
+                .requestMatchers(HttpMethod.POST, "/mantenimiento/finalizar/{mantenimientoId}").hasRole(operador)
+                .requestMatchers(HttpMethod.PATCH, "/inventario/utilizarItem/{id}").hasRole(operador);
     }
 
     private void configureAuthenticatedEndpoints(AuthorizeHttpRequestsConfigurer<HttpSecurity>.AuthorizationManagerRequestMatcherRegistry authRequest) {
