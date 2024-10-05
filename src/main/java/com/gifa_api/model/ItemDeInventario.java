@@ -32,8 +32,7 @@ public class ItemDeInventario {
     @OneToMany(mappedBy = "item")
     private Set<Pedido> pedidos = new LinkedHashSet<>();
 
-    @OneToMany
-    @JoinColumn(name = "proveedor_de_item_id")
+    @OneToMany(mappedBy = "itemDeInventario", cascade = CascadeType.ALL)
     private Set<ProveedorDeItem> proveedorDeItems;
 
     @OneToMany(mappedBy = "itemDeInventario", cascade = CascadeType.ALL)

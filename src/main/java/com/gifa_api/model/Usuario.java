@@ -40,8 +40,6 @@ public class Usuario implements UserDetails {
     @OneToMany(mappedBy = "operador")
     private Set<Mantenimiento> mantenimientos = new LinkedHashSet<>();
 
-    @OneToMany(mappedBy = "gerente")
-    private Set<Presupuesto> presupuestos = new LinkedHashSet<>();
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

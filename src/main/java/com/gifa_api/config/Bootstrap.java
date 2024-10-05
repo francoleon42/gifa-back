@@ -8,8 +8,10 @@ import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
 import org.springframework.stereotype.Component;
 
+import java.math.BigDecimal;
 import java.time.Instant;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 
 @Component
@@ -25,7 +27,7 @@ public class Bootstrap implements ApplicationRunner {
     private final IMantenimientoRepository mantenimientoRepository;
     private final IProveedorRepository proveedorRepository;
     private final IProveedorDeParteRepository proveedorDeParteRepository;
-    private final IPresupuestoRepository presupuestoRepository;
+    private final IGestorDePedidosRepository igestorDePedidosRepository;
     private final IKilometrajeVehiculoRepository kilometrajeVehiculoRepository;
     private final IItemUsadoMantenimientoRepository itemUsadoMantenimientoRepository;
 
@@ -57,6 +59,15 @@ public class Bootstrap implements ApplicationRunner {
                 .build();
 
         userRepository.saveAll(List.of(admin, operador, supervisor, gerente));
+
+
+        GestorDePedidos gestorDePedidos = GestorDePedidos.builder()
+                .presupuesto(100.00)
+                .cantDePedidoAutomatico(20)
+                .gerente(gerente)
+                .build();
+
+        igestorDePedidosRepository.save(gestorDePedidos);
 
         // Crear tarjetas con builder
         Tarjeta tarjeta1 = Tarjeta.builder()
@@ -134,6 +145,7 @@ public class Bootstrap implements ApplicationRunner {
 
         itemDeInventarioRepository.saveAll(List.of(item1, item2));
 
+
         // Crear proveedores con builder y relaciones con ítems
         Proveedor proveedor1 = Proveedor.builder()
                 .nombre("Proveedor1")
@@ -150,10 +162,14 @@ public class Bootstrap implements ApplicationRunner {
         ProveedorDeItem proveedorDeItem1 = ProveedorDeItem.builder()
 
                 .proveedor(proveedor1)
+                .precio(BigDecimal.valueOf(100))
+                .itemDeInventario(item2)
                 .build();
 
         ProveedorDeItem proveedorDeItem2 = ProveedorDeItem.builder()
                 .proveedor(proveedor2)
+                .precio(BigDecimal.valueOf(100))
+                .itemDeInventario(item1)
                 .build();
 
         proveedorDeParteRepository.saveAll(List.of(proveedorDeItem1, proveedorDeItem2));
@@ -213,18 +229,7 @@ public class Bootstrap implements ApplicationRunner {
 
         itemUsadoMantenimientoRepository.saveAll(List.of(itemUsadoMantenimiento1, itemUsadoMantenimiento2));
 
-        // Crear presupuestos con builder
-        Presupuesto presupuesto1 = Presupuesto.builder()
-                .monto(1000f)
-                .gerente(gerente)
-                .build();
 
-        Presupuesto presupuesto2 = Presupuesto.builder()
-                .monto(1500f)
-                .gerente(gerente)
-                .build();
-
-        presupuestoRepository.saveAll(List.of(presupuesto1, presupuesto2));
 
         // Crear kilometrajes asociados a vehiculo1
         for (int i = 1; i <= 5; i++) {
