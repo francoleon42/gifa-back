@@ -11,7 +11,6 @@ import lombok.*;
 @Entity
 @Table(name = "item_usado_en_mantenimiento")
 public class ItemUsadoMantenimiento {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)

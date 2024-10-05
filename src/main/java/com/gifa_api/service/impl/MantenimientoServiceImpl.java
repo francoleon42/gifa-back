@@ -82,9 +82,8 @@ public class MantenimientoServiceImpl implements IMantenimientoService {
                 .orElseThrow(() -> new NotFoundException("No se encontró el mantenimiento con id: " + mantenimientoId));
     }
 
-    // fix para que si utilizo un respuesto que se agrege a respuestosUtilizado.
     @Override
-    public void finalizarMantenimiento(Integer mantenimientoId, FinalizarMantenimientoDTO finalizarMantenimientoDTO) {
+    public void finalizarMantenimiento(Integer mantenimientoId) {
         Mantenimiento mantenimiento = findById(mantenimientoId);
         mantenimiento.setEstadoMantenimiento(EstadoMantenimiento.FINALIZADO);
         mantenimiento.getVehiculo().setEstadoVehiculo(EstadoVehiculo.REPARADO);

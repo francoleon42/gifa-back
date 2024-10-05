@@ -17,7 +17,7 @@ public interface IMantenimientoService {
 
     void asignarMantenimiento(Integer mantenimientoId, AsignarMantenimientoRequestDTO asignarMantenimientoRequestDTO);
 
-    void finalizarMantenimiento(Integer mantenimientoId, FinalizarMantenimientoDTO finalizarMantenimientoDTO);
+    void finalizarMantenimiento(Integer mantenimientoId);
 
 
 }

@@ -43,9 +43,9 @@ public class MantenimientoController {
     }
 
     @PatchMapping("/finalizar/{mantenimientoId}")
-    public ResponseEntity<?> finalizarMantenimiento(@PathVariable Integer mantenimientoId, FinalizarMantenimientoDTO finalizarMantenimientoDTO){
-        mantenimientoService.finalizarMantenimiento(mantenimientoId,finalizarMantenimientoDTO);
-        itemUsadoMantenimientoService.agregaritemUtilizadoEnMantenimiento(finalizarMantenimientoDTO.getIdItem(), mantenimientoId,finalizarMantenimientoDTO.getCantidad());
+    public ResponseEntity<?> finalizarMantenimiento(@PathVariable Integer mantenimientoId, @RequestBody FinalizarMantenimientoDTO finalizarMantenimientoDTO){
+        mantenimientoService.finalizarMantenimiento(mantenimientoId);
+        itemUsadoMantenimientoService.agregaritemUtilizadoEnMantenimiento(mantenimientoId, finalizarMantenimientoDTO);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 }

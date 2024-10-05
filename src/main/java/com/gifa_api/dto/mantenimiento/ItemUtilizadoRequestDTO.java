@@ -5,12 +5,11 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.util.List;
-
-@Data
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class FinalizarMantenimientoDTO {
-    List<ItemUtilizadoRequestDTO> items;
+@Data
+public class ItemUtilizadoRequestDTO {
+    Integer idItem;
+    Integer cantidad;
 }

@@ -3,11 +3,13 @@ package com.gifa_api.utils.mappers;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.gifa_api.dto.mantenimiento.*;
+import com.gifa_api.model.ItemUsadoMantenimiento;
 import com.gifa_api.model.Mantenimiento;
 import com.gifa_api.model.Vehiculo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -44,8 +46,6 @@ public class MantenimientoMapper {
                 .fechaInicio(mantenimiento.getFechaInicio())
                 .fechaFinalizacion(mantenimiento.getFechaFinalizacion())
                 .asunto(mantenimiento.getAsunto())
-//                .repuestoUtilizado(mantenimiento.getRepuestoUtilizado() != null ?
-//                        mantenimiento.getRepuestoUtilizado().getNombre() : null)
                 .estadoMantenimiento(mantenimiento.getEstadoMantenimiento().name())
                 .build();
 
@@ -73,6 +73,19 @@ public class MantenimientoMapper {
                     .build();
 
             responseDTO.setVehiculo(vehiculoDTO);
+        }
+
+        if (mantenimiento.getItemUsadoMantenimientos() != null) {
+            List<ItemUtilizadoMantenimientoResponseDTO> items = new ArrayList<>();
+            for(ItemUsadoMantenimiento item : mantenimiento.getItemUsadoMantenimientos()){
+                ItemUtilizadoMantenimientoResponseDTO itemUtilizado = ItemUtilizadoMantenimientoResponseDTO.builder()
+                        .item(item.getItemDeInventario().getNombre())
+                        .cantidad(item.getCantidad())
+                        .build();
+                items.add(itemUtilizado);
+            }
+
+            responseDTO.setItemUtilizado(items);
         }
 
         return responseDTO;

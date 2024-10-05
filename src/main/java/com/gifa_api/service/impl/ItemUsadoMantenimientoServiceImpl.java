@@ -1,5 +1,7 @@
 package com.gifa_api.service.impl;
 
+import com.gifa_api.dto.mantenimiento.FinalizarMantenimientoDTO;
+import com.gifa_api.dto.mantenimiento.ItemUtilizadoRequestDTO;
 import com.gifa_api.exception.NotFoundException;
 import com.gifa_api.model.ItemDeInventario;
 import com.gifa_api.model.ItemUsadoMantenimiento;
@@ -19,19 +21,22 @@ public class ItemUsadoMantenimientoServiceImpl implements IitemUsadoMantenimient
     private final IMantenimientoRepository  iMantenimientoRepository;
 
     @Override
-    public void agregaritemUtilizadoEnMantenimiento(Integer idItem, Integer idMantenimiento, Integer cantidad) {
-        ItemDeInventario itemDeInventario= itemDeInventarioRepository.findById(idItem)
-                .orElseThrow(() -> new NotFoundException("No se encontró el item con id: " + idItem));
-
+    public void agregaritemUtilizadoEnMantenimiento(Integer idMantenimiento, FinalizarMantenimientoDTO finalizarMantenimientoDTO) {
         Mantenimiento mantenimiento= iMantenimientoRepository.findById(idMantenimiento)
                 .orElseThrow(() -> new NotFoundException("No se encontró el mantenimiento con id: " + idMantenimiento));
 
-        ItemUsadoMantenimiento itemUsadoMantenimiento = ItemUsadoMantenimiento
-                .builder()
-                .cantidad(cantidad)
-                .itemDeInventario(itemDeInventario)
-                .mantenimiento(mantenimiento)
-                .build();
-        itemUsadoMantenimientoRepository.save(itemUsadoMantenimiento);
+        for(ItemUtilizadoRequestDTO item : finalizarMantenimientoDTO.getItems()){
+            ItemDeInventario itemDeInventario= itemDeInventarioRepository.findById(item.getIdItem())
+                    .orElseThrow(() -> new NotFoundException("No se encontró el item con id: " + item.getIdItem()));
+
+            ItemUsadoMantenimiento itemUsadoMantenimiento = ItemUsadoMantenimiento
+                    .builder()
+                    .cantidad(item.getCantidad())
+                    .itemDeInventario(itemDeInventario)
+                    .mantenimiento(mantenimiento)
+                    .build();
+
+            itemUsadoMantenimientoRepository.save(itemUsadoMantenimiento);
+        }
     }
 }

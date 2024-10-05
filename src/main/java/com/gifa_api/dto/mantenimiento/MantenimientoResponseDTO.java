@@ -7,6 +7,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
+import java.util.List;
 
 @Data
 @Builder
@@ -19,8 +20,8 @@ public class MantenimientoResponseDTO {
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
     private LocalDate fechaFinalizacion;
     private String asunto;
-    private String repuestoUtilizado;
     private String estadoMantenimiento;
     private OperadorMantenimientoResponseDTO operador;
     private VehiculoMantenimientoResponseDTO vehiculo;
+    private List<ItemUtilizadoMantenimientoResponseDTO> itemUtilizado;
 }
