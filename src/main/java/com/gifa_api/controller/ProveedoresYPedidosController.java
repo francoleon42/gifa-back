@@ -1,9 +1,6 @@
 package com.gifa_api.controller;
 
-import com.gifa_api.dto.proveedoresYPedidos.AsociacionProveedorDeITemDTO;
-import com.gifa_api.dto.proveedoresYPedidos.GestorDePedidosDTO;
-import com.gifa_api.dto.proveedoresYPedidos.PedidoDTO;
-import com.gifa_api.dto.proveedoresYPedidos.RegistroProveedorRequestDTO;
+import com.gifa_api.dto.proveedoresYPedidos.*;
 import com.gifa_api.service.IGestorDePedidosService;
 import com.gifa_api.service.IPedidoService;
 import com.gifa_api.service.IProvedorService;
@@ -46,9 +43,15 @@ public class ProveedoresYPedidosController {
         gestorDePedidosService.actualizarGestorDePedidos(gestorDePedidosDTO);
         return ResponseEntity.ok(HttpStatus.OK);
     }
-    @GetMapping("/verPedidos")
-    public List<PedidoDTO> verPedidos(){
+    @GetMapping("/verAll")
+    public List<PedidoResponseDTO> verPedidos(){
         return pedidoService.obtenerPedidos();
+    }
+
+    @PostMapping("/generarPedido")
+    public ResponseEntity<?> generarPedido(@RequestBody PedidoManualDTO pedidoManualDTO){
+        pedidoService.createPedido(pedidoManualDTO.getIdItem(), pedidoManualDTO.getCantidad(),pedidoManualDTO.getMotivo());
+        return ResponseEntity.ok(HttpStatus.CREATED);
     }
 
 

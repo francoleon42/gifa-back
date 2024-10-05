@@ -1,7 +1,7 @@
 package com.gifa_api.service.impl;
 
-import com.gifa_api.dto.proveedoresYPedidos.GestorDePedidosDTO;
-import com.gifa_api.dto.proveedoresYPedidos.PedidoDTO;
+import com.gifa_api.dto.proveedoresYPedidos.PedidoResponseDTO;
+import com.gifa_api.exception.NotFoundException;
 import com.gifa_api.model.*;
 import com.gifa_api.repository.IPedidoRepository;
 import com.gifa_api.repository.ItemDeInventarioRepository;
@@ -27,15 +27,16 @@ public class PedidoServiceImpl implements IPedidoService {
     private final PedidosMapper pedidosMapper;
 
     @Override
-    public void createPedido(ItemDeInventario itemDeInventario, Integer cantidad) {
-
+    public void createPedido(Integer idItem, Integer cantidad,String motivo) {
+        ItemDeInventario item = itemDeInventarioRepository.findById(idItem)
+                .orElseThrow(() -> new NotFoundException("No se encontró el item con id: " + idItem));
         Pedido pedido = Pedido
                 .builder()
                 .estadoPedido(EstadoPedido.PENDIENTE)
-                .item(itemDeInventario)
+                .item(item)
                 .cantidad(cantidad)
                 .fecha(LocalDate.now())
-                .motivo("Solcitud de stock ")
+                .motivo(motivo)
                 .build();
         pedidoRepository.save(pedido);
 
@@ -58,8 +59,8 @@ public class PedidoServiceImpl implements IPedidoService {
                 ProveedorDeItem proveerDeItemMasEconomico = proveedorDeItemService.proveedorMasEconomico(item.getId());
                 if ((proveerDeItemMasEconomico.getPrecio() * cantidad) < gestorDePedidos.getPresupuesto()) {
 
-                    if (!existeElPedidoByItemId(item)) {
-                        createPedido(item, cantidad);
+                    if (!existeElPedidoByItemId(item.getId())) {
+                        createPedido(item.getId(), cantidad, "Solcitud de stock automatica");
                     }
 
                 }
@@ -68,12 +69,12 @@ public class PedidoServiceImpl implements IPedidoService {
 
     }
 
-    public boolean existeElPedidoByItemId(ItemDeInventario item) {
-        return pedidoRepository.existsByItemId(item.getId());
+    public boolean existeElPedidoByItemId(Integer idItem) {
+        return pedidoRepository.existsByItemId(idItem);
     }
 
     @Override
-    public List<PedidoDTO> obtenerPedidos() {
+    public List<PedidoResponseDTO> obtenerPedidos() {
        return  pedidosMapper.mapToPedidoDTO(pedidoRepository.findAll());
     }
 }

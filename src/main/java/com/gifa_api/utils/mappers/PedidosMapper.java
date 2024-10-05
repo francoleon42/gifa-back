@@ -1,7 +1,8 @@
 package com.gifa_api.utils.mappers;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.gifa_api.dto.proveedoresYPedidos.PedidoDTO;
+import com.gifa_api.dto.proveedoresYPedidos.PedidoManualDTO;
+import com.gifa_api.dto.proveedoresYPedidos.PedidoResponseDTO;
 import com.gifa_api.model.Pedido;
 import com.gifa_api.utils.enums.EstadoPedido;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,17 +19,16 @@ public class PedidosMapper {
     public PedidosMapper(ObjectMapper objectMapper) {
         this.objectMapper = objectMapper;
     }
-
-    // Mapea una lista de pedidos a una lista de PedidoDTO
-    public List<PedidoDTO> mapToPedidoDTO(List<Pedido> pedidos) {
+    
+    public List<PedidoResponseDTO> mapToPedidoDTO(List<Pedido> pedidos) {
         return pedidos.stream()
                 .map(this::mapToPedidoDTO)
                 .collect(Collectors.toList());
     }
 
-    // Mapea un Pedido a PedidoDTO
-    public PedidoDTO mapToPedidoDTO(Pedido pedido) {
-        return PedidoDTO.builder()
+
+    public PedidoResponseDTO mapToPedidoDTO(Pedido pedido) {
+        return PedidoResponseDTO.builder()
                 .fecha(pedido.getFecha())
                 .cantidad(pedido.getCantidad())
                 .motivo(pedido.getMotivo())
@@ -37,14 +37,13 @@ public class PedidosMapper {
                 .build();
     }
 
-    // Mapea un PedidoDTO a Pedido
-    public Pedido mapToPedido(PedidoDTO pedidoDTO) {
+
+    public Pedido mapToPedido(PedidoResponseDTO pedidoResponseDTO) {
         return Pedido.builder()
-                .fecha(pedidoDTO.getFecha())
-                .cantidad(pedidoDTO.getCantidad())
-                .motivo(pedidoDTO.getMotivo())
-                // Debes establecer el item correctamente, posiblemente mediante un repositorio
-                .estadoPedido(EstadoPedido.valueOf(pedidoDTO.getEstadoPedido()))  // Asegúrate de manejar las conversiones adecuadamente
+                .fecha(pedidoResponseDTO.getFecha())
+                .cantidad(pedidoResponseDTO.getCantidad())
+                .motivo(pedidoResponseDTO.getMotivo())
+                .estadoPedido(EstadoPedido.valueOf(pedidoResponseDTO.getEstadoPedido()))  // Asegúrate de manejar las conversiones adecuadamente
                 .build();
     }
 }
