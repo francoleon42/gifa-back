@@ -16,7 +16,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/pedidos")
+@RequestMapping("/pedido")
 @RequiredArgsConstructor
 public class ProveedoresYPedidosController {
     private final IPedidoService pedidoService;
@@ -24,7 +24,7 @@ public class ProveedoresYPedidosController {
     private final IProveedorDeItemService proveedorDeItemService;
     private final IGestorDePedidosService gestorDePedidosService;
 
-    @PostMapping("/registro")
+    @PostMapping("/registrar-proveedor")
     public ResponseEntity<?> registrarProveedor(@RequestBody RegistroProveedorRequestDTO registroProveedorRequestDTO) {
         provedorService.registrarProveedor(registroProveedorRequestDTO);
         return new ResponseEntity<>(HttpStatus.CREATED);
@@ -37,14 +37,14 @@ public class ProveedoresYPedidosController {
         return ResponseEntity.ok(HttpStatus.CREATED);
     }
 
+    @GetMapping("obtener-gestorDePedido")
+    public GestorDePedidosDTO obtenerGestorDePedidos() {
+        return gestorDePedidosService.obtenerGestorDePedidos();
+    }
     @PatchMapping("/actualizar-gestor")
     public ResponseEntity<?> actualizarGestorDePedidos(@RequestBody GestorDePedidosDTO gestorDePedidosDTO){
         gestorDePedidosService.actualizarGestorDePedidos(gestorDePedidosDTO);
         return ResponseEntity.ok(HttpStatus.OK);
-    }
-    @GetMapping("obtener-gestor")
-    public GestorDePedidos obtenerGestorDePedidos() {
-        return gestorDePedidosService.obtenerGestorDePedidos();
     }
 
 

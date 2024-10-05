@@ -14,7 +14,7 @@ import java.math.BigDecimal;
 @NoArgsConstructor
 public class AsociacionProveedorDeITemDTO {
 
-    Integer id_item;
-    Integer id_proveedor;
+    Integer idItem;
+    Integer idProveedor;
     BigDecimal precio;
 }

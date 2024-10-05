@@ -5,7 +5,10 @@ import com.gifa_api.dto.proveedoresYPedidos.GestorDePedidosDTO;
 import com.gifa_api.model.GestorDePedidos;
 
 public interface IGestorDePedidosService {
-    GestorDePedidos obtenerGestorDePedidos();
+    GestorDePedidosDTO obtenerGestorDePedidos();
+
+    GestorDePedidos getGestorDePedidos();
+
     void actualizarGestorDePedidos(GestorDePedidosDTO gestorDePedidosDTO);
 
 }
