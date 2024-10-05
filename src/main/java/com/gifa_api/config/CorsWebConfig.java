@@ -10,9 +10,9 @@ public class CorsWebConfig implements WebMvcConfigurer {
     @Override
     public void addCorsMappings(CorsRegistry registry) {
         registry.addMapping("/**")
-                .allowedOrigins("http://localhost:*")  // Permitir solo desde React (puerto 3000)
-                .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS")
-                .allowedHeaders("*")
-                .allowCredentials(true);
+                .allowedOrigins("http://localhost:*")  // Permitir desde cualquier puerto en localhost
+                .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS", "PATCH")  // Métodos permitidos
+                .allowedHeaders("*")  // Todos los encabezados permitidos
+                .allowCredentials(true);  // Permitir credenciales
     }
 }
