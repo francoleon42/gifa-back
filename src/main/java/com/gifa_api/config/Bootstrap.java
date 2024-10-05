@@ -26,7 +26,7 @@ public class Bootstrap implements ApplicationRunner {
     private final IPedidoRepository pedidoRepository;
     private final IMantenimientoRepository mantenimientoRepository;
     private final IProveedorRepository proveedorRepository;
-    private final IProveedorDeParteRepository proveedorDeParteRepository;
+    private final IProveedorDeItemRepository proveedorDeParteRepository;
     private final IGestorDePedidosRepository igestorDePedidosRepository;
     private final IKilometrajeVehiculoRepository kilometrajeVehiculoRepository;
     private final IItemUsadoMantenimientoRepository itemUsadoMantenimientoRepository;
@@ -162,13 +162,13 @@ public class Bootstrap implements ApplicationRunner {
         ProveedorDeItem proveedorDeItem1 = ProveedorDeItem.builder()
 
                 .proveedor(proveedor1)
-                .precio(BigDecimal.valueOf(100))
+                .precio(100.00)
                 .itemDeInventario(item2)
                 .build();
 
         ProveedorDeItem proveedorDeItem2 = ProveedorDeItem.builder()
                 .proveedor(proveedor2)
-                .precio(BigDecimal.valueOf(100))
+                .precio(100.00)
                 .itemDeInventario(item1)
                 .build();
 

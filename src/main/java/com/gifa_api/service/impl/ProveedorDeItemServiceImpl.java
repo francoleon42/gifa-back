@@ -4,7 +4,7 @@ import com.gifa_api.dto.proveedoresYPedidos.AsociacionProveedorDeITemDTO;
 import com.gifa_api.model.ItemDeInventario;
 import com.gifa_api.model.Proveedor;
 import com.gifa_api.model.ProveedorDeItem;
-import com.gifa_api.repository.IProveedorDeParteRepository;
+import com.gifa_api.repository.IProveedorDeItemRepository;
 import com.gifa_api.service.IItemDeIventarioService;
 import com.gifa_api.service.IProvedorService;
 import com.gifa_api.service.IProveedorDeItemService;
@@ -16,7 +16,7 @@ import org.springframework.stereotype.Service;
 public class ProveedorDeItemServiceImpl implements IProveedorDeItemService {
     private final IItemDeIventarioService  itemDeIventarioService;
     private final IProvedorService provedorService;
-    private final IProveedorDeParteRepository iProveedorDeParteRepository;
+    private final IProveedorDeItemRepository iProveedorDeItemRepository;
     @Override
     public void asociarProveedorAItem(AsociacionProveedorDeITemDTO asociacionProveedorDeItemDTO) {
        ItemDeInventario itemDeInventario = itemDeIventarioService.obtenerById(asociacionProveedorDeItemDTO.getIdItem());
@@ -28,6 +28,11 @@ public class ProveedorDeItemServiceImpl implements IProveedorDeItemService {
                 .proveedor(proveedor)
                 .build();
 
-        iProveedorDeParteRepository.save(proveedorDeItem);
+        iProveedorDeItemRepository.save(proveedorDeItem);
+    }
+
+    @Override
+    public ProveedorDeItem proveedorMasEconomico(Integer idItem) {
+       return  iProveedorDeItemRepository.findProveedorMasEconomicoByItemId(idItem);
     }
 }

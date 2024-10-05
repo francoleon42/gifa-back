@@ -20,7 +20,7 @@ public class ProveedorDeItem {
     private Integer id;
 
     @Column(name="precio")
-    private BigDecimal precio;
+    private Double precio;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "proveedor_id")

@@ -16,5 +16,5 @@ public class AsociacionProveedorDeITemDTO {
 
     Integer idItem;
     Integer idProveedor;
-    BigDecimal precio;
+    Double precio;
 }
