@@ -15,14 +15,14 @@ public class MantenimientoController {
     private final IMantenimientoService mantenimientoService;
     private final IitemUsadoMantenimientoService itemUsadoMantenimientoService;
 
-    @PostMapping("/crear-manualmente")
+    @PostMapping("/crearManual")
     public ResponseEntity<?> cargarMantenimientoManualmente(@RequestBody RegistrarMantenimientoDTO registrarMantenimientoDTO){
         mantenimientoService.crearMantenimiento(registrarMantenimientoDTO);
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
-    @GetMapping("por-vehiculo/{id}")
-    public MantenimientosResponseDTO verMantenimientoPorVehiculo(@PathVariable Integer id){
-        return mantenimientoService.verMantenimientosPorVehiculo(id);
+    @GetMapping("/porVehiculo/{id}")
+    public ResponseEntity<MantenimientosResponseDTO> verMantenimientoPorVehiculo(@PathVariable Integer id){
+        return new ResponseEntity<>(mantenimientoService.verMantenimientosPorVehiculo(id), HttpStatus.OK);
     }
 
     @GetMapping("/")
@@ -35,14 +35,14 @@ public class MantenimientoController {
         return new ResponseEntity<>(mantenimientoService.verMantenimientosPendientes(), HttpStatus.OK);
     }
 
-    @PatchMapping("/asignar/{mantenimientoId}")
+    @PostMapping("/asignar/{mantenimientoId}")
     public ResponseEntity<?> asignarMantenimiento(@PathVariable Integer mantenimientoId,
                                                   @RequestBody AsignarMantenimientoRequestDTO asignarMantenimientoRequestDTO){
         mantenimientoService.asignarMantenimiento(mantenimientoId, asignarMantenimientoRequestDTO);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
-    @PatchMapping("/finalizar/{mantenimientoId}")
+    @PostMapping("/finalizar/{mantenimientoId}")
     public ResponseEntity<?> finalizarMantenimiento(@PathVariable Integer mantenimientoId, @RequestBody FinalizarMantenimientoDTO finalizarMantenimientoDTO){
         mantenimientoService.finalizarMantenimiento(mantenimientoId);
         itemUsadoMantenimientoService.agregaritemUtilizadoEnMantenimiento(mantenimientoId, finalizarMantenimientoDTO);
