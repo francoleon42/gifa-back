@@ -33,7 +33,8 @@ public class CargaCombustible {
     private Float costoTotal;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "vehiculo_id")
-    private com.gifa_api.model.Vehiculo vehiculo;
+    @JoinColumn(name = "tarjeta_id")
+    private Tarjeta tarjeta;
+
 
 }

@@ -51,11 +51,6 @@ public class Vehiculo {
     @Column(name = "fecha_vencimiento")
     private LocalDate fechaVencimiento;
 
-    @OneToMany(mappedBy = "vehiculo")
-    private Set<CargaCombustible> cargasCombustible ;
-
-    @OneToMany(mappedBy = "vehiculo", cascade = CascadeType.ALL)
-    private Set<CargaCombustible> cargasCombustibles;
 
     @OneToMany(mappedBy = "vehiculo", cascade = CascadeType.ALL)
     private Set<GpsData> gpsDataSet;

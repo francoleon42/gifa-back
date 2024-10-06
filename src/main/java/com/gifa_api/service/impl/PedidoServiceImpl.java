@@ -50,11 +50,9 @@ public class PedidoServiceImpl implements IPedidoService {
         List<ItemDeInventario> itemsDeInventario = itemDeInventarioRepository.findAll();
         GestorDePedidos gestorDePedidos = gestorDePedidosService.getGestorDePedidos();
 
-
         for (ItemDeInventario item : itemsDeInventario) {
             if (item.getUmbral() > item.getStock()) {
-                int cantidadMinima = (item.getUmbral() - item.getStock()) + item.getStock();
-                int cantidad = gestorDePedidos.getCantDePedidoAutomatico() + cantidadMinima;
+                int cantidad = gestorDePedidos.getCantDePedidoAutomatico() + item.getUmbral();
 
                 ProveedorDeItem proveerDeItemMasEconomico = proveedorDeItemService.proveedorMasEconomico(item.getId());
                 if ((proveerDeItemMasEconomico.getPrecio() * cantidad) < gestorDePedidos.getPresupuesto()) {
