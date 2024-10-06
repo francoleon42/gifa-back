@@ -43,8 +43,8 @@ public class PedidoServiceImpl implements IPedidoService {
     }
 
 
-    //    @Scheduled(fixedRate = 1000, initialDelay = 30000)
-    @Scheduled(fixedRate = 86400000)  // Ejecuta cada 24 horas (86400000 milisegundos)
+
+    @Scheduled(fixedRate = 86400000)
     public void hacerPedidos() {
 
         List<ItemDeInventario> itemsDeInventario = itemDeInventarioRepository.findAll();
@@ -55,7 +55,7 @@ public class PedidoServiceImpl implements IPedidoService {
             if (item.getUmbral() > item.getStock()) {
                 int cantidadMinima = (item.getUmbral() - item.getStock()) + item.getStock();
                 int cantidad = gestorDePedidos.getCantDePedidoAutomatico() + cantidadMinima;
-                // seleccionar el proveer mas barato y ver si me alcanza
+
                 ProveedorDeItem proveerDeItemMasEconomico = proveedorDeItemService.proveedorMasEconomico(item.getId());
                 if ((proveerDeItemMasEconomico.getPrecio() * cantidad) < gestorDePedidos.getPresupuesto()) {
 
