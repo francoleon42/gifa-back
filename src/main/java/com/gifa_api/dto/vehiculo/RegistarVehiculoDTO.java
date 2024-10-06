@@ -14,7 +14,6 @@ import java.util.Date;
 @AllArgsConstructor
 @NoArgsConstructor
 public class RegistarVehiculoDTO {
-    private Integer id;
     private String patente;
     private Integer antiguedad;
     private Integer kilometraje;
