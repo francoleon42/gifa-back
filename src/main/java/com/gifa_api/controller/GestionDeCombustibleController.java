@@ -14,9 +14,9 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/gestionDeCombustible")
 @RequiredArgsConstructor
 public class GestionDeCombustibleController {
+    private final
 
-
-    @PostMapping("/registrarCombustible")
+    @PostMapping("/cargarCombustible")
     public ResponseEntity<?> registrarCombustible(@RequestBody CargaCombustibleRequestDTO cargaCombustibleRequestDTO){
 
         return new ResponseEntity<>(HttpStatus.CREATED);
