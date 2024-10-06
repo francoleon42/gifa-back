@@ -5,6 +5,7 @@ import jakarta.persistence.*;
 import lombok.*;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Getter
 @Setter
@@ -24,7 +25,7 @@ public class CargaCombustible {
 
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
     @Column(name = "fecha_hora")
-    private LocalDate fechaHora;
+    private LocalDateTime fechaHora;
 
     @Column(name = "precio_por_litro")
     private Float precioPorLitro;

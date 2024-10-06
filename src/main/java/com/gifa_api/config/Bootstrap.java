@@ -11,6 +11,7 @@ import org.springframework.stereotype.Component;
 import java.math.BigDecimal;
 import java.time.Instant;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -111,7 +112,7 @@ public class Bootstrap implements ApplicationRunner {
         for (int i = 1; i <= 10; i++) {
             CargaCombustible carga = CargaCombustible.builder()
                     .cantidadLitros(i * 10)
-                    .fechaHora(LocalDate.now())
+                    .fechaHora(LocalDateTime.now())
                     .precioPorLitro(100f + i)
                     .tarjeta(tarjeta1)
                     .build();

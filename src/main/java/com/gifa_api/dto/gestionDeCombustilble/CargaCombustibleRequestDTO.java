@@ -4,11 +4,13 @@ import lombok.Builder;
 import lombok.Data;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Data
 @Builder
 public class CargaCombustibleRequestDTO {
     Integer cantidadLitros;
-    LocalDate FechaYhora;
+
+    LocalDateTime FechaYhora;
     Integer numeroTarjeta;
 }
