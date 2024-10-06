@@ -36,25 +36,25 @@ public class Bootstrap implements ApplicationRunner {
         // Crear usuarios con builder
         Usuario admin = Usuario.builder()
                 .usuario("admin")
-                .contrasena("$2a$10$pnxUrqPKMU2HtJPt9RO1z.p5CK48s6Hus10QD1SFjCjvea9CxddKu")
+                .contrasena("$2a$10$RRAzywJFxaAG3pRlHXep6u6VNKi5KOTT3M8GCxDPHpAyZ0ofX2Bcu")
                 .rol(Rol.ADMINISTRADOR)
                 .build();
 
         Usuario operador = Usuario.builder()
                 .usuario("operador")
-                .contrasena("$2a$10$pnxUrqPKMU2HtJPt9RO1z.p5CK48s6Hus10QD1SFjCjvea9CxddKu")
+                .contrasena("$2a$10$RRAzywJFxaAG3pRlHXep6u6VNKi5KOTT3M8GCxDPHpAyZ0ofX2Bcu")
                 .rol(Rol.OPERADOR)
                 .build();
 
         Usuario supervisor = Usuario.builder()
                 .usuario("supervisor")
-                .contrasena("$2a$10$pnxUrqPKMU2HtJPt9RO1z.p5CK48s6Hus10QD1SFjCjvea9CxddKu")
+                .contrasena("$2a$10$RRAzywJFxaAG3pRlHXep6u6VNKi5KOTT3M8GCxDPHpAyZ0ofX2Bcu")
                 .rol(Rol.SUPERVISOR)
                 .build();
 
         Usuario gerente = Usuario.builder()
                 .usuario("gerente")
-                .contrasena("$2a$10$pnxUrqPKMU2HtJPt9RO1z.p5CK48s6Hus10QD1SFjCjvea9CxddKu")
+                .contrasena("$2a$10$RRAzywJFxaAG3pRlHXep6u6VNKi5KOTT3M8GCxDPHpAyZ0ofX2Bcu")
                 .rol(Rol.GERENTE)
                 .build();
 
