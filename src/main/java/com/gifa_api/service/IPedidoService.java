@@ -1,12 +1,11 @@
 package com.gifa_api.service;
 
-import com.gifa_api.dto.proveedoresYPedidos.PedidoDTO;
-import com.gifa_api.model.ItemDeInventario;
+import com.gifa_api.dto.proveedoresYPedidos.PedidoResponseDTO;
 
 import java.util.List;
 
 public interface IPedidoService {
 
-    void createPedido(ItemDeInventario itemDeInventario,Integer cantidad);
-    List<PedidoDTO> obtenerPedidos();
+    void createPedido(Integer idItem,Integer cantidad,String motivo);
+    List<PedidoResponseDTO> obtenerPedidos();
 }

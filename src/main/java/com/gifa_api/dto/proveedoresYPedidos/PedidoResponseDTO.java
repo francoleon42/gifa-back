@@ -11,13 +11,11 @@ import java.time.LocalDate;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class PedidoDTO {
+public class PedidoResponseDTO {
 
     LocalDate fecha;
     Integer cantidad;
     String motivo;
     String item;
     String estadoPedido;
-
-
 }
