@@ -19,5 +19,5 @@ public interface IMantenimientoService {
 
     void finalizarMantenimiento(Integer mantenimientoId);
 
-
+    MantenimientosResponseDTO obtenerMantenimientosPorOperador(Integer idOperador);
 }

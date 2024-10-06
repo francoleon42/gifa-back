@@ -128,7 +128,8 @@ public class SecurityConfig {
                 .requestMatchers(HttpMethod.PATCH, "/mantenimiento/asignar/{mantenimientoId}").hasRole(operador)
                 .requestMatchers(HttpMethod.POST, "/mantenimiento/finalizar/{mantenimientoId}").hasRole(operador)
                 .requestMatchers(HttpMethod.PATCH, "/inventario/utilizarItem/{id}").hasRole(operador)
-                .requestMatchers(HttpMethod.GET, "/inventario/obtenerItems").hasRole(operador);
+                .requestMatchers(HttpMethod.GET, "/inventario/obtenerItems").hasRole(operador)
+                .requestMatchers(HttpMethod.GET, "/mantenimiento/verMisMantenimientos").hasRole(operador);
 
     }
 
