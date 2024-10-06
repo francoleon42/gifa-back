@@ -92,7 +92,9 @@ public class SecurityConfig {
     private void configureSupervisorEndpoints(AuthorizeHttpRequestsConfigurer<HttpSecurity>.AuthorizationManagerRequestMatcherRegistry authRequest) {
         String supervisor = Rol.SUPERVISOR.toString();
         authRequest
-                .requestMatchers(HttpMethod.POST, "/mantenimiento/crearManual").hasRole(supervisor);
+                .requestMatchers(HttpMethod.POST, "/mantenimiento/crearManual").hasRole(supervisor)
+                .requestMatchers(HttpMethod.GET, "/pedido/verAll").hasRole(supervisor);
+
     }
 
     private void configureGerenteEndpoints(AuthorizeHttpRequestsConfigurer<HttpSecurity>.AuthorizationManagerRequestMatcherRegistry authRequest) {
@@ -105,7 +107,8 @@ public class SecurityConfig {
                 .requestMatchers(HttpMethod.GET, "/mantenimiento/pendientes").hasRole(operador)
                 .requestMatchers(HttpMethod.PATCH, "/mantenimiento/asignar/{mantenimientoId}").hasRole(operador)
                 .requestMatchers(HttpMethod.POST, "/mantenimiento/finalizar/{mantenimientoId}").hasRole(operador)
-                .requestMatchers(HttpMethod.PATCH, "/inventario/utilizarItem/{id}").hasRole(operador);
+                .requestMatchers(HttpMethod.PATCH, "/inventario/utilizarItem/{id}").hasRole(operador)
+                .requestMatchers(HttpMethod.GET, "/inventario/obtenerItems").hasRole(operador);
 
     }
 

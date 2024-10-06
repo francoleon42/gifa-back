@@ -29,7 +29,6 @@ public class InventarioController {
 
     @GetMapping("/obtenerItems")
     public List<ItemDeInventarioDTO> obtenerAllItems(){
-        System.out.println("asdas");
        return itemDeIventarioService.obtenerAllitems();
     }
 
