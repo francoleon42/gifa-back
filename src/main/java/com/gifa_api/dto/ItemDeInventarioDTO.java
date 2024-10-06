@@ -10,7 +10,7 @@ import lombok.NoArgsConstructor;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class RegistrarItemDeInventarioDTO {
+public class ItemDeInventarioDTO {
 
     private String nombre;
     private Integer umbral;

@@ -1,6 +1,6 @@
 package com.gifa_api.service.impl;
 
-import com.gifa_api.dto.RegistrarItemDeInventarioDTO;
+import com.gifa_api.dto.ItemDeInventarioDTO;
 import com.gifa_api.dto.mantenimiento.RegistrarMantenimientoDTO;
 import com.gifa_api.exception.NotFoundException;
 import com.gifa_api.model.ItemDeInventario;
@@ -9,6 +9,7 @@ import com.gifa_api.repository.ItemDeInventarioRepository;
 import com.gifa_api.service.IItemDeIventarioService;
 import com.gifa_api.service.IMantenimientoService;
 import com.gifa_api.service.IPedidoService;
+import com.gifa_api.utils.mappers.ItemDeInventarioMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
@@ -22,14 +23,15 @@ public class ItemDeInventarioServiceImpl implements IItemDeIventarioService {
 
     private final ItemDeInventarioRepository itemDeInventarioRepository;
     private final IMantenimientoService iMantenimientoService;
+    private final ItemDeInventarioMapper itemDeInventarioMapper;
 
     @Override
-    public void registrar(RegistrarItemDeInventarioDTO registrarItemDeInventarioDTO) {
+    public void registrar(ItemDeInventarioDTO itemDeInventarioDTO) {
         ItemDeInventario itemDeInventario = ItemDeInventario
                 .builder()
-                .nombre(registrarItemDeInventarioDTO.getNombre())
-                .umbral(registrarItemDeInventarioDTO.getUmbral())
-                .stock(registrarItemDeInventarioDTO.getStock())
+                .nombre(itemDeInventarioDTO.getNombre())
+                .umbral(itemDeInventarioDTO.getUmbral())
+                .stock(itemDeInventarioDTO.getStock())
                 .build();
         itemDeInventarioRepository.save(itemDeInventario);
     }
@@ -50,6 +52,11 @@ public class ItemDeInventarioServiceImpl implements IItemDeIventarioService {
          ItemDeInventario itemIventario = itemDeInventarioRepository.findById(id)
                 .orElseThrow(() -> new NotFoundException("No se encontró el item con id: " + id));
          return itemIventario;
+    }
+
+    @Override
+    public List<ItemDeInventarioDTO> obtenerAllitems() {
+        return itemDeInventarioMapper.mapToItemDeInventarioDTO(itemDeInventarioRepository.findAll());
     }
 
 

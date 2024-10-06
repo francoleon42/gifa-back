@@ -1,11 +1,13 @@
 package com.gifa_api.controller;
 
-import com.gifa_api.dto.RegistrarItemDeInventarioDTO;
+import com.gifa_api.dto.ItemDeInventarioDTO;
 import com.gifa_api.service.IItemDeIventarioService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/inventario")
@@ -14,8 +16,8 @@ public class InventarioController {
     private final IItemDeIventarioService itemDeIventarioService;
 
     @PostMapping("/registrarItem")
-    public ResponseEntity<?> registrarItem(@RequestBody RegistrarItemDeInventarioDTO registrarItemDeInventarioDTO){
-        itemDeIventarioService.registrar(registrarItemDeInventarioDTO);
+    public ResponseEntity<?> registrarItem(@RequestBody ItemDeInventarioDTO itemDeInventarioDTO){
+        itemDeIventarioService.registrar(itemDeInventarioDTO);
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
@@ -24,4 +26,12 @@ public class InventarioController {
         itemDeIventarioService.utilizarItem(id);
         return new ResponseEntity<>(HttpStatus.OK);
     }
+
+    @GetMapping("/obtenerItems")
+    public List<ItemDeInventarioDTO> obtenerAllItems(){
+        System.out.println("asdas");
+       return itemDeIventarioService.obtenerAllitems();
+    }
+
+
 }

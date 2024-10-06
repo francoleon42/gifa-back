@@ -1,11 +1,15 @@
 package com.gifa_api.service;
 
-import com.gifa_api.dto.RegistrarItemDeInventarioDTO;
+import com.gifa_api.dto.ItemDeInventarioDTO;
+
 import com.gifa_api.model.ItemDeInventario;
+
+import java.util.List;
 
 public interface IItemDeIventarioService {
 
-    void registrar(RegistrarItemDeInventarioDTO registrarItemDeInventarioDTO);
+    void registrar(ItemDeInventarioDTO itemDeInventarioDTO);
     void utilizarItem(Integer id);
     ItemDeInventario obtenerById(Integer id);
+    List<ItemDeInventarioDTO> obtenerAllitems();
 }

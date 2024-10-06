@@ -105,7 +105,9 @@ public class SecurityConfig {
                 .requestMatchers(HttpMethod.GET, "/mantenimiento/pendientes").hasRole(operador)
                 .requestMatchers(HttpMethod.PATCH, "/mantenimiento/asignar/{mantenimientoId}").hasRole(operador)
                 .requestMatchers(HttpMethod.POST, "/mantenimiento/finalizar/{mantenimientoId}").hasRole(operador)
-                .requestMatchers(HttpMethod.PATCH, "/inventario/utilizarItem/{id}").hasRole(operador);
+                .requestMatchers(HttpMethod.PATCH, "/inventario/utilizarItem/{id}").hasRole(operador)
+                .requestMatchers(HttpMethod.PATCH, "/inventario/obtenerItems").hasRole(operador);
+
     }
 
     private void configureAuthenticatedEndpoints(AuthorizeHttpRequestsConfigurer<HttpSecurity>.AuthorizationManagerRequestMatcherRegistry authRequest) {
