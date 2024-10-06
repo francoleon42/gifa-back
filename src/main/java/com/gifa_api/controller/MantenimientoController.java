@@ -25,7 +25,7 @@ public class MantenimientoController {
         return new ResponseEntity<>(mantenimientoService.verMantenimientosPorVehiculo(id), HttpStatus.OK);
     }
 
-    @GetMapping("/")
+    @GetMapping("/verAll")
     public ResponseEntity<MantenimientosResponseDTO> verMantenimientos(){
         return new ResponseEntity<>(mantenimientoService.verMantenimientos(), HttpStatus.OK);
     }

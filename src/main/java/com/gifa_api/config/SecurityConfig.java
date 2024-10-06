@@ -83,7 +83,9 @@ public class SecurityConfig {
                 .requestMatchers(HttpMethod.POST, "/inventario/registrarItem").hasRole(administrador)
                 .requestMatchers(HttpMethod.PATCH, "/vehiculo/habilitar/{id}", "/vehiculo/inhabilitar/{id}").hasRole(administrador)
                 .requestMatchers(HttpMethod.PATCH, "/pedido/actualizarGestor").hasRole(administrador)
-                .requestMatchers(HttpMethod.GET, "/vehiculo/verAll").hasRole(administrador);
+                .requestMatchers(HttpMethod.GET, "/vehiculo/verAll").hasRole(administrador)
+                .requestMatchers(HttpMethod.GET, "/mantenimiento/verAll").hasRole(administrador)
+                .requestMatchers(HttpMethod.GET, "/mantenimiento/porVehiculo/{id}").hasRole(administrador);
     }
 
 
