@@ -92,7 +92,10 @@ public class MantenimientoServiceImpl implements IMantenimientoService {
         IMantenimientoRepository.save(mantenimiento);
     }
 
-
+    @Override
+    public MantenimientosResponseDTO obtenerMantenimientosPorOperador(Integer idOperador) {
+        return mantenimientoMapper.mapListToMantenimientosDTO(IMantenimientoRepository.findByOperadorId(idOperador));
+    }
 
 
 }

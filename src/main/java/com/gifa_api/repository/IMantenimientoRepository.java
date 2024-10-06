@@ -18,4 +18,7 @@ public interface IMantenimientoRepository extends JpaRepository<Mantenimiento, I
 
     @EntityGraph(attributePaths = {"vehiculo"})
     Optional<Mantenimiento> findById(Integer id);
+
+    @Query("SELECT m FROM Mantenimiento m WHERE m.operador.id = :operadorId")
+    List<Mantenimiento> findByOperadorId(@Param("operadorId") Integer operadorId);
 }
