@@ -89,6 +89,7 @@ public class SecurityConfig {
                 .requestMatchers(HttpMethod.GET, "/vehiculo/verAll").hasRole(administrador)
                 .requestMatchers(HttpMethod.GET, "/mantenimiento/verAll").hasRole(administrador)
                 .requestMatchers(HttpMethod.GET, "/mantenimiento/porVehiculo/{id}").hasRole(administrador);
+
     }
 
 
@@ -96,7 +97,8 @@ public class SecurityConfig {
         String supervisor = Rol.SUPERVISOR.toString();
         authRequest
                 .requestMatchers(HttpMethod.POST, "/mantenimiento/crearManual").hasRole(supervisor)
-                .requestMatchers(HttpMethod.GET, "/pedido/verAll").hasRole(supervisor);
+                .requestMatchers(HttpMethod.GET, "/pedido/verAll").hasRole(supervisor)
+                .requestMatchers(HttpMethod.POST, "/gestionDeCombustible/cargarCombustible").hasRole(supervisor);
 
     }
 
