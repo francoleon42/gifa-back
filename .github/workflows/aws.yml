@@ -45,6 +45,7 @@ jobs:
             docker pull 778425189746.dkr.ecr.us-east-1.amazonaws.com/hola-mundo-repo:back_latest
             docker stop JavaBackend || true
             docker rm JavaBackend || true
+            docker system prune -a --volumes
             docker run -d --name JavaBackend -p 8080:8080 778425189746.dkr.ecr.us-east-1.amazonaws.com/hola-mundo-repo:back_latest
 
       - name: executing remote ssh commands using password
@@ -59,5 +60,6 @@ jobs:
             docker pull 778425189746.dkr.ecr.us-east-1.amazonaws.com/hola-mundo-repo:back_latest
             docker stop JavaBackend || true
             docker rm JavaBackend || true
+            docker system prune -a --volumes
             docker run -d --name JavaBackend -p 8080:8080 778425189746.dkr.ecr.us-east-1.amazonaws.com/hola-mundo-repo:back_latest
 
