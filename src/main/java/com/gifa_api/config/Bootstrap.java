@@ -113,7 +113,7 @@ public class Bootstrap implements ApplicationRunner {
                     .cantidadLitros(i * 10)
                     .fechaHora(LocalDate.now())
                     .precioPorLitro(100f + i)
-                    .vehiculo(vehiculo1)
+                    .tarjeta(tarjeta1)
                     .build();
             cargaCombustibleRepository.save(carga);
         }

@@ -26,5 +26,7 @@ public class Tarjeta {
     @JoinColumn(name = "vehiculo_id")
     private Vehiculo vehiculo;
 
+    @OneToMany(mappedBy = "tarjeta", cascade = CascadeType.ALL)
+    private Set<CargaCombustible> cargasCombustible;
 
 }
