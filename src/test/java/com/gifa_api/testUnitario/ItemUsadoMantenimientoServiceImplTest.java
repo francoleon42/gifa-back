@@ -99,6 +99,4 @@ class ItemUsadoMantenimientoServiceImplTest {
         // Assert
         verify(itemUsadoMantenimientoRepository, times(1)).save(any(ItemUsadoMantenimiento.class));
     }
-
-
 }

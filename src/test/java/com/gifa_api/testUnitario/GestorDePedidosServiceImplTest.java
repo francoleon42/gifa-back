@@ -91,8 +91,6 @@ public class GestorDePedidosServiceImplTest {
         verify(gestorDePedidosMapper, times(1)).obtenerGestorDePedidosDTO(gestorDePedidos);
     }
 
-
-
     @Test
     void actualizarGestorDePedidos_debeActualizarCorrectamente() {
         // Arrange
@@ -106,6 +104,4 @@ public class GestorDePedidosServiceImplTest {
         assertEquals(gestorDePedidosDTO.getPresupuesto(), gestorDePedidos.getPresupuesto());
         verify(gestorDePedidosRepository, times(1)).save(gestorDePedidos);
     }
-
-
 }

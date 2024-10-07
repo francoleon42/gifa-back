@@ -39,13 +39,11 @@ class ProvedorServiceImplTest {
 
     @Test
     void registrarProveedor_debeGuardarProveedor() {
-        // Arrange
         RegistroProveedorRequestDTO requestDTO = new RegistroProveedorRequestDTO("Proveedor1", "email@proveedor.com");
 
-        // Act
         provedorService.registrarProveedor(requestDTO);
 
-        // Assert
+
         verify(proveedorRepository, times(1)).save(any(Proveedor.class));
     }
 
@@ -58,20 +56,16 @@ class ProvedorServiceImplTest {
                 .build();
         when(proveedorRepository.findById(1)).thenReturn(Optional.of(proveedor));
 
-        // Act
         Proveedor resultado = provedorService.obtenerByid(1);
 
-        // Assert
         assertEquals(proveedor, resultado);
         verify(proveedorRepository, times(1)).findById(1);
     }
 
     @Test
     void obtenerByid_debeLanzarNotFoundExceptionSiNoExiste() {
-        // Arrange
         when(proveedorRepository.findById(1)).thenReturn(Optional.empty());
 
-        // Act & Assert
         NotFoundException exception = assertThrows(NotFoundException.class, () -> provedorService.obtenerByid(1));
         assertEquals("No se encontró el proveedor con id: 1", exception.getMessage());
         verify(proveedorRepository, times(1)).findById(1);
@@ -91,7 +85,6 @@ class ProvedorServiceImplTest {
         when(random.nextInt(100)).thenReturn(25, 50); // El primero debe ser rechazado (< 30), el segundo aceptado (> 30)
 
         provedorService.simulacionDeAceptacionORechazoProovedor();
-
 
         assertEquals(EstadoPedido.RECHAZADO, pedido1.getEstadoPedido()); // Primer pedido debe ser rechazado
         assertEquals(EstadoPedido.ACEPTADO, pedido2.getEstadoPedido());  // Segundo pedido debe ser aceptado
