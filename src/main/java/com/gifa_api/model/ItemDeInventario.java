@@ -38,6 +38,8 @@ public class ItemDeInventario {
     @OneToMany(mappedBy = "itemDeInventario", cascade = CascadeType.ALL)
     private Set<ItemUsadoMantenimiento> itemUsadoMantenimientos;
 
+
+
     public void desminuirStock() {
         this.stock -= 1;
     }
