@@ -1,5 +1,5 @@
 # Stage 1: Build
-FROM openjdk:17-jdk AS build
+FROM maven:3.9.2-openjdk-17 AS build
 
 # Setting working directory
 WORKDIR /app
@@ -11,7 +11,7 @@ RUN mvn dependency:go-offline
 
 # Copy the source code and build the application
 COPY src ./src
-RUN mvn clean package -DskipTests
+RUN mvn package 
 
 # Stage 2: Create Runtime Image
 FROM openjdk:17-jdk-slim
