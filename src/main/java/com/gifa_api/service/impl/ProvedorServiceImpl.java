@@ -19,6 +19,7 @@ import java.util.Random;
 public class ProvedorServiceImpl implements IProvedorService {
     private final IProveedorRepository iProveedorRepository;
     private final IPedidoRepository pedidoRepository;
+    private final Random random;
 
     @Override
     public void registrarProveedor(RegistroProveedorRequestDTO requestDTO) {
@@ -40,11 +41,11 @@ public class ProvedorServiceImpl implements IProvedorService {
 
     @Scheduled(fixedRate = 86400000)
     public void simulacionDeAceptacionORechazoProovedor() {
-        Random random = new Random();
         int decision ;
                 List<Pedido> pedidos = pedidoRepository.findPedidosByEstado(EstadoPedido.PENDIENTE);
         for (Pedido pedido : pedidos) {
             decision = random.nextInt(100);
+            //Si decision es = 30. no pasa nada
             if (decision < 30) {
 
                 pedido.setEstadoPedido(EstadoPedido.RECHAZADO);

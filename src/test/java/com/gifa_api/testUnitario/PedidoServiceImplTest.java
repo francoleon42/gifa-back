@@ -51,7 +51,7 @@ class PedidoServiceImplTest {
     }
 
     @Test
-    void testCreatePedido_ItemExistente() {
+    void testCrearPedido_ItemExistente() {
         // Arrange
         Integer idItem = 1;
         Integer cantidad = 5;
@@ -79,7 +79,7 @@ class PedidoServiceImplTest {
     }
 
     @Test
-    void testCreatePedido_ItemNoExistente() {
+    void testCrearPedido_ItemNoExistente() {
         // Arrange
         Integer idItem = 1;
         Integer cantidad = 5;
@@ -95,34 +95,34 @@ class PedidoServiceImplTest {
 
     @Test
     void testHacerPedidos() {
-
         // Arrange
-        Integer id1 = 1;
-        Integer id2 = 2;
-        ItemDeInventario item1 = ItemDeInventario.builder().id(id1).nombre("Item A").stock(4).umbral(5).build();
-        ItemDeInventario item2 = ItemDeInventario.builder().id(id2).nombre("Item B").stock(8).umbral(7).build();
-        List<ItemDeInventario> items = Arrays.asList(item1, item2);
+        Integer idItem = 1;
+        ItemDeInventario item = ItemDeInventario.builder().id(idItem).nombre("Item A").stock(4).umbral(5).build();
+        List<ItemDeInventario> items = Arrays.asList(item);
 
         GestorDePedidos gestorDePedidos = GestorDePedidos.builder().cantDePedidoAutomatico(3).presupuesto(1000.0).build();
         ProveedorDeItem proveedorEconomico = ProveedorDeItem.builder().precio(50.0).build();
 
+        // Configura el comportamiento del repositorio para que devuelva el item
+        when(itemDeInventarioRepository.findById(idItem)).thenReturn(Optional.of(item));
+
         when(itemDeInventarioRepository.findAll()).thenReturn(items);
         when(gestorDePedidosService.getGestorDePedidos()).thenReturn(gestorDePedidos);
-        when(proveedorDeItemService.proveedorMasEconomico(anyInt())).thenReturn(proveedorEconomico);
-        when(pedidoRepository.existsByItemId(anyInt())).thenReturn(false);
+        when(proveedorDeItemService.proveedorMasEconomico(idItem)).thenReturn(proveedorEconomico);
+        when(pedidoRepository.existsByItemId(anyInt())).thenReturn(false); // No existe el pedido
 
-
+        // Act
         pedidoService.hacerPedidos();
 
-
-        verify(pedidoRepository, times(1)).save(any(Pedido.class)); // Solo se debe crear un pedido
+        // Assert
+        verify(pedidoRepository, times(1)).save(any(Pedido.class)); // Debe crear un pedido
     }
 
     @Test
     void testHacerPedidos_NoStockBajo() {
 
         ItemDeInventario item1 = ItemDeInventario.builder().id(1).nombre("Item A").stock(6).umbral(5).build();
-        ItemDeInventario item2 = ItemDeInventario.builder().id(2).nombre("Item B").stock(10).umbral(8).build();
+        ItemDeInventario item2 = ItemDeInventario.builder().id(2).nombre("Item B").stock(10).umbral(9).build();
         List<ItemDeInventario> items = Arrays.asList(item1, item2);
 
         when(itemDeInventarioRepository.findAll()).thenReturn(items);

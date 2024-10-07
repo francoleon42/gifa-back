@@ -43,29 +43,6 @@ class ItemUsadoMantenimientoServiceImplTest {
     }
 
     @Test
-    void testAgregaritemUtilizadoEnMantenimiento_conMantenimientoYItemExistentes() {
-        // Arrange
-        Integer idMantenimiento = 1;
-        FinalizarMantenimientoDTO finalizarMantenimientoDTO = new FinalizarMantenimientoDTO();
-        ItemUtilizadoRequestDTO itemUtilizado = new ItemUtilizadoRequestDTO();
-        itemUtilizado.setIdItem(1);
-        itemUtilizado.setCantidad(2);
-        finalizarMantenimientoDTO.setItems(Collections.singletonList(itemUtilizado));
-
-        Mantenimiento mantenimiento = new Mantenimiento();
-        ItemDeInventario itemDeInventario = new ItemDeInventario();
-
-        when(iMantenimientoRepository.findById(idMantenimiento)).thenReturn(Optional.of(mantenimiento));
-        when(itemDeInventarioRepository.findById(itemUtilizado.getIdItem())).thenReturn(Optional.of(itemDeInventario));
-
-        // Act
-        itemUsadoMantenimientoService.agregaritemUtilizadoEnMantenimiento(idMantenimiento, finalizarMantenimientoDTO);
-
-        // Assert
-        verify(itemUsadoMantenimientoRepository, times(1)).save(any(ItemUsadoMantenimiento.class));
-    }
-
-    @Test
     void testAgregaritemUtilizadoEnMantenimiento_mantenimientoNoEncontrado() {
         // Arrange
         Integer idMantenimiento = 1;
@@ -103,4 +80,29 @@ class ItemUsadoMantenimientoServiceImplTest {
 
         verify(itemUsadoMantenimientoRepository, never()).save(any(ItemUsadoMantenimiento.class));
     }
+
+    @Test
+    void testAgregaritemUtilizadoEnMantenimiento_conMantenimientoYItemExistentes() {
+        // Arrange
+        Integer idMantenimiento = 1;
+        FinalizarMantenimientoDTO finalizarMantenimientoDTO = new FinalizarMantenimientoDTO();
+        ItemUtilizadoRequestDTO itemUtilizado = new ItemUtilizadoRequestDTO();
+        itemUtilizado.setIdItem(1);
+        itemUtilizado.setCantidad(2);
+        finalizarMantenimientoDTO.setItems(Collections.singletonList(itemUtilizado));
+
+        Mantenimiento mantenimiento = new Mantenimiento();
+        ItemDeInventario itemDeInventario = new ItemDeInventario();
+
+        when(iMantenimientoRepository.findById(idMantenimiento)).thenReturn(Optional.of(mantenimiento));
+        when(itemDeInventarioRepository.findById(itemUtilizado.getIdItem())).thenReturn(Optional.of(itemDeInventario));
+
+        // Act
+        itemUsadoMantenimientoService.agregaritemUtilizadoEnMantenimiento(idMantenimiento, finalizarMantenimientoDTO);
+
+        // Assert
+        verify(itemUsadoMantenimientoRepository, times(1)).save(any(ItemUsadoMantenimiento.class));
+    }
+
+
 }

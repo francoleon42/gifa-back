@@ -39,10 +39,7 @@ class InventarioTest {
     @Test
     void testRegistrar() {
         // Arrange
-        ItemDeInventarioDTO itemDeInventarioDTO = new ItemDeInventarioDTO();
-        itemDeInventarioDTO.setNombre("Producto A");
-        itemDeInventarioDTO.setUmbral(5);
-        itemDeInventarioDTO.setStock(10);
+        ItemDeInventarioDTO itemDeInventarioDTO = new ItemDeInventarioDTO("Producto A",5,10);
 
         ItemDeInventario itemDeInventario = ItemDeInventario
                 .builder()
