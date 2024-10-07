@@ -10,11 +10,11 @@ import com.gifa_api.repository.IMantenimientoRepository;
 import com.gifa_api.repository.ItemDeInventarioRepository;
 import com.gifa_api.repository.ItemUsadoMantenimientoRepository;
 import com.gifa_api.service.impl.ItemUsadoMantenimientoServiceImpl;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
+import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.Optional;
 import java.util.Collections;
@@ -23,6 +23,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
+@ExtendWith(MockitoExtension.class)
 class ItemUsadoMantenimientoServiceImplTest {
 
     @InjectMocks
@@ -37,19 +38,14 @@ class ItemUsadoMantenimientoServiceImplTest {
     @Mock
     private IMantenimientoRepository iMantenimientoRepository;
 
-    @BeforeEach
-    void setUp() {
-        MockitoAnnotations.openMocks(this);
-    }
-
     @Test
     void testAgregaritemUtilizadoEnMantenimiento_mantenimientoNoEncontrado() {
-        // Arrange
+
         Integer idMantenimiento = 1;
         FinalizarMantenimientoDTO finalizarMantenimientoDTO = new FinalizarMantenimientoDTO();
         when(iMantenimientoRepository.findById(idMantenimiento)).thenReturn(Optional.empty());
 
-        // Act & Assert
+
         assertThrows(NotFoundException.class, () -> {
             itemUsadoMantenimientoService.agregaritemUtilizadoEnMantenimiento(idMantenimiento, finalizarMantenimientoDTO);
         });
@@ -60,7 +56,7 @@ class ItemUsadoMantenimientoServiceImplTest {
 
     @Test
     void testAgregaritemUtilizadoEnMantenimiento_itemNoEncontrado() {
-        // Arrange
+
         Integer idMantenimiento = 1;
         FinalizarMantenimientoDTO finalizarMantenimientoDTO = new FinalizarMantenimientoDTO();
         ItemUtilizadoRequestDTO itemUtilizado = new ItemUtilizadoRequestDTO();
@@ -73,7 +69,7 @@ class ItemUsadoMantenimientoServiceImplTest {
         when(iMantenimientoRepository.findById(idMantenimiento)).thenReturn(Optional.of(mantenimiento));
         when(itemDeInventarioRepository.findById(itemUtilizado.getIdItem())).thenReturn(Optional.empty());
 
-        // Act & Assert
+
         assertThrows(NotFoundException.class, () -> {
             itemUsadoMantenimientoService.agregaritemUtilizadoEnMantenimiento(idMantenimiento, finalizarMantenimientoDTO);
         });

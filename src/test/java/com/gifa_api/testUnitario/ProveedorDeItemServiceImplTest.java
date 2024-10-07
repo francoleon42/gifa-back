@@ -1,6 +1,5 @@
 package com.gifa_api.testUnitario;
 
-
 import com.gifa_api.dto.proveedoresYPedidos.AsociacionProveedorDeITemDTO;
 import com.gifa_api.model.ItemDeInventario;
 import com.gifa_api.model.Proveedor;
@@ -9,15 +8,15 @@ import com.gifa_api.repository.IProveedorDeItemRepository;
 import com.gifa_api.service.IItemDeIventarioService;
 import com.gifa_api.service.IProvedorService;
 import com.gifa_api.service.impl.ProveedorDeItemServiceImpl;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
+import org.mockito.junit.jupiter.MockitoExtension;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
-
+@ExtendWith(MockitoExtension.class)
 class ProveedorDeItemServiceImplTest {
 
     @Mock
@@ -32,10 +31,6 @@ class ProveedorDeItemServiceImplTest {
     @InjectMocks
     private ProveedorDeItemServiceImpl proveedorDeItemService;
 
-    @BeforeEach
-    void setUp() {
-        MockitoAnnotations.openMocks(this);
-    }
 
     @Test
     void asociarProveedorAItem_debeGuardarProveedorDeItem() {
@@ -58,16 +53,13 @@ class ProveedorDeItemServiceImplTest {
 
     @Test
     void proveedorMasEconomico_debeRetornarProveedorConPrecioMasBajo() {
-        // Arrange
         Integer idItem = 1;
         ProveedorDeItem proveedorDeItem = new ProveedorDeItem();
 
         when(proveedorDeItemRepository.findProveedorMasEconomicoByItemId(idItem)).thenReturn(proveedorDeItem);
 
-        // Act
         ProveedorDeItem result = proveedorDeItemService.proveedorMasEconomico(idItem);
 
-        // Assert
         assertNotNull(result);
         assertEquals(proveedorDeItem, result);
         verify(proveedorDeItemRepository, times(1)).findProveedorMasEconomicoByItemId(idItem);

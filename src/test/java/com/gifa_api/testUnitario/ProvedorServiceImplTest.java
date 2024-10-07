@@ -8,11 +8,11 @@ import com.gifa_api.model.Proveedor;
 import com.gifa_api.repository.IPedidoRepository;
 import com.gifa_api.repository.IProveedorRepository;
 import com.gifa_api.service.impl.ProvedorServiceImpl;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
+import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.Arrays;
 import java.util.List;
@@ -22,7 +22,7 @@ import java.util.Random;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
-
+@ExtendWith(MockitoExtension.class)
 class ProvedorServiceImplTest {
 
     @Mock
@@ -37,19 +37,10 @@ class ProvedorServiceImplTest {
     @InjectMocks
     private ProvedorServiceImpl provedorService;
 
-    @BeforeEach
-    void setUp() {
-        MockitoAnnotations.openMocks(this);
-    }
-
     @Test
     void registrarProveedor_debeGuardarProveedor() {
         // Arrange
         RegistroProveedorRequestDTO requestDTO = new RegistroProveedorRequestDTO("Proveedor1", "email@proveedor.com");
-        Proveedor proveedor = Proveedor.builder()
-                .nombre("Proveedor1")
-                .email("email@proveedor.com")
-                .build();
 
         // Act
         provedorService.registrarProveedor(requestDTO);
@@ -97,13 +88,11 @@ class ProvedorServiceImplTest {
         List<Pedido> pedidos = Arrays.asList(pedido1, pedido2);
         when(pedidoRepository.findPedidosByEstado(EstadoPedido.PENDIENTE)).thenReturn(pedidos);
 
-        // Mockeamos los valores del random para que podamos controlar la aceptación o rechazo
         when(random.nextInt(100)).thenReturn(25, 50); // El primero debe ser rechazado (< 30), el segundo aceptado (> 30)
 
-        // Act
         provedorService.simulacionDeAceptacionORechazoProovedor();
 
-        // Assert
+
         assertEquals(EstadoPedido.RECHAZADO, pedido1.getEstadoPedido()); // Primer pedido debe ser rechazado
         assertEquals(EstadoPedido.ACEPTADO, pedido2.getEstadoPedido());  // Segundo pedido debe ser aceptado
         verify(pedidoRepository, times(2)).save(any(Pedido.class));

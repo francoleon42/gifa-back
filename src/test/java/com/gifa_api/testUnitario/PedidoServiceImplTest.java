@@ -10,11 +10,11 @@ import com.gifa_api.service.IProveedorDeItemService;
 import com.gifa_api.service.impl.PedidoServiceImpl;
 import com.gifa_api.utils.enums.EstadoPedido;
 import com.gifa_api.utils.mappers.PedidosMapper;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
+import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.time.LocalDate;
 import java.util.Arrays;
@@ -25,6 +25,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
+@ExtendWith(MockitoExtension.class)
 class PedidoServiceImplTest {
 
     @InjectMocks
@@ -44,11 +45,6 @@ class PedidoServiceImplTest {
 
     @Mock
     private PedidosMapper pedidosMapper;
-
-    @BeforeEach
-    void setUp() {
-        MockitoAnnotations.openMocks(this);
-    }
 
     @Test
     void testCrearPedido_ItemExistente() {

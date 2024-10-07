@@ -11,12 +11,11 @@ import com.gifa_api.service.impl.MantenimientoServiceImpl;
 import com.gifa_api.utils.enums.EstadoMantenimiento;
 import com.gifa_api.utils.enums.EstadoVehiculo;
 import com.gifa_api.utils.enums.Rol;
-import com.gifa_api.utils.mappers.MantenimientoMapper;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
+import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.Optional;
 
@@ -24,6 +23,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
+@ExtendWith(MockitoExtension.class)
 public class MantenimientoServiceImplTest {
 
     @InjectMocks
@@ -38,14 +38,6 @@ public class MantenimientoServiceImplTest {
     @Mock
     private IVehiculoRepository vehiculoRepository;
 
-    @Mock
-    private MantenimientoMapper mantenimientoMapper;
-
-    @BeforeEach
-    void setUp() {
-        MockitoAnnotations.openMocks(this);
-    }
-
     @Test
     void crearMantenimiento_debeGuardarMantenimiento() {
         // Arrange
@@ -54,10 +46,8 @@ public class MantenimientoServiceImplTest {
         Vehiculo vehiculo = new Vehiculo();
         when(vehiculoRepository.findById(dto.getVehiculo_id())).thenReturn(Optional.of(vehiculo));
 
-        // Act
         mantenimientoService.crearMantenimiento(dto);
 
-        // Assert
         verify(mantenimientoRepository, times(1)).save(any(Mantenimiento.class));
     }
 
@@ -68,13 +58,12 @@ public class MantenimientoServiceImplTest {
         RegistrarMantenimientoDTO dto = new RegistrarMantenimientoDTO("cambio de aceite", id);
         when(vehiculoRepository.findById(dto.getVehiculo_id())).thenReturn(Optional.empty());
 
-        // Act & Assert
         assertThrows(NotFoundException.class, () -> mantenimientoService.crearMantenimiento(dto));
     }
 
     @Test
     void asignarMantenimiento_debeAsignarOperadorYActualizarEstado() {
-        // Arrange
+
         AsignarMantenimientoRequestDTO dto = new AsignarMantenimientoRequestDTO(1);
         Mantenimiento mantenimiento = new Mantenimiento();
         Usuario operador = new Usuario();
@@ -83,10 +72,9 @@ public class MantenimientoServiceImplTest {
         when(mantenimientoRepository.findById(anyInt())).thenReturn(Optional.of(mantenimiento));
         when(usuarioRepository.findById(dto.getOperadorId())).thenReturn(Optional.of(operador));
 
-        // Act
         mantenimientoService.asignarMantenimiento(1, dto);
 
-        // Assert
+
         assertEquals(operador, mantenimiento.getOperador());
         assertEquals(EstadoMantenimiento.APROBADO, mantenimiento.getEstadoMantenimiento());
     }
@@ -115,10 +103,8 @@ public class MantenimientoServiceImplTest {
 
         when(mantenimientoRepository.findById(anyInt())).thenReturn(Optional.of(mantenimiento));
 
-        // Act
         mantenimientoService.finalizarMantenimiento(1);
 
-        // Assert
         assertEquals(EstadoMantenimiento.FINALIZADO, mantenimiento.getEstadoMantenimiento());
         assertEquals(EstadoVehiculo.REPARADO, vehiculo.getEstadoVehiculo());
         verify(mantenimientoRepository, times(1)).save(mantenimiento);
@@ -126,10 +112,7 @@ public class MantenimientoServiceImplTest {
 
     @Test
     void finalizarMantenimiento_debeLanzarNotFoundException_siMantenimientoNoExiste() {
-        // Arrange
         when(mantenimientoRepository.findById(anyInt())).thenReturn(Optional.empty());
-
-        // Act & Assert
         assertThrows(NotFoundException.class, () -> mantenimientoService.finalizarMantenimiento(1));
     }
 }

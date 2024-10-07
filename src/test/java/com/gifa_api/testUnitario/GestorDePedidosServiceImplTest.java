@@ -47,20 +47,17 @@ public class GestorDePedidosServiceImplTest {
     }
 
     @Test
-    void obtenerGestorDePedidos_debeDevolverGestorDePedidosDTO() {
+    void actualizarGestorDePedidos_debeLanzarNotFoundExceptionSiNoExisteGestor() {
         // Arrange
-        when(gestorDePedidosRepository.findById(1)).thenReturn(Optional.of(this.gestorDePedidos));
-        when(gestorDePedidosMapper.obtenerGestorDePedidosDTO(this.gestorDePedidos)).thenReturn(this.gestorDePedidosDTO);
+        when(gestorDePedidosRepository.findById(1)).thenReturn(Optional.empty());
 
-        // Act
-        GestorDePedidosDTO resultado = gestorDePedidosService.obtenerGestorDePedidos();
+        // Act & Assert
+        NotFoundException exception = assertThrows(NotFoundException.class, () -> {
+            gestorDePedidosService.actualizarGestorDePedidos(gestorDePedidosDTO);
+        });
 
-        // Assert
-        assertNotNull(resultado);
-        assertEquals(gestorDePedidosDTO.getCantDePedidoAutomatico(), resultado.getCantDePedidoAutomatico());
-        assertEquals(gestorDePedidosDTO.getPresupuesto(), resultado.getPresupuesto());
+        assertEquals("No se encontró el gestor de pedido con id: 1", exception.getMessage());
         verify(gestorDePedidosRepository, times(1)).findById(1);
-        verify(gestorDePedidosMapper, times(1)).obtenerGestorDePedidosDTO(gestorDePedidos);
     }
 
     @Test
@@ -78,6 +75,25 @@ public class GestorDePedidosServiceImplTest {
     }
 
     @Test
+    void obtenerGestorDePedidos_debeDevolverGestorDePedidosDTO() {
+        // Arrange
+        when(gestorDePedidosRepository.findById(1)).thenReturn(Optional.of(this.gestorDePedidos));
+        when(gestorDePedidosMapper.obtenerGestorDePedidosDTO(this.gestorDePedidos)).thenReturn(this.gestorDePedidosDTO);
+
+        // Act
+        GestorDePedidosDTO resultado = gestorDePedidosService.obtenerGestorDePedidos();
+
+        // Assert
+        assertNotNull(resultado);
+        assertEquals(gestorDePedidosDTO.getCantDePedidoAutomatico(), resultado.getCantDePedidoAutomatico());
+        assertEquals(gestorDePedidosDTO.getPresupuesto(), resultado.getPresupuesto());
+        verify(gestorDePedidosRepository, times(1)).findById(1);
+        verify(gestorDePedidosMapper, times(1)).obtenerGestorDePedidosDTO(gestorDePedidos);
+    }
+
+
+
+    @Test
     void actualizarGestorDePedidos_debeActualizarCorrectamente() {
         // Arrange
         when(gestorDePedidosRepository.findById(1)).thenReturn(Optional.of(gestorDePedidos));
@@ -91,17 +107,5 @@ public class GestorDePedidosServiceImplTest {
         verify(gestorDePedidosRepository, times(1)).save(gestorDePedidos);
     }
 
-    @Test
-    void actualizarGestorDePedidos_debeLanzarNotFoundExceptionSiNoExisteGestor() {
-        // Arrange
-        when(gestorDePedidosRepository.findById(1)).thenReturn(Optional.empty());
 
-        // Act & Assert
-        NotFoundException exception = assertThrows(NotFoundException.class, () -> {
-            gestorDePedidosService.actualizarGestorDePedidos(gestorDePedidosDTO);
-        });
-
-        assertEquals("No se encontró el gestor de pedido con id: 1", exception.getMessage());
-        verify(gestorDePedidosRepository, times(1)).findById(1);
-    }
 }
