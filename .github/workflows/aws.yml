@@ -45,8 +45,8 @@ jobs:
             docker pull 778425189746.dkr.ecr.us-east-1.amazonaws.com/hola-mundo-repo:back_latest
             docker stop JavaBackend || true
             docker rm JavaBackend || true
-            docker system prune -a --volumes
-            docker run -e JWT_SECRET_KEY=${{ secrets.JWT_SECRET_KEY }}-d --name JavaBackend -p 8080:8080 778425189746.dkr.ecr.us-east-1.amazonaws.com/hola-mundo-repo:back_latest
+            docker system prune -a --volumes -f
+            docker run -e JWT_SECRET_KEY=${{ secrets.JWT_SECRET_KEY }}-d --name JavaBackend -p 8080:8080 --memory=1g 778425189746.dkr.ecr.us-east-1.amazonaws.com/hola-mundo-repo:back_latest
 
       - name: executing remote ssh commands using password
         uses: appleboy/ssh-action@v1.0.3
@@ -60,6 +60,6 @@ jobs:
             docker pull 778425189746.dkr.ecr.us-east-1.amazonaws.com/hola-mundo-repo:back_latest
             docker stop JavaBackend || true
             docker rm JavaBackend || true
-            docker system prune -a --volumes
-            docker run -d --name JavaBackend -p 8080:8080 778425189746.dkr.ecr.us-east-1.amazonaws.com/hola-mundo-repo:back_latest
+            docker system prune -a --volumes -f 
+            docker run -d --name JavaBackend -p 8080:8080 --memory=1g 778425189746.dkr.ecr.us-east-1.amazonaws.com/hola-mundo-repo:back_latest
 
