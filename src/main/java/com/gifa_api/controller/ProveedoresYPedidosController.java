@@ -25,7 +25,6 @@ public class ProveedoresYPedidosController {
     public ResponseEntity<?> registrarProveedor(@RequestBody RegistroProveedorRequestDTO registroProveedorRequestDTO) {
         provedorService.registrarProveedor(registroProveedorRequestDTO);
         return new ResponseEntity<>(HttpStatus.CREATED);
-
     }
 
     @PostMapping("/asociarProveedor")
@@ -34,18 +33,19 @@ public class ProveedoresYPedidosController {
         return ResponseEntity.ok(HttpStatus.CREATED);
     }
 
-    @GetMapping("obtenerGestorDePedido")
-    public GestorDePedidosDTO obtenerGestorDePedidos() {
-        return gestorDePedidosService.obtenerGestorDePedidos();
+    @GetMapping("/obtenerGestorDePedido")
+    public ResponseEntity<GestorDePedidosDTO> obtenerGestorDePedidos() {
+        return ResponseEntity.ok(gestorDePedidosService.obtenerGestorDePedidos());
     }
+
     @PatchMapping("/actualizarGestor")
     public ResponseEntity<?> actualizarGestorDePedidos(@RequestBody GestorDePedidosDTO gestorDePedidosDTO){
         gestorDePedidosService.actualizarGestorDePedidos(gestorDePedidosDTO);
         return ResponseEntity.ok(HttpStatus.OK);
     }
     @GetMapping("/verAll")
-    public List<PedidoResponseDTO> verPedidos(){
-        return pedidoService.obtenerPedidos();
+    public ResponseEntity<List<PedidoResponseDTO>> verPedidos(){
+        return ResponseEntity.ok(pedidoService.obtenerPedidos());
     }
 
     @PostMapping("/generarPedido")

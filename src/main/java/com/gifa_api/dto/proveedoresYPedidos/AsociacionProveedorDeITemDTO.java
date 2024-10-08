@@ -13,7 +13,6 @@ import java.math.BigDecimal;
 @AllArgsConstructor
 @NoArgsConstructor
 public class AsociacionProveedorDeITemDTO {
-
     Integer idItem;
     Integer idProveedor;
     Double precio;

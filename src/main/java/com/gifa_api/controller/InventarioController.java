@@ -28,9 +28,8 @@ public class InventarioController {
     }
 
     @GetMapping("/obtenerItems")
-    public List<ItemDeInventarioDTO> obtenerAllItems(){
-       return itemDeIventarioService.obtenerAllitems();
+    public ResponseEntity<List<ItemDeInventarioDTO>> obtenerAllItems(){
+        return ResponseEntity.ok(itemDeIventarioService.obtenerAllitems());
     }
-
 
 }

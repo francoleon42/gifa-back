@@ -12,11 +12,8 @@ import java.time.LocalDate;
 @AllArgsConstructor
 @NoArgsConstructor
 public class PedidoManualDTO {
-
     Integer cantidad;
     String motivo;
     Integer idItem;
     String estadoPedido;
-
-
 }

@@ -13,8 +13,6 @@ import java.math.BigDecimal;
 @AllArgsConstructor
 @NoArgsConstructor
 public class GestorDePedidosDTO {
-
     Double presupuesto;
     Integer cantDePedidoAutomatico;
-
 }
