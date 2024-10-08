@@ -22,7 +22,6 @@ import java.util.List;
 public class ItemDeInventarioServiceImpl implements IItemDeIventarioService {
 
     private final ItemDeInventarioRepository itemDeInventarioRepository;
-    private final IMantenimientoService iMantenimientoService;
     private final ItemDeInventarioMapper itemDeInventarioMapper;
 
     @Override
@@ -32,6 +31,7 @@ public class ItemDeInventarioServiceImpl implements IItemDeIventarioService {
                 .nombre(itemDeInventarioDTO.getNombre())
                 .umbral(itemDeInventarioDTO.getUmbral())
                 .stock(itemDeInventarioDTO.getStock())
+                .cantCompraAutomatica(itemDeInventarioDTO.getCantCompraAutomatica())
                 .build();
         itemDeInventarioRepository.save(itemDeInventario);
     }

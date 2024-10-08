@@ -31,8 +31,6 @@ public class MantenimientoServiceImpl implements IMantenimientoService {
     private final MantenimientoMapper mantenimientoMapper;
     private final IVehiculoRepository iVehiculoRepository;
 
-
-
     @Override
     public void crearMantenimiento(RegistrarMantenimientoDTO registrarMantenimientoDTO) {
         Vehiculo vehiculo = iVehiculoRepository.findById(registrarMantenimientoDTO.getVehiculo_id())

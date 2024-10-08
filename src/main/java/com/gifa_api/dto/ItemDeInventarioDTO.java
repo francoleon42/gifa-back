@@ -11,10 +11,9 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class ItemDeInventarioDTO {
-
     private String nombre;
     private Integer umbral;
     private Integer stock;
-
+    private Integer cantCompraAutomatica;
 }
 

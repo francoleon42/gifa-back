@@ -88,7 +88,8 @@ public class SecurityConfig {
                 .requestMatchers(HttpMethod.PATCH, "/pedido/actualizarGestor").hasRole(administrador)
                 .requestMatchers(HttpMethod.GET, "/vehiculo/verAll").hasRole(administrador)
                 .requestMatchers(HttpMethod.GET, "/mantenimiento/verAll").hasRole(administrador)
-                .requestMatchers(HttpMethod.GET, "/mantenimiento/porVehiculo/{id}").hasRole(administrador);
+                .requestMatchers(HttpMethod.GET, "/mantenimiento/porVehiculo/{id}").hasRole(administrador)
+                .requestMatchers(HttpMethod.GET, "/inventario/obtenerItems").hasRole(administrador);
 
     }
 
@@ -98,7 +99,9 @@ public class SecurityConfig {
         authRequest
                 .requestMatchers(HttpMethod.POST, "/mantenimiento/crearManual").hasRole(supervisor)
                 .requestMatchers(HttpMethod.GET, "/pedido/verAll").hasRole(supervisor)
-                .requestMatchers(HttpMethod.POST, "/gestionDeCombustible/cargarCombustible").hasRole(supervisor);
+                .requestMatchers(HttpMethod.POST, "/gestionDeCombustible/cargarCombustible").hasRole(supervisor)
+                .requestMatchers(HttpMethod.GET, "/vehiculo/verAll").hasRole(supervisor)
+                .requestMatchers(HttpMethod.GET, "/inventario/obtenerItems").hasRole(supervisor);
 
     }
 

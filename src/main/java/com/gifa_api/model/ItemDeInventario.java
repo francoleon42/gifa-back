@@ -29,6 +29,9 @@ public class ItemDeInventario {
     @Column(name = "stock")
     private Integer stock;
 
+    @Column(name = "cant_compra_automatica")
+    private Integer cantCompraAutomatica;
+
     @OneToMany(mappedBy = "item")
     private Set<Pedido> pedidos = new LinkedHashSet<>();
 
