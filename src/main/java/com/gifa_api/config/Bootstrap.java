@@ -136,12 +136,14 @@ public class Bootstrap implements ApplicationRunner {
                 .nombre("Filtro de aceite")
                 .umbral(5)
                 .stock(10)
+                .cantCompraAutomatica(3)
                 .build();
 
         ItemDeInventario item2 = ItemDeInventario.builder()
                 .nombre("Neumático")
                 .umbral(3)
                 .stock(8)
+                .cantCompraAutomatica(2)
                 .build();
 
         itemDeInventarioRepository.saveAll(List.of(item1, item2));

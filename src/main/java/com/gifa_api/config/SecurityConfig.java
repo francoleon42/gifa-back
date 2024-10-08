@@ -31,6 +31,11 @@ public class SecurityConfig {
     private final JwtAuthenticationFilter jwtAuthenticationFilter;
     private final AuthenticationProvider authenticationProvider;
 
+    private static final String ADMINISTRADOR = Rol.ADMINISTRADOR.toString();
+    private static final String SUPERVISOR = Rol.SUPERVISOR.toString();
+    private static final String GERENTE = Rol.GERENTE.toString();
+    private static final String OPERADOR = Rol.OPERADOR.toString();
+
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
         return httpSecurity
@@ -41,13 +46,13 @@ public class SecurityConfig {
                 )
                 .authorizeHttpRequests(authRequest -> {
                     configurePublicEndpoints(authRequest);
-                    configureAdminEndpoints(authRequest);
-                    configureSupervisorEndpoints(authRequest);
-                    configureGerenteEndpoints(authRequest);
-                    configureOperadorEndpoints(authRequest);
+                    configureVehiculoEndpoints(authRequest);
+                    configurePedidoEndpoints(authRequest);
+                    configureInventarioEndpoints(authRequest);
+                    configureMantenimientoEndpoints(authRequest);
                     configureAuthenticatedEndpoints(authRequest);
                 })
-                .sessionManagement( sessionManager -> sessionManager.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+                .sessionManagement(sessionManager -> sessionManager.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authenticationProvider(authenticationProvider)
                 .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
                 .build();
@@ -56,7 +61,7 @@ public class SecurityConfig {
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
-        configuration.setAllowedOrigins(List.of("http://localhost:5173","http://52.70.76.55", "http://52.70.76.55:80"));
+        configuration.setAllowedOrigins(List.of("http://localhost:5173", "http://52.70.76.55", "http://52.70.76.55:80"));
         configuration.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS", "PATCH"));
         configuration.setAllowedHeaders(List.of("Authorization", "Content-Type"));
         configuration.setAllowCredentials(true);
@@ -76,49 +81,37 @@ public class SecurityConfig {
                 .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll();
     }
 
-    private void configureAdminEndpoints(AuthorizeHttpRequestsConfigurer<HttpSecurity>.AuthorizationManagerRequestMatcherRegistry authRequest) {
-        String administrador = Rol.ADMINISTRADOR.toString();
+    private void configureVehiculoEndpoints(AuthorizeHttpRequestsConfigurer<HttpSecurity>.AuthorizationManagerRequestMatcherRegistry authRequest) {
         authRequest
-                .requestMatchers(HttpMethod.POST, "/auth/register").hasRole(administrador)
-                .requestMatchers(HttpMethod.POST, "/vehiculo/registrar").hasRole(administrador)
-                .requestMatchers(HttpMethod.POST, "/pedido/registrarProveedor").hasRole(administrador)
-                .requestMatchers(HttpMethod.POST, "/pedido/asociarProveedor").hasRole(administrador)
-                .requestMatchers(HttpMethod.POST, "/inventario/registrarItem").hasRole(administrador)
-                .requestMatchers(HttpMethod.PATCH, "/vehiculo/habilitar/{id}", "/vehiculo/inhabilitar/{id}").hasRole(administrador)
-                .requestMatchers(HttpMethod.PATCH, "/pedido/actualizarGestor").hasRole(administrador)
-                .requestMatchers(HttpMethod.GET, "/vehiculo/verAll").hasRole(administrador)
-                .requestMatchers(HttpMethod.GET, "/mantenimiento/verAll").hasRole(administrador)
-                .requestMatchers(HttpMethod.GET, "/mantenimiento/porVehiculo/{id}").hasRole(administrador)
-                .requestMatchers(HttpMethod.GET, "/inventario/obtenerItems").hasRole(administrador);
-
+                .requestMatchers(HttpMethod.POST, "/vehiculo/registrar").hasRole(ADMINISTRADOR)
+                .requestMatchers(HttpMethod.GET, "/vehiculo/verAll").hasAnyRole(ADMINISTRADOR, SUPERVISOR)
+                .requestMatchers(HttpMethod.PATCH, "/vehiculo/habilitar/{id}").hasRole(ADMINISTRADOR)
+                .requestMatchers(HttpMethod.PATCH, "/vehiculo/inhabilitar/{id}").hasRole(ADMINISTRADOR);
     }
 
-
-    private void configureSupervisorEndpoints(AuthorizeHttpRequestsConfigurer<HttpSecurity>.AuthorizationManagerRequestMatcherRegistry authRequest) {
-        String supervisor = Rol.SUPERVISOR.toString();
+    private void configurePedidoEndpoints(AuthorizeHttpRequestsConfigurer<HttpSecurity>.AuthorizationManagerRequestMatcherRegistry authRequest) {
         authRequest
-                .requestMatchers(HttpMethod.POST, "/mantenimiento/crearManual").hasRole(supervisor)
-                .requestMatchers(HttpMethod.GET, "/pedido/verAll").hasRole(supervisor)
-                .requestMatchers(HttpMethod.POST, "/gestionDeCombustible/cargarCombustible").hasRole(supervisor)
-                .requestMatchers(HttpMethod.GET, "/vehiculo/verAll").hasRole(supervisor)
-                .requestMatchers(HttpMethod.GET, "/inventario/obtenerItems").hasRole(supervisor);
-
+                .requestMatchers(HttpMethod.POST, "/pedido/registrarProveedor").hasRole(ADMINISTRADOR)
+                .requestMatchers(HttpMethod.POST, "/pedido/asociarProveedor").hasRole(ADMINISTRADOR)
+                .requestMatchers(HttpMethod.GET, "/pedido/verAll").hasRole(SUPERVISOR);
     }
 
-    private void configureGerenteEndpoints(AuthorizeHttpRequestsConfigurer<HttpSecurity>.AuthorizationManagerRequestMatcherRegistry authRequest) {
-        String gerente = Rol.GERENTE.toString();
+    private void configureInventarioEndpoints(AuthorizeHttpRequestsConfigurer<HttpSecurity>.AuthorizationManagerRequestMatcherRegistry authRequest) {
+        authRequest
+                .requestMatchers(HttpMethod.POST, "/inventario/registrarItem").hasRole(ADMINISTRADOR)
+                .requestMatchers(HttpMethod.GET, "/inventario/obtenerItems").hasAnyRole(ADMINISTRADOR, SUPERVISOR, OPERADOR)
+                .requestMatchers(HttpMethod.PATCH, "/inventario/utilizarItem/{id}").hasRole(OPERADOR);
     }
 
-    private void configureOperadorEndpoints(AuthorizeHttpRequestsConfigurer<HttpSecurity>.AuthorizationManagerRequestMatcherRegistry authRequest) {
-        String operador = Rol.OPERADOR.toString();
+    private void configureMantenimientoEndpoints(AuthorizeHttpRequestsConfigurer<HttpSecurity>.AuthorizationManagerRequestMatcherRegistry authRequest) {
         authRequest
-                .requestMatchers(HttpMethod.GET, "/mantenimiento/pendientes").hasRole(operador)
-                .requestMatchers(HttpMethod.PATCH, "/mantenimiento/asignar/{mantenimientoId}").hasRole(operador)
-                .requestMatchers(HttpMethod.POST, "/mantenimiento/finalizar/{mantenimientoId}").hasRole(operador)
-                .requestMatchers(HttpMethod.PATCH, "/inventario/utilizarItem/{id}").hasRole(operador)
-                .requestMatchers(HttpMethod.GET, "/inventario/obtenerItems").hasRole(operador)
-                .requestMatchers(HttpMethod.GET, "/mantenimiento/verMisMantenimientos").hasRole(operador);
-
+                .requestMatchers(HttpMethod.POST, "/mantenimiento/crearManual").hasRole(SUPERVISOR)
+                .requestMatchers(HttpMethod.GET, "/mantenimiento/pendientes").hasRole(OPERADOR)
+                .requestMatchers(HttpMethod.PATCH, "/mantenimiento/asignar/{mantenimientoId}").hasRole(OPERADOR)
+                .requestMatchers(HttpMethod.POST, "/mantenimiento/finalizar/{mantenimientoId}").hasRole(OPERADOR)
+                .requestMatchers(HttpMethod.GET, "/mantenimiento/verAll").hasRole(ADMINISTRADOR)
+                .requestMatchers(HttpMethod.GET, "/mantenimiento/porVehiculo/{id}").hasRole(ADMINISTRADOR)
+                .requestMatchers(HttpMethod.GET, "/mantenimiento/verMisMantenimientos").hasRole(OPERADOR);
     }
 
     private void configureAuthenticatedEndpoints(AuthorizeHttpRequestsConfigurer<HttpSecurity>.AuthorizationManagerRequestMatcherRegistry authRequest) {
