@@ -6,11 +6,11 @@ import com.gifa_api.model.ItemDeInventario;
 import com.gifa_api.repository.ItemDeInventarioRepository;
 import com.gifa_api.service.impl.ItemDeInventarioServiceImpl;
 import com.gifa_api.utils.mappers.ItemDeInventarioMapper;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
+import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.Arrays;
 import java.util.List;
@@ -20,7 +20,8 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
-class InventarioTest {
+@ExtendWith(MockitoExtension.class)
+class ItemDeInventarioServiceImplTest {
 
     @InjectMocks
     private ItemDeInventarioServiceImpl itemDeInventarioService;
@@ -31,18 +32,10 @@ class InventarioTest {
     @Mock
     private ItemDeInventarioMapper itemDeInventarioMapper;
 
-    @BeforeEach
-    void setUp() {
-        MockitoAnnotations.openMocks(this);
-    }
-
     @Test
     void testRegistrar() {
         // Arrange
-        ItemDeInventarioDTO itemDeInventarioDTO = new ItemDeInventarioDTO();
-        itemDeInventarioDTO.setNombre("Producto A");
-        itemDeInventarioDTO.setUmbral(5);
-        itemDeInventarioDTO.setStock(10);
+        ItemDeInventarioDTO itemDeInventarioDTO = new ItemDeInventarioDTO("Producto A",5,10);
 
         ItemDeInventario itemDeInventario = ItemDeInventario
                 .builder()

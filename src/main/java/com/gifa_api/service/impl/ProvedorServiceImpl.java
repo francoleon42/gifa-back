@@ -19,11 +19,11 @@ import java.util.Random;
 public class ProvedorServiceImpl implements IProvedorService {
     private final IProveedorRepository iProveedorRepository;
     private final IPedidoRepository pedidoRepository;
+    private final Random random; // Inyecta Random como dependencia
 
     @Override
     public void registrarProveedor(RegistroProveedorRequestDTO requestDTO) {
-        Proveedor proveedor = Proveedor
-                .builder()
+        Proveedor proveedor = Proveedor.builder()
                 .nombre(requestDTO.getNombre())
                 .email(requestDTO.getEmail())
                 .build();
@@ -33,25 +33,22 @@ public class ProvedorServiceImpl implements IProvedorService {
 
     @Override
     public Proveedor obtenerByid(Integer id) {
-        Proveedor proveedor = iProveedorRepository.findById(id)
+        return iProveedorRepository.findById(id)
                 .orElseThrow(() -> new NotFoundException("No se encontró el proveedor con id: " + id));
-        return proveedor;
     }
 
     @Scheduled(fixedRate = 86400000)
     public void simulacionDeAceptacionORechazoProovedor() {
-        Random random = new Random();
-        int decision ;
-                List<Pedido> pedidos = pedidoRepository.findPedidosByEstado(EstadoPedido.PENDIENTE);
+        List<Pedido> pedidos = pedidoRepository.findPedidosByEstado(EstadoPedido.PENDIENTE);
         for (Pedido pedido : pedidos) {
-            decision = random.nextInt(100);
+            int decision = random.nextInt(100);  // Utiliza el Random inyectado
             if (decision < 30) {
-
                 pedido.setEstadoPedido(EstadoPedido.RECHAZADO);
-            }else if(decision > 30){
+            } else if (decision > 30) {
                 pedido.setEstadoPedido(EstadoPedido.ACEPTADO);
             }
             pedidoRepository.save(pedido);
         }
     }
 }
+

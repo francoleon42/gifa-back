@@ -9,8 +9,8 @@ import java.time.LocalDateTime;
 @Data
 @Builder
 public class CargaCombustibleRequestDTO {
-    Integer cantidadLitros;
+     Integer cantidadLitros;
 
-    LocalDateTime FechaYhora;
-    Integer numeroTarjeta;
+     LocalDateTime FechaYhora;
+     Integer numeroTarjeta;
 }
