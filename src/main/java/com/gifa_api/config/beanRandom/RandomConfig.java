@@ -1,4 +1,4 @@
-package com.gifa_api.service.impl.beanRandom;
+package com.gifa_api.config.beanRandom;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
