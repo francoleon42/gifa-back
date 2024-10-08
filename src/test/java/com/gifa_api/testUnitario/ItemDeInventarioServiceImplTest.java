@@ -35,7 +35,7 @@ class ItemDeInventarioServiceImplTest {
     @Test
     void testRegistrar() {
         // Arrange
-        ItemDeInventarioDTO itemDeInventarioDTO = new ItemDeInventarioDTO("Producto A",5,10);
+        ItemDeInventarioDTO itemDeInventarioDTO = new ItemDeInventarioDTO("Producto A",5,10, 10);
 
         ItemDeInventario itemDeInventario = ItemDeInventario
                 .builder()
