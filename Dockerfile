@@ -37,6 +37,10 @@ RUN mkdir -p /img
 ARG JWT_SECRET_KEY
 # Set the environment variable using the ARG value
 ENV JWT_SECRET_KEY=${JWT_SECRET_KEY}
+ENV HOST_MYSQL=${HOST_MYSQL} 
+ENV DB_NAME=${DB_NAME}
+ENV DB_USERNAME=${DB_USERNAME} 
+ENV DB_PASSWORD=${DB_PASSWORD}
 
 # Expose the necessary port
 EXPOSE 8080
