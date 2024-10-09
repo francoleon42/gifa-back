@@ -107,7 +107,7 @@ public class SecurityConfig {
         authRequest
                 .requestMatchers(HttpMethod.POST, "/mantenimiento/crearManual").hasRole(SUPERVISOR)
                 .requestMatchers(HttpMethod.GET, "/mantenimiento/pendientes").hasRole(OPERADOR)
-                .requestMatchers(HttpMethod.PATCH, "/mantenimiento/asignar/{mantenimientoId}").hasRole(OPERADOR)
+                .requestMatchers(HttpMethod.POST, "/mantenimiento/asignar/{mantenimientoId}").hasRole(OPERADOR)
                 .requestMatchers(HttpMethod.POST, "/mantenimiento/finalizar/{mantenimientoId}").hasRole(OPERADOR)
                 .requestMatchers(HttpMethod.GET, "/mantenimiento/verAll").hasRole(ADMINISTRADOR)
                 .requestMatchers(HttpMethod.GET, "/mantenimiento/porVehiculo/{id}").hasRole(ADMINISTRADOR)
