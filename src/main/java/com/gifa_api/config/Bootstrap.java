@@ -6,6 +6,7 @@ import com.gifa_api.utils.enums.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
+import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Component;
 
 import java.math.BigDecimal;
@@ -15,6 +16,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
+@Profile("!prod")
 @Component
 @RequiredArgsConstructor
 public class Bootstrap implements ApplicationRunner {
