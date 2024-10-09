@@ -63,15 +63,10 @@ public class MantenimientoServiceImpl implements IMantenimientoService {
         return mantenimientoMapper.mapListToMantenimientosPendientesDTO(IMantenimientoRepository.findAllByEstadoMantenimiento(EstadoMantenimiento.PENDIENTE));
     }
 
-    // acepta un mantenimiento un operador
-    public void asignarMantenimiento(Integer mantenimientoId, AsignarMantenimientoRequestDTO asignarMantenimientoRequestDTO) {
+    public void asignarMantenimiento(Integer mantenimientoId, Usuario operador) {
         Mantenimiento mantenimiento = findById(mantenimientoId);
 
-        Usuario usuario = IUsuarioRepository.findById(asignarMantenimientoRequestDTO.getOperadorId())
-                .filter(u -> u.getRol() == Rol.OPERADOR)
-                .orElseThrow(() -> new BadRoleException("El usuario a asignar al mantenimiento no es un operador. Id: " + asignarMantenimientoRequestDTO.getOperadorId()));
-
-        mantenimiento.setOperador(usuario);
+        mantenimiento.setOperador(operador);
         mantenimiento.setEstadoMantenimiento(EstadoMantenimiento.APROBADO);
     }
 

@@ -63,35 +63,17 @@ public class MantenimientoServiceImplTest {
 
     @Test
     void asignarMantenimiento_debeAsignarOperadorYActualizarEstado() {
-
-        AsignarMantenimientoRequestDTO dto = new AsignarMantenimientoRequestDTO(1);
         Mantenimiento mantenimiento = new Mantenimiento();
         Usuario operador = new Usuario();
         operador.setRol(Rol.OPERADOR);
 
         when(mantenimientoRepository.findById(anyInt())).thenReturn(Optional.of(mantenimiento));
-        when(usuarioRepository.findById(dto.getOperadorId())).thenReturn(Optional.of(operador));
 
-        mantenimientoService.asignarMantenimiento(1, dto);
+        mantenimientoService.asignarMantenimiento(1, operador);
 
 
         assertEquals(operador, mantenimiento.getOperador());
         assertEquals(EstadoMantenimiento.APROBADO, mantenimiento.getEstadoMantenimiento());
-    }
-
-    @Test
-    void asignarMantenimiento_debeLanzarBadRoleException_siUsuarioNoEsOperador() {
-        // Arrange
-        AsignarMantenimientoRequestDTO dto = new AsignarMantenimientoRequestDTO(1);
-        Mantenimiento mantenimiento = new Mantenimiento();
-        Usuario usuario = new Usuario();
-        usuario.setRol(Rol.ADMINISTRADOR);
-
-        when(mantenimientoRepository.findById(anyInt())).thenReturn(Optional.of(mantenimiento));
-        when(usuarioRepository.findById(dto.getOperadorId())).thenReturn(Optional.of(usuario));
-
-        // Act & Assert
-        assertThrows(BadRoleException.class, () -> mantenimientoService.asignarMantenimiento(1, dto));
     }
 
     @Test
