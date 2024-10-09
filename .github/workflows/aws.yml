@@ -48,7 +48,7 @@ jobs:
             docker system prune -a --volumes -f
             docker run -e JWT_SECRET_KEY=${{ secrets.JWT_SECRET_KEY }} \
              -e DB_NAME=${{ secrets.DB_NAME }} \
-             -e DB_USER=${{ secrets.DB_USER }} \
+             -e DB_USERNAME=${{ secrets.DB_USER }} \
              -e DB_PASSWORD=${{ secrets.DB_PASSWORD }} \
              -e HOST_MYSQL=${{ secrets.HOST_MYSQL }}  \
              -d --name JavaBackend \
@@ -70,7 +70,7 @@ jobs:
             docker system prune -a --volumes -f 
             docker run -e JWT_SECRET_KEY=${{ secrets.JWT_SECRET_KEY }} \
              -e DB_NAME=${{ secrets.DB_NAME }} \
-             -e DB_USER=${{ secrets.DB_USER }} \
+             -e DB_USERNAME=${{ secrets.DB_USER }} \
              -e DB_PASSWORD=${{ secrets.DB_PASSWORD }} \
              -e HOST_MYSQL=${{ secrets.HOST_MYSQL }}  \
              -d --name JavaBackend \
