@@ -68,6 +68,8 @@ public class MantenimientoServiceImpl implements IMantenimientoService {
 
         mantenimiento.setOperador(operador);
         mantenimiento.setEstadoMantenimiento(EstadoMantenimiento.APROBADO);
+
+        IMantenimientoRepository.save(mantenimiento);
     }
 
     private Mantenimiento findById(Integer mantenimientoId){
