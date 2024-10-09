@@ -48,9 +48,10 @@ jobs:
             docker system prune -a --volumes -f
             docker run -e JWT_SECRET_KEY=${{ secrets.JWT_SECRET_KEY }} \
              -e DB_NAME=${{ secrets.DB_NAME }} \
-             -e DB_USERNAME=${{ secrets.DB_USER }} \
+             -e DB_USERNAME=${{ secrets.DB_USERNAME }} \
              -e DB_PASSWORD=${{ secrets.DB_PASSWORD }} \
              -e HOST_MYSQL=${{ secrets.HOST_MYSQL }}  \
+             -e SPRING_PROFILES_ACTIVE=${{ secrets.SPRING_PROFILES_ACTIVE  }}  \
              -d --name JavaBackend \
              -p 8080:8080 \
              --memory=1g 778425189746.dkr.ecr.us-east-1.amazonaws.com/hola-mundo-repo:back_latest
@@ -70,9 +71,10 @@ jobs:
             docker system prune -a --volumes -f 
             docker run -e JWT_SECRET_KEY=${{ secrets.JWT_SECRET_KEY }} \
              -e DB_NAME=${{ secrets.DB_NAME }} \
-             -e DB_USERNAME=${{ secrets.DB_USER }} \
+             -e DB_USERNAME=${{ secrets.DB_USERNAME }} \
              -e DB_PASSWORD=${{ secrets.DB_PASSWORD }} \
              -e HOST_MYSQL=${{ secrets.HOST_MYSQL }}  \
+             -e SPRING_PROFILES_ACTIVE=${{ secrets.SPRING_PROFILES_ACTIVE  }}  \
              -d --name JavaBackend \
              -p 8080:8080 \
              --memory=1g 778425189746.dkr.ecr.us-east-1.amazonaws.com/hola-mundo-repo:back_latest
