@@ -1,6 +1,6 @@
 package com.gifa_api.controller;
 
-import com.gifa_api.dto.ItemDeInventarioDTO;
+import com.gifa_api.dto.item.ItemDeInventarioDTO;
 import com.gifa_api.service.IItemDeIventarioService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;

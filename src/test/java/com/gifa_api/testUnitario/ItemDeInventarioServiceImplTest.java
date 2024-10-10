@@ -1,6 +1,6 @@
 package com.gifa_api.testUnitario;
 
-import com.gifa_api.dto.ItemDeInventarioDTO;
+import com.gifa_api.dto.item.ItemDeInventarioDTO;
 import com.gifa_api.exception.NotFoundException;
 import com.gifa_api.model.ItemDeInventario;
 import com.gifa_api.repository.ItemDeInventarioRepository;

@@ -1,6 +1,6 @@
 package com.gifa_api.service;
 
-import com.gifa_api.dto.ItemDeInventarioDTO;
+import com.gifa_api.dto.item.ItemDeInventarioDTO;
 
 import com.gifa_api.model.ItemDeInventario;
 
