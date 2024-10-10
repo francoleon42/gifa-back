@@ -29,6 +29,7 @@ public class ItemDeInventarioMapper {
 
     public ItemDeInventarioDTO mapToItemDeInventarioDTO(ItemDeInventario item) {
         return ItemDeInventarioDTO.builder()
+                .id(item.getId())
                 .nombre(item.getNombre())
                 .umbral(item.getUmbral())
                 .stock(item.getStock())

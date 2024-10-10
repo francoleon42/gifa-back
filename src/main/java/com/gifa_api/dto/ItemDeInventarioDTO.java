@@ -11,6 +11,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class ItemDeInventarioDTO {
+    private Integer id;
     private String nombre;
     private Integer umbral;
     private Integer stock;
