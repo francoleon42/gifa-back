@@ -33,6 +33,7 @@ public class ItemDeInventarioMapper {
                 .nombre(item.getNombre())
                 .umbral(item.getUmbral())
                 .stock(item.getStock())
+                .cantCompraAutomatica(item.getCantCompraAutomatica())
                 .build();
     }
 

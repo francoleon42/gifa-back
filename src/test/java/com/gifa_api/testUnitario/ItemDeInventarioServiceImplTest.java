@@ -1,6 +1,7 @@
 package com.gifa_api.testUnitario;
 
 import com.gifa_api.dto.item.ItemDeInventarioDTO;
+import com.gifa_api.dto.item.ItemDeInventarioRequestDTO;
 import com.gifa_api.exception.NotFoundException;
 import com.gifa_api.model.ItemDeInventario;
 import com.gifa_api.repository.ItemDeInventarioRepository;
@@ -35,7 +36,7 @@ class ItemDeInventarioServiceImplTest {
     @Test
     void testRegistrar() {
         // Arrange
-        ItemDeInventarioDTO itemDeInventarioDTO = new ItemDeInventarioDTO("Producto A",5,10, 10);
+        ItemDeInventarioRequestDTO itemDeInventarioDTO = new ItemDeInventarioRequestDTO("Producto A",5,10, 10);
 
         ItemDeInventario itemDeInventario = ItemDeInventario
                 .builder()

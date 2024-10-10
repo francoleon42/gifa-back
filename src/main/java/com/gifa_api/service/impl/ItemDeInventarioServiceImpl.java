@@ -1,6 +1,7 @@
 package com.gifa_api.service.impl;
 
 import com.gifa_api.dto.item.ItemDeInventarioDTO;
+import com.gifa_api.dto.item.ItemDeInventarioRequestDTO;
 import com.gifa_api.exception.NotFoundException;
 import com.gifa_api.model.ItemDeInventario;
 import com.gifa_api.repository.ItemDeInventarioRepository;
@@ -19,7 +20,7 @@ public class ItemDeInventarioServiceImpl implements IItemDeIventarioService {
     private final ItemDeInventarioMapper itemDeInventarioMapper;
 
     @Override
-    public void registrar(ItemDeInventarioDTO itemDeInventarioDTO) {
+    public void registrar(ItemDeInventarioRequestDTO itemDeInventarioDTO) {
         ItemDeInventario itemDeInventario = ItemDeInventario
                 .builder()
                 .nombre(itemDeInventarioDTO.getNombre())
