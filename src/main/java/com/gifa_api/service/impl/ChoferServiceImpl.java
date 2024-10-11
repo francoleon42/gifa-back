@@ -35,7 +35,7 @@ public class ChoferServiceImpl implements IChoferService {
     }
 
     @Override
-    public void habilitarChofer(ChoferEditDTO choferEditDTO) {
+    public void habilitar(ChoferEditDTO choferEditDTO) {
         Chofer chofer = choferRepository.findById(choferEditDTO.getId_chofer())
                 .orElseThrow(() -> new NotFoundException("No se encontró el chofer del id " + choferEditDTO.getId_chofer()));
         if(chofer.getEstadoChofer().equals(EstadoChofer.INHABILITADO)) {
@@ -43,7 +43,7 @@ public class ChoferServiceImpl implements IChoferService {
         }
     }
     @Override
-    public void inhabilitarChofer(ChoferEditDTO choferEditDTO) {
+    public void inhabilitar(ChoferEditDTO choferEditDTO) {
         Chofer chofer = choferRepository.findById(choferEditDTO.getId_chofer())
                 .orElseThrow(() -> new NotFoundException("No se encontró el chofer del id " + choferEditDTO.getId_chofer()));
         if(chofer.getEstadoChofer().equals(EstadoChofer.HABILITADO)) {

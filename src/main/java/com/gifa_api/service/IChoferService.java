@@ -5,6 +5,6 @@ import com.gifa_api.dto.chofer.ChoferRegistroDTO;
 
 public interface IChoferService {
     void registro(ChoferRegistroDTO choferRegistroDTO);
-    void habilitarChofer(ChoferEditDTO choferEditDTO);
-    void inhabilitarChofer(ChoferEditDTO choferEditDTO);
+    void habilitar(ChoferEditDTO choferEditDTO);
+    void inhabilitar(ChoferEditDTO choferEditDTO);
 }
