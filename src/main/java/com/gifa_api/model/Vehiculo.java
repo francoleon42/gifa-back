@@ -61,6 +61,9 @@ public class Vehiculo {
     @OneToMany(mappedBy = "vehiculo", cascade = CascadeType.ALL)
     private Set<Mantenimiento> mantenimientos;
 
+    @OneToMany(mappedBy = "vehiculo", cascade = CascadeType.ALL)
+    private Set<Chofer> chofers;
+
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "tarjeta_id")
     private Tarjeta tarjeta;

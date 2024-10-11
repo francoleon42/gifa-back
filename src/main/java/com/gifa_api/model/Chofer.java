@@ -24,4 +24,8 @@ public class Chofer {
     @Enumerated(EnumType.STRING)
     @Column(name = "estadoChofer", nullable = false)
     private EstadoChofer estadoChofer;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "id_vehiculo")
+    private Vehiculo vehiculo;
 }
