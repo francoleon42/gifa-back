@@ -17,6 +17,6 @@ public class Chofer {
     @Column(name = "id", nullable = false)
     private Integer id;
 
-    @Column(name = "patente", nullable = false, length = 10)
+    @Column(name = "nombre", nullable = false, length = 10)
     private String nombre;
 }
