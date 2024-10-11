@@ -3,6 +3,7 @@ package com.gifa_api.controller;
 import com.gifa_api.dto.chofer.ChoferRegistroDTO;
 import com.gifa_api.service.IChoferService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -17,6 +18,6 @@ public class ChoferController {
     @PostMapping("/crear")
     public ResponseEntity<?> createChofer(@RequestBody ChoferRegistroDTO choferRegistroDTO) {
         choferService.registro(choferRegistroDTO);
-        return ResponseEntity.ok().body(chofer);
+        return new ResponseEntity<>(HttpStatus.CREATED);
     }
 }
