@@ -15,7 +15,8 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 public class ChoferController {
     private IChoferService choferService;
-    @PostMapping("/crear")
+
+    @PostMapping("/registrar")
     public ResponseEntity<?> createChofer(@RequestBody ChoferRegistroDTO choferRegistroDTO) {
         choferService.registro(choferRegistroDTO);
         return new ResponseEntity<>(HttpStatus.CREATED);
