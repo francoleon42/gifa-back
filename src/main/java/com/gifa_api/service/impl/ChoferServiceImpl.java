@@ -41,6 +41,7 @@ public class ChoferServiceImpl implements IChoferService {
         if(chofer.getEstadoChofer().equals(EstadoChofer.INHABILITADO)) {
             chofer.setEstadoChofer(EstadoChofer.HABILITADO);
         }
+        choferRepository.save(chofer);
     }
     @Override
     public void inhabilitar(ChoferEditDTO choferEditDTO) {
@@ -49,5 +50,6 @@ public class ChoferServiceImpl implements IChoferService {
         if(chofer.getEstadoChofer().equals(EstadoChofer.HABILITADO)) {
             chofer.setEstadoChofer(EstadoChofer.INHABILITADO);
         }
+        choferRepository.save(chofer);
     }
 }
