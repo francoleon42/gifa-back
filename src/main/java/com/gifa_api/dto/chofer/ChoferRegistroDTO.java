@@ -15,5 +15,5 @@ import lombok.NoArgsConstructor;
 public class ChoferRegistroDTO {
 
     String nombre;
-    String id_vehiculo;
+    Integer id_vehiculo;
 }
