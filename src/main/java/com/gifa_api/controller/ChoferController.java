@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/chofer")
 @RequiredArgsConstructor
 public class ChoferController {
-    private IChoferService choferService;
+    private final IChoferService choferService;
 
     @PostMapping("/registrar")
     public ResponseEntity<?> createChofer(@RequestBody ChoferRegistroDTO choferRegistroDTO) {
@@ -30,4 +30,9 @@ public class ChoferController {
         choferService.inhabilitar(choferEditDTO);
         return new ResponseEntity<>(HttpStatus.OK);
     }
+
+//    @GetMapping("/verChofers")
+//    public ResponseEntity<?> getAllChofers() {
+//        return
+//    }
 }
