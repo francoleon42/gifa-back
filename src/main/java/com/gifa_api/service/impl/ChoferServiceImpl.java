@@ -1,5 +1,6 @@
 package com.gifa_api.service.impl;
 
+import com.gifa_api.dto.chofer.ChoferEditDTO;
 import com.gifa_api.dto.chofer.ChoferRegistroDTO;
 import com.gifa_api.exception.NotFoundException;
 import com.gifa_api.model.Chofer;
@@ -31,5 +32,22 @@ public class ChoferServiceImpl implements IChoferService {
                 .build();
 
         choferRepository.save(chofer);
+    }
+
+    @Override
+    public void habilitarChofer(ChoferEditDTO choferEditDTO) {
+        Chofer chofer = choferRepository.findById(choferEditDTO.getId_chofer())
+                .orElseThrow(() -> new NotFoundException("No se encontró el chofer del id " + choferEditDTO.getId_chofer()));
+        if(chofer.getEstadoChofer().equals(EstadoChofer.INHABILITADO)) {
+            chofer.setEstadoChofer(EstadoChofer.HABILITADO);
+        }
+    }
+    @Override
+    public void inhabilitarChofer(ChoferEditDTO choferEditDTO) {
+        Chofer chofer = choferRepository.findById(choferEditDTO.getId_chofer())
+                .orElseThrow(() -> new NotFoundException("No se encontró el chofer del id " + choferEditDTO.getId_chofer()));
+        if(chofer.getEstadoChofer().equals(EstadoChofer.HABILITADO)) {
+            chofer.setEstadoChofer(EstadoChofer.INHABILITADO);
+        }
     }
 }
