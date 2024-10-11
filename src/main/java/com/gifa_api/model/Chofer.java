@@ -28,4 +28,5 @@ public class Chofer {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "id_vehiculo")
     private Vehiculo vehiculo;
+
 }
