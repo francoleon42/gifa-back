@@ -1,5 +1,6 @@
 package com.gifa_api.model;
 
+import com.gifa_api.utils.enums.EstadoChofer;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -19,4 +20,8 @@ public class Chofer {
 
     @Column(name = "nombre", nullable = false, length = 10)
     private String nombre;
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "estadoChofer", nullable = false)
+    private EstadoChofer estadoChofer;
 }
