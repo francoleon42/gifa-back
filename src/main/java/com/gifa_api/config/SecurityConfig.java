@@ -89,9 +89,12 @@ public class SecurityConfig {
                 .requestMatchers(HttpMethod.PATCH, "/vehiculo/habilitar/{id}").hasRole(ADMINISTRADOR)
                 .requestMatchers(HttpMethod.PATCH, "/vehiculo/inhabilitar/{id}").hasRole(ADMINISTRADOR);
     }
+
     private void configureChoferEndpoints(AuthorizeHttpRequestsConfigurer<HttpSecurity>.AuthorizationManagerRequestMatcherRegistry authRequest) {
         authRequest
-                .requestMatchers(HttpMethod.POST, "/chofer/registrar").hasRole(ADMINISTRADOR);
+                .requestMatchers(HttpMethod.POST, "/chofer/registrar").hasRole(ADMINISTRADOR)
+                .requestMatchers(HttpMethod.PATCH, "/chofer/inhabilitar").hasRole(ADMINISTRADOR)
+                .requestMatchers(HttpMethod.PATCH, "/chofer/habilitar").hasRole(ADMINISTRADOR);
     }
 
     private void configurePedidoEndpoints(AuthorizeHttpRequestsConfigurer<HttpSecurity>.AuthorizationManagerRequestMatcherRegistry authRequest) {
