@@ -32,13 +32,14 @@ public class MantenimientoController {
         return new ResponseEntity<>(mantenimientoService.verMantenimientosPorVehiculo(id), HttpStatus.OK);
     }
 
-    @GetMapping("/verAll")
-    public ResponseEntity<MantenimientosResponseDTO> verMantenimientos() {
-        return new ResponseEntity<>(mantenimientoService.verMantenimientos(), HttpStatus.OK);
+
+    @GetMapping("/finalizados")
+    public ResponseEntity<MantenimientosResponseDTO> verMantenimientosFinalizados() {
+        return new ResponseEntity<>(mantenimientoService.verMantenimientosFinalizados(), HttpStatus.OK);
     }
 
     @GetMapping("/pendientes")
-    public ResponseEntity<MantenimientosPendientesResponseDTO> verMantenimientosPendientes() {
+    public ResponseEntity<MantenimientosResponseDTO> verMantenimientosPendientes() {
         return new ResponseEntity<>(mantenimientoService.verMantenimientosPendientes(), HttpStatus.OK);
     }
 

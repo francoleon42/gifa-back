@@ -28,8 +28,8 @@ public class MantenimientoMapper {
                 .build();
     }
 
-    public MantenimientosPendientesResponseDTO mapListToMantenimientosPendientesDTO(List<Mantenimiento> mantenimientos) {
-        return MantenimientosPendientesResponseDTO.builder()
+    public MantenimientosResponseDTO mapListToMantenimientosPendientesDTO(List<Mantenimiento> mantenimientos) {
+        return MantenimientosResponseDTO.builder()
                 .mantenimientos(mapToMantenimientosDTO(mantenimientos))
                 .build();
     }

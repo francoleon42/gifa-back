@@ -12,7 +12,8 @@ public interface IMantenimientoService {
     void crearMantenimiento(RegistrarMantenimientoDTO registrarMantenimientoDTO);
     MantenimientosResponseDTO verMantenimientosPorVehiculo(Integer id);
 
-    MantenimientosPendientesResponseDTO verMantenimientosPendientes();
+    MantenimientosResponseDTO verMantenimientosPendientes();
+    MantenimientosResponseDTO verMantenimientosFinalizados();
 
     MantenimientosResponseDTO verMantenimientos();
 
@@ -21,4 +22,6 @@ public interface IMantenimientoService {
     void finalizarMantenimiento(Integer mantenimientoId);
 
     MantenimientosResponseDTO obtenerMantenimientosPorOperador(Integer idOperador);
+
+
 }

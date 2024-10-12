@@ -59,8 +59,13 @@ public class MantenimientoServiceImpl implements IMantenimientoService {
     }
 
     @Override
-    public MantenimientosPendientesResponseDTO verMantenimientosPendientes() {
+    public MantenimientosResponseDTO verMantenimientosPendientes() {
         return mantenimientoMapper.mapListToMantenimientosPendientesDTO(IMantenimientoRepository.findAllByEstadoMantenimiento(EstadoMantenimiento.PENDIENTE));
+    }
+
+    @Override
+    public MantenimientosResponseDTO verMantenimientosFinalizados() {
+        return mantenimientoMapper.mapListToMantenimientosPendientesDTO(IMantenimientoRepository.findAllByEstadoMantenimiento(EstadoMantenimiento.FINALIZADO));
     }
 
     public void asignarMantenimiento(Integer mantenimientoId, Usuario operador) {
