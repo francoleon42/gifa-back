@@ -31,8 +31,8 @@ public class ChoferController {
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
-//    @GetMapping("/verChofers")
-//    public ResponseEntity<?> getAllChofers() {
-//        return
-//    }
+    @GetMapping("/verChofers")
+    public ResponseEntity<?> getAllChofers() {
+        return Res
+    }
 }
