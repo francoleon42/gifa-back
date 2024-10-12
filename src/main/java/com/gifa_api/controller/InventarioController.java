@@ -2,6 +2,7 @@ package com.gifa_api.controller;
 
 import com.gifa_api.dto.item.ItemDeInventarioDTO;
 import com.gifa_api.dto.item.ItemDeInventarioRequestDTO;
+import com.gifa_api.dto.item.UtilizarItemDeInventarioDTO;
 import com.gifa_api.service.IItemDeIventarioService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -23,8 +24,8 @@ public class InventarioController {
     }
 
     @PatchMapping("/utilizarItem/{id}")
-    public ResponseEntity<?> utilizarItem(@PathVariable Integer id){
-        itemDeIventarioService.utilizarItem(id);
+    public ResponseEntity<?> utilizarItem(@PathVariable Integer id, @RequestBody UtilizarItemDeInventarioDTO utilizarItemDeInventarioDTO){
+        itemDeIventarioService.utilizarItem(id,utilizarItemDeInventarioDTO);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 

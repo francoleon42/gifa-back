@@ -2,6 +2,7 @@ package com.gifa_api.service.impl;
 
 import com.gifa_api.dto.item.ItemDeInventarioDTO;
 import com.gifa_api.dto.item.ItemDeInventarioRequestDTO;
+import com.gifa_api.dto.item.UtilizarItemDeInventarioDTO;
 import com.gifa_api.exception.NotFoundException;
 import com.gifa_api.model.ItemDeInventario;
 import com.gifa_api.repository.ItemDeInventarioRepository;
@@ -32,11 +33,11 @@ public class ItemDeInventarioServiceImpl implements IItemDeIventarioService {
     }
 
     @Override
-    public void utilizarItem(Integer itemId) {
+    public void utilizarItem(Integer itemId, UtilizarItemDeInventarioDTO utilizarItemDeInventarioDTO) {
         ItemDeInventario itemIventario = obtenerById(itemId);
 
-        if(itemIventario.getUmbral() <  itemIventario.getStock() - 1 ){
-            itemIventario.desminuirStock();
+        if(itemIventario.getUmbral() <  itemIventario.getStock() - utilizarItemDeInventarioDTO.getCantidadADisminuir() ){
+            itemIventario.desminuirStock(utilizarItemDeInventarioDTO.getCantidadADisminuir());
         }
         itemDeInventarioRepository.save(itemIventario);
 
