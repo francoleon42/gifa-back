@@ -33,6 +33,6 @@ public class ChoferController {
 
     @GetMapping("/verChofers")
     public ResponseEntity<?> getAllChofers() {
-        return choferService.
+        return new ResponseEntity<>(choferService.obtenerAll(),HttpStatus.OK);
     }
 }
