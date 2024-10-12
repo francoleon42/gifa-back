@@ -38,7 +38,7 @@ public class ItemDeInventarioServiceImpl implements IItemDeIventarioService {
     public void utilizarItem(Integer itemId, UtilizarItemDeInventarioDTO utilizarItemDeInventarioDTO) {
         ItemDeInventario itemIventario = obtenerById(itemId);
 
-        if(0 <  itemIventario.getStock() - utilizarItemDeInventarioDTO.getCantidadADisminuir() ){
+        if(0 <=  itemIventario.getStock() - utilizarItemDeInventarioDTO.getCantidadADisminuir() ){
             itemIventario.desminuirStock(utilizarItemDeInventarioDTO.getCantidadADisminuir());
         }else{
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Stock insuficiente");
