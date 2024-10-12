@@ -1,5 +1,6 @@
 package com.gifa_api.controller;
 
+import com.gifa_api.dto.chofer.AsignarChoferDTO;
 import com.gifa_api.dto.chofer.ChoferEditDTO;
 import com.gifa_api.dto.chofer.ChoferRegistroDTO;
 import com.gifa_api.service.IChoferService;
@@ -18,6 +19,11 @@ public class ChoferController {
     public ResponseEntity<?> createChofer(@RequestBody ChoferRegistroDTO choferRegistroDTO) {
         choferService.registro(choferRegistroDTO);
         return new ResponseEntity<>(HttpStatus.CREATED);
+    }
+    @PatchMapping("/asignarChofer")
+    public ResponseEntity<?> AsignarChofer(@RequestBody AsignarChoferDTO asignarChoferDTO) {
+        choferService.asignarVehiculo(asignarChoferDTO);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 
     @PatchMapping("/habilitar")

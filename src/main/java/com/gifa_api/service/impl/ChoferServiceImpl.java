@@ -1,5 +1,6 @@
 package com.gifa_api.service.impl;
 
+import com.gifa_api.dto.chofer.AsignarChoferDTO;
 import com.gifa_api.dto.chofer.ChoferEditDTO;
 import com.gifa_api.dto.chofer.ChoferRegistroDTO;
 import com.gifa_api.dto.chofer.ChoferResponseDTO;
@@ -26,19 +27,28 @@ public class ChoferServiceImpl implements IChoferService {
 
     @Override
     public void registro(ChoferRegistroDTO choferRegistroDTO) {
-        Vehiculo vehiculo = vehiculoRepository.findById(choferRegistroDTO.getId_vehiculo())
-                .orElseThrow(() -> new NotFoundException("No se encontró el vehiculo para el chofer del id " + choferRegistroDTO.getId_vehiculo() ));
+
 
         Chofer chofer = Chofer
                 .builder()
                 .estadoChofer(EstadoChofer.HABILITADO)
                 .nombre(choferRegistroDTO.getNombre())
-                .vehiculo(vehiculo)
                 .build();
 
         choferRepository.save(chofer);
     }
 
+
+    @Override
+    public void asignarVehiculo(AsignarChoferDTO asignarChoferDTO ) {
+        Vehiculo vehiculo = vehiculoRepository.findById(asignarChoferDTO.getIdVehiculo())
+                .orElseThrow(() -> new NotFoundException("No se encontró el vehiculo para el chofer del id " + asignarChoferDTO.getIdVehiculo() ));
+        Chofer chofer = choferRepository.findById(asignarChoferDTO.getIdChofer())
+                .orElseThrow(() -> new NotFoundException("No se encontró el chofer del id " + asignarChoferDTO.getIdChofer() ));
+
+        chofer.setVehiculo(vehiculo);
+        choferRepository.save(chofer);
+    }
     @Override
     public void habilitar(ChoferEditDTO choferEditDTO) {
         Chofer chofer = choferRepository.findById(choferEditDTO.getId_chofer())
