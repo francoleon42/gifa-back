@@ -52,7 +52,7 @@ public class VehiculoServiceImpl implements IVehiculoService {
                 .modelo(vehiculoDTO.getModelo())
                 .estadoDeHabilitacion(EstadoDeHabilitacion.HABILITADO)
                 .estadoVehiculo(EstadoVehiculo.REPARADO)
-                .fechaVencimiento(LocalDate.now().plusMonths(2))
+                .fechaVencimiento(vehiculoDTO.getFechaRevision())
                 .tarjeta(tarjeta)
                 .build();
 
