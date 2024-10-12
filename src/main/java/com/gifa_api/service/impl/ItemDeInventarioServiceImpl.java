@@ -9,7 +9,9 @@ import com.gifa_api.repository.ItemDeInventarioRepository;
 import com.gifa_api.service.IItemDeIventarioService;
 import com.gifa_api.utils.mappers.ItemDeInventarioMapper;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 
@@ -38,6 +40,8 @@ public class ItemDeInventarioServiceImpl implements IItemDeIventarioService {
 
         if(0 <  itemIventario.getStock() - utilizarItemDeInventarioDTO.getCantidadADisminuir() ){
             itemIventario.desminuirStock(utilizarItemDeInventarioDTO.getCantidadADisminuir());
+        }else{
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Stock insuficiente");
         }
         itemDeInventarioRepository.save(itemIventario);
 
