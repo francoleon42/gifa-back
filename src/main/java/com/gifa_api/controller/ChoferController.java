@@ -35,4 +35,5 @@ public class ChoferController {
     public ResponseEntity<?> getAllChofers() {
         return new ResponseEntity<>(choferService.obtenerAll(),HttpStatus.OK);
     }
+
 }
