@@ -2,6 +2,7 @@ package com.gifa_api.service.impl;
 
 import com.gifa_api.dto.chofer.ChoferEditDTO;
 import com.gifa_api.dto.chofer.ChoferRegistroDTO;
+import com.gifa_api.dto.chofer.ChoferResponseDTO;
 import com.gifa_api.exception.NotFoundException;
 import com.gifa_api.model.Chofer;
 import com.gifa_api.model.GestorDePedidos;
@@ -10,14 +11,18 @@ import com.gifa_api.repository.IChoferRepository;
 import com.gifa_api.repository.IVehiculoRepository;
 import com.gifa_api.service.IChoferService;
 import com.gifa_api.utils.enums.EstadoChofer;
+import com.gifa_api.utils.mappers.ChoferMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
 public class ChoferServiceImpl implements IChoferService {
     private final IVehiculoRepository vehiculoRepository;
     private final IChoferRepository choferRepository;
+    private final ChoferMapper choferMapper;
 
     @Override
     public void registro(ChoferRegistroDTO choferRegistroDTO) {
@@ -51,5 +56,10 @@ public class ChoferServiceImpl implements IChoferService {
             chofer.setEstadoChofer(EstadoChofer.INHABILITADO);
         }
         choferRepository.save(chofer);
+    }
+
+    @Override
+    public List<ChoferResponseDTO> obtenerAll() {
+        return choferMapper.obtenerListaChoferDTO(choferRepository.findAll());
     }
 }
