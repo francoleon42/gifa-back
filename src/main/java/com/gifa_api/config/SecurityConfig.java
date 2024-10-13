@@ -52,6 +52,8 @@ public class SecurityConfig {
                     configurePedidoEndpoints(authRequest);
                     configureInventarioEndpoints(authRequest);
                     configureMantenimientoEndpoints(authRequest);
+                    configureCargaCombustibleEndpoints(authRequest);
+                    configureMetabaseEndpoints(authRequest);
                     configureAuthenticatedEndpoints(authRequest);
                 })
                 .sessionManagement(sessionManager -> sessionManager.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
@@ -131,6 +133,11 @@ public class SecurityConfig {
 
     }
 
+    private void configureMetabaseEndpoints(AuthorizeHttpRequestsConfigurer<HttpSecurity>.AuthorizationManagerRequestMatcherRegistry authRequest) {
+        authRequest
+                .requestMatchers(HttpMethod.GET, "/metabase/token").hasRole(GERENTE);
+
+    }
 
     private void configureAuthenticatedEndpoints(AuthorizeHttpRequestsConfigurer<HttpSecurity>.AuthorizationManagerRequestMatcherRegistry authRequest) {
         authRequest
