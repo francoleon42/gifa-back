@@ -33,6 +33,7 @@ public class Bootstrap implements ApplicationRunner {
     private final IGestorDePedidosRepository igestorDePedidosRepository;
     private final IKilometrajeVehiculoRepository kilometrajeVehiculoRepository;
     private final IItemUsadoMantenimientoRepository itemUsadoMantenimientoRepository;
+    private final IChoferRepository choferRepository;
 
     @Override
     public void run(ApplicationArguments args) throws Exception {
@@ -109,6 +110,21 @@ public class Bootstrap implements ApplicationRunner {
                 .build();
 
         vehiculoRepository.saveAll(List.of(vehiculo1, vehiculo2));
+
+        Usuario usuarioChofer = Usuario.builder()
+                .usuario("chofer")
+                .contrasena("$2a$10$RRAzywJFxaAG3pRlHXep6u6VNKi5KOTT3M8GCxDPHpAyZ0ofX2Bcu")
+                .rol(Rol.CHOFER)
+                .build();
+
+        Chofer chofer = Chofer.builder()
+                .usuario(usuarioChofer)
+                .estadoChofer(EstadoChofer.HABILITADO)
+                .nombre("chofer1")
+                .vehiculo(vehiculo1)
+                .build();
+
+        choferRepository.saveAll(List.of(chofer));
 
         // Crear cargas de combustible con builder
         for (int i = 1; i <= 10; i++) {

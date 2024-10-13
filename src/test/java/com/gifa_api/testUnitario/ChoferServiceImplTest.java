@@ -111,7 +111,7 @@ class ChoferServiceImplTest {
     @Test
     void registrarChofer_debeGuardarChoferSiVehiculoExiste() {
         // Arrange
-        ChoferRegistroDTO choferRegistroDTO = new ChoferRegistroDTO("Juan Pérez");
+        ChoferRegistroDTO choferRegistroDTO = new ChoferRegistroDTO("juanpe", "123", "Juan Pére");
 
         // Act
         choferService.registro(choferRegistroDTO);
