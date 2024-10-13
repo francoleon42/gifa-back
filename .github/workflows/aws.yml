@@ -55,8 +55,7 @@ jobs:
              -d --name JavaBackend \
              -p 8080:8080 \
              --memory=1g 778425189746.dkr.ecr.us-east-1.amazonaws.com/hola-mundo-repo:back_latest
-             docker logs -f JavaBackend
-
+            
            
       - name: executing remote ssh commands using password
         uses: appleboy/ssh-action@v1.0.3
@@ -80,7 +79,7 @@ jobs:
              -d --name JavaBackend \
              -p 8080:8080 \
              --memory=1g 778425189746.dkr.ecr.us-east-1.amazonaws.com/hola-mundo-repo:back_latest
-             docker logs -f JavaBackend
+             
 
            
 
