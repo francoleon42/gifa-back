@@ -13,6 +13,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class ChoferRegistroDTO {
-
+    String username;
+    String password;
     String nombre;
 }

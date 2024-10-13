@@ -6,6 +6,7 @@ import com.gifa_api.model.Chofer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -35,6 +36,9 @@ public class ChoferMapper {
 
 
     public List<ChoferResponseDTO> obtenerListaChoferDTO(List<Chofer> choferes) {
+        if (choferes == null) {
+            return Collections.emptyList();
+        }
         return choferes.stream()
                 .map(this::obtenerChoferDTO)
                 .collect(Collectors.toList());

@@ -12,11 +12,13 @@ import lombok.*;
 @Entity
 @Table(name = "chofer")
 public class Chofer {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id", nullable = false)
     private Integer id;
+
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "id_usuario", nullable = false)
+    private Usuario usuario;
 
     @Column(name = "nombre", nullable = false, length = 10)
     private String nombre;
@@ -28,5 +30,4 @@ public class Chofer {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "id_vehiculo")
     private Vehiculo vehiculo;
-
 }

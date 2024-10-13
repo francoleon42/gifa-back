@@ -7,13 +7,16 @@ import com.gifa_api.dto.chofer.ChoferResponseDTO;
 import com.gifa_api.exception.NotFoundException;
 import com.gifa_api.model.Chofer;
 import com.gifa_api.model.GestorDePedidos;
+import com.gifa_api.model.Usuario;
 import com.gifa_api.model.Vehiculo;
 import com.gifa_api.repository.IChoferRepository;
 import com.gifa_api.repository.IVehiculoRepository;
 import com.gifa_api.service.IChoferService;
 import com.gifa_api.utils.enums.EstadoChofer;
+import com.gifa_api.utils.enums.Rol;
 import com.gifa_api.utils.mappers.ChoferMapper;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -24,13 +27,17 @@ public class ChoferServiceImpl implements IChoferService {
     private final IVehiculoRepository vehiculoRepository;
     private final IChoferRepository choferRepository;
     private final ChoferMapper choferMapper;
+    private final PasswordEncoder passwordEncoder;
 
     @Override
     public void registro(ChoferRegistroDTO choferRegistroDTO) {
-
-
-        Chofer chofer = Chofer
-                .builder()
+        Usuario usuario = Usuario.builder()
+                .usuario(choferRegistroDTO.getUsername())
+                .contrasena(passwordEncoder.encode(choferRegistroDTO.getPassword()))
+                .rol(Rol.CHOFER)
+                .build();
+        Chofer chofer = Chofer.builder()
+                .usuario(usuario)
                 .estadoChofer(EstadoChofer.HABILITADO)
                 .nombre(choferRegistroDTO.getNombre())
                 .build();
@@ -38,9 +45,8 @@ public class ChoferServiceImpl implements IChoferService {
         choferRepository.save(chofer);
     }
 
-
     @Override
-    public void asignarVehiculo(AsignarChoferDTO asignarChoferDTO ) {
+    public void asignarVehiculo(AsignarChoferDTO asignarChoferDTO) {
         Vehiculo vehiculo = vehiculoRepository.findById(asignarChoferDTO.getIdVehiculo())
                 .orElseThrow(() -> new NotFoundException("No se encontró el vehiculo para el chofer del id " + asignarChoferDTO.getIdVehiculo() ));
         Chofer chofer = choferRepository.findById(asignarChoferDTO.getIdChofer())
@@ -49,6 +55,7 @@ public class ChoferServiceImpl implements IChoferService {
         chofer.setVehiculo(vehiculo);
         choferRepository.save(chofer);
     }
+
     @Override
     public void habilitar(ChoferEditDTO choferEditDTO) {
         Chofer chofer = choferRepository.findById(choferEditDTO.getId_chofer())
@@ -58,14 +65,15 @@ public class ChoferServiceImpl implements IChoferService {
         }
         choferRepository.save(chofer);
     }
+
     @Override
     public void inhabilitar(ChoferEditDTO choferEditDTO) {
         Chofer chofer = choferRepository.findById(choferEditDTO.getId_chofer())
                 .orElseThrow(() -> new NotFoundException("No se encontró el chofer del id " + choferEditDTO.getId_chofer()));
         if(chofer.getEstadoChofer().equals(EstadoChofer.HABILITADO)) {
             chofer.setEstadoChofer(EstadoChofer.INHABILITADO);
+            choferRepository.save(chofer);
         }
-        choferRepository.save(chofer);
     }
 
     @Override
