@@ -2,6 +2,7 @@ package com.gifa_api.client;
 
 import com.gifa_api.dto.traccar.CrearDispositivoRequestDTO;
 import com.gifa_api.dto.traccar.CrearDispositivoResponseDTO;
+import com.gifa_api.dto.traccar.PosicionDispositivoDTO;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
@@ -10,9 +11,12 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.http.HttpStatus;
+import org.springframework.web.util.UriComponentsBuilder;
 
 import java.nio.charset.StandardCharsets;
+import java.util.Arrays;
 import java.util.Base64;
+import java.util.List;
 
 @Component
 @RequiredArgsConstructor
@@ -44,6 +48,30 @@ public class TraccarClient implements ITraccarCliente {
         } else {
             // Manejar el caso de error si es necesario
             throw new RuntimeException("Error en la creación del dispositivo: " + response.getStatusCode());
+        }
+    }
+
+    @Override
+    public List<PosicionDispositivoDTO> getPosicionDispositivoTraccar(Integer deviceId) {
+        HttpHeaders headers = getHeaders();
+        HttpEntity<CrearDispositivoRequestDTO> entity = new HttpEntity<>( headers);
+
+        UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(baseUrl + "/positions");
+        if (deviceId != null) {
+            builder.queryParam("deviceId", deviceId);
+        }
+        ResponseEntity<PosicionDispositivoDTO[]> response = restTemplate.exchange(
+                builder.toUriString(),
+                HttpMethod.GET,
+                entity,
+                PosicionDispositivoDTO[].class
+        );
+
+        if (response.getStatusCode() == HttpStatus.OK) {
+            return Arrays.asList(response.getBody());
+        } else {
+            // Manejar el caso de error si es necesario
+            throw new RuntimeException("Error al obtener las posiciones: " + response.getStatusCode());
         }
     }
 
