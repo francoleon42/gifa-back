@@ -12,7 +12,7 @@ import java.util.Base64;
 
 @Component
 @RequiredArgsConstructor
-public class TraccarClient {
+public class TraccarClient implements ITraccarCliente {
     private final WebClient.Builder webClientBuilder;
 
     private WebClient webClient;
@@ -27,7 +27,9 @@ public class TraccarClient {
         }
         return webClient;
     }
-    public Mono<CrearDispositivoResponseDTO> postCrearDispositivoTraccar(String username, String password, CrearDispositivoRequestDTO request) {
+
+    @Override
+    public Mono<CrearDispositivoResponseDTO> postCrearDispositivoTraccar(CrearDispositivoRequestDTO request) {
         String basicAuthHeader = getBasicAuthHeader();
 
         return webClient.post()
@@ -44,7 +46,6 @@ public class TraccarClient {
         byte[] encodedAuth = Base64.getEncoder().encode(auth.getBytes(StandardCharsets.US_ASCII));
         return "Basic " + new String(encodedAuth);
     }
-
 
 
 }
