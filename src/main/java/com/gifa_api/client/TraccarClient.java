@@ -13,9 +13,10 @@ import java.util.Base64;
 @Component
 @RequiredArgsConstructor
 public class TraccarClient implements ITraccarCliente {
-    private final WebClient.Builder webClientBuilder;
+
 
     private WebClient webClient;
+    private final WebClient.Builder webClientBuilder;
 
     private final String username = "gifaemail@email.com";
     private final String password = "123456";
@@ -30,8 +31,10 @@ public class TraccarClient implements ITraccarCliente {
 
     @Override
     public Mono<CrearDispositivoResponseDTO> postCrearDispositivoTraccar(CrearDispositivoRequestDTO request) {
+        WebClient client = getWebClient();
         String basicAuthHeader = getBasicAuthHeader();
 
+        System.out.println("-----------AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA-----------");
         return webClient.post()
                 .uri("/devices") // Endpoint específico de la API
                 .header("Authorization", basicAuthHeader) // Añadir encabezado Basic Auth

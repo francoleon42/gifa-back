@@ -52,6 +52,7 @@ public class SecurityConfig {
                     configurePedidoEndpoints(authRequest);
                     configureInventarioEndpoints(authRequest);
                     configureMantenimientoEndpoints(authRequest);
+                    configureFuncionesTraccarEndpoints(authRequest);
                     configureCargaCombustibleEndpoints(authRequest);
                     configureMetabaseEndpoints(authRequest);
                     configureAuthenticatedEndpoints(authRequest);
@@ -130,6 +131,11 @@ public class SecurityConfig {
     private void configureCargaCombustibleEndpoints(AuthorizeHttpRequestsConfigurer<HttpSecurity>.AuthorizationManagerRequestMatcherRegistry authRequest) {
         authRequest
                 .requestMatchers(HttpMethod.POST, "/gestionDeCombustible/cargarCombustible").hasRole(CHOFER);
+
+    }
+    private void configureFuncionesTraccarEndpoints(AuthorizeHttpRequestsConfigurer<HttpSecurity>.AuthorizationManagerRequestMatcherRegistry authRequest) {
+        authRequest
+                .requestMatchers(HttpMethod.POST, "/traccar/crearDispositivo").hasRole(ADMINISTRADOR);
 
     }
 

@@ -17,7 +17,10 @@ public class TraccaController {
 
     @PostMapping("/crearDispositivo")
     public ResponseEntity<?> crearDispositivo(CrearDispositivoRequestDTO crearDispositivoRequestDTO){
-        traccarService.crearDispositivo(crearDispositivoRequestDTO);
+//        System.out.println(crearDispositivoRequestDTO.getNombre());
+//
+        CrearDispositivoRequestDTO crearDispositivoRequestDTO1 = CrearDispositivoRequestDTO.builder().nombre("nombrehard").uniqueID("9999").build();
+        traccarService.crearDispositivo(crearDispositivoRequestDTO1);
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
 }
