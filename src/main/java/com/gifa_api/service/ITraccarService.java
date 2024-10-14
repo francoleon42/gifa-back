@@ -6,4 +6,5 @@ public interface ITraccarService {
 
     void crearDispositivo(CrearDispositivoRequestDTO crearDispositivoRequestDTO);
 
+
 }
