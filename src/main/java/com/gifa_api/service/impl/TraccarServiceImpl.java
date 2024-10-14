@@ -15,4 +15,8 @@ public class TraccarServiceImpl implements ITraccarService {
     public void crearDispositivo(CrearDispositivoRequestDTO crearDispositivoRequestDTO) {
         traccarCliente.postCrearDispositivoTraccar(crearDispositivoRequestDTO);
     }
+
+
+
+
 }
