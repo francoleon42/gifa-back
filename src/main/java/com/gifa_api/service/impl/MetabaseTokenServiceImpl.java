@@ -4,8 +4,10 @@ import com.gifa_api.dto.metabase.MetabaseTokenResponseDTO;
 import com.gifa_api.service.IMetabaseTokenService;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
+import io.jsonwebtoken.security.Keys;
 import org.springframework.stereotype.Service;
 
+import javax.crypto.SecretKey;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -22,10 +24,18 @@ public class MetabaseTokenServiceImpl implements IMetabaseTokenService {
         payload.put("params", new HashMap<String, Object>());
         payload.put("exp", (new Date().getTime() / 1000) + (EXPIRATION_TIME / 1000));
 
-        String token = Jwts.builder()
-                .setClaims(payload)
-                .signWith(SignatureAlgorithm.HS256, SECRET_KEY)
-                .compact();
+        SecretKey key = Keys.hmacShaKeyFor(SECRET_KEY.getBytes());
+
+        String token;
+        try {
+            token = Jwts.builder()
+                    .setClaims(payload)
+                    .signWith(key, SignatureAlgorithm.HS256)
+                    .compact();
+        } catch (Exception e) {
+            throw new RuntimeException("Error al generar el token: " + e.getMessage());
+        }
+
 
         return MetabaseTokenResponseDTO.builder()
                 .token(token)
