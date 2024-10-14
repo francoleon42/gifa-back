@@ -5,5 +5,5 @@ import com.gifa_api.dto.traccar.CrearDispositivoResponseDTO;
 import reactor.core.publisher.Mono;
 
 public interface ITraccarCliente {
-    public Mono<CrearDispositivoResponseDTO> postCrearDispositivoTraccar(CrearDispositivoRequestDTO request) ;
+    public CrearDispositivoResponseDTO postCrearDispositivoTraccar(CrearDispositivoRequestDTO request) ;
 }

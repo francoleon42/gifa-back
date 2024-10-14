@@ -3,9 +3,13 @@ package com.gifa_api.client;
 import com.gifa_api.dto.traccar.CrearDispositivoRequestDTO;
 import com.gifa_api.dto.traccar.CrearDispositivoResponseDTO;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
-import org.springframework.web.reactive.function.client.WebClient;
-import reactor.core.publisher.Mono;
+import org.springframework.web.client.RestTemplate;
+import org.springframework.http.HttpStatus;
 
 import java.nio.charset.StandardCharsets;
 import java.util.Base64;
@@ -14,33 +18,39 @@ import java.util.Base64;
 @RequiredArgsConstructor
 public class TraccarClient implements ITraccarCliente {
 
-
-    private WebClient webClient;
-    private final WebClient.Builder webClientBuilder;
+    private final RestTemplate restTemplate;
 
     private final String username = "gifaemail@email.com";
     private final String password = "123456";
-
-
-    private WebClient getWebClient() {
-        if (webClient == null) {
-            webClient = webClientBuilder.baseUrl("http://54.227.167.207:8082/api").build();
-        }
-        return webClient;
-    }
+    private final String baseUrl = "http://54.227.167.207:8082/api";
 
     @Override
-    public Mono<CrearDispositivoResponseDTO> postCrearDispositivoTraccar(CrearDispositivoRequestDTO request) {
-        WebClient client = getWebClient();
+    public CrearDispositivoResponseDTO postCrearDispositivoTraccar(CrearDispositivoRequestDTO request) {
         String basicAuthHeader = getBasicAuthHeader();
 
-        System.out.println("-----------AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA-----------");
-        return webClient.post()
-                .uri("/devices") // Endpoint específico de la API
-                .header("Authorization", basicAuthHeader) // Añadir encabezado Basic Auth
-                .bodyValue(request) // Enviar el cuerpo de la solicitud
-                .retrieve() // Obtener la respuesta
-                .bodyToMono(CrearDispositivoResponseDTO.class); // Convertir la respuesta a ResponseDTO
+        // Crear encabezados con autenticación Basic
+        HttpHeaders headers = new HttpHeaders();
+        headers.set("Authorization", basicAuthHeader);
+        headers.set("Content-Type", "application/json");
+
+        // Crear la entidad que encapsula los encabezados y el cuerpo
+        HttpEntity<CrearDispositivoRequestDTO> entity = new HttpEntity<>(request, headers);
+
+        // Realizar la solicitud POST
+        ResponseEntity<CrearDispositivoResponseDTO> response = restTemplate.exchange(
+                baseUrl + "/devices",
+                HttpMethod.POST,
+                entity,
+                CrearDispositivoResponseDTO.class
+        );
+
+
+        if (response.getStatusCode() == HttpStatus.CREATED || response.getStatusCode() == HttpStatus.OK) {
+            return response.getBody();
+        } else {
+            // Manejar el caso de error si es necesario
+            throw new RuntimeException("Error en la creación del dispositivo: " + response.getStatusCode());
+        }
     }
 
     // Método para generar el encabezado de Basic Auth
@@ -49,6 +59,4 @@ public class TraccarClient implements ITraccarCliente {
         byte[] encodedAuth = Base64.getEncoder().encode(auth.getBytes(StandardCharsets.US_ASCII));
         return "Basic " + new String(encodedAuth);
     }
-
-
 }

@@ -6,6 +6,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -16,11 +17,8 @@ public class TraccaController {
     private final ITraccarService traccarService;
 
     @PostMapping("/crearDispositivo")
-    public ResponseEntity<?> crearDispositivo(CrearDispositivoRequestDTO crearDispositivoRequestDTO){
-//        System.out.println(crearDispositivoRequestDTO.getNombre());
-//
-        CrearDispositivoRequestDTO crearDispositivoRequestDTO1 = CrearDispositivoRequestDTO.builder().nombre("nombrehard").uniqueID("9999").build();
-        traccarService.crearDispositivo(crearDispositivoRequestDTO1);
+    public ResponseEntity<?> crearDispositivo(@RequestBody CrearDispositivoRequestDTO crearDispositivoRequestDTO){
+        traccarService.crearDispositivo(crearDispositivoRequestDTO);
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
 }
