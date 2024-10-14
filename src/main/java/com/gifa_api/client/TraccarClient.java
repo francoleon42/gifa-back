@@ -26,14 +26,8 @@ public class TraccarClient implements ITraccarCliente {
 
     @Override
     public CrearDispositivoResponseDTO postCrearDispositivoTraccar(CrearDispositivoRequestDTO request) {
-        String basicAuthHeader = getBasicAuthHeader();
-
-        // Crear encabezados con autenticación Basic
-        HttpHeaders headers = new HttpHeaders();
-        headers.set("Authorization", basicAuthHeader);
-        headers.set("Content-Type", "application/json");
-
         // Crear la entidad que encapsula los encabezados y el cuerpo
+        HttpHeaders headers = getHeaders();
         HttpEntity<CrearDispositivoRequestDTO> entity = new HttpEntity<>(request, headers);
 
         // Realizar la solicitud POST
@@ -58,5 +52,13 @@ public class TraccarClient implements ITraccarCliente {
         String auth = this.username + ":" + this.password;
         byte[] encodedAuth = Base64.getEncoder().encode(auth.getBytes(StandardCharsets.US_ASCII));
         return "Basic " + new String(encodedAuth);
+    }
+    private HttpHeaders getHeaders() {
+        String basicAuthHeader = getBasicAuthHeader();
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.set("Authorization", basicAuthHeader);
+        headers.set("Content-Type", "application/json");
+        return headers;
     }
 }
