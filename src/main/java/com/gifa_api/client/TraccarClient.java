@@ -17,6 +17,9 @@ public class TraccarClient {
 
     private WebClient webClient;
 
+    private final String username = "gifaemail@email.com";
+    private final String password = "123456";
+
 
     private WebClient getWebClient() {
         if (webClient == null) {
@@ -25,7 +28,7 @@ public class TraccarClient {
         return webClient;
     }
     public Mono<CrearDispositivoResponseDTO> postCrearDispositivoTraccar(String username, String password, CrearDispositivoRequestDTO request) {
-        String basicAuthHeader = getBasicAuthHeader(username, password);
+        String basicAuthHeader = getBasicAuthHeader();
 
         return webClient.post()
                 .uri("/devices") // Endpoint específico de la API
@@ -36,8 +39,8 @@ public class TraccarClient {
     }
 
     // Método para generar el encabezado de Basic Auth
-    private String getBasicAuthHeader(String username, String password) {
-        String auth = username + ":" + password;
+    private String getBasicAuthHeader() {
+        String auth = this.username + ":" + this.password;
         byte[] encodedAuth = Base64.getEncoder().encode(auth.getBytes(StandardCharsets.US_ASCII));
         return "Basic " + new String(encodedAuth);
     }
