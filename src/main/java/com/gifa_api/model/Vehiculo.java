@@ -53,7 +53,7 @@ public class Vehiculo {
 
 
     @OneToMany(mappedBy = "vehiculo", cascade = CascadeType.ALL)
-    private Set<GpsData> gpsDataSet;
+    private Set<Posicion> posiciones;
 
     @OneToMany(mappedBy = "vehiculo", cascade = CascadeType.ALL)
     private Set<KilometrajeVehiculo> kilometrajeVehiculos;

@@ -24,7 +24,7 @@ public class Bootstrap implements ApplicationRunner {
     private final IVehiculoRepository vehiculoRepository;
     private final ITarjetaRepository tarjetaRepository;
     private final ICargaCombustibleRepository cargaCombustibleRepository;
-    private final IGpsDataRepository gpsDataRepository;
+    private final IPosicionRepository gpsDataRepository;
     private final ItemDeInventarioRepository itemDeInventarioRepository;
     private final IPedidoRepository pedidoRepository;
     private final IMantenimientoRepository mantenimientoRepository;
@@ -139,7 +139,7 @@ public class Bootstrap implements ApplicationRunner {
 
         // Crear datos de GPS con builder
         for (int i = 1; i <= 5; i++) {
-            GpsData gpsData = GpsData.builder()
+            Posicion gpsData = Posicion.builder()
                     .latitud(40.0f + i)
                     .longitud(-74.0f - i)
                     .fechaHora(Instant.now())
