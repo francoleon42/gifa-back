@@ -26,7 +26,7 @@ public class TraccarServiceImpl implements ITraccarService {
 
     @Scheduled(fixedRate = 9999)
     private void obtnerPosicionesHardcodeado() {
-        Integer deviceId = 123;
+        Integer deviceId = 25;
 
         // Obtener el primer día del mes actual a las 00:00:00 en formato UTC
         LocalDateTime now = LocalDateTime.now(ZoneOffset.UTC);
@@ -44,15 +44,16 @@ public class TraccarServiceImpl implements ITraccarService {
         String to = endOfMonth.toInstant(ZoneOffset.UTC).toString();
 
         // Ejemplo de IDs de dispositivos
-        List<Integer> ids = Arrays.asList(31, 42); // IDs hardcodeados, opcionales
+
 
         // Obtener las posiciones utilizando el cliente Traccar con los valores hardcodeados
-        List<PosicionDispositivoDTO> posiciones = traccarCliente.getPosicionDispositivoTraccar(deviceId, from, to, ids);
-
+        List<PosicionDispositivoDTO> posiciones = traccarCliente.getPosicionDispositivoTraccar(deviceId, from, to);
+        System.out.println("-------------------------");
         // Iterar sobre las posiciones y hacer algo con ellas, por ejemplo, imprimir la longitud
         for (PosicionDispositivoDTO posicion : posiciones) {
+
             System.out.println("Longitud: " + posicion.getLongitude() );
-            System.out.println("Altitud: " + posicion.getAltitude() );
+            System.out.println("Altitud: " + posicion.getLatitude() );
         }
     }
 

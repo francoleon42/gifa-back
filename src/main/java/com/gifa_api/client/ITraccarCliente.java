@@ -9,5 +9,5 @@ import java.util.List;
 
 public interface ITraccarCliente {
     public CrearDispositivoResponseDTO postCrearDispositivoTraccar(CrearDispositivoRequestDTO request) ;
-    List<PosicionDispositivoDTO> getPosicionDispositivoTraccar(Integer deviceId, String from, String to,List<Integer> ids);
+    List<PosicionDispositivoDTO> getPosicionDispositivoTraccar(Integer deviceId, String from, String to);
 }
