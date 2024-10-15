@@ -18,17 +18,14 @@ public class Posicion {
     @Column(name = "id", nullable = false)
     private Integer id;
 
-    @Column(name = "latitud")
-    private Float latitud;
+    @Column(name = "latitude")
+    private double latitude;
 
-    @Column(name = "longitud")
-    private Float longitud;
+    @Column(name = "longitude")
+    private double longitude;
 
     @Column(name = "fecha_hora")
     private Instant fechaHora;
-
-    @Column(name = "distancia_desde_ultima_posicion")
-    private Float distanciaDesdeUltimaPosicion;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "dispositivo_id")

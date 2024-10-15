@@ -105,7 +105,33 @@ public class TraccarClient implements ITraccarCliente {
         }
     }
 
+    @Override
+    public ObtenerDispositivoRequestDTO getDispositivo(Integer deviceId) {
+        HttpHeaders headers = getHeaders();
+        HttpEntity<Void> entity = new HttpEntity<>(headers);
+        UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(baseUrl + "/devices");
 
+        if (deviceId != null) {
+            builder.queryParam("id", deviceId);
+        }
+
+        ResponseEntity<ObtenerDispositivoRequestDTO[]> response = restTemplate.exchange(
+                builder.toUriString(),
+                HttpMethod.GET,
+                entity,
+                ObtenerDispositivoRequestDTO[].class
+        );
+
+        if (response.getStatusCode() == HttpStatus.OK && response.getBody() != null) {
+            ObtenerDispositivoRequestDTO[] dispositivos = response.getBody();
+            return Arrays.stream(dispositivos)
+                    .filter(dispositivo -> dispositivo.getId().equals(deviceId)) // Comparar los IDs
+                    .findFirst()
+                    .orElseThrow(() -> new RuntimeException("No se encontró el dispositivo con ID: " + deviceId));
+        } else {
+            throw new RuntimeException("Error al obtener los dispositivos: " + response.getStatusCode());
+        }
+    }
 
 
     private String getBasicAuthHeader() {
@@ -113,6 +139,7 @@ public class TraccarClient implements ITraccarCliente {
         byte[] encodedAuth = Base64.getEncoder().encode(auth.getBytes(StandardCharsets.US_ASCII));
         return "Basic " + new String(encodedAuth);
     }
+
     private HttpHeaders getHeaders() {
         String basicAuthHeader = getBasicAuthHeader();
 

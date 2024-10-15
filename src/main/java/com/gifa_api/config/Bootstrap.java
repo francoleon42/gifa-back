@@ -34,6 +34,7 @@ public class Bootstrap implements ApplicationRunner {
     private final IKilometrajeVehiculoRepository kilometrajeVehiculoRepository;
     private final IItemUsadoMantenimientoRepository itemUsadoMantenimientoRepository;
     private final IChoferRepository choferRepository;
+    private final IDispositivoRepository dispositivoRepository;
 
     @Override
     public void run(ApplicationArguments args) throws Exception {
@@ -148,6 +149,13 @@ public class Bootstrap implements ApplicationRunner {
 //                    .build();
 //            gpsDataRepository.save(gpsData);
 //        }
+        Dispositivo dispositivo= Dispositivo
+                .builder()
+                .unicoId("123")
+                .nombre("vehiculo1")
+                .vehiculo(vehiculo1)
+                .build();
+        dispositivoRepository.save(dispositivo);
 
         // Crear ítems de inventario con builder
         ItemDeInventario item1 = ItemDeInventario.builder()

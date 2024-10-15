@@ -12,4 +12,5 @@ public interface ITraccarCliente {
     public CrearDispositivoResponseDTO postCrearDispositivoTraccar(CrearDispositivoRequestDTO request) ;
     List<PosicionDispositivoDTO> getPosicionDispositivoTraccar(Integer deviceId, String from, String to);
     List<ObtenerDispositivoRequestDTO> getDispositivos();
+    ObtenerDispositivoRequestDTO getDispositivo(Integer id);
 }
