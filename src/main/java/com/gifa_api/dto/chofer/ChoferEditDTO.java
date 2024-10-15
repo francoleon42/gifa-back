@@ -10,5 +10,5 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class ChoferEditDTO {
-    Integer id_chofer;
+    Integer idChofer;
 }

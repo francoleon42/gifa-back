@@ -39,7 +39,7 @@ class ChoferServiceImplTest {
     void habilitarChofer_debeLanzarExcepcionSiNoExiste() {
         // Arrange
         ChoferEditDTO choferEditDTO = new ChoferEditDTO();
-        choferEditDTO.setId_chofer(1);
+        choferEditDTO.setIdChofer(1);
 
         when(choferRepository.findById(1)).thenReturn(Optional.empty());
 
@@ -53,7 +53,7 @@ class ChoferServiceImplTest {
     void inhabilitarChofer_debeLanzarExcepcionSiNoExiste() {
         // Arrange
         ChoferEditDTO choferEditDTO = new ChoferEditDTO();
-        choferEditDTO.setId_chofer(1);
+        choferEditDTO.setIdChofer(1);
 
         when(choferRepository.findById(1)).thenReturn(Optional.empty());
 
@@ -123,7 +123,7 @@ class ChoferServiceImplTest {
     void habilitarChofer_debeHabilitarSiEstaInhabilitado() {
         // Arrange
         ChoferEditDTO choferEditDTO = new ChoferEditDTO();
-        choferEditDTO.setId_chofer(1);
+        choferEditDTO.setIdChofer(1);
 
         Chofer chofer = new Chofer();
         chofer.setId(1);
@@ -142,7 +142,7 @@ class ChoferServiceImplTest {
     void inhabilitarChofer_debeInhabilitarSiEstaHabilitado() {
         // Arrange
         ChoferEditDTO choferEditDTO = new ChoferEditDTO();
-        choferEditDTO.setId_chofer(1);
+        choferEditDTO.setIdChofer(1);
 
         Chofer chofer = new Chofer();
         chofer.setId(1);
