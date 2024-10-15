@@ -55,12 +55,15 @@ public class TraccarServiceImpl implements ITraccarService {
         return endOfMonth.toInstant(ZoneOffset.UTC).toString();
     }
 
+    // IMPORTANTE
+    //optimizar con cache
+    // y que agregue cada una diferencia muy notable de longitud y latitud
     @Scheduled(fixedRate = 9999)
-    private void obtenerPosicionesDelMes() {
+    private void obtenerPosiciones() {
 
+        // sacar lo de por mess para que sean todas en general.
         String from = getStartOfMonthUTC();
         String to = getEndOfMonthUTC();
-
 
         List<ObtenerDispositivoRequestDTO> dispositivosDTO = traccarCliente.getDispositivos();
         for (ObtenerDispositivoRequestDTO dispositivoDTO : dispositivosDTO) {
