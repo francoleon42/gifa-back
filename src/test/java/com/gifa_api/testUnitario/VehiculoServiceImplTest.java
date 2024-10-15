@@ -3,6 +3,7 @@ package com.gifa_api.testUnitario;
 import com.gifa_api.dto.mantenimiento.RegistrarMantenimientoDTO;
 import com.gifa_api.dto.vehiculo.ListaVehiculosResponseDTO;
 import com.gifa_api.dto.vehiculo.RegistarVehiculoDTO;
+import com.gifa_api.exception.NotFoundException;
 import com.gifa_api.model.Tarjeta;
 import com.gifa_api.model.Vehiculo;
 import com.gifa_api.repository.ITarjetaRepository;
@@ -41,6 +42,24 @@ class VehiculoServiceImplTest {
 
     @InjectMocks
     private VehiculoServiceImpl vehiculoService;
+
+    @Test
+    void inhabilitar_lanzaExcepcionVehiculoNoExiste(){
+        when(vehiculoRepository.findById(anyInt())).thenReturn(Optional.empty());
+        assertThrows(NotFoundException.class , () -> vehiculoService.inhabilitar(anyInt()));
+        verify(vehiculoRepository,times(1)).findById(anyInt());
+        verify(vehiculoRepository,never()).save(any(Vehiculo.class));
+
+    }
+
+    @Test
+    void habilitar_lanzaExcepcionVehiculoNoExiste(){
+        when(vehiculoRepository.findById(anyInt())).thenReturn(Optional.empty());
+        assertThrows(NotFoundException.class , () -> vehiculoService.habilitar(anyInt()));
+        verify(vehiculoRepository,times(1)).findById(anyInt());
+        verify(vehiculoRepository,never()).save(any(Vehiculo.class));
+
+    }
 
     @Test
     void getVehiculos_debeRetornarListaVehiculosResponseDTO() {

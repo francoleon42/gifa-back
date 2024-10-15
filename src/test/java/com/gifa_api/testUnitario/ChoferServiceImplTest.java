@@ -15,6 +15,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.util.Optional;
 
@@ -31,6 +32,9 @@ class ChoferServiceImplTest {
     @Mock
     private IChoferRepository choferRepository;
 
+    @Mock
+    private  PasswordEncoder passwordEncoder;
+
     @InjectMocks
     private ChoferServiceImpl choferService;
 
@@ -39,9 +43,8 @@ class ChoferServiceImplTest {
     void habilitarChofer_debeLanzarExcepcionSiNoExiste() {
         // Arrange
         ChoferEditDTO choferEditDTO = new ChoferEditDTO();
-        choferEditDTO.setId_chofer(1);
 
-        when(choferRepository.findById(1)).thenReturn(Optional.empty());
+        when(choferRepository.findById(choferEditDTO.getId_chofer())).thenReturn(Optional.empty());
 
         // Act & Assert
         assertThrows(NotFoundException.class, () -> choferService.habilitar(choferEditDTO));
@@ -52,8 +55,7 @@ class ChoferServiceImplTest {
     @Test
     void inhabilitarChofer_debeLanzarExcepcionSiNoExiste() {
         // Arrange
-        ChoferEditDTO choferEditDTO = new ChoferEditDTO();
-        choferEditDTO.setId_chofer(1);
+        ChoferEditDTO choferEditDTO = new ChoferEditDTO(1);
 
         when(choferRepository.findById(1)).thenReturn(Optional.empty());
 
@@ -111,8 +113,9 @@ class ChoferServiceImplTest {
     @Test
     void registrarChofer_debeGuardarChoferSiVehiculoExiste() {
         // Arrange
-        ChoferRegistroDTO choferRegistroDTO = new ChoferRegistroDTO("juanpe", "123", "Juan Pére");
+        ChoferRegistroDTO choferRegistroDTO = new ChoferRegistroDTO("chofer","1234","CHOFER");
 
+        when(passwordEncoder.encode(choferRegistroDTO.getPassword())).thenReturn("1234");
         // Act
         choferService.registro(choferRegistroDTO);
 
@@ -136,6 +139,8 @@ class ChoferServiceImplTest {
 
         // Assert
         verify(choferRepository, times(1)).save(any(Chofer.class));
+        verify(choferRepository, times(1)).findById(1);
+
         assertEquals(EstadoChofer.HABILITADO, chofer.getEstadoChofer());
     }
     @Test
@@ -154,8 +159,10 @@ class ChoferServiceImplTest {
         choferService.inhabilitar(choferEditDTO);
 
         // Assert
-        verify(choferRepository, times(1)).save(any(Chofer.class));
+
         assertEquals(EstadoChofer.INHABILITADO, chofer.getEstadoChofer());
+        verify(choferRepository, times(1)).findById(1);
+        verify(choferRepository, times(1)).save(any(Chofer.class));
     }
 
 }

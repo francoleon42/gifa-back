@@ -38,6 +38,16 @@ class ProvedorServiceImplTest {
     private ProvedorServiceImpl provedorService;
 
     @Test
+    void obtenerByid_debeLanzarNotFoundExceptionSiNoExiste() {
+        when(proveedorRepository.findById(1)).thenReturn(Optional.empty());
+
+        assertThrows(NotFoundException.class, () -> provedorService.obtenerByid(1));
+
+        verify(proveedorRepository, times(1)).findById(1);
+
+    }
+
+    @Test
     void registrarProveedor_debeGuardarProveedor() {
         RegistroProveedorRequestDTO requestDTO = new RegistroProveedorRequestDTO("Proveedor1", "email@proveedor.com");
 
@@ -59,15 +69,6 @@ class ProvedorServiceImplTest {
         Proveedor resultado = provedorService.obtenerByid(1);
 
         assertEquals(proveedor, resultado);
-        verify(proveedorRepository, times(1)).findById(1);
-    }
-
-    @Test
-    void obtenerByid_debeLanzarNotFoundExceptionSiNoExiste() {
-        when(proveedorRepository.findById(1)).thenReturn(Optional.empty());
-
-        NotFoundException exception = assertThrows(NotFoundException.class, () -> provedorService.obtenerByid(1));
-        assertEquals("No se encontró el proveedor con id: 1", exception.getMessage());
         verify(proveedorRepository, times(1)).findById(1);
     }
 

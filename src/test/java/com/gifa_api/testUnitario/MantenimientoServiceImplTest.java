@@ -39,6 +39,22 @@ public class MantenimientoServiceImplTest {
     private IVehiculoRepository vehiculoRepository;
 
     @Test
+    void crearMantenimiento_debeLanzarNotFoundException_siVehiculoNoExiste() {
+        // Arrange
+        Integer id = 1;
+        RegistrarMantenimientoDTO dto = new RegistrarMantenimientoDTO("cambio de aceite", id);
+        when(vehiculoRepository.findById(dto.getVehiculo_id())).thenReturn(Optional.empty());
+
+        assertThrows(NotFoundException.class, () -> mantenimientoService.crearMantenimiento(dto));
+    }
+
+    @Test
+    void finalizarMantenimiento_debeLanzarNotFoundException_siMantenimientoNoExiste() {
+        when(mantenimientoRepository.findById(anyInt())).thenReturn(Optional.empty());
+        assertThrows(NotFoundException.class, () -> mantenimientoService.finalizarMantenimiento(1));
+    }
+
+    @Test
     void crearMantenimiento_debeGuardarMantenimiento() {
         // Arrange
         Integer id = 1;
@@ -49,16 +65,6 @@ public class MantenimientoServiceImplTest {
         mantenimientoService.crearMantenimiento(dto);
 
         verify(mantenimientoRepository, times(1)).save(any(Mantenimiento.class));
-    }
-
-    @Test
-    void crearMantenimiento_debeLanzarNotFoundException_siVehiculoNoExiste() {
-        // Arrange
-        Integer id = 1;
-        RegistrarMantenimientoDTO dto = new RegistrarMantenimientoDTO("cambio de aceite", id);
-        when(vehiculoRepository.findById(dto.getVehiculo_id())).thenReturn(Optional.empty());
-
-        assertThrows(NotFoundException.class, () -> mantenimientoService.crearMantenimiento(dto));
     }
 
     @Test
@@ -92,9 +98,5 @@ public class MantenimientoServiceImplTest {
         verify(mantenimientoRepository, times(1)).save(mantenimiento);
     }
 
-    @Test
-    void finalizarMantenimiento_debeLanzarNotFoundException_siMantenimientoNoExiste() {
-        when(mantenimientoRepository.findById(anyInt())).thenReturn(Optional.empty());
-        assertThrows(NotFoundException.class, () -> mantenimientoService.finalizarMantenimiento(1));
-    }
+
 }

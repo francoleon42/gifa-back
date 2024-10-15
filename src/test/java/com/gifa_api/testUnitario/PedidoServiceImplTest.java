@@ -47,6 +47,21 @@ class PedidoServiceImplTest {
     private PedidosMapper pedidosMapper;
 
     @Test
+    void testCrearPedido_ItemNoExistente() {
+        // Arrange
+        Integer idItem = 1;
+        Integer cantidad = 5;
+        String motivo = "Pedido manual";
+
+        when(itemDeInventarioRepository.findById(idItem)).thenReturn(Optional.empty());
+
+        // Act & Assert
+        assertThrows(NotFoundException.class, () -> pedidoService.createPedido(idItem, cantidad, motivo));
+        verify(itemDeInventarioRepository, times(1)).findById(idItem);
+        verify(pedidoRepository, times(0)).save(any(Pedido.class));
+    }
+
+    @Test
     void testCrearPedido_ItemExistente() {
         // Arrange
         Integer idItem = 1;
@@ -72,21 +87,6 @@ class PedidoServiceImplTest {
         // Assert
         verify(itemDeInventarioRepository, times(1)).findById(idItem);
         verify(pedidoRepository, times(1)).save(any(Pedido.class));
-    }
-
-    @Test
-    void testCrearPedido_ItemNoExistente() {
-        // Arrange
-        Integer idItem = 1;
-        Integer cantidad = 5;
-        String motivo = "Pedido manual";
-
-        when(itemDeInventarioRepository.findById(idItem)).thenReturn(Optional.empty());
-
-        // Act & Assert
-        assertThrows(NotFoundException.class, () -> pedidoService.createPedido(idItem, cantidad, motivo));
-        verify(itemDeInventarioRepository, times(1)).findById(idItem);
-        verify(pedidoRepository, times(0)).save(any(Pedido.class));
     }
 
     @Test
