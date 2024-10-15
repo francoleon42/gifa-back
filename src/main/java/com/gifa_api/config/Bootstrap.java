@@ -137,17 +137,17 @@ public class Bootstrap implements ApplicationRunner {
             cargaCombustibleRepository.save(carga);
         }
 
-        // Crear datos de GPS con builder
-        for (int i = 1; i <= 5; i++) {
-            Posicion gpsData = Posicion.builder()
-                    .latitud(40.0f + i)
-                    .longitud(-74.0f - i)
-                    .fechaHora(Instant.now())
-                    .distanciaDesdeUltimaPosicion(5.0f * i)
-                    .vehiculo(vehiculo1)
-                    .build();
-            gpsDataRepository.save(gpsData);
-        }
+//        // Crear datos de GPS con builder
+//        for (int i = 1; i <= 5; i++) {
+//            Posicion gpsData = Posicion.builder()
+//                    .latitud(40.0f + i)
+//                    .longitud(-74.0f - i)
+//                    .fechaHora(Instant.now())
+//                    .distanciaDesdeUltimaPosicion(5.0f * i)
+//                    .vehiculo(vehiculo1)
+//                    .build();
+//            gpsDataRepository.save(gpsData);
+//        }
 
         // Crear ítems de inventario con builder
         ItemDeInventario item1 = ItemDeInventario.builder()

@@ -53,9 +53,6 @@ public class Vehiculo {
 
 
     @OneToMany(mappedBy = "vehiculo", cascade = CascadeType.ALL)
-    private Set<Posicion> posiciones;
-
-    @OneToMany(mappedBy = "vehiculo", cascade = CascadeType.ALL)
     private Set<KilometrajeVehiculo> kilometrajeVehiculos;
 
     @OneToMany(mappedBy = "vehiculo", cascade = CascadeType.ALL)
@@ -68,6 +65,9 @@ public class Vehiculo {
     @JoinColumn(name = "tarjeta_id")
     private Tarjeta tarjeta;
 
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "dispositivo_id")
+    private Dispositivo dispositivo;
 
     public void inhabilitar(){
         this.estadoDeHabilitacion= EstadoDeHabilitacion.INHABILITADO;

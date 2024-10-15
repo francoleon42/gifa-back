@@ -31,7 +31,7 @@ public class Posicion {
     private Float distanciaDesdeUltimaPosicion;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "vehiculo_id")
-    private Vehiculo vehiculo;
+    @JoinColumn(name = "dispositivo_id")
+    private Dispositivo dispositivo;
 
 }

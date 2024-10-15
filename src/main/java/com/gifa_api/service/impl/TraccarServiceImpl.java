@@ -25,7 +25,7 @@ public class TraccarServiceImpl implements ITraccarService {
     }
 
     @Scheduled(fixedRate = 9999)
-    private List<PosicionDispositivoDTO> obtenerPosiciones() {
+    private List<PosicionDispositivoDTO> obtenerPosicionesDelMes() {
         Integer deviceId = 25;
 
         // Obtener el primer día del mes actual a las 00:00:00 en formato UTC
@@ -48,13 +48,13 @@ public class TraccarServiceImpl implements ITraccarService {
 
         // Obtener las posiciones utilizando el cliente Traccar con los valores hardcodeados
         List<PosicionDispositivoDTO> posiciones = traccarCliente.getPosicionDispositivoTraccar(deviceId, from, to);
-        System.out.println("-------------------------");
-        // Iterar sobre las posiciones y hacer algo con ellas, por ejemplo, imprimir la longitud
-        for (PosicionDispositivoDTO posicion : posiciones) {
-
-            System.out.println("Longitud: " + posicion.getLongitude() );
-            System.out.println("Altitud: " + posicion.getLatitude() );
-        }
+//        System.out.println("-------------------------");
+//        // Iterar sobre las posiciones y hacer algo con ellas, por ejemplo, imprimir la longitud
+//        for (PosicionDispositivoDTO posicion : posiciones) {
+//
+//            System.out.println("Longitud: " + posicion.getLongitude() );
+//            System.out.println("Altitud: " + posicion.getLatitude() );
+//        }
         return posiciones;
     }
     private List<Integer> obtenerDispositivos() {
