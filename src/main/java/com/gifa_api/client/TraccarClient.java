@@ -2,6 +2,7 @@ package com.gifa_api.client;
 
 import com.gifa_api.dto.traccar.CrearDispositivoRequestDTO;
 import com.gifa_api.dto.traccar.CrearDispositivoResponseDTO;
+import com.gifa_api.dto.traccar.ObtenerDispositivoRequestDTO;
 import com.gifa_api.dto.traccar.PosicionDispositivoDTO;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpEntity;
@@ -81,6 +82,25 @@ public class TraccarClient implements ITraccarCliente {
             throw new RuntimeException("Error al obtener las posiciones: " + response.getStatusCode());
         }
     }
+
+    @Override
+    public List<ObtenerDispositivoRequestDTO> getDispositivos() {
+        return List.of();
+    }
+
+//    @Override
+//    public List<ObtenerDispositivoRequestDTO> getDispositivos() {
+//        HttpHeaders headers = getHeaders();
+//        HttpEntity<CrearDispositivoRequestDTO> entity = new HttpEntity<>( headers);
+//
+//        UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(baseUrl + "/");
+//        ResponseEntity<PosicionDispositivoDTO[]> response = restTemplate.exchange(
+//                builder.toUriString(),
+//                HttpMethod.GET,
+//                entity,
+//                PosicionDispositivoDTO[].class
+//        );
+//    }
 
     // Método para generar el encabezado de Basic Auth
     private String getBasicAuthHeader() {

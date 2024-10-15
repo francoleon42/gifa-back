@@ -57,8 +57,11 @@ public class TraccarServiceImpl implements ITraccarService {
         }
         return posiciones;
     }
+    private List<Integer> obtenerDispositivos() {
 
-    
+    }
+
+
 
 
 }
