@@ -37,7 +37,7 @@ public class DispositivoServiceImpl implements IDispositivoService {
 
     @Scheduled(fixedRate = 99999)
     public void calcularDistanciaRecorrida() {
-        List<Posicion> posiciones = posicionRepository.findByUnicoId("123");
+        List<Posicion> posiciones = posicionRepository.findByUnicoId("2");
 
         double distanciaTotal = 0.0;
 
@@ -46,7 +46,7 @@ public class DispositivoServiceImpl implements IDispositivoService {
             Posicion pos2 = posiciones.get(i);
 
             double lat1 = Math.toRadians(pos1.getLatitude());
-            double lon1 = Math.toRadians(pos1.getLatitude());
+            double lon1 = Math.toRadians(pos1.getLongitude());
             double lat2 = Math.toRadians(pos2.getLatitude());
             double lon2 = Math.toRadians(pos2.getLongitude());
 
@@ -62,7 +62,14 @@ public class DispositivoServiceImpl implements IDispositivoService {
 
             distanciaTotal += distancia;
         }
+        int kilometros = (int) distanciaTotal; // Kilómetros enteros
+        int metros = (int) ((distanciaTotal - kilometros) * 1000); // Convertir a metros y obtener el resto
 
-        System.out.println("Distancian en KM of device 123"+": "+ distanciaTotal);
+        // Formatear la distancia en el formato deseado "km,metros"
+        String distanciaFormateada = kilometros + "," + String.format("%03d", metros);
+
+        System.out.println("Distancia del dispositivo 123: " + distanciaFormateada);
     }
+
+
 }
