@@ -77,6 +77,7 @@ public class TraccarServiceImpl implements ITraccarService {
                         .latitude(posicionDTO.getLatitude())
                         .dispositivo(dispositivo)
                         .longitude(posicionDTO.getLongitude())
+                        .fechaHora(posicionDTO.getServerTime())
                         .build();
                 posicionRepository.save(posicion);
             }

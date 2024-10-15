@@ -32,4 +32,12 @@ public class CargaCombustibleServiceImpl implements ICargaCombustibleService {
 
         cargaCombustibleRepository.save(cargaCombustible);
     }
+
+//    private double combustibleCargadoEn(Integer numeroTarjeta,String fecha ){
+//
+//    }
+    private int calculoDeCombustiblePorKilometro(int cantidadKilometros){
+        return 5;
+
+    }
 }

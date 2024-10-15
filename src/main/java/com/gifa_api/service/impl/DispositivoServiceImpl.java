@@ -35,9 +35,9 @@ public class DispositivoServiceImpl implements IDispositivoService {
         dispositivoRepository.save(dispositivo);
     }
 
-    @Scheduled(fixedRate = 99999)
-    public void calcularDistanciaRecorrida() {
-        List<Posicion> posiciones = posicionRepository.findByUnicoId("2");
+
+    public int calcularDistanciaRecorrida(String unicoIdDeDispositivo ) {
+        List<Posicion> posiciones = posicionRepository.findByUnicoId(unicoIdDeDispositivo);
 
         double distanciaTotal = 0.0;
 
@@ -62,13 +62,13 @@ public class DispositivoServiceImpl implements IDispositivoService {
 
             distanciaTotal += distancia;
         }
-        int kilometros = (int) distanciaTotal; // Kilómetros enteros
-        int metros = (int) ((distanciaTotal - kilometros) * 1000); // Convertir a metros y obtener el resto
+        int kilometros = (int) distanciaTotal;
+//        int metros = (int) ((distanciaTotal - kilometros) * 1000); // Convertir a metros y obtener el resto
 
-        // Formatear la distancia en el formato deseado "km,metros"
-        String distanciaFormateada = kilometros + "," + String.format("%03d", metros);
+//        // Formatear la distancia en el formato deseado "km,metros"
+//        String distanciaFormateada = kilometros + "," + String.format("%03d", metros);
 
-        System.out.println("Distancia del dispositivo 123: " + distanciaFormateada);
+        return kilometros;
     }
 
 

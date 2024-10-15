@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.*;
 
 import java.time.Instant;
+import java.time.OffsetDateTime;
 
 @Getter
 @Setter
@@ -25,7 +26,7 @@ public class Posicion {
     private double longitude;
 
     @Column(name = "fecha_hora")
-    private Instant fechaHora;
+    private OffsetDateTime fechaHora;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "dispositivo_id")
