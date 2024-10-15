@@ -64,10 +64,9 @@ public class TraccarServiceImpl implements ITraccarService {
 
         List<ObtenerDispositivoRequestDTO> dispositivosDTO = traccarCliente.getDispositivos();
         for (ObtenerDispositivoRequestDTO dispositivoDTO : dispositivosDTO) {
-            List<PosicionDispositivoDTO> posicionesDeDispositivio = traccarCliente.getPosicionDispositivoTraccar(dispositivoDTO.getId(), from, to);
-            System.out.println(dispositivoDTO.getUniqueId());
             Dispositivo dispositivo = dispositivoRepository.findByUnicoId(dispositivoDTO.getUniqueId())
                     .orElseThrow(() -> new NotFoundException("No se encontró el dispositivo con id: "));
+            List<PosicionDispositivoDTO> posicionesDeDispositivio = traccarCliente.getPosicionDispositivoTraccar(dispositivoDTO.getId(), from, to);
             for (PosicionDispositivoDTO posicionDTO : posicionesDeDispositivio) {
 
                 Posicion posicion = Posicion

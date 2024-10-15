@@ -157,6 +157,14 @@ public class Bootstrap implements ApplicationRunner {
                 .build();
         dispositivoRepository.save(dispositivo);
 
+        Dispositivo dispositivo2= Dispositivo
+                .builder()
+                .unicoId("124")
+                .nombre("vehiculo2")
+                .vehiculo(vehiculo2)
+                .build();
+        dispositivoRepository.save(dispositivo2);
+
         // Crear ítems de inventario con builder
         ItemDeInventario item1 = ItemDeInventario.builder()
                 .nombre("Filtro de aceite")
