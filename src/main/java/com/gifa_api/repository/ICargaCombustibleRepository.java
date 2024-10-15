@@ -3,6 +3,15 @@ package com.gifa_api.repository;
 import com.gifa_api.model.CargaCombustible;
 import com.gifa_api.model.Mantenimiento;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
+
+import java.time.LocalDateTime;
+import java.util.List;
 
 public interface ICargaCombustibleRepository extends JpaRepository<CargaCombustible, Integer> {
+
+    @Query("SELECT c FROM CargaCombustible c WHERE c.tarjeta.numero = :numeroTarjeta AND c.fechaHora > :fecha")
+    public List<CargaCombustible> findByNumeroTarjetaAndFechaAfter(@Param("numeroTarjeta") String numeroTarjeta, @Param("fecha") LocalDateTime fecha);
+
 }

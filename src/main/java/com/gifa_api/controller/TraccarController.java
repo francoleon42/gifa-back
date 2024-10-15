@@ -26,4 +26,5 @@ public class TraccarController {
     public ResponseEntity<?> getDispositivos(){
         return new ResponseEntity<>(traccarService.obtenerDispositivos(),HttpStatus.OK);
     }
+
 }

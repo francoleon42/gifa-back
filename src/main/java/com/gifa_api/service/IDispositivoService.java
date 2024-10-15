@@ -5,4 +5,5 @@ import com.gifa_api.model.Dispositivo;
 
 public interface IDispositivoService {
     void crearDispositivo(CrearDispositivoRequestDTO crearDispositivoRequestDTO,Integer idVehiculo);
+
 }

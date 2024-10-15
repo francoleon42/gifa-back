@@ -40,13 +40,13 @@ public class TraccarServiceImpl implements ITraccarService {
     }
 
 
-    public static String getStartOfMonthUTC() {
+    public  String getStartOfMonthUTC() {
         LocalDateTime now = LocalDateTime.now(ZoneOffset.UTC);
         LocalDateTime startOfMonth = now.withDayOfMonth(1).toLocalDate().atStartOfDay();
         return startOfMonth.toInstant(ZoneOffset.UTC).toString();
     }
 
-    private static String getEndOfMonthUTC() {
+    private  String getEndOfMonthUTC() {
         LocalDateTime now = LocalDateTime.now(ZoneOffset.UTC);
         LocalDateTime endOfMonth = now.withDayOfMonth(now.toLocalDate().lengthOfMonth())
                 .withHour(23)
@@ -56,10 +56,11 @@ public class TraccarServiceImpl implements ITraccarService {
     }
 
     // IMPORTANTE
+    // mover a posicion service
     //optimizar con cache
     // y que agregue cada una diferencia muy notable de longitud y latitud
     @Scheduled(fixedRate = 9999)
-    private void obtenerPosiciones() {
+    private void actualizarPosicionesDeDispositivo() {
 
         // sacar lo de por mess para que sean todas en general.
         String from = getStartOfMonthUTC();
@@ -84,6 +85,8 @@ public class TraccarServiceImpl implements ITraccarService {
         }
 
     }
+
+
 
 
 }

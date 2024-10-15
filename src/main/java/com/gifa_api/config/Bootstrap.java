@@ -131,7 +131,8 @@ public class Bootstrap implements ApplicationRunner {
         for (int i = 1; i <= 10; i++) {
             CargaCombustible carga = CargaCombustible.builder()
                     .cantidadLitros(i * 10)
-                    .fechaHora(LocalDateTime.now())
+                    // Sumamos i días y horas para que cada registro tenga una fecha y hora diferentes
+                    .fechaHora(LocalDateTime.now().plusDays(i).plusHours(i))
                     .precioPorLitro(100f + i)
                     .tarjeta(tarjeta1)
                     .build();
