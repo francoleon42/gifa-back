@@ -6,6 +6,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
 import java.util.List;
 import java.util.Map;
 
@@ -17,9 +18,9 @@ public class PosicionDispositivoDTO {
     private int id;
     private int deviceId;
     private String protocol;
-    private LocalDateTime deviceTime;
-    private LocalDateTime fixTime;
-    private LocalDateTime serverTime;
+    private OffsetDateTime deviceTime;
+    private OffsetDateTime fixTime;
+    private OffsetDateTime serverTime;
     private boolean outdated;
     private boolean valid;
     private double latitude;
