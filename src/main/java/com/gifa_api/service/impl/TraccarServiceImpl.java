@@ -2,6 +2,7 @@ package com.gifa_api.service.impl;
 
 import com.gifa_api.client.ITraccarCliente;
 import com.gifa_api.dto.traccar.CrearDispositivoRequestDTO;
+import com.gifa_api.dto.traccar.ObtenerDispositivoRequestDTO;
 import com.gifa_api.dto.traccar.PosicionDispositivoDTO;
 import com.gifa_api.service.ITraccarService;
 import lombok.RequiredArgsConstructor;
@@ -22,6 +23,11 @@ public class TraccarServiceImpl implements ITraccarService {
     @Override
     public void crearDispositivo(CrearDispositivoRequestDTO crearDispositivoRequestDTO) {
         traccarCliente.postCrearDispositivoTraccar(crearDispositivoRequestDTO);
+    }
+
+    @Override
+    public List<ObtenerDispositivoRequestDTO> obtenerDispositivos() {
+        return traccarCliente.getDispositivos();
     }
 
     @Scheduled(fixedRate = 9999)
@@ -57,9 +63,7 @@ public class TraccarServiceImpl implements ITraccarService {
 //        }
         return posiciones;
     }
-    private List<Integer> obtenerDispositivos() {
-        return List.of();
-    }
+
 
 
 

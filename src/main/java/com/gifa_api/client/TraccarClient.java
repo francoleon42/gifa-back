@@ -55,7 +55,7 @@ public class TraccarClient implements ITraccarCliente {
     @Override
     public List<PosicionDispositivoDTO> getPosicionDispositivoTraccar(Integer deviceId, String from, String to) {
         HttpHeaders headers = getHeaders();
-        HttpEntity<CrearDispositivoRequestDTO> entity = new HttpEntity<>( headers);
+        HttpEntity<CrearDispositivoRequestDTO> entity = new HttpEntity<>(headers);
 
         UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(baseUrl + "/positions");
         if (deviceId != null) {
@@ -83,24 +83,29 @@ public class TraccarClient implements ITraccarCliente {
         }
     }
 
+
     @Override
     public List<ObtenerDispositivoRequestDTO> getDispositivos() {
-        return List.of();
+        HttpHeaders headers = getHeaders();
+        HttpEntity<Void> entity = new HttpEntity<>(headers);
+        UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(baseUrl + "/devices");
+
+        ResponseEntity<ObtenerDispositivoRequestDTO[]> response = restTemplate.exchange(
+                builder.toUriString(),
+                HttpMethod.GET,
+                entity,
+                ObtenerDispositivoRequestDTO[].class
+        );
+
+
+        if (response.getStatusCode() == HttpStatus.OK && response.getBody() != null) {
+
+            return Arrays.asList(response.getBody());
+        } else {
+            throw new RuntimeException("Error al obtener los dispositivos: " + response.getStatusCode());
+        }
     }
 
-//    @Override
-//    public List<ObtenerDispositivoRequestDTO> getDispositivos() {
-//        HttpHeaders headers = getHeaders();
-//        HttpEntity<CrearDispositivoRequestDTO> entity = new HttpEntity<>( headers);
-//
-//        UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(baseUrl + "/");
-//        ResponseEntity<PosicionDispositivoDTO[]> response = restTemplate.exchange(
-//                builder.toUriString(),
-//                HttpMethod.GET,
-//                entity,
-//                PosicionDispositivoDTO[].class
-//        );
-//    }
 
     // Método para generar el encabezado de Basic Auth
     private String getBasicAuthHeader() {
@@ -108,6 +113,7 @@ public class TraccarClient implements ITraccarCliente {
         byte[] encodedAuth = Base64.getEncoder().encode(auth.getBytes(StandardCharsets.US_ASCII));
         return "Basic " + new String(encodedAuth);
     }
+
     private HttpHeaders getHeaders() {
         String basicAuthHeader = getBasicAuthHeader();
 

@@ -10,7 +10,6 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Data
 public class CrearDispositivoRequestDTO {
-    private Integer id;
     private String name;
     private String uniqueId;
 
