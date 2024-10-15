@@ -25,7 +25,7 @@ public class TraccarServiceImpl implements ITraccarService {
     }
 
     @Scheduled(fixedRate = 9999)
-    private void obtnerPosicionesHardcodeado() {
+    private List<PosicionDispositivoDTO> obtenerPosiciones() {
         Integer deviceId = 25;
 
         // Obtener el primer día del mes actual a las 00:00:00 en formato UTC
@@ -55,7 +55,10 @@ public class TraccarServiceImpl implements ITraccarService {
             System.out.println("Longitud: " + posicion.getLongitude() );
             System.out.println("Altitud: " + posicion.getLatitude() );
         }
+        return posiciones;
     }
+
+    
 
 
 }
