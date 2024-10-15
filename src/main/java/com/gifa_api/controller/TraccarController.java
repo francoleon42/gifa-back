@@ -22,8 +22,8 @@ public class TraccarController {
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
-//    @GetMapping("/getDispositivos")
-//    public ResponseEntity<?> getDispositivos(){
-//        return new ResponseEntity<>(traccarService.obtenerDispositivos(),HttpStatus.OK);
-//    }
+    @GetMapping("/getDispositivos")
+    public ResponseEntity<?> getDispositivos(){
+        return new ResponseEntity<>(traccarService.obtenerDispositivos(),HttpStatus.OK);
+    }
 }

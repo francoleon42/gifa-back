@@ -30,30 +30,44 @@ public class TraccarServiceImpl implements ITraccarService {
         return traccarCliente.getDispositivos();
     }
 
-    @Scheduled(fixedRate = 9999)
-    private List<PosicionDispositivoDTO> obtenerPosicionesDelMes() {
-        Integer deviceId = 25;
 
-        // Obtener el primer día del mes actual a las 00:00:00 en formato UTC
+    public static String getStartOfMonthUTC() {
         LocalDateTime now = LocalDateTime.now(ZoneOffset.UTC);
         LocalDateTime startOfMonth = now.withDayOfMonth(1).toLocalDate().atStartOfDay();
+        return startOfMonth.toInstant(ZoneOffset.UTC).toString();
+    }
 
-        // Obtener el último día del mes actual a las 23:59:59 en formato UTC
+    private static String getEndOfMonthUTC() {
+        LocalDateTime now = LocalDateTime.now(ZoneOffset.UTC);
         LocalDateTime endOfMonth = now.withDayOfMonth(now.toLocalDate().lengthOfMonth())
                 .withHour(23)
                 .withMinute(59)
                 .withSecond(59);
+        return endOfMonth.toInstant(ZoneOffset.UTC).toString();
+    }
 
-        // Formatear las fechas a ISO 8601 (con 'Z' para indicar UTC)
-        DateTimeFormatter formatter = DateTimeFormatter.ISO_INSTANT;
-        String from = startOfMonth.toInstant(ZoneOffset.UTC).toString();
-        String to = endOfMonth.toInstant(ZoneOffset.UTC).toString();
+    @Scheduled(fixedRate = 9999)
+    private void obtenerPosicionesDelMes() {
 
-        // Ejemplo de IDs de dispositivos
+        String from = getStartOfMonthUTC();
+        String to = getEndOfMonthUTC();
+
+
+        List<ObtenerDispositivoRequestDTO> dispositivos  = traccarCliente.getDispositivos();
+        for(ObtenerDispositivoRequestDTO dispositivo : dispositivos) {
+            List<PosicionDispositivoDTO> posiciones = traccarCliente.getPosicionDispositivoTraccar(dispositivo.getId(), from, to);
+            System.out.println("---------Dispositivo-------"+dispositivo.getId());
+            for (PosicionDispositivoDTO posicion : posiciones) {
+
+                System.out.println("Longitud: " + posicion.getLongitude());
+                System.out.println("Altitud: " + posicion.getLatitude());
+            }
+        }
+//        Integer deviceId = 25;
 
 
         // Obtener las posiciones utilizando el cliente Traccar con los valores hardcodeados
-        List<PosicionDispositivoDTO> posiciones = traccarCliente.getPosicionDispositivoTraccar(deviceId, from, to);
+
 //        System.out.println("-------------------------");
 //        // Iterar sobre las posiciones y hacer algo con ellas, por ejemplo, imprimir la longitud
 //        for (PosicionDispositivoDTO posicion : posiciones) {
@@ -61,7 +75,6 @@ public class TraccarServiceImpl implements ITraccarService {
 //            System.out.println("Longitud: " + posicion.getLongitude() );
 //            System.out.println("Altitud: " + posicion.getLatitude() );
 //        }
-        return posiciones;
     }
 
 

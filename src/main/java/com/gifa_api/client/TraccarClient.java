@@ -83,7 +83,6 @@ public class TraccarClient implements ITraccarCliente {
         }
     }
 
-
     @Override
     public List<ObtenerDispositivoRequestDTO> getDispositivos() {
         HttpHeaders headers = getHeaders();
@@ -107,13 +106,13 @@ public class TraccarClient implements ITraccarCliente {
     }
 
 
-    // Método para generar el encabezado de Basic Auth
+
+
     private String getBasicAuthHeader() {
         String auth = this.username + ":" + this.password;
         byte[] encodedAuth = Base64.getEncoder().encode(auth.getBytes(StandardCharsets.US_ASCII));
         return "Basic " + new String(encodedAuth);
     }
-
     private HttpHeaders getHeaders() {
         String basicAuthHeader = getBasicAuthHeader();
 
