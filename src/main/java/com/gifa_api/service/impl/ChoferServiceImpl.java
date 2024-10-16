@@ -1,7 +1,6 @@
 package com.gifa_api.service.impl;
 
 import com.gifa_api.dto.chofer.AsignarChoferDTO;
-import com.gifa_api.dto.chofer.ChoferEditDTO;
 import com.gifa_api.dto.chofer.ChoferRegistroDTO;
 import com.gifa_api.dto.chofer.ChoferResponseDTO;
 import com.gifa_api.exception.NotFoundException;
@@ -57,9 +56,9 @@ public class ChoferServiceImpl implements IChoferService {
     }
 
     @Override
-    public void habilitar(ChoferEditDTO choferEditDTO) {
-        Chofer chofer = choferRepository.findById(choferEditDTO.getIdChofer())
-                .orElseThrow(() -> new NotFoundException("No se encontró el chofer del id " + choferEditDTO.getIdChofer()));
+    public void habilitar(Integer idChofer) {
+        Chofer chofer = choferRepository.findById(idChofer)
+                .orElseThrow(() -> new NotFoundException("No se encontró el chofer del id " + idChofer));
         if(chofer.getEstadoChofer().equals(EstadoChofer.INHABILITADO)) {
             chofer.setEstadoChofer(EstadoChofer.HABILITADO);
         }
@@ -67,9 +66,9 @@ public class ChoferServiceImpl implements IChoferService {
     }
 
     @Override
-    public void inhabilitar(ChoferEditDTO choferEditDTO) {
-        Chofer chofer = choferRepository.findById(choferEditDTO.getIdChofer())
-                .orElseThrow(() -> new NotFoundException("No se encontró el chofer del id " + choferEditDTO.getIdChofer()));
+    public void inhabilitar(Integer idChofer) {
+        Chofer chofer = choferRepository.findById(idChofer)
+                .orElseThrow(() -> new NotFoundException("No se encontró el chofer del id " + idChofer));
         if(chofer.getEstadoChofer().equals(EstadoChofer.HABILITADO)) {
             chofer.setEstadoChofer(EstadoChofer.INHABILITADO);
             choferRepository.save(chofer);
