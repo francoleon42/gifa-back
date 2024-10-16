@@ -15,6 +15,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.util.Optional;
 
@@ -30,6 +31,9 @@ class ChoferServiceImplTest {
 
     @Mock
     private IChoferRepository choferRepository;
+
+    @Mock
+    private PasswordEncoder passwordEncoder;
 
     @InjectMocks
     private ChoferServiceImpl choferService;
@@ -112,7 +116,7 @@ class ChoferServiceImplTest {
     void registrarChofer_debeGuardarChoferSiVehiculoExiste() {
         // Arrange
         ChoferRegistroDTO choferRegistroDTO = new ChoferRegistroDTO("juanpe", "123", "Juan Pére");
-
+        when(passwordEncoder.encode(any())).thenReturn("contraseñaencriptada.com");
         // Act
         choferService.registro(choferRegistroDTO);
 
