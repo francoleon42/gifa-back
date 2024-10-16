@@ -8,15 +8,18 @@ import com.gifa_api.service.impl.GestorDePedidosServiceImpl;
 import com.gifa_api.utils.mappers.GestorDePedidosMapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
+@ExtendWith(MockitoExtension.class)
 public class GestorDePedidosServiceImplTest {
 
     @Mock
@@ -33,7 +36,6 @@ public class GestorDePedidosServiceImplTest {
 
     @BeforeEach
     void setUp() {
-        MockitoAnnotations.openMocks(this);
         gestorDePedidos = GestorDePedidos.builder()
                 .id(1)
                 .cantDePedidoAutomatico(10)

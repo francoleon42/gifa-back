@@ -35,6 +35,38 @@ class ItemDeInventarioServiceImplTest {
     private ItemDeInventarioMapper itemDeInventarioMapper;
 
     @Test
+    void testUtilizarItemsinStockSuficiente() {
+        // Arrange
+        Integer cantidadDisminuir = 6;
+        UtilizarItemDeInventarioDTO utilizacionItem = new UtilizarItemDeInventarioDTO(cantidadDisminuir);
+        Integer itemId = 1;
+        ItemDeInventario itemDeInventario = ItemDeInventario.builder()
+                .id(itemId)
+                .nombre("Producto A")
+                .umbral(5)
+                .stock(5)  // Stock justo en el umbral
+                .build();
+
+        assertThrows(NotFoundException.class,() -> itemDeInventarioService.utilizarItem(itemId,utilizacionItem));
+
+        // Assert
+        assertEquals(5, itemDeInventario.getStock()); // el stock no tiene que cambiar
+        verify(itemDeInventarioRepository, never()).save(itemDeInventario); // no se esta guardando
+    }
+
+    @Test
+    void testObtenerByIdconIdInvalido() {
+        // Arrange
+        Integer itemId = 1;
+        when(itemDeInventarioRepository.findById(itemId)).thenReturn(Optional.empty());
+
+        // Act & Assert
+        assertThrows(NotFoundException.class, () -> itemDeInventarioService.obtenerById(itemId));
+
+        verify(itemDeInventarioRepository, times(1)).findById(itemId);
+    }
+
+    @Test
     void testRegistrar() {
         // Arrange
         ItemDeInventarioRequestDTO itemDeInventarioDTO = new ItemDeInventarioRequestDTO("Producto A", 5, 10, 10);
@@ -78,25 +110,7 @@ class ItemDeInventarioServiceImplTest {
         verify(itemDeInventarioRepository, times(1)).save(itemDeInventario);
     }
 
-    @Test
-    void testUtilizarItemsinStockSuficiente() {
-        // Arrange
-        Integer cantidadDisminuir = 6;
-        UtilizarItemDeInventarioDTO utilizacionItem = new UtilizarItemDeInventarioDTO(cantidadDisminuir);
-        Integer itemId = 1;
-        ItemDeInventario itemDeInventario = ItemDeInventario.builder()
-                .id(itemId)
-                .nombre("Producto A")
-                .umbral(5)
-                .stock(5)  // Stock justo en el umbral
-                .build();
 
-        assertThrows(NotFoundException.class,() -> itemDeInventarioService.utilizarItem(itemId,utilizacionItem));
-
-        // Assert
-        assertEquals(5, itemDeInventario.getStock()); // el stock no tiene que cambiar
-        verify(itemDeInventarioRepository, never()).save(itemDeInventario); // no se esta guardando
-    }
 
     @Test
     void testObtenerById_conIdValido() {
@@ -118,17 +132,6 @@ class ItemDeInventarioServiceImplTest {
         verify(itemDeInventarioRepository, times(1)).findById(itemId);
     }
 
-    @Test
-    void testObtenerByIdconIdInvalido() {
-        // Arrange
-        Integer itemId = 1;
-        when(itemDeInventarioRepository.findById(itemId)).thenReturn(Optional.empty());
-
-        // Act & Assert
-        assertThrows(NotFoundException.class, () -> itemDeInventarioService.obtenerById(itemId));
-
-        verify(itemDeInventarioRepository, times(1)).findById(itemId);
-    }
 
     @Test
     void testObtenerAllitems() {

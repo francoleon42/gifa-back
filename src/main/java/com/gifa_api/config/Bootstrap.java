@@ -24,7 +24,7 @@ public class Bootstrap implements ApplicationRunner {
     private final IVehiculoRepository vehiculoRepository;
     private final ITarjetaRepository tarjetaRepository;
     private final ICargaCombustibleRepository cargaCombustibleRepository;
-    private final IGpsDataRepository gpsDataRepository;
+    private final IPosicionRepository gpsDataRepository;
     private final ItemDeInventarioRepository itemDeInventarioRepository;
     private final IPedidoRepository pedidoRepository;
     private final IMantenimientoRepository mantenimientoRepository;
@@ -34,6 +34,7 @@ public class Bootstrap implements ApplicationRunner {
     private final IKilometrajeVehiculoRepository kilometrajeVehiculoRepository;
     private final IItemUsadoMantenimientoRepository itemUsadoMantenimientoRepository;
     private final IChoferRepository choferRepository;
+    private final IDispositivoRepository dispositivoRepository;
 
     @Override
     public void run(ApplicationArguments args) throws Exception {
@@ -130,24 +131,30 @@ public class Bootstrap implements ApplicationRunner {
         for (int i = 1; i <= 10; i++) {
             CargaCombustible carga = CargaCombustible.builder()
                     .cantidadLitros(i * 10)
-                    .fechaHora(LocalDateTime.now())
+                    // Sumamos i días y horas para que cada registro tenga una fecha y hora diferentes
+                    .fechaHora(LocalDateTime.now().plusDays(i).plusHours(i))
                     .precioPorLitro(100f + i)
                     .tarjeta(tarjeta1)
                     .build();
             cargaCombustibleRepository.save(carga);
         }
 
-        // Crear datos de GPS con builder
-        for (int i = 1; i <= 5; i++) {
-            GpsData gpsData = GpsData.builder()
-                    .latitud(40.0f + i)
-                    .longitud(-74.0f - i)
-                    .fechaHora(Instant.now())
-                    .distanciaDesdeUltimaPosicion(5.0f * i)
-                    .vehiculo(vehiculo1)
-                    .build();
-            gpsDataRepository.save(gpsData);
-        }
+
+        Dispositivo dispositivo= Dispositivo
+                .builder()
+                .unicoId("1")
+                .nombre("vehiculazo")
+                .vehiculo(vehiculo1)
+                .build();
+        dispositivoRepository.save(dispositivo);
+
+        Dispositivo dispositivo2= Dispositivo
+                .builder()
+                .unicoId("2")
+                .nombre("vehiculito")
+                .vehiculo(vehiculo2)
+                .build();
+        dispositivoRepository.save(dispositivo2);
 
         // Crear ítems de inventario con builder
         ItemDeInventario item1 = ItemDeInventario.builder()

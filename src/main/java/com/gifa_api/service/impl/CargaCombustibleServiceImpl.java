@@ -8,6 +8,7 @@ import com.gifa_api.repository.ICargaCombustibleRepository;
 import com.gifa_api.repository.ITarjetaRepository;
 
 import com.gifa_api.service.ICargaCombustibleService;
+import com.gifa_api.service.IDispositivoService;
 import lombok.RequiredArgsConstructor;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -22,18 +23,21 @@ import java.util.List;
 import java.util.Locale;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
+
 @Service
 @RequiredArgsConstructor
 public class CargaCombustibleServiceImpl implements ICargaCombustibleService {
     private final ITarjetaRepository tarjetaRepository;
     private final ICargaCombustibleRepository cargaCombustibleRepository;
+    private final IDispositivoService dispositivoService;
 
     private List<Float> preciosCombustiblesCache;
     private LocalDate ultimaActualizacionPrecio;
 
     @Override
     public void cargarCombustible(CargaCombustibleRequestDTO cargaCombustibleRequestDTO) {
-    // cargaCombustible conseguir preciosporlitro y asi calcular el total de esa carga.
+        // cargaCombustible conseguir preciosporlitro y asi calcular el total de esa carga.
         Tarjeta tarjeta = tarjetaRepository.findById(cargaCombustibleRequestDTO.getNumeroTarjeta())
                 .orElseThrow(() -> new NotFoundException("No se encontró la tarjeta con id: " + cargaCombustibleRequestDTO.getNumeroTarjeta()));
 
@@ -115,5 +119,15 @@ public class CargaCombustibleServiceImpl implements ICargaCombustibleService {
         }
 
         return preciosCombustibles;
+    }
+
+    @Override
+    public double combustibleCargadoEn(String numeroTarjeta, LocalDateTime fecha) {
+        int cargaTotal = 0;
+        List<CargaCombustible> cargasCombustible = cargaCombustibleRepository.findByNumeroTarjetaAndFechaAfter(numeroTarjeta, fecha);
+        for (CargaCombustible carga : cargasCombustible) {
+            cargaTotal += carga.getCantidadLitros();
+        }
+        return cargaTotal;
     }
 }

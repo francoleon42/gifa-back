@@ -49,6 +49,7 @@ class CargaCombustibleServiceImplTest {
 
         assertThrows(NotFoundException.class, () -> cargaCombustibleService.cargarCombustible(cargaCombustible));
 
+        verify(tarjetaRepository,times(1)).findById(cargaCombustible.getNumeroTarjeta());
         verify(cargaCombustibleRepository, never()).save(any(CargaCombustible.class));
     }
 

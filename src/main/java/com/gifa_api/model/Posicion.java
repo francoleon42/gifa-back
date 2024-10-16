@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.*;
 
 import java.time.Instant;
+import java.time.OffsetDateTime;
 
 @Getter
 @Setter
@@ -11,27 +12,24 @@ import java.time.Instant;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name = "gps_data")
-public class GpsData {
+@Table(name = "posicion")
+public class Posicion {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
     private Integer id;
 
-    @Column(name = "latitud")
-    private Float latitud;
+    @Column(name = "latitude")
+    private double latitude;
 
-    @Column(name = "longitud")
-    private Float longitud;
+    @Column(name = "longitude")
+    private double longitude;
 
     @Column(name = "fecha_hora")
-    private Instant fechaHora;
-
-    @Column(name = "distancia_desde_ultima_posicion")
-    private Float distanciaDesdeUltimaPosicion;
+    private OffsetDateTime fechaHora;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "vehiculo_id")
-    private Vehiculo vehiculo;
+    @JoinColumn(name = "dispositivo_id")
+    private Dispositivo dispositivo;
 
 }

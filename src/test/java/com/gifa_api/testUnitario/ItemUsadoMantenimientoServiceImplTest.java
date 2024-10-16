@@ -50,6 +50,7 @@ class ItemUsadoMantenimientoServiceImplTest {
             itemUsadoMantenimientoService.agregaritemUtilizadoEnMantenimiento(idMantenimiento, finalizarMantenimientoDTO);
         });
 
+        verify(iMantenimientoRepository,times(1)).findById(idMantenimiento);
         verify(itemDeInventarioRepository, never()).findById(anyInt());
         verify(itemUsadoMantenimientoRepository, never()).save(any(ItemUsadoMantenimiento.class));
     }
@@ -74,6 +75,9 @@ class ItemUsadoMantenimientoServiceImplTest {
             itemUsadoMantenimientoService.agregaritemUtilizadoEnMantenimiento(idMantenimiento, finalizarMantenimientoDTO);
         });
 
+        verify(iMantenimientoRepository,times(1)).findById(idMantenimiento);
+        verify(itemDeInventarioRepository,times(1)).findById(itemUtilizado.getIdItem());
+
         verify(itemUsadoMantenimientoRepository, never()).save(any(ItemUsadoMantenimiento.class));
     }
 
@@ -97,6 +101,8 @@ class ItemUsadoMantenimientoServiceImplTest {
         itemUsadoMantenimientoService.agregaritemUtilizadoEnMantenimiento(idMantenimiento, finalizarMantenimientoDTO);
 
         // Assert
+        verify(iMantenimientoRepository,times(1)).findById(idMantenimiento);
+        verify(itemDeInventarioRepository,times(1)).findById(itemUtilizado.getIdItem());
         verify(itemUsadoMantenimientoRepository, times(1)).save(any(ItemUsadoMantenimiento.class));
     }
 }

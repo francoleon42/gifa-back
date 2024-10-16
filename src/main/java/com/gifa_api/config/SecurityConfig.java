@@ -52,7 +52,9 @@ public class SecurityConfig {
                     configurePedidoEndpoints(authRequest);
                     configureInventarioEndpoints(authRequest);
                     configureMantenimientoEndpoints(authRequest);
-                    configureCargarCombustibleEndpoints(authRequest);
+                    configureFuncionesTraccarEndpoints(authRequest);
+                    configureCargaCombustibleEndpoints(authRequest);
+                    configureMetabaseEndpoints(authRequest);
                     configureAuthenticatedEndpoints(authRequest);
                 })
                 .sessionManagement(sessionManager -> sessionManager.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
@@ -124,6 +126,25 @@ public class SecurityConfig {
                 .requestMatchers(HttpMethod.GET, "/mantenimiento/finalizados").hasRole(ADMINISTRADOR)
                 .requestMatchers(HttpMethod.GET, "/mantenimiento/porVehiculo/{id}").hasRole(ADMINISTRADOR)
                 .requestMatchers(HttpMethod.GET, "/mantenimiento/verMisMantenimientos").hasRole(OPERADOR);
+    }
+
+    private void configureCargaCombustibleEndpoints(AuthorizeHttpRequestsConfigurer<HttpSecurity>.AuthorizationManagerRequestMatcherRegistry authRequest) {
+        authRequest
+                .requestMatchers(HttpMethod.POST, "/gestionDeCombustible/cargarCombustible").hasRole(CHOFER);
+
+    }
+    private void configureFuncionesTraccarEndpoints(AuthorizeHttpRequestsConfigurer<HttpSecurity>.AuthorizationManagerRequestMatcherRegistry authRequest) {
+        authRequest
+                .requestMatchers(HttpMethod.POST, "/traccar/crearDispositivo").hasRole(ADMINISTRADOR)
+                .requestMatchers(HttpMethod.GET, "/traccar/getDispositivos").hasRole(ADMINISTRADOR);
+
+
+    }
+
+    private void configureMetabaseEndpoints(AuthorizeHttpRequestsConfigurer<HttpSecurity>.AuthorizationManagerRequestMatcherRegistry authRequest) {
+        authRequest
+                .requestMatchers(HttpMethod.GET, "/metabase/token").hasRole(GERENTE);
+
     }
 
     private void configureAuthenticatedEndpoints(AuthorizeHttpRequestsConfigurer<HttpSecurity>.AuthorizationManagerRequestMatcherRegistry authRequest) {
