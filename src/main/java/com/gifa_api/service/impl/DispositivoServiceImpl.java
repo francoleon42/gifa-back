@@ -24,7 +24,6 @@ public class DispositivoServiceImpl implements IDispositivoService {
     private final IDispositivoRepository dispositivoRepository;
     private final IVehiculoRepository vehiculoRepository;
     private final IPosicionRepository posicionRepository;
-    private final ICargaCombustibleService cargaCombustibleService;
     @Override
     public void crearDispositivo(CrearDispositivoRequestDTO crearDispositivoRequestDTO, Integer idVehiculo) {
         Vehiculo vehiculo = vehiculoRepository.findById(idVehiculo)

@@ -30,7 +30,6 @@ import java.time.LocalDateTime;
 public class CargaCombustibleServiceImpl implements ICargaCombustibleService {
     private final ITarjetaRepository tarjetaRepository;
     private final ICargaCombustibleRepository cargaCombustibleRepository;
-    private final IDispositivoService dispositivoService;
 
     private List<Float> preciosCombustiblesCache;
     private LocalDate ultimaActualizacionPrecio;
