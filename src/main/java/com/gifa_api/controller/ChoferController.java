@@ -44,7 +44,7 @@ public class ChoferController {
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
-    @GetMapping("/verChofers")
+    @GetMapping("/verChoferes")
     public ResponseEntity<?> getAllChofers() {
         return new ResponseEntity<>(choferService.obtenerAll(),HttpStatus.OK);
     }

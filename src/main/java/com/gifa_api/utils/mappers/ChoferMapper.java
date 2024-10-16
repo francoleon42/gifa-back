@@ -27,8 +27,9 @@ public class ChoferMapper {
         }
 
         ChoferResponseDTO choferResponseDTO = new ChoferResponseDTO();
+        choferResponseDTO.setIdChofer(chofer.getId());
         choferResponseDTO.setNombre(chofer.getNombre());
-        choferResponseDTO.setId_dvehiculo(chofer.getVehiculo() != null ? chofer.getVehiculo().getId() : null);
+        choferResponseDTO.setIdVehiculo(chofer.getVehiculo() != null ? chofer.getVehiculo().getId() : null);
         choferResponseDTO.setEstadoChofer(chofer.getEstadoChofer().name());
 
         return choferResponseDTO;
