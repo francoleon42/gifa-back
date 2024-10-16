@@ -35,6 +35,7 @@ public class SecurityConfig {
     private static final String SUPERVISOR = Rol.SUPERVISOR.toString();
     private static final String GERENTE = Rol.GERENTE.toString();
     private static final String OPERADOR = Rol.OPERADOR.toString();
+    private static final String CHOFER = Rol.CHOFER.toString();
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
@@ -51,6 +52,7 @@ public class SecurityConfig {
                     configurePedidoEndpoints(authRequest);
                     configureInventarioEndpoints(authRequest);
                     configureMantenimientoEndpoints(authRequest);
+                    configureCargarCombustibleEndpoints(authRequest);
                     configureAuthenticatedEndpoints(authRequest);
                 })
                 .sessionManagement(sessionManager -> sessionManager.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
@@ -127,5 +129,10 @@ public class SecurityConfig {
     private void configureAuthenticatedEndpoints(AuthorizeHttpRequestsConfigurer<HttpSecurity>.AuthorizationManagerRequestMatcherRegistry authRequest) {
         authRequest
                 .requestMatchers(HttpMethod.POST, "/auth/logout").authenticated();
+    }
+
+    private void configureCargarCombustibleEndpoints(AuthorizeHttpRequestsConfigurer<HttpSecurity>.AuthorizationManagerRequestMatcherRegistry authRequest) {
+        authRequest
+                .requestMatchers(HttpMethod.POST, "/gestionDeCombustible/cargarCombustible").hasRole(CHOFER);
     }
 }
