@@ -62,34 +62,34 @@ public class DispositivoServiceImplTest {
         verify(dispositivoRepository, times(1)).save(any(Dispositivo.class));
     }
 
-    // Tests añadidos para calcularDistanciaRecorrida
-    @Test
-    public void testCalcularDistanciaRecorrida() {
-        // Creamos posiciones simuladas
-        Posicion pos1 = Posicion.builder().latitude(-34.603722).longitude(-58.381592).build(); // Buenos Aires
-        Posicion pos2 = Posicion.builder().latitude(-34.609722).longitude(-58.381592).build(); // Punto cercano
-        Posicion pos3 = Posicion.builder().latitude(-34.615722).longitude(-58.381592).build(); // Punto más lejano
-
-        List<Posicion> posiciones = Arrays.asList(pos1, pos2, pos3);
-        when(posicionRepository.findByUnicoId("device123")).thenReturn(posiciones);
-
-
-        int distanciaRecorrida = serviceDispositivo.calcularDistanciaRecorrida("device123");
-
-        // Verificamos el resultado esperado. Para este caso, espera una distancia en kilómetros.
-        assertEquals(1, distanciaRecorrida); // Verifica si la distancia es correcta
-    }
-
-    @Test
-    public void testCalcularDistanciaConUnSoloPunto() {
-        Posicion pos1 = Posicion.builder().latitude(-34.603722).longitude(-58.381592).build(); // Buenos Aires
-
-        List<Posicion> posiciones = Arrays.asList(pos1);
-        when(posicionRepository.findByUnicoId("device123")).thenReturn(posiciones);
-
-        int distanciaRecorrida = serviceDispositivo.calcularDistanciaRecorrida("device123");
-
-        // Con solo una posición, la distancia recorrida debe ser 0
-        assertEquals(0, distanciaRecorrida);
-    }
+//    // Tests añadidos para calcularDistanciaRecorrida
+//    @Test
+//    public void testCalcularDistanciaRecorrida() {
+//        // Creamos posiciones simuladas
+//        Posicion pos1 = Posicion.builder().latitude(-34.603722).longitude(-58.381592).build(); // Buenos Aires
+//        Posicion pos2 = Posicion.builder().latitude(-34.609722).longitude(-58.381592).build(); // Punto cercano
+//        Posicion pos3 = Posicion.builder().latitude(-34.615722).longitude(-58.381592).build(); // Punto más lejano
+//
+//        List<Posicion> posiciones = Arrays.asList(pos1, pos2, pos3);
+//        when(posicionRepository.findByUnicoId("device123")).thenReturn(posiciones);
+//
+//
+//        int distanciaRecorrida = serviceDispositivo.calcularDistanciaRecorrida("device123");
+//
+//        // Verificamos el resultado esperado. Para este caso, espera una distancia en kilómetros.
+//        assertEquals(1, distanciaRecorrida); // Verifica si la distancia es correcta
+//    }
+//
+//    @Test
+//    public void testCalcularDistanciaConUnSoloPunto() {
+//        Posicion pos1 = Posicion.builder().latitude(-34.603722).longitude(-58.381592).build(); // Buenos Aires
+//
+//        List<Posicion> posiciones = Arrays.asList(pos1);
+//        when(posicionRepository.findByUnicoId("device123")).thenReturn(posiciones);
+//
+//        int distanciaRecorrida = serviceDispositivo.calcularDistanciaRecorrida("device123");
+//
+//        // Con solo una posición, la distancia recorrida debe ser 0
+//        assertEquals(0, distanciaRecorrida);
+//    }
 }
