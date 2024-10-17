@@ -27,4 +27,9 @@ public class TraccarController {
         return new ResponseEntity<>(traccarService.obtenerDispositivos(),HttpStatus.OK);
     }
 
+    @GetMapping("/verInconsistenciasDeCombustible")
+    public ResponseEntity<?> verInconsistenciasDeCombustible(){
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
 }
