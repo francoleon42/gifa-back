@@ -26,7 +26,7 @@ import java.util.List;
 public class TraccarServiceImpl implements ITraccarService {
 
     private final ITraccarCliente traccarCliente;
-    private final IPosicionRepository posicionRepository;
+
     private final IDispositivoRepository dispositivoRepository;
 
     @Override
@@ -40,51 +40,9 @@ public class TraccarServiceImpl implements ITraccarService {
     }
 
 
-    public  String getStartOfMonthUTC() {
-        LocalDateTime now = LocalDateTime.now(ZoneOffset.UTC);
-        LocalDateTime startOfMonth = now.withDayOfMonth(1).toLocalDate().atStartOfDay();
-        return startOfMonth.toInstant(ZoneOffset.UTC).toString();
-    }
 
-    private  String getEndOfMonthUTC() {
-        LocalDateTime now = LocalDateTime.now(ZoneOffset.UTC);
-        LocalDateTime endOfMonth = now.withDayOfMonth(now.toLocalDate().lengthOfMonth())
-                .withHour(23)
-                .withMinute(59)
-                .withSecond(59);
-        return endOfMonth.toInstant(ZoneOffset.UTC).toString();
-    }
 
-    // IMPORTANTE
-    // mover a posicion service
-    //optimizar con cache
-    // y que agregue cada una diferencia muy notable de longitud y latitud
-    @Scheduled(fixedRate = 9999)
-    private void actualizarPosicionesDeDispositivo() {
 
-        // sacar lo de por mess para que sean todas en general.
-        String from = getStartOfMonthUTC();
-        String to = getEndOfMonthUTC();
-
-        List<ObtenerDispositivoRequestDTO> dispositivosDTO = traccarCliente.getDispositivos();
-        for (ObtenerDispositivoRequestDTO dispositivoDTO : dispositivosDTO) {
-            Dispositivo dispositivo = dispositivoRepository.findByUnicoId(dispositivoDTO.getUniqueId())
-                    .orElseThrow(() -> new NotFoundException("No se encontró el dispositivo con id: "));
-            List<PosicionDispositivoDTO> posicionesDeDispositivio = traccarCliente.getPosicionDispositivoTraccar(dispositivoDTO.getId(), from, to);
-            for (PosicionDispositivoDTO posicionDTO : posicionesDeDispositivio) {
-
-                Posicion posicion = Posicion
-                        .builder()
-                        .latitude(posicionDTO.getLatitude())
-                        .dispositivo(dispositivo)
-                        .longitude(posicionDTO.getLongitude())
-                        .fechaHora(posicionDTO.getServerTime())
-                        .build();
-                posicionRepository.save(posicion);
-            }
-        }
-
-    }
 
 
 

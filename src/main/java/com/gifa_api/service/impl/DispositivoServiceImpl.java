@@ -11,10 +11,12 @@ import com.gifa_api.repository.IUsuarioRepository;
 import com.gifa_api.repository.IVehiculoRepository;
 import com.gifa_api.service.ICargaCombustibleService;
 import com.gifa_api.service.IDispositivoService;
+import com.gifa_api.service.IPosicionService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
 import java.time.ZoneOffset;
 import java.util.List;
 
@@ -24,6 +26,7 @@ public class DispositivoServiceImpl implements IDispositivoService {
     private final IDispositivoRepository dispositivoRepository;
     private final IVehiculoRepository vehiculoRepository;
     private final IPosicionRepository posicionRepository;
+    private final IPosicionService posicionService;
 
     @Override
     public void crearDispositivo(CrearDispositivoRequestDTO crearDispositivoRequestDTO, Integer idVehiculo) {
@@ -38,10 +41,32 @@ public class DispositivoServiceImpl implements IDispositivoService {
         dispositivoRepository.save(dispositivo);
     }
 
-    //fix agregar que sea despues de una fecha las posiciones
-    private int calcularDistanciaRecorrida(String unicoIdDeDispositivo) {
-        List<Posicion> posiciones = posicionRepository.findByUnicoId(unicoIdDeDispositivo);
+    @Override
+    public Dispositivo obtenerDispositivo(String unicoId) {
+        Dispositivo dispositivo = dispositivoRepository.findByUnicoId(unicoId)
+                .orElseThrow(() -> new NotFoundException("No se encontró el dispositivo con id: "));
+        return  dispositivo;
+    }
 
+
+
+    @Override
+    public int calcularKmDeDispositivoDespuesDeFecha(String unicoIdDeDispositivo, OffsetDateTime fecha ) {
+        List<Posicion> posiciones = posicionService.getPosicionesDeDispositivoDespuesDeFecha(unicoIdDeDispositivo,fecha);
+        int kmDeDispositivoDespuesDeFecha = formulaDeHaversine(posiciones);
+        return kmDeDispositivoDespuesDeFecha;
+    }
+
+    @Override
+    public void actualizarKilometrajeDeVehiculos() {
+        for(Vehiculo vehiculo : vehiculoRepository.findAll()) {
+            List<Posicion> posisicionesDeVehiculo = posicionService.getPosicionesDeDispositivo(vehiculo.getDispositivo().getUnicoId());
+            int kilometrajeActual = formulaDeHaversine(posisicionesDeVehiculo);
+            vehiculo.setKilometraje(kilometrajeActual);
+        }
+    }
+
+    private int formulaDeHaversine(List<Posicion> posiciones){
         double distanciaTotal = 0.0;
 
         for (int i = 1; i < posiciones.size(); i++) {
@@ -75,25 +100,25 @@ public class DispositivoServiceImpl implements IDispositivoService {
     }
 
 
-    //hacer para obtener la fecha del inicio del mes o semana lo que se quiera
-    public  String getStartOfMonthUTC() {
-        LocalDateTime now = LocalDateTime.now(ZoneOffset.UTC);
-        LocalDateTime startOfMonth = now.withDayOfMonth(1).toLocalDate().atStartOfDay();
-        return startOfMonth.toInstant(ZoneOffset.UTC).toString();
-    }
-    //este es override y debe retornas un dto para ver inconsistencias
-    public void verInconsistenciasKMConCombustible(){
-        List<Dispositivo> dispositivos = dispositivoRepository.findAll();
-        for (Dispositivo dispositivo : dispositivos) {
-
-//            int km = calcularDistanciaRecorrida(dispositivo.getUnicoId(),fecha);
-//            double cargaCombustible =cargaCombustibleService.combustibleCargadoEn(dispositivo.getVehiculo().getTarjeta().getNumero(),fecha);
-        }
-
-    }
-    private boolean calculoDeCombustiblePorKilometro(int kilometrajeRecorrido,double combustibleUtilizado,LocalDateTime fecha) {
-        int kmPorLitro = 10;
-        return kilometrajeRecorrido < combustibleUtilizado * kmPorLitro;
-    }
+//    //hacer para obtener la fecha del inicio del mes o semana lo que se quiera
+//    public  String getStartOfMonthUTC() {
+//        LocalDateTime now = LocalDateTime.now(ZoneOffset.UTC);
+//        LocalDateTime startOfMonth = now.withDayOfMonth(1).toLocalDate().atStartOfDay();
+//        return startOfMonth.toInstant(ZoneOffset.UTC).toString();
+//    }
+//    //este es override y debe retornas un dto para ver inconsistencias
+//    public void verInconsistenciasKMConCombustible(){
+//        List<Dispositivo> dispositivos = dispositivoRepository.findAll();
+//        for (Dispositivo dispositivo : dispositivos) {
+//
+////            int km = calcularDistanciaRecorrida(dispositivo.getUnicoId(),fecha);
+////            double cargaCombustible =cargaCombustibleService.combustibleCargadoEn(dispositivo.getVehiculo().getTarjeta().getNumero(),fecha);
+//        }
+//
+//    }
+//    private boolean calculoDeCombustiblePorKilometro(int kilometrajeRecorrido,double combustibleUtilizado,LocalDateTime fecha) {
+//        int kmPorLitro = 10;
+//        return kilometrajeRecorrido < combustibleUtilizado * kmPorLitro;
+//    }
 
 }
