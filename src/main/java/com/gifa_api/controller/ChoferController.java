@@ -26,13 +26,13 @@ public class ChoferController {
     }
 
     @PatchMapping("/habilitar/{id}")
-    public ResponseEntity<?> habilitar(@PathVariable Integer idChofer) {
-        choferService.habilitar(idChofer);
+    public ResponseEntity<?> habilitar(@PathVariable Integer id) {
+        choferService.habilitar(id);
         return new ResponseEntity<>(HttpStatus.OK);
     }
     @PatchMapping("/inhabilitar/{id}")
-    public ResponseEntity<?> createChofer(@PathVariable Integer idChofer) {
-        choferService.inhabilitar(idChofer);
+    public ResponseEntity<?> createChofer(@PathVariable Integer id) {
+        choferService.inhabilitar(id);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
