@@ -8,7 +8,7 @@ import java.time.OffsetDateTime;
 public interface IDispositivoService {
     void crearDispositivo(CrearDispositivoRequestDTO crearDispositivoRequestDTO,Integer idVehiculo);
     Dispositivo obtenerDispositivo(String unicoId);
-    void actualizarKilometrajeDeVehiculos();
+//    void actualizarKilometrajeDeVehiculos();
     int calcularKmDeDispositivoDespuesDeFecha(String unicoId, OffsetDateTime fecha );
 
 }

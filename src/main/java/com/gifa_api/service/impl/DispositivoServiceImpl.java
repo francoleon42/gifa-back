@@ -13,20 +13,22 @@ import com.gifa_api.service.ICargaCombustibleService;
 import com.gifa_api.service.IDispositivoService;
 import com.gifa_api.service.IPosicionService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.time.OffsetDateTime;
 import java.time.ZoneOffset;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
 public class DispositivoServiceImpl implements IDispositivoService {
     private final IDispositivoRepository dispositivoRepository;
     private final IVehiculoRepository vehiculoRepository;
+    //    private final IPosicionService posicionService;
     private final IPosicionRepository posicionRepository;
-    private final IPosicionService posicionService;
 
     @Override
     public void crearDispositivo(CrearDispositivoRequestDTO crearDispositivoRequestDTO, Integer idVehiculo) {
@@ -45,28 +47,36 @@ public class DispositivoServiceImpl implements IDispositivoService {
     public Dispositivo obtenerDispositivo(String unicoId) {
         Dispositivo dispositivo = dispositivoRepository.findByUnicoId(unicoId)
                 .orElseThrow(() -> new NotFoundException("No se encontró el dispositivo con id: "));
-        return  dispositivo;
+        return dispositivo;
     }
 
 
-
     @Override
-    public int calcularKmDeDispositivoDespuesDeFecha(String unicoIdDeDispositivo, OffsetDateTime fecha ) {
-        List<Posicion> posiciones = posicionService.getPosicionesDeDispositivoDespuesDeFecha(unicoIdDeDispositivo,fecha);
+    public int calcularKmDeDispositivoDespuesDeFecha(String unicoIdDeDispositivo, OffsetDateTime fecha) {
+        List<Posicion> posiciones = posicionRepository.findByUnicoIdAndDespuesFecha(unicoIdDeDispositivo, fecha);
         int kmDeDispositivoDespuesDeFecha = formulaDeHaversine(posiciones);
         return kmDeDispositivoDespuesDeFecha;
     }
 
-    @Override
-    public void actualizarKilometrajeDeVehiculos() {
-        for(Vehiculo vehiculo : vehiculoRepository.findAll()) {
-            List<Posicion> posisicionesDeVehiculo = posicionService.getPosicionesDeDispositivo(vehiculo.getDispositivo().getUnicoId());
+    @Scheduled(fixedRate = 19999)
+    private void actualizarKilometrajeDeVehiculos() {
+        for (Dispositivo dispositivo : dispositivoRepository.findAll()) {
+            List<Posicion> posisicionesDeVehiculo = posicionRepository.findByUnicoId(dispositivo.getUnicoId());
             int kilometrajeActual = formulaDeHaversine(posisicionesDeVehiculo);
+
+            Vehiculo vehiculo = dispositivoRepository.findVehiculosDeDispositivo(dispositivo.getUnicoId())
+                    .orElseThrow(() -> new NotFoundException("No se encontró el vehiculo con id: " + dispositivo.getUnicoId()));
+
+
             vehiculo.setKilometraje(kilometrajeActual);
+            vehiculoRepository.save(vehiculo);
+            System.out.println(vehiculo.getModelo() + " kilometraje actualizado a: " + vehiculo.getKilometraje());
+
+
         }
     }
 
-    private int formulaDeHaversine(List<Posicion> posiciones){
+    private int formulaDeHaversine(List<Posicion> posiciones) {
         double distanciaTotal = 0.0;
 
         for (int i = 1; i < posiciones.size(); i++) {

@@ -85,11 +85,12 @@ public class Bootstrap implements ApplicationRunner {
 
         tarjetaRepository.saveAll(List.of(tarjeta1, tarjeta2));
 
+
         // Crear vehículos con builder
         Vehiculo vehiculo1 = Vehiculo.builder()
                 .patente("ABC123")
                 .antiguedad(5)
-                .kilometraje(10000)
+                .kilometraje(0)
                 .litrosDeTanque(60)
                 .modelo("Modelo X")
                 .estadoVehiculo(EstadoVehiculo.REPARADO)
@@ -101,7 +102,7 @@ public class Bootstrap implements ApplicationRunner {
         Vehiculo vehiculo2 = Vehiculo.builder()
                 .patente("XYZ789")
                 .antiguedad(3)
-                .kilometraje(8000)
+                .kilometraje(0)
                 .litrosDeTanque(50)
                 .modelo("Modelo Y")
                 .estadoVehiculo(EstadoVehiculo.EN_REPARACION)

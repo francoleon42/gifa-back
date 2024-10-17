@@ -29,7 +29,7 @@ public class PosicionServiceImpl implements IPosicionService {
     private final IDispositivoService dispositivoService;
 
     //optimizar con cache
-    // y que agregue cada una diferencia muy notable de longitud y latitud
+    //Validar si la posición es lo suficientemente diferente de la última
     @Scheduled(fixedRate = 9999)
     private void actualizarPosicionesDeDispositivo() {
 
@@ -37,12 +37,23 @@ public class PosicionServiceImpl implements IPosicionService {
         String from = getStartOfMonthUTC();
         String to = getEndOfMonthUTC();
 
+
+
         List<ObtenerDispositivoRequestDTO> dispositivosDTO = traccarService.obtenerDispositivos();
         for (ObtenerDispositivoRequestDTO dispositivoDTO : dispositivosDTO) {
-            Dispositivo dispositivo = dispositivoService.obtenerDispositivo(dispositivoDTO.getUniqueId());
+           Dispositivo dispositivo = dispositivoService.obtenerDispositivo(dispositivoDTO.getUniqueId());
             List<PosicionDispositivoDTO> posicionesDeDispositivio = traccarCliente.getPosicionDispositivoTraccar(dispositivoDTO.getId(), from, to);
             for (PosicionDispositivoDTO posicionDTO : posicionesDeDispositivio) {
-
+//
+//                double diferenciaMinima = 0.0001; // Valor ajustable según tus necesidades
+//                Posicion ultimaPosicion = posicionRepository.encontrarUltimaPosicion(dispositivo.getUnicoId())
+//                        .orElseThrow(() -> new NotFoundException("No se encontró la ultima posicion"));
+//
+//                if (ultimaPosicion != null &&
+//                        Math.abs(ultimaPosicion.getLatitude() - posicionDTO.getLatitude()) < diferenciaMinima &&
+//                        Math.abs(ultimaPosicion.getLongitude() - posicionDTO.getLongitude()) < diferenciaMinima) {
+//                    continue; // Saltar posiciones casi idénticas
+//                }
                 Posicion posicion = Posicion
                         .builder()
                         .latitude(posicionDTO.getLatitude())
@@ -53,8 +64,6 @@ public class PosicionServiceImpl implements IPosicionService {
                 posicionRepository.save(posicion);
             }
         }
-
-        dispositivoService.actualizarKilometrajeDeVehiculos();
     }
 
     private String getStartOfMonthUTC() {
@@ -78,7 +87,7 @@ public class PosicionServiceImpl implements IPosicionService {
 
     @Override
     public List<Posicion> getPosicionesDeDispositivoDespuesDeFecha(String unicoID, OffsetDateTime fecha) {
-        return List.of();
+        return posicionRepository.findByUnicoIdAndDespuesFecha(unicoID,fecha);
     }
 }
 
