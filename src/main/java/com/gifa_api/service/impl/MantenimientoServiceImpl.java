@@ -35,6 +35,7 @@ public class MantenimientoServiceImpl implements IMantenimientoService {
     public void crearMantenimiento(RegistrarMantenimientoDTO registrarMantenimientoDTO) {
         Vehiculo vehiculo = iVehiculoRepository.findById(registrarMantenimientoDTO.getVehiculo_id())
                 .orElseThrow(() -> new NotFoundException("No se encontró el vehiculo con id: " + registrarMantenimientoDTO.getVehiculo_id()));
+        vehiculo.setEstadoVehiculo(EstadoVehiculo.EN_REPARACION);
         Mantenimiento mantenimiento = Mantenimiento
                 .builder()
                 .asunto(registrarMantenimientoDTO.getAsunto())
