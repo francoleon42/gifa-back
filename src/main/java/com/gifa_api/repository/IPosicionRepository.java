@@ -17,7 +17,6 @@ public interface IPosicionRepository extends JpaRepository<Posicion, Integer> {
     @Query("SELECT p FROM Posicion p WHERE p.dispositivo.unicoId=:unicoId AND p.fechaHora > :fecha")
     List<Posicion> findByUnicoIdAndDespuesFecha(@Param("unicoId") String unicoId, @Param("fecha") OffsetDateTime fecha);
 
-    @Query("SELECT p FROM Posicion p WHERE p.dispositivo.unicoId =:unicoId ORDER BY p.fechaHora DESC")
-    Optional<Posicion> encontrarUltimaPosicion(@Param("unicoId") String unicoId);
-
+    @Query("SELECT p FROM Posicion p WHERE p.dispositivo.unicoId=:unicoId AND p.fechaHora = :fecha")
+    Optional<Posicion> obtenerPosicionDeDispositivoPorFecha(@Param("unicoId") String unicoId, @Param("fecha") OffsetDateTime fecha);
 }

@@ -44,26 +44,23 @@ public class PosicionServiceImpl implements IPosicionService {
            Dispositivo dispositivo = dispositivoService.obtenerDispositivo(dispositivoDTO.getUniqueId());
             List<PosicionDispositivoDTO> posicionesDeDispositivio = traccarCliente.getPosicionDispositivoTraccar(dispositivoDTO.getId(), from, to);
             for (PosicionDispositivoDTO posicionDTO : posicionesDeDispositivio) {
-//
-//                double diferenciaMinima = 0.0001; // Valor ajustable según tus necesidades
-//                Posicion ultimaPosicion = posicionRepository.encontrarUltimaPosicion(dispositivo.getUnicoId())
-//                        .orElseThrow(() -> new NotFoundException("No se encontró la ultima posicion"));
-//
-//                if (ultimaPosicion != null &&
-//                        Math.abs(ultimaPosicion.getLatitude() - posicionDTO.getLatitude()) < diferenciaMinima &&
-//                        Math.abs(ultimaPosicion.getLongitude() - posicionDTO.getLongitude()) < diferenciaMinima) {
-//                    continue; // Saltar posiciones casi idénticas
-//                }
-                Posicion posicion = Posicion
-                        .builder()
-                        .latitude(posicionDTO.getLatitude())
-                        .dispositivo(dispositivo)
-                        .longitude(posicionDTO.getLongitude())
-                        .fechaHora(posicionDTO.getServerTime())
-                        .build();
-                posicionRepository.save(posicion);
+                
+                if(!estaPosicion(dispositivoDTO.getUniqueId(),posicionDTO.getServerTime())){
+                    Posicion posicion = Posicion
+                            .builder()
+                            .latitude(posicionDTO.getLatitude())
+                            .dispositivo(dispositivo)
+                            .longitude(posicionDTO.getLongitude())
+                            .fechaHora(posicionDTO.getServerTime())
+                            .build();
+                    posicionRepository.save(posicion);
+                }
+
             }
         }
+    }
+    private boolean estaPosicion(String unicoId,OffsetDateTime fecha) {
+        return posicionRepository.obtenerPosicionDeDispositivoPorFecha(unicoId, fecha).isPresent();
     }
 
     private String getStartOfMonthUTC() {

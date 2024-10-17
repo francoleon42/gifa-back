@@ -67,11 +67,8 @@ public class DispositivoServiceImpl implements IDispositivoService {
             Vehiculo vehiculo = dispositivoRepository.findVehiculosDeDispositivo(dispositivo.getUnicoId())
                     .orElseThrow(() -> new NotFoundException("No se encontró el vehiculo con id: " + dispositivo.getUnicoId()));
 
-
             vehiculo.setKilometraje(kilometrajeActual);
             vehiculoRepository.save(vehiculo);
-            System.out.println(vehiculo.getModelo() + " kilometraje actualizado a: " + vehiculo.getKilometraje());
-
 
         }
     }
