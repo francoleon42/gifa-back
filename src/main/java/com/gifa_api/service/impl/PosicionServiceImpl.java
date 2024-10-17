@@ -32,19 +32,17 @@ public class PosicionServiceImpl implements IPosicionService {
     //Validar si la posición es lo suficientemente diferente de la última
     @Scheduled(fixedRate = 9999)
     private void actualizarPosicionesDeDispositivo() {
-
-        // sacar lo de por mess para que sean todas en general.
-        String from = getStartOfMonthUTC();
-        String to = getEndOfMonthUTC();
-
-
+        //Fix:
+            // sacar lo de por mess para que sean todas en general.
+            String from = getStartOfMonthUTC();
+            String to = getEndOfMonthUTC();
 
         List<ObtenerDispositivoRequestDTO> dispositivosDTO = traccarService.obtenerDispositivos();
         for (ObtenerDispositivoRequestDTO dispositivoDTO : dispositivosDTO) {
            Dispositivo dispositivo = dispositivoService.obtenerDispositivo(dispositivoDTO.getUniqueId());
             List<PosicionDispositivoDTO> posicionesDeDispositivio = traccarCliente.getPosicionDispositivoTraccar(dispositivoDTO.getId(), from, to);
             for (PosicionDispositivoDTO posicionDTO : posicionesDeDispositivio) {
-                
+
                 if(!estaPosicion(dispositivoDTO.getUniqueId(),posicionDTO.getServerTime())){
                     Posicion posicion = Posicion
                             .builder()
