@@ -8,6 +8,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.OffsetDateTime;
+
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/traccar")
@@ -28,8 +30,8 @@ public class TraccarController {
     }
 
     @GetMapping("/verInconsistenciasDeCombustible")
-    public ResponseEntity<?> verInconsistenciasDeCombustible(){
-        return new ResponseEntity<>(HttpStatus.OK);
+    public ResponseEntity<?> verInconsistenciasDeCombustible(OffsetDateTime fecha){
+        return new ResponseEntity<>(traccarService.getInconsistencias(fecha),HttpStatus.OK);
     }
 
 

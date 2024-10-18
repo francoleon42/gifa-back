@@ -4,6 +4,7 @@ import com.gifa_api.client.ITraccarCliente;
 import com.gifa_api.dto.traccar.CrearDispositivoRequestDTO;
 import com.gifa_api.dto.traccar.InconsistenciasKMconCombustiblesResponseDTO;
 import com.gifa_api.dto.traccar.ObtenerDispositivoRequestDTO;
+import com.gifa_api.dto.vehiculo.VehiculoResponseDTO;
 import com.gifa_api.model.Vehiculo;
 import com.gifa_api.repository.IDispositivoRepository;
 import com.gifa_api.repository.IVehiculoRepository;
@@ -46,7 +47,27 @@ public class TraccarServiceImpl implements ITraccarService {
             double litrosCargados = cargaCombustibleService.combustibleCargadoEn(vehiculo.getTarjeta().getNumero(), fecha);
             if(calculoDeCombustiblePorKilometro(kmRecorridos,litrosCargados)){
                 //crear DTO
-                //agregar a inconsistencias
+                VehiculoResponseDTO vehiculoResponseDTO = VehiculoResponseDTO
+                        .builder()
+                        .modelo(vehiculo.getModelo())
+                        .antiguedad(vehiculo.getAntiguedad())
+                        .estadoVehiculo(vehiculo.getEstadoVehiculo())
+                        .estadoDeHabilitacion(vehiculo.getEstadoDeHabilitacion())
+                        .fechaVencimiento(vehiculo.getFechaVencimiento())
+                        .kilometraje(vehiculo.getKilometraje())
+                        .patente(vehiculo.getPatente())
+                        .litrosDeTanque(vehiculo.getLitrosDeTanque())
+                        .build();
+
+                InconsistenciasKMconCombustiblesResponseDTO inconsistencia = InconsistenciasKMconCombustiblesResponseDTO
+                        .builder()
+                        .litrosCargados(litrosCargados)
+                        .kilometrajeRecorrido(kmRecorridos)
+//                        .nombreChofer(vehiculo.ge)
+                        .vehiculo(vehiculoResponseDTO)
+//                        .litrosInconsistente()
+                        .build();
+                inconsistencias.add(inconsistencia);
             }
         }
 
