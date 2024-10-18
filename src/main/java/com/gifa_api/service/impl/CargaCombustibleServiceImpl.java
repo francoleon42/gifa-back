@@ -17,6 +17,7 @@ import org.jsoup.select.Elements;
 
 import java.io.IOException;
 import java.time.LocalDate;
+import java.time.OffsetDateTime;
 import java.time.format.TextStyle;
 import java.util.ArrayList;
 import java.util.List;
@@ -121,7 +122,7 @@ public class CargaCombustibleServiceImpl implements ICargaCombustibleService {
     }
 
     @Override
-    public double combustibleCargadoEn(String numeroTarjeta, LocalDateTime fecha) {
+    public double combustibleCargadoEn(Integer numeroTarjeta, OffsetDateTime fecha) {
         int cargaTotal = 0;
         List<CargaCombustible> cargasCombustible = cargaCombustibleRepository.findByNumeroTarjetaAndFechaAfter(numeroTarjeta, fecha);
         for (CargaCombustible carga : cargasCombustible) {

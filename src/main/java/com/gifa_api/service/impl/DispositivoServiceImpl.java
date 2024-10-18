@@ -123,9 +123,6 @@ public class DispositivoServiceImpl implements IDispositivoService {
 //        }
 //
 //    }
-//    private boolean calculoDeCombustiblePorKilometro(int kilometrajeRecorrido,double combustibleUtilizado,LocalDateTime fecha) {
-//        int kmPorLitro = 10;
-//        return kilometrajeRecorrido < combustibleUtilizado * kmPorLitro;
-//    }
+
 
 }

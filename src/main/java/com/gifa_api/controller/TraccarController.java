@@ -32,4 +32,5 @@ public class TraccarController {
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
+
 }
