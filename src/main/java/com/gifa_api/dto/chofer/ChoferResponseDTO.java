@@ -11,6 +11,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class ChoferResponseDTO {
     Integer idChofer;
+    String patente;
     String nombre;
     Integer idVehiculo;
     String estadoChofer;
