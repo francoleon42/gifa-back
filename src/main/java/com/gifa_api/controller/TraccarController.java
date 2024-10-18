@@ -32,7 +32,6 @@ public class TraccarController {
 
     @GetMapping("/verInconsistenciasDeCombustible")
     public ResponseEntity<?> verInconsistenciasDeCombustible(@RequestBody  VerInconsistenciasRequestDTO verInconsistenciasRequestDTO){
-        System.out.println("Fecha recibida de controlador"+verInconsistenciasRequestDTO.getFecha());
         return new ResponseEntity<>(traccarService.getInconsistencias(verInconsistenciasRequestDTO.getFecha()),HttpStatus.OK);
     }
 

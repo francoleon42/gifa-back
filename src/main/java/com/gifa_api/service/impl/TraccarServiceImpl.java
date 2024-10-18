@@ -43,17 +43,13 @@ public class TraccarServiceImpl implements ITraccarService {
 
     @Override
     public List<InconsistenciasKMconCombustiblesResponseDTO> getInconsistencias(OffsetDateTime fecha) {
-        System.out.println("fecha que entra a get Inconsistencias" + fecha);
         List<InconsistenciasKMconCombustiblesResponseDTO> inconsistencias = new ArrayList<>();
         for (Vehiculo vehiculo : vehiculoRepository.findAll()) {
             int kmRecorridos = dispositivoService.calcularKmDeDispositivoDespuesDeFecha(vehiculo.getDispositivo().getUnicoId(), fecha);
             double litrosCargados = cargaCombustibleService.combustibleCargadoEn(vehiculo.getTarjeta().getNumero(), fecha);
-            System.out.println("kmRecorrdios"+ kmRecorridos);
-            System.out.println("Litros cargados"+ litrosCargados);
 
-            if(calculoDeCombustiblePorKilometro(kmRecorridos,litrosCargados)){
-                //crear DTO
-                System.out.println("adentro del if");
+            if (calculoDeCombustiblePorKilometro(kmRecorridos, litrosCargados)) {
+
                 List<String> nombreDeresponsables = choferRepository.obtenerNombreDeChofersDeVehiculo(vehiculo.getId());
                 VehiculoResponseDTO vehiculoResponseDTO = VehiculoResponseDTO
                         .builder()
@@ -86,6 +82,5 @@ public class TraccarServiceImpl implements ITraccarService {
         int kmPorLitro = 10;
         return kilometrajeRecorrido < combustibleCargado * kmPorLitro;
     }
-
 
 }
