@@ -36,5 +36,4 @@ public class TraccarController {
         return new ResponseEntity<>(traccarService.getInconsistencias(verInconsistenciasRequestDTO.getFecha()),HttpStatus.OK);
     }
 
-
 }

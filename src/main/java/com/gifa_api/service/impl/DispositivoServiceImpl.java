@@ -13,6 +13,7 @@ import com.gifa_api.service.ICargaCombustibleService;
 import com.gifa_api.service.IDispositivoService;
 import com.gifa_api.service.IPosicionService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.dao.DuplicateKeyException;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
@@ -42,7 +43,10 @@ public class DispositivoServiceImpl implements IDispositivoService {
                 .build();
         vehiculo.setDispositivo(dispositivo);
         vehiculoRepository.save(vehiculo);
+
         dispositivoRepository.save(dispositivo);
+
+
     }
 
     @Override
