@@ -8,6 +8,7 @@ import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
 
 @Data
 @Builder
@@ -16,6 +17,6 @@ import java.time.LocalDateTime;
 public class CargaCombustibleRequestDTO {
      Integer cantidadLitros;
      @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
-     LocalDateTime FechaYhora;
+     OffsetDateTime FechaYhora;
      Integer numeroTarjeta;
 }

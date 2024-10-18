@@ -136,7 +136,8 @@ public class SecurityConfig {
     private void configureFuncionesTraccarEndpoints(AuthorizeHttpRequestsConfigurer<HttpSecurity>.AuthorizationManagerRequestMatcherRegistry authRequest) {
         authRequest
                 .requestMatchers(HttpMethod.POST, "/traccar/crearDispositivo").hasRole(ADMINISTRADOR)
-                .requestMatchers(HttpMethod.GET, "/traccar/getDispositivos").hasRole(ADMINISTRADOR);
+                .requestMatchers(HttpMethod.GET, "/traccar/getDispositivos").hasRole(ADMINISTRADOR)
+                .requestMatchers(HttpMethod.GET, "/traccar/verInconsistenciasDeCombustible").hasRole(ADMINISTRADOR);
 
 
     }

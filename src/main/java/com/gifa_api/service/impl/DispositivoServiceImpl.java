@@ -40,6 +40,8 @@ public class DispositivoServiceImpl implements IDispositivoService {
                 .unicoId(crearDispositivoRequestDTO.getUniqueId())
                 .vehiculo(vehiculo)
                 .build();
+        vehiculo.setDispositivo(dispositivo);
+        vehiculoRepository.save(vehiculo);
         dispositivoRepository.save(dispositivo);
     }
 
@@ -105,24 +107,6 @@ public class DispositivoServiceImpl implements IDispositivoService {
 
         return kilometros;
     }
-
-
-//    //hacer para obtener la fecha del inicio del mes o semana lo que se quiera
-//    public  String getStartOfMonthUTC() {
-//        LocalDateTime now = LocalDateTime.now(ZoneOffset.UTC);
-//        LocalDateTime startOfMonth = now.withDayOfMonth(1).toLocalDate().atStartOfDay();
-//        return startOfMonth.toInstant(ZoneOffset.UTC).toString();
-//    }
-//    //este es override y debe retornas un dto para ver inconsistencias
-//    public void verInconsistenciasKMConCombustible(){
-//        List<Dispositivo> dispositivos = dispositivoRepository.findAll();
-//        for (Dispositivo dispositivo : dispositivos) {
-//
-////            int km = calcularDistanciaRecorrida(dispositivo.getUnicoId(),fecha);
-////            double cargaCombustible =cargaCombustibleService.combustibleCargadoEn(dispositivo.getVehiculo().getTarjeta().getNumero(),fecha);
-//        }
-//
-//    }
 
 
 }

@@ -6,6 +6,7 @@ import com.gifa_api.dto.traccar.InconsistenciasKMconCombustiblesResponseDTO;
 import com.gifa_api.dto.traccar.ObtenerDispositivoRequestDTO;
 import com.gifa_api.dto.vehiculo.VehiculoResponseDTO;
 import com.gifa_api.model.Vehiculo;
+import com.gifa_api.repository.IChoferRepository;
 import com.gifa_api.repository.IDispositivoRepository;
 import com.gifa_api.repository.IVehiculoRepository;
 import com.gifa_api.service.ICargaCombustibleService;
@@ -26,6 +27,7 @@ public class TraccarServiceImpl implements ITraccarService {
     private final ICargaCombustibleService cargaCombustibleService;
     private final IDispositivoService dispositivoService;
     private final IVehiculoRepository vehiculoRepository;
+    private final IChoferRepository choferRepository;
 
     private final IDispositivoRepository dispositivoRepository;
 
@@ -41,12 +43,18 @@ public class TraccarServiceImpl implements ITraccarService {
 
     @Override
     public List<InconsistenciasKMconCombustiblesResponseDTO> getInconsistencias(OffsetDateTime fecha) {
+        System.out.println("fecha que entra a get Inconsistencias" + fecha);
         List<InconsistenciasKMconCombustiblesResponseDTO> inconsistencias = new ArrayList<>();
         for (Vehiculo vehiculo : vehiculoRepository.findAll()) {
             int kmRecorridos = dispositivoService.calcularKmDeDispositivoDespuesDeFecha(vehiculo.getDispositivo().getUnicoId(), fecha);
             double litrosCargados = cargaCombustibleService.combustibleCargadoEn(vehiculo.getTarjeta().getNumero(), fecha);
+            System.out.println("kmRecorrdios"+ kmRecorridos);
+            System.out.println("Litros cargados"+ litrosCargados);
+
             if(calculoDeCombustiblePorKilometro(kmRecorridos,litrosCargados)){
                 //crear DTO
+                System.out.println("adentro del if");
+                List<String> nombreDeresponsables = choferRepository.obtenerNombreDeChofersDeVehiculo(vehiculo.getId());
                 VehiculoResponseDTO vehiculoResponseDTO = VehiculoResponseDTO
                         .builder()
                         .modelo(vehiculo.getModelo())
@@ -63,7 +71,7 @@ public class TraccarServiceImpl implements ITraccarService {
                         .builder()
                         .litrosCargados(litrosCargados)
                         .kilometrajeRecorrido(kmRecorridos)
-//                        .nombreChofer(vehiculo.ge)
+                        .nombresDeResponsables(nombreDeresponsables)
                         .vehiculo(vehiculoResponseDTO)
 //                        .litrosInconsistente()
                         .build();

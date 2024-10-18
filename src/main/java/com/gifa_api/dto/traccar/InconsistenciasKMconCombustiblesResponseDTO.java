@@ -6,6 +6,8 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.List;
+
 
 @Data
 @Builder
@@ -13,7 +15,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class InconsistenciasKMconCombustiblesResponseDTO {
 
-    String nombreChofer;
+    List<String> nombresDeResponsables;
     VehiculoResponseDTO vehiculo;
     Integer kilometrajeRecorrido;
     Double litrosCargados;

@@ -1,6 +1,7 @@
 package com.gifa_api.controller;
 
 import com.gifa_api.dto.traccar.CrearDispositivoRequestDTO;
+import com.gifa_api.dto.traccar.VerInconsistenciasRequestDTO;
 import com.gifa_api.service.IDispositivoService;
 import com.gifa_api.service.ITraccarService;
 import lombok.RequiredArgsConstructor;
@@ -18,7 +19,7 @@ public class TraccarController {
     private  final IDispositivoService dispositivoService;
 
     @PostMapping("/crearDispositivo")
-    public ResponseEntity<?> crearDispositivo(@RequestBody CrearDispositivoRequestDTO crearDispositivoRequestDTO,@RequestParam Integer idVehiculo){
+    public ResponseEntity<?> crearDispositivo(@RequestBody CrearDispositivoRequestDTO crearDispositivoRequestDTO,@RequestParam("idVehiculo") Integer idVehiculo){
         traccarService.crearDispositivo(crearDispositivoRequestDTO);
         dispositivoService.crearDispositivo(crearDispositivoRequestDTO,idVehiculo);
         return new ResponseEntity<>(HttpStatus.CREATED);
@@ -30,8 +31,9 @@ public class TraccarController {
     }
 
     @GetMapping("/verInconsistenciasDeCombustible")
-    public ResponseEntity<?> verInconsistenciasDeCombustible(OffsetDateTime fecha){
-        return new ResponseEntity<>(traccarService.getInconsistencias(fecha),HttpStatus.OK);
+    public ResponseEntity<?> verInconsistenciasDeCombustible(@RequestBody  VerInconsistenciasRequestDTO verInconsistenciasRequestDTO){
+        System.out.println("Fecha recibida de controlador"+verInconsistenciasRequestDTO.getFecha());
+        return new ResponseEntity<>(traccarService.getInconsistencias(verInconsistenciasRequestDTO.getFecha()),HttpStatus.OK);
     }
 
 

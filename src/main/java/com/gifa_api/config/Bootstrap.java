@@ -13,6 +13,7 @@ import java.math.BigDecimal;
 import java.time.Instant;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -130,10 +131,11 @@ public class Bootstrap implements ApplicationRunner {
 
         // Crear cargas de combustible con builder
         for (int i = 1; i <= 10; i++) {
+            OffsetDateTime fechaHora = OffsetDateTime.now().plusDays(i).plusHours(i);
             CargaCombustible carga = CargaCombustible.builder()
-                    .cantidadLitros(i * 10)
+                    .cantidadLitros(i * 50)
                     // Sumamos i días y horas para que cada registro tenga una fecha y hora diferentes
-                    .fechaHora(LocalDateTime.now().plusDays(i).plusHours(i))
+                    .fechaHora(fechaHora)
                     .precioPorLitro(100f + i)
                     .tarjeta(tarjeta1)
                     .build();
@@ -141,21 +143,21 @@ public class Bootstrap implements ApplicationRunner {
         }
 
 
-        Dispositivo dispositivo= Dispositivo
-                .builder()
-                .unicoId("1")
-                .nombre("vehiculazo")
-                .vehiculo(vehiculo1)
-                .build();
-        dispositivoRepository.save(dispositivo);
-
-        Dispositivo dispositivo2= Dispositivo
-                .builder()
-                .unicoId("2")
-                .nombre("vehiculito")
-                .vehiculo(vehiculo2)
-                .build();
-        dispositivoRepository.save(dispositivo2);
+//        Dispositivo dispositivo= Dispositivo
+//                .builder()
+//                .unicoId("1")
+//                .nombre("vehiculazo")
+//                .vehiculo(vehiculo1)
+//                .build();
+//        dispositivoRepository.save(dispositivo);
+//
+//        Dispositivo dispositivo2= Dispositivo
+//                .builder()
+//                .unicoId("2")
+//                .nombre("vehiculito")
+//                .vehiculo(vehiculo2)
+//                .build();
+//        dispositivoRepository.save(dispositivo2);
 
         // Crear ítems de inventario con builder
         ItemDeInventario item1 = ItemDeInventario.builder()
