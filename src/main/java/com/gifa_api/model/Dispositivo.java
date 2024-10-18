@@ -19,7 +19,7 @@ public class Dispositivo {
     @Column(name = "id", nullable = false)
     private Integer id;
 
-    @Column(name = "unico_id", nullable = false, length = 100,unique = true)
+    @Column(name = "unico_id", nullable = false, length = 100)
     private String unicoId;
 
     @Column(name = "nombre", nullable = false, length = 100)
