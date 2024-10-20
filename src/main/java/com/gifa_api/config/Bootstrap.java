@@ -1,5 +1,8 @@
 package com.gifa_api.config;
 
+import com.gifa_api.client.ITraccarCliente;
+import com.gifa_api.dto.traccar.CrearDispositivoRequestDTO;
+import com.gifa_api.dto.traccar.ObtenerDispositivoRequestDTO;
 import com.gifa_api.model.*;
 import com.gifa_api.repository.*;
 import com.gifa_api.utils.enums.*;
@@ -36,6 +39,7 @@ public class Bootstrap implements ApplicationRunner {
     private final IItemUsadoMantenimientoRepository itemUsadoMantenimientoRepository;
     private final IChoferRepository choferRepository;
     private final IDispositivoRepository dispositivoRepository;
+    private final ITraccarCliente traccarCliente;
 
     @Override
     public void run(ApplicationArguments args) throws Exception {
@@ -142,22 +146,37 @@ public class Bootstrap implements ApplicationRunner {
             cargaCombustibleRepository.save(carga);
         }
 
+        List<ObtenerDispositivoRequestDTO> dispositivosEnTraccar = traccarCliente.getDispositivos();
 
-//        Dispositivo dispositivo= Dispositivo
-//                .builder()
-//                .unicoId("1")
-//                .nombre("vehiculazo")
-//                .vehiculo(vehiculo1)
-//                .build();
-//        dispositivoRepository.save(dispositivo);
-//
-//        Dispositivo dispositivo2= Dispositivo
-//                .builder()
-//                .unicoId("2")
-//                .nombre("vehiculito")
-//                .vehiculo(vehiculo2)
-//                .build();
-//        dispositivoRepository.save(dispositivo2);
+        if(dispositivosEnTraccar == null || dispositivosEnTraccar.isEmpty()) {
+            List<CrearDispositivoRequestDTO> dispositivosParaCrear = List.of(
+                    CrearDispositivoRequestDTO.builder()
+                            .name("vehiculazo")
+                            .uniqueId("1")
+                            .build(),
+                    CrearDispositivoRequestDTO.builder()
+                            .name("vehiculito")
+                            .uniqueId("2")
+                            .build()
+            );
+
+            for(CrearDispositivoRequestDTO request : dispositivosParaCrear) {
+                traccarCliente.postCrearDispositivoTraccar(request);
+            }
+
+            dispositivosEnTraccar = traccarCliente.getDispositivos();
+        }
+
+        List<Vehiculo> vehiculos = vehiculoRepository.findAll();
+        for(ObtenerDispositivoRequestDTO dispositivoTraccar : dispositivosEnTraccar) {
+            Dispositivo dispositivo = Dispositivo.builder()
+                    .unicoId(dispositivoTraccar.getUniqueId())
+                    .nombre(dispositivoTraccar.getName())
+                    .vehiculo(vehiculos.get(Integer.parseInt(dispositivoTraccar.getUniqueId()) - 1))
+                    .build();
+
+            dispositivoRepository.save(dispositivo);
+        }
 
         // Crear ítems de inventario con builder
         ItemDeInventario item1 = ItemDeInventario.builder()

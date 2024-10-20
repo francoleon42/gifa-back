@@ -43,10 +43,6 @@ public class DispositivoServiceImpl implements IDispositivoService {
                 .build();
         vehiculo.setDispositivo(dispositivo);
         vehiculoRepository.save(vehiculo);
-
-        dispositivoRepository.save(dispositivo);
-
-
     }
 
     @Override
