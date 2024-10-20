@@ -30,7 +30,7 @@ public class PosicionServiceImpl implements IPosicionService {
 
     //optimizar con cache
     //Validar si la posición es lo suficientemente diferente de la última
-//    @Scheduled(fixedRate = 9999)
+    @Scheduled(fixedRate = 86400000)
     private void actualizarPosicionesDeDispositivo() {
         //Fix:
             // sacar lo de por mess para que sean todas en general.
