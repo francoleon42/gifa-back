@@ -71,15 +71,19 @@ public class ChoferServiceImpl implements IChoferService {
     public void inhabilitar(Integer idChofer) {
         Chofer chofer = choferRepository.findByIdWithVehiculo(idChofer)
                 .orElseThrow(() -> new NotFoundException("No se encontró el chofer del id " + idChofer));
+
         if(chofer.getEstadoChofer().equals(EstadoChofer.HABILITADO)) {
-            if(chofer.getVehiculo() != null) {
-                Vehiculo vehiculo = chofer.getVehiculo();
-                vehiculo.setChofers(vehiculo.getChofers().stream().filter(c -> !Objects.equals(c.getId(), idChofer)).collect(Collectors.toSet()));
-                vehiculoRepository.save(vehiculo);
-            }
+           designarVehiculosDeChoferInhabilitado(chofer);
             chofer.setEstadoChofer(EstadoChofer.INHABILITADO);
             chofer.setVehiculo(null);
             choferRepository.save(chofer);
+        }
+    }
+    private void designarVehiculosDeChoferInhabilitado(Chofer chofer){
+        if(chofer.getVehiculo() != null) {
+            Vehiculo vehiculo = chofer.getVehiculo();
+            vehiculo.setChofers(vehiculo.getChofers().stream().filter(c -> !Objects.equals(c.getId(), chofer.getId())).collect(Collectors.toSet()));
+            vehiculoRepository.save(vehiculo);
         }
     }
 

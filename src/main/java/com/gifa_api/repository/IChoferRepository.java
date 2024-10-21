@@ -15,6 +15,7 @@ public interface IChoferRepository extends JpaRepository<Chofer, Integer> {
     @Query("SELECT c.nombre FROM Chofer c WHERE c.vehiculo.id = :idVehiculo")
     public List<String> obtenerNombreDeChofersDeVehiculo(@Param("idVehiculo") Integer idVehiculo);
 
-    @EntityGraph(attributePaths = {"vehiculo"})
-    Optional<Chofer> findByIdWithVehiculo(Integer id);
+    @Query("SELECT c FROM Chofer c JOIN FETCH c.vehiculo WHERE c.id = :id")
+    Optional<Chofer> findByIdWithVehiculo(@Param("id") Integer id);
+
 }
