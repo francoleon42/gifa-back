@@ -1,7 +1,7 @@
 package com.gifa_api.controller;
 
 import com.gifa_api.dto.proveedoresYPedidos.*;
-import com.gifa_api.service.IGestorDePedidosService;
+import com.gifa_api.service.IGestorOperacionalService;
 import com.gifa_api.service.IPedidoService;
 import com.gifa_api.service.IProvedorService;
 import com.gifa_api.service.IProveedorDeItemService;
@@ -19,7 +19,7 @@ public class ProveedoresYPedidosController {
     private final IPedidoService pedidoService;
     private final IProvedorService provedorService;
     private final IProveedorDeItemService proveedorDeItemService;
-    private final IGestorDePedidosService gestorDePedidosService;
+
 
     @PostMapping("/registrarProveedor")
     public ResponseEntity<?> registrarProveedor(@RequestBody RegistroProveedorRequestDTO registroProveedorRequestDTO) {
@@ -33,26 +33,21 @@ public class ProveedoresYPedidosController {
         return ResponseEntity.ok(HttpStatus.CREATED);
     }
 
-    @GetMapping("/obtenerGestorDePedido")
-    public ResponseEntity<GestorDePedidosDTO> obtenerGestorDePedidos() {
-        return ResponseEntity.ok(gestorDePedidosService.obtenerGestorDePedidos());
+    // Pedidos
+    @PostMapping("/generarPedido")
+    public ResponseEntity<?> generarPedidoManual(@RequestBody PedidoManualDTO pedidoManualDTO){
+        pedidoService.createPedido(pedidoManualDTO.getIdItem(), pedidoManualDTO.getCantidad(),pedidoManualDTO.getMotivo());
+        return ResponseEntity.ok(HttpStatus.CREATED);
     }
 
-    @PatchMapping("/actualizarGestor")
-    public ResponseEntity<?> actualizarGestorDePedidos(@RequestBody GestorDePedidosDTO gestorDePedidosDTO){
-        gestorDePedidosService.actualizarGestorDePedidos(gestorDePedidosDTO);
-        return ResponseEntity.ok(HttpStatus.OK);
-    }
     @GetMapping("/verAll")
     public ResponseEntity<List<PedidoResponseDTO>> verPedidos(){
         return ResponseEntity.ok(pedidoService.obtenerPedidos());
     }
 
-    @PostMapping("/generarPedido")
-    public ResponseEntity<?> generarPedido(@RequestBody PedidoManualDTO pedidoManualDTO){
-        pedidoService.createPedido(pedidoManualDTO.getIdItem(), pedidoManualDTO.getCantidad(),pedidoManualDTO.getMotivo());
-        return ResponseEntity.ok(HttpStatus.CREATED);
-    }
+
+
+
 
 
 

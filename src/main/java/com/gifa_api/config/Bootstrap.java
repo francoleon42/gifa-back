@@ -34,7 +34,7 @@ public class Bootstrap implements ApplicationRunner {
     private final IMantenimientoRepository mantenimientoRepository;
     private final IProveedorRepository proveedorRepository;
     private final IProveedorDeItemRepository proveedorDeParteRepository;
-    private final IGestorDePedidosRepository igestorDePedidosRepository;
+    private final IGestorOperacionalRepository iGestorOperacionalRepository;
     private final IItemUsadoMantenimientoRepository itemUsadoMantenimientoRepository;
     private final IChoferRepository choferRepository;
     private final IDispositivoRepository dispositivoRepository;
@@ -70,13 +70,13 @@ public class Bootstrap implements ApplicationRunner {
         userRepository.saveAll(List.of(admin, operador, supervisor, gerente));
 
 
-        GestorDePedidos gestorDePedidos = GestorDePedidos.builder()
+        GestorOperacional gestorDePedidos = GestorOperacional.builder()
                 .presupuesto(100.00)
                 .cantDePedidoAutomatico(20)
                 .gerente(gerente)
                 .build();
 
-        igestorDePedidosRepository.save(gestorDePedidos);
+        iGestorOperacionalRepository.save(gestorDePedidos);
 
         // Crear tarjetas con builder
         Tarjeta tarjeta1 = Tarjeta.builder()

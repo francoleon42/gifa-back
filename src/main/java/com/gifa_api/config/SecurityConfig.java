@@ -50,6 +50,7 @@ public class SecurityConfig {
                     configureVehiculoEndpoints(authRequest);
                     configureChoferEndpoints(authRequest);
                     configurePedidoEndpoints(authRequest);
+                    configureGestorOperacionalEndpoints(authRequest);
                     configureInventarioEndpoints(authRequest);
                     configureMantenimientoEndpoints(authRequest);
                     configureFuncionesTraccarEndpoints(authRequest);
@@ -108,6 +109,12 @@ public class SecurityConfig {
                 .requestMatchers(HttpMethod.POST, "/pedido/registrarProveedor").hasRole(ADMINISTRADOR)
                 .requestMatchers(HttpMethod.POST, "/pedido/asociarProveedor").hasRole(ADMINISTRADOR)
                 .requestMatchers(HttpMethod.GET, "/pedido/verAll").hasRole(SUPERVISOR);
+    }
+
+    private void configureGestorOperacionalEndpoints(AuthorizeHttpRequestsConfigurer<HttpSecurity>.AuthorizationManagerRequestMatcherRegistry authRequest) {
+        authRequest
+                .requestMatchers(HttpMethod.PATCH, "/gestorOperacional/actualizar").hasRole(SUPERVISOR)
+                .requestMatchers(HttpMethod.GET, "/gestorOperacional/obtener").hasRole(SUPERVISOR);
     }
 
     private void configureInventarioEndpoints(AuthorizeHttpRequestsConfigurer<HttpSecurity>.AuthorizationManagerRequestMatcherRegistry authRequest) {
