@@ -28,7 +28,6 @@ public class VehiculoRepositoryTest {
                 .patente("XYZ789")
                 .antiguedad(3)
                 .kilometraje(0)
-                .litrosDeTanque(50)
                 .modelo("Modelo Y")
                 .estadoVehiculo(EstadoVehiculo.EN_REPARACION)
                 .estadoDeHabilitacion(EstadoDeHabilitacion.HABILITADO)
@@ -42,7 +41,6 @@ public class VehiculoRepositoryTest {
         assertEquals(vehiculo.getPatente(), vehiculoGuardado.getPatente());
         assertEquals(vehiculo.getAntiguedad(), vehiculoGuardado.getAntiguedad());
         assertEquals(vehiculo.getKilometraje(), vehiculoGuardado.getKilometraje());
-        assertEquals(vehiculo.getLitrosDeTanque(), vehiculoGuardado.getLitrosDeTanque());
         assertEquals(vehiculo.getModelo(), vehiculoGuardado.getModelo());
         assertEquals(vehiculo.getEstadoVehiculo(), vehiculoGuardado.getEstadoVehiculo());
         assertEquals(vehiculo.getEstadoDeHabilitacion(), vehiculoGuardado.getEstadoDeHabilitacion());

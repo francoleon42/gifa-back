@@ -65,7 +65,6 @@ public class MantenimientoMapper {
                     .patente(vehiculo.getPatente())
                     .antiguedad(vehiculo.getAntiguedad())
                     .kilometraje(vehiculo.getKilometraje())
-                    .litrosDeTanque(vehiculo.getLitrosDeTanque())
                     .modelo(vehiculo.getModelo())
                     .estadoVehiculo(vehiculo.getEstadoVehiculo().name())
                     .estadoDeHabilitacion(vehiculo.getEstadoDeHabilitacion().name())

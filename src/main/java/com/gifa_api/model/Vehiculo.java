@@ -31,9 +31,6 @@ public class Vehiculo {
     @Column(name = "kilometraje")
     private Integer kilometraje;
 
-    @Column(name = "litros_de_tanque")
-    private Integer litrosDeTanque;
-
     @Column(name = "modelo", length = 50)
     private String modelo;
 

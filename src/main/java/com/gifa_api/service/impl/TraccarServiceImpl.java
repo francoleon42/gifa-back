@@ -60,7 +60,6 @@ public class TraccarServiceImpl implements ITraccarService {
                         .fechaVencimiento(vehiculo.getFechaVencimiento())
                         .kilometraje(vehiculo.getKilometraje())
                         .patente(vehiculo.getPatente())
-                        .litrosDeTanque(vehiculo.getLitrosDeTanque())
                         .build();
 
                 InconsistenciasKMconCombustiblesResponseDTO inconsistencia = InconsistenciasKMconCombustiblesResponseDTO

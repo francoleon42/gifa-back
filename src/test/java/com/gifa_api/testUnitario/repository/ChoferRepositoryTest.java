@@ -93,7 +93,6 @@ public class ChoferRepositoryTest {
                 .patente("ABC123")
                 .antiguedad(3)
                 .kilometraje(50000)
-                .litrosDeTanque(60)
                 .modelo("Hilux")
                 .estadoDeHabilitacion(EstadoDeHabilitacion.HABILITADO)
                 .estadoVehiculo(EstadoVehiculo.REPARADO)
