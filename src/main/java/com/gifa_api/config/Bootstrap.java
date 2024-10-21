@@ -35,7 +35,6 @@ public class Bootstrap implements ApplicationRunner {
     private final IProveedorRepository proveedorRepository;
     private final IProveedorDeItemRepository proveedorDeParteRepository;
     private final IGestorDePedidosRepository igestorDePedidosRepository;
-    private final IKilometrajeVehiculoRepository kilometrajeVehiculoRepository;
     private final IItemUsadoMantenimientoRepository itemUsadoMantenimientoRepository;
     private final IChoferRepository choferRepository;
     private final IDispositivoRepository dispositivoRepository;
@@ -281,18 +280,18 @@ public class Bootstrap implements ApplicationRunner {
 
 
 
-        // Crear kilometrajes asociados a vehiculo1
-        for (int i = 1; i <= 5; i++) {
-            KilometrajeVehiculo kilometraje = KilometrajeVehiculo.builder()
-                    .kilometrosRecorridos(100 * (float) i) // Convertir i a Float
-                    .kilometroAlFinTrayecto(1000 + (100 * (float) i))
-                    .kilometroInicioTrayecto(900 + (100 * (float) i))
-                    .fechaInicio(LocalDate.now().minusDays(i))
-                    .fechaFin(LocalDate.now().minusDays(i - 1))
-                    .vehiculo(vehiculo1)
-                    .build();
-            kilometrajeVehiculoRepository.save(kilometraje);
-        }
+//        // Crear kilometrajes asociados a vehiculo1
+//        for (int i = 1; i <= 5; i++) {
+//            KilometrajeVehiculo kilometraje = KilometrajeVehiculo.builder()
+//                    .kilometrosRecorridos(100 * (float) i) // Convertir i a Float
+//                    .kilometroAlFinTrayecto(1000 + (100 * (float) i))
+//                    .kilometroInicioTrayecto(900 + (100 * (float) i))
+//                    .fechaInicio(LocalDate.now().minusDays(i))
+//                    .fechaFin(LocalDate.now().minusDays(i - 1))
+//                    .vehiculo(vehiculo1)
+//                    .build();
+//            kilometrajeVehiculoRepository.save(kilometraje);
+//        }
 
     }
 }

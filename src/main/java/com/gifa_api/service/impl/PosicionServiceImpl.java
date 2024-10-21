@@ -3,10 +3,8 @@ package com.gifa_api.service.impl;
 import com.gifa_api.client.ITraccarCliente;
 import com.gifa_api.dto.traccar.ObtenerDispositivoRequestDTO;
 import com.gifa_api.dto.traccar.PosicionDispositivoDTO;
-import com.gifa_api.exception.NotFoundException;
 import com.gifa_api.model.Dispositivo;
 import com.gifa_api.model.Posicion;
-import com.gifa_api.repository.IDispositivoRepository;
 import com.gifa_api.repository.IPosicionRepository;
 import com.gifa_api.service.IDispositivoService;
 import com.gifa_api.service.IPosicionService;
@@ -30,7 +28,7 @@ public class PosicionServiceImpl implements IPosicionService {
 
     //optimizar con cache
     //Validar si la posición es lo suficientemente diferente de la última
-    @Scheduled(fixedRate = 86400000)
+    @Scheduled(fixedRate = 8640)
     private void actualizarPosicionesDeDispositivo() {
         //Fix:
             // sacar lo de por mess para que sean todas en general.
@@ -52,6 +50,8 @@ public class PosicionServiceImpl implements IPosicionService {
                             .fechaHora(posicionDTO.getServerTime())
                             .build();
                     posicionRepository.save(posicion);
+
+
                 }
 
             }

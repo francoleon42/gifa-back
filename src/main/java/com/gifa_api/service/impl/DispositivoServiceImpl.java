@@ -3,33 +3,28 @@ package com.gifa_api.service.impl;
 import com.gifa_api.dto.traccar.CrearDispositivoRequestDTO;
 import com.gifa_api.exception.NotFoundException;
 import com.gifa_api.model.Dispositivo;
+import com.gifa_api.model.KilometrajeVehiculo;
 import com.gifa_api.model.Posicion;
 import com.gifa_api.model.Vehiculo;
 import com.gifa_api.repository.IDispositivoRepository;
 import com.gifa_api.repository.IPosicionRepository;
-import com.gifa_api.repository.IUsuarioRepository;
 import com.gifa_api.repository.IVehiculoRepository;
-import com.gifa_api.service.ICargaCombustibleService;
 import com.gifa_api.service.IDispositivoService;
-import com.gifa_api.service.IPosicionService;
+import com.gifa_api.service.IKilometrajeVehiculoService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.dao.DuplicateKeyException;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDateTime;
 import java.time.OffsetDateTime;
-import java.time.ZoneOffset;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
 public class DispositivoServiceImpl implements IDispositivoService {
     private final IDispositivoRepository dispositivoRepository;
     private final IVehiculoRepository vehiculoRepository;
-    //    private final IPosicionService posicionService;
     private final IPosicionRepository posicionRepository;
+    private final IKilometrajeVehiculoService kilometrajeVehiculoService;
 
     @Override
     public void crearDispositivo(CrearDispositivoRequestDTO crearDispositivoRequestDTO, Integer idVehiculo) {
@@ -64,14 +59,16 @@ public class DispositivoServiceImpl implements IDispositivoService {
     private void actualizarKilometrajeDeVehiculos() {
         for (Dispositivo dispositivo : dispositivoRepository.findAll()) {
             List<Posicion> posisicionesDeVehiculo = posicionRepository.findByUnicoId(dispositivo.getUnicoId());
-            int kilometrajeActual = formulaDeHaversine(posisicionesDeVehiculo);
+            int kilometrajeRecorridoActual = formulaDeHaversine(posisicionesDeVehiculo);
 
             Vehiculo vehiculo = dispositivoRepository.findVehiculosDeDispositivo(dispositivo.getUnicoId())
                     .orElseThrow(() -> new NotFoundException("No se encontró el vehiculo con id: " + dispositivo.getUnicoId()));
-
-            vehiculo.setKilometraje(kilometrajeActual);
-            vehiculoRepository.save(vehiculo);
-
+            int kilometrosAgregados = kilometrajeRecorridoActual - vehiculo.getKilometraje();
+            if( kilometrosAgregados  > 0){
+                kilometrajeVehiculoService.addKilometrajeVehiculo(kilometrosAgregados,OffsetDateTime.now(),vehiculo.getId());
+                vehiculo.setKilometraje(kilometrajeRecorridoActual);
+                vehiculoRepository.save(vehiculo);
+            }
         }
     }
 

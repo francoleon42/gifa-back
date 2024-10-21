@@ -4,7 +4,6 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.*;
 import lombok.*;
 
-import java.time.LocalDate;
 import java.time.OffsetDateTime;
 
 @Getter
@@ -21,7 +20,7 @@ public class KilometrajeVehiculo {
     private Integer id;
 
     @Column(name = "kilometros_recorridos")
-    private Float kilometrosRecorridos;
+    private Integer kilometrosRecorridos;
 
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
     @Column(name = "fecha_inicio")
