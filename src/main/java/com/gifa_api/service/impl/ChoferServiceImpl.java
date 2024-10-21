@@ -18,6 +18,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Objects;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -67,10 +69,16 @@ public class ChoferServiceImpl implements IChoferService {
 
     @Override
     public void inhabilitar(Integer idChofer) {
-        Chofer chofer = choferRepository.findById(idChofer)
+        Chofer chofer = choferRepository.findByIdWithVehiculo(idChofer)
                 .orElseThrow(() -> new NotFoundException("No se encontró el chofer del id " + idChofer));
         if(chofer.getEstadoChofer().equals(EstadoChofer.HABILITADO)) {
+            if(chofer.getVehiculo() != null) {
+                Vehiculo vehiculo = chofer.getVehiculo();
+                vehiculo.setChofers(vehiculo.getChofers().stream().filter(c -> !Objects.equals(c.getId(), idChofer)).collect(Collectors.toSet()));
+                vehiculoRepository.save(vehiculo);
+            }
             chofer.setEstadoChofer(EstadoChofer.INHABILITADO);
+            chofer.setVehiculo(null);
             choferRepository.save(chofer);
         }
     }
