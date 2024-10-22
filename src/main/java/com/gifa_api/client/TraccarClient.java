@@ -5,6 +5,7 @@ import com.gifa_api.dto.traccar.CrearDispositivoResponseDTO;
 import com.gifa_api.dto.traccar.ObtenerDispositivoRequestDTO;
 import com.gifa_api.dto.traccar.PosicionDispositivoDTO;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
@@ -25,9 +26,14 @@ public class TraccarClient implements ITraccarCliente {
 
     private final RestTemplate restTemplate;
 
-    private final String username = "gifaemail@email.com";
-    private final String password = "123456";
-    private final String baseUrl = "http://54.227.167.207:8082/api";
+    @Value("${apptraccar.email.username}")
+    private  String username;
+
+    @Value("${apptraccar.email.password}")
+    private  String password;
+
+    @Value("${apptraccar.api.base-url}")
+    private String baseUrl;
 
     @Override
     public CrearDispositivoResponseDTO postCrearDispositivoTraccar(CrearDispositivoRequestDTO request) {
