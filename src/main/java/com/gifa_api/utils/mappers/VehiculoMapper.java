@@ -35,7 +35,6 @@ public class VehiculoMapper {
                 .patente(vehiculo.getPatente())
                 .antiguedad(vehiculo.getAntiguedad())
                 .kilometraje(vehiculo.getKilometraje())
-                .litrosDeTanque(vehiculo.getLitrosDeTanque())
                 .modelo(vehiculo.getModelo())
                 .estadoVehiculo(vehiculo.getEstadoVehiculo())
                 .estadoDeHabilitacion(vehiculo.getEstadoDeHabilitacion())

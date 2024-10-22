@@ -31,9 +31,6 @@ public class Vehiculo {
     @Column(name = "kilometraje")
     private Integer kilometraje;
 
-    @Column(name = "litros_de_tanque")
-    private Integer litrosDeTanque;
-
     @Column(name = "modelo", length = 50)
     private String modelo;
 
@@ -65,7 +62,7 @@ public class Vehiculo {
     @JoinColumn(name = "tarjeta_id")
     private Tarjeta tarjeta;
 
-    @OneToOne(fetch = FetchType.LAZY)
+    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "dispositivo_id")
     private Dispositivo dispositivo;
 

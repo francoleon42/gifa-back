@@ -2,23 +2,21 @@ package com.gifa_api.service.impl;
 
 import com.gifa_api.client.ITraccarCliente;
 import com.gifa_api.dto.traccar.CrearDispositivoRequestDTO;
+import com.gifa_api.dto.traccar.InconsistenciasKMconCombustiblesResponseDTO;
 import com.gifa_api.dto.traccar.ObtenerDispositivoRequestDTO;
-import com.gifa_api.dto.traccar.PosicionDispositivoDTO;
-import com.gifa_api.exception.NotFoundException;
-import com.gifa_api.model.Dispositivo;
-import com.gifa_api.model.ItemDeInventario;
-import com.gifa_api.model.Posicion;
+import com.gifa_api.dto.vehiculo.VehiculoResponseDTO;
+import com.gifa_api.model.Vehiculo;
+import com.gifa_api.repository.IChoferRepository;
 import com.gifa_api.repository.IDispositivoRepository;
-import com.gifa_api.repository.IPosicionRepository;
+import com.gifa_api.repository.IVehiculoRepository;
+import com.gifa_api.service.ICargaCombustibleService;
+import com.gifa_api.service.IDispositivoService;
 import com.gifa_api.service.ITraccarService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDateTime;
-import java.time.ZoneOffset;
-import java.time.format.DateTimeFormatter;
-import java.util.Arrays;
+import java.time.OffsetDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -26,7 +24,11 @@ import java.util.List;
 public class TraccarServiceImpl implements ITraccarService {
 
     private final ITraccarCliente traccarCliente;
-    private final IPosicionRepository posicionRepository;
+    private final ICargaCombustibleService cargaCombustibleService;
+    private final IDispositivoService dispositivoService;
+    private final IVehiculoRepository vehiculoRepository;
+    private final IChoferRepository choferRepository;
+
     private final IDispositivoRepository dispositivoRepository;
 
     @Override
@@ -39,54 +41,45 @@ public class TraccarServiceImpl implements ITraccarService {
         return traccarCliente.getDispositivos();
     }
 
+    @Override
+    public List<InconsistenciasKMconCombustiblesResponseDTO> getInconsistencias(OffsetDateTime fecha) {
+        List<InconsistenciasKMconCombustiblesResponseDTO> inconsistencias = new ArrayList<>();
+        for (Vehiculo vehiculo : vehiculoRepository.findAll()) {
+            int kmRecorridos = dispositivoService.calcularKmDeDispositivoDespuesDeFecha(vehiculo.getDispositivo().getUnicoId(), fecha);
+            double litrosCargados = cargaCombustibleService.combustibleCargadoEn(vehiculo.getTarjeta().getNumero(), fecha);
 
-    public  String getStartOfMonthUTC() {
-        LocalDateTime now = LocalDateTime.now(ZoneOffset.UTC);
-        LocalDateTime startOfMonth = now.withDayOfMonth(1).toLocalDate().atStartOfDay();
-        return startOfMonth.toInstant(ZoneOffset.UTC).toString();
-    }
+            if (calculoDeCombustiblePorKilometro(kmRecorridos, litrosCargados)) {
 
-    private  String getEndOfMonthUTC() {
-        LocalDateTime now = LocalDateTime.now(ZoneOffset.UTC);
-        LocalDateTime endOfMonth = now.withDayOfMonth(now.toLocalDate().lengthOfMonth())
-                .withHour(23)
-                .withMinute(59)
-                .withSecond(59);
-        return endOfMonth.toInstant(ZoneOffset.UTC).toString();
-    }
-
-    // IMPORTANTE
-    // mover a posicion service
-    //optimizar con cache
-    // y que agregue cada una diferencia muy notable de longitud y latitud
-    @Scheduled(fixedRate = 9999)
-    private void actualizarPosicionesDeDispositivo() {
-
-        // sacar lo de por mess para que sean todas en general.
-        String from = getStartOfMonthUTC();
-        String to = getEndOfMonthUTC();
-
-        List<ObtenerDispositivoRequestDTO> dispositivosDTO = traccarCliente.getDispositivos();
-        for (ObtenerDispositivoRequestDTO dispositivoDTO : dispositivosDTO) {
-            Dispositivo dispositivo = dispositivoRepository.findByUnicoId(dispositivoDTO.getUniqueId())
-                    .orElseThrow(() -> new NotFoundException("No se encontró el dispositivo con id: "));
-            List<PosicionDispositivoDTO> posicionesDeDispositivio = traccarCliente.getPosicionDispositivoTraccar(dispositivoDTO.getId(), from, to);
-            for (PosicionDispositivoDTO posicionDTO : posicionesDeDispositivio) {
-
-                Posicion posicion = Posicion
+                List<String> nombreDeresponsables = choferRepository.obtenerNombreDeChofersDeVehiculo(vehiculo.getId());
+                VehiculoResponseDTO vehiculoResponseDTO = VehiculoResponseDTO
                         .builder()
-                        .latitude(posicionDTO.getLatitude())
-                        .dispositivo(dispositivo)
-                        .longitude(posicionDTO.getLongitude())
-                        .fechaHora(posicionDTO.getServerTime())
+                        .modelo(vehiculo.getModelo())
+                        .antiguedad(vehiculo.getAntiguedad())
+                        .estadoVehiculo(vehiculo.getEstadoVehiculo())
+                        .estadoDeHabilitacion(vehiculo.getEstadoDeHabilitacion())
+                        .fechaVencimiento(vehiculo.getFechaVencimiento())
+                        .kilometraje(vehiculo.getKilometraje())
+                        .patente(vehiculo.getPatente())
                         .build();
-                posicionRepository.save(posicion);
+
+                InconsistenciasKMconCombustiblesResponseDTO inconsistencia = InconsistenciasKMconCombustiblesResponseDTO
+                        .builder()
+                        .litrosCargados(litrosCargados)
+                        .kilometrajeRecorrido(kmRecorridos)
+                        .nombresDeResponsables(nombreDeresponsables)
+                        .vehiculo(vehiculoResponseDTO)
+//                        .litrosInconsistente()
+                        .build();
+                inconsistencias.add(inconsistencia);
             }
         }
 
+        return inconsistencias;
     }
 
-
-
+    private boolean calculoDeCombustiblePorKilometro(int kilometrajeRecorrido, double combustibleCargado) {
+        int kmPorLitro = 10;
+        return kilometrajeRecorrido < combustibleCargado * kmPorLitro;
+    }
 
 }

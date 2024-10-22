@@ -5,7 +5,7 @@ import com.gifa_api.exception.NotFoundException;
 import com.gifa_api.model.*;
 import com.gifa_api.repository.IPedidoRepository;
 import com.gifa_api.repository.ItemDeInventarioRepository;
-import com.gifa_api.service.IGestorDePedidosService;
+import com.gifa_api.service.IGestorOperacionalService;
 import com.gifa_api.service.IPedidoService;
 import com.gifa_api.service.IProveedorDeItemService;
 import com.gifa_api.utils.enums.EstadoPedido;
@@ -22,7 +22,7 @@ import java.util.List;
 public class PedidoServiceImpl implements IPedidoService {
     private final IPedidoRepository pedidoRepository;
     private final ItemDeInventarioRepository itemDeInventarioRepository;
-    private final IGestorDePedidosService gestorDePedidosService;
+    private final IGestorOperacionalService gestorOperacionalService;
     private final IProveedorDeItemService proveedorDeItemService;
     private final PedidosMapper pedidosMapper;
 
@@ -48,14 +48,14 @@ public class PedidoServiceImpl implements IPedidoService {
     public void hacerPedidos() {
 
         List<ItemDeInventario> itemsDeInventario = itemDeInventarioRepository.findAll();
-        GestorDePedidos gestorDePedidos = gestorDePedidosService.getGestorDePedidos();
+        GestorOperacional  gestorOperacional  = gestorOperacionalService.getGestorOperacional();
 
         for (ItemDeInventario item : itemsDeInventario) {
             if (item.getUmbral() > item.getStock()) {
-                int cantidad = gestorDePedidos.getCantDePedidoAutomatico() + item.getUmbral();
+                int cantidad = item.getCantCompraAutomatica() + item.getUmbral();
 
                 ProveedorDeItem proveerDeItemMasEconomico = proveedorDeItemService.proveedorMasEconomico(item.getId());
-                if ((proveerDeItemMasEconomico.getPrecio() * cantidad) < gestorDePedidos.getPresupuesto()) {
+                if ((proveerDeItemMasEconomico.getPrecio() * cantidad) < gestorOperacional.getPresupuesto()) {
 
                     if (!existeElPedidoByItemId(item.getId())) {
                         createPedido(item.getId(), cantidad, "Solcitud de stock automatica");

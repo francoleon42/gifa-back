@@ -1,12 +1,10 @@
 package com.gifa_api.service.impl;
 
 import com.gifa_api.dto.chofer.AsignarChoferDTO;
-import com.gifa_api.dto.chofer.ChoferEditDTO;
 import com.gifa_api.dto.chofer.ChoferRegistroDTO;
 import com.gifa_api.dto.chofer.ChoferResponseDTO;
 import com.gifa_api.exception.NotFoundException;
 import com.gifa_api.model.Chofer;
-import com.gifa_api.model.GestorDePedidos;
 import com.gifa_api.model.Usuario;
 import com.gifa_api.model.Vehiculo;
 import com.gifa_api.repository.IChoferRepository;
@@ -20,6 +18,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Objects;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -58,9 +58,9 @@ public class ChoferServiceImpl implements IChoferService {
     }
 
     @Override
-    public void habilitar(ChoferEditDTO choferEditDTO) {
-        Chofer chofer = choferRepository.findById(choferEditDTO.getId_chofer())
-                .orElseThrow(() -> new NotFoundException("No se encontró el chofer del id " + choferEditDTO.getId_chofer()));
+    public void habilitar(Integer idChofer) {
+        Chofer chofer = choferRepository.findById(idChofer)
+                .orElseThrow(() -> new NotFoundException("No se encontró el chofer del id " + idChofer));
         if(chofer.getEstadoChofer().equals(EstadoChofer.INHABILITADO)) {
             chofer.setEstadoChofer(EstadoChofer.HABILITADO);
         }
@@ -68,12 +68,22 @@ public class ChoferServiceImpl implements IChoferService {
     }
 
     @Override
-    public void inhabilitar(ChoferEditDTO choferEditDTO) {
-        Chofer chofer = choferRepository.findById(choferEditDTO.getId_chofer())
-                .orElseThrow(() -> new NotFoundException("No se encontró el chofer del id " + choferEditDTO.getId_chofer()));
+    public void inhabilitar(Integer idChofer) {
+        Chofer chofer = choferRepository.findByIdWithVehiculo(idChofer)
+                .orElseThrow(() -> new NotFoundException("No se encontró el chofer del id " + idChofer));
+
         if(chofer.getEstadoChofer().equals(EstadoChofer.HABILITADO)) {
+           designarVehiculosDeChoferInhabilitado(chofer);
             chofer.setEstadoChofer(EstadoChofer.INHABILITADO);
+            chofer.setVehiculo(null);
             choferRepository.save(chofer);
+        }
+    }
+    private void designarVehiculosDeChoferInhabilitado(Chofer chofer){
+        if(chofer.getVehiculo() != null) {
+            Vehiculo vehiculo = chofer.getVehiculo();
+            vehiculo.setChofers(vehiculo.getChofers().stream().filter(c -> !Objects.equals(c.getId(), chofer.getId())).collect(Collectors.toSet()));
+            vehiculoRepository.save(vehiculo);
         }
     }
 

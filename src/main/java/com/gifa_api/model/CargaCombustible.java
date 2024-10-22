@@ -6,6 +6,7 @@ import lombok.*;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
 
 @Getter
 @Setter
@@ -25,7 +26,7 @@ public class CargaCombustible {
 
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
     @Column(name = "fecha_hora")
-    private LocalDateTime fechaHora;
+    private OffsetDateTime fechaHora;
 
     @Column(name = "precio_por_litro")
     private Float precioPorLitro;

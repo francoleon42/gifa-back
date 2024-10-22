@@ -4,7 +4,7 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.*;
 import lombok.*;
 
-import java.time.LocalDate;
+import java.time.OffsetDateTime;
 
 @Getter
 @Setter
@@ -20,21 +20,11 @@ public class KilometrajeVehiculo {
     private Integer id;
 
     @Column(name = "kilometros_recorridos")
-    private Float kilometrosRecorridos;
-
-    @Column(name = "kilometro_al_fin_trayecto")
-    private Float kilometroAlFinTrayecto;
-
-    @Column(name = "kilometro_inicio_trayecto")
-    private Float kilometroInicioTrayecto;
+    private Integer kilometrosRecorridos;
 
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
     @Column(name = "fecha_inicio")
-    private LocalDate fechaInicio;
-
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
-    @Column(name = "fecha_fin")
-    private LocalDate fechaFin;
+    private OffsetDateTime fecha;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "vehiculo_id")
