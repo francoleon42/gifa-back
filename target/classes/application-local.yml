@@ -11,3 +11,10 @@ spring:
     database-platform: org.hibernate.dialect.H2Dialect
     hibernate:
       ddl-auto: update
+
+apptraccar:
+  email:
+    username: gifaemail@email.com
+    password: 123456
+  api:
+    base-url: http://54.227.167.207:8082/api
