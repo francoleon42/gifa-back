@@ -52,7 +52,7 @@ public class PedidoServiceImpl implements IPedidoService {
 
         for (ItemDeInventario item : itemsDeInventario) {
             if (item.getUmbral() > item.getStock()) {
-                int cantidad = gestorOperacional.getCantDePedidoAutomatico() + item.getUmbral();
+                int cantidad = item.getCantCompraAutomatica() + item.getUmbral();
 
                 ProveedorDeItem proveerDeItemMasEconomico = proveedorDeItemService.proveedorMasEconomico(item.getId());
                 if ((proveerDeItemMasEconomico.getPrecio() * cantidad) < gestorOperacional.getPresupuesto()) {

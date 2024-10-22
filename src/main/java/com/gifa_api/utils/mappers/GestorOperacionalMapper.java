@@ -22,7 +22,6 @@ public class GestorOperacionalMapper {
 
         GestorOperacionalDTO gestorDePedidosDTO = GestorOperacionalDTO
                  .builder()
-                 .cantDePedidoAutomatico(gestorDePedidos.getCantDePedidoAutomatico())
                  .presupuesto(gestorDePedidos.getPresupuesto())
                  .build();
         return  gestorDePedidosDTO;

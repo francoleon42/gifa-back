@@ -38,7 +38,6 @@ public class GestorOperacionalServiceImpl implements IGestorOperacionalService {
     @Override
     public void actualizarGestorOperacional(GestorOperacionalDTO gestorDePedidosDTO) {
         GestorOperacional gestorOperacional = getGestorOperacional();
-        gestorOperacional.setCantDePedidoAutomatico(gestorDePedidosDTO.getCantDePedidoAutomatico());
         gestorOperacional.setPresupuesto(gestorDePedidosDTO.getPresupuesto());
         gestorOperacionalRepository.save(gestorOperacional);
     }

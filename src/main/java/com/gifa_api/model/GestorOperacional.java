@@ -21,11 +21,4 @@ public class GestorOperacional  {
     @Column(name = "presupuesto")
     private Double presupuesto;
 
-    @Column(name="cant_de_pedido_automatico")
-    private Integer cantDePedidoAutomatico;
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "gerente_id")
-    private Usuario gerente;
-
 }

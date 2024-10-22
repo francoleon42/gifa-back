@@ -11,5 +11,4 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class GestorOperacionalDTO {
     Double presupuesto;
-    Integer cantDePedidoAutomatico;
 }
