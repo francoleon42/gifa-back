@@ -30,15 +30,11 @@ public class PosicionServiceImpl implements IPosicionService {
     //Validar si la posición es lo suficientemente diferente de la última
     @Scheduled(fixedRate = 8640)
     private void actualizarPosicionesDeDispositivo() {
-        //Fix:
-            // sacar lo de por mess para que sean todas en general.
-            String from = getStartOfMonthUTC();
-            String to = getEndOfMonthUTC();
 
         List<ObtenerDispositivoRequestDTO> dispositivosDTO = traccarService.obtenerDispositivos();
         for (ObtenerDispositivoRequestDTO dispositivoDTO : dispositivosDTO) {
            Dispositivo dispositivo = dispositivoService.obtenerDispositivo(dispositivoDTO.getUniqueId());
-            List<PosicionDispositivoDTO> posicionesDeDispositivio = traccarCliente.getPosicionDispositivoTraccar(dispositivoDTO.getId(), from, to);
+            List<PosicionDispositivoDTO> posicionesDeDispositivio = traccarCliente.getPosicionDispositivoTraccar(dispositivoDTO.getId());
             for (PosicionDispositivoDTO posicionDTO : posicionesDeDispositivio) {
 
                 if(!estaPosicion(dispositivoDTO.getUniqueId(),posicionDTO.getServerTime())){
@@ -59,20 +55,6 @@ public class PosicionServiceImpl implements IPosicionService {
     }
     private boolean estaPosicion(String unicoId,OffsetDateTime fecha) {
         return posicionRepository.obtenerPosicionDeDispositivoPorFecha(unicoId, fecha).isPresent();
-    }
-
-    private String getStartOfMonthUTC() {
-        LocalDateTime now = LocalDateTime.now(ZoneOffset.UTC);
-        LocalDateTime startOfMonth = now.withDayOfMonth(1).toLocalDate().atStartOfDay();
-        return startOfMonth.toInstant(ZoneOffset.UTC).toString();
-    }
-    private String getEndOfMonthUTC() {
-        LocalDateTime now = LocalDateTime.now(ZoneOffset.UTC);
-        LocalDateTime endOfMonth = now.withDayOfMonth(now.toLocalDate().lengthOfMonth())
-                .withHour(23)
-                .withMinute(59)
-                .withSecond(59);
-        return endOfMonth.toInstant(ZoneOffset.UTC).toString();
     }
 
     @Override

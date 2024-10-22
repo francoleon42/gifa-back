@@ -53,19 +53,13 @@ public class TraccarClient implements ITraccarCliente {
     }
 
     @Override
-    public List<PosicionDispositivoDTO> getPosicionDispositivoTraccar(Integer deviceId, String from, String to) {
+    public List<PosicionDispositivoDTO> getPosicionDispositivoTraccar(Integer deviceId) {
         HttpHeaders headers = getHeaders();
         HttpEntity<CrearDispositivoRequestDTO> entity = new HttpEntity<>(headers);
 
         UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(baseUrl + "/positions");
         if (deviceId != null) {
             builder.queryParam("deviceId", deviceId);
-        }
-        if (from != null && !from.isEmpty()) {
-            builder.queryParam("from", from);
-        }
-        if (to != null && !to.isEmpty()) {
-            builder.queryParam("to", to);
         }
 
         ResponseEntity<PosicionDispositivoDTO[]> response = restTemplate.exchange(
