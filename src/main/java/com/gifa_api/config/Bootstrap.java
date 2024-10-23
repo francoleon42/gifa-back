@@ -71,7 +71,7 @@ public class Bootstrap implements ApplicationRunner {
 
 
         GestorOperacional gestorDePedidos = GestorOperacional.builder()
-                .presupuesto(100.00)
+                .presupuesto(9999999.00)
                 .build();
 
         iGestorOperacionalRepository.save(gestorDePedidos);

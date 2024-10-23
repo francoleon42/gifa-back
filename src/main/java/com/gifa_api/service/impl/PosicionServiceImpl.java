@@ -30,7 +30,7 @@ public class PosicionServiceImpl implements IPosicionService {
     private final ITraccarService traccarService;
     private final IDispositivoService dispositivoService;
 
-    //@Scheduled(fixedRate = 8640)
+    @Scheduled(fixedRate = 8640)
     private void actualizarPosicionesDeDispositivo() {
 
         List<ObtenerDispositivoRequestDTO> dispositivosDTO = traccarService.obtenerDispositivos();

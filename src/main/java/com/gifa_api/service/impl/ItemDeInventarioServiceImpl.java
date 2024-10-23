@@ -7,6 +7,7 @@ import com.gifa_api.exception.NotFoundException;
 import com.gifa_api.model.ItemDeInventario;
 import com.gifa_api.repository.ItemDeInventarioRepository;
 import com.gifa_api.service.IItemDeIventarioService;
+import com.gifa_api.service.IPedidoService;
 import com.gifa_api.utils.mappers.ItemDeInventarioMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -21,6 +22,7 @@ public class ItemDeInventarioServiceImpl implements IItemDeIventarioService {
 
     private final ItemDeInventarioRepository itemDeInventarioRepository;
     private final ItemDeInventarioMapper itemDeInventarioMapper;
+    private final IPedidoService pedidoService;
 
     @Override
     public void registrar(ItemDeInventarioRequestDTO itemDeInventarioDTO) {
@@ -44,9 +46,11 @@ public class ItemDeInventarioServiceImpl implements IItemDeIventarioService {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Stock insuficiente");
         }
         itemDeInventarioRepository.save(itemIventario);
-
+        revisarNecesidadDePedido(itemIventario.getId());
     }
-
+    private void revisarNecesidadDePedido(Integer idItemDeInventario){
+        pedidoService.hacerPedidos(idItemDeInventario);
+    }
     @Override
     public ItemDeInventario obtenerById(Integer id) {
          ItemDeInventario itemIventario = itemDeInventarioRepository.findById(id)

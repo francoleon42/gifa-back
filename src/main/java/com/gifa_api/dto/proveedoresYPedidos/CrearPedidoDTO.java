@@ -11,7 +11,7 @@ import java.time.LocalDate;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class PedidoManualDTO {
+public class CrearPedidoDTO {
     Integer cantidad;
     String motivo;
     Integer idItem;

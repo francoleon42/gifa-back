@@ -1,12 +1,14 @@
 package com.gifa_api.service;
 
-import com.gifa_api.dto.proveedoresYPedidos.PedidoManualDTO;
+import com.gifa_api.dto.proveedoresYPedidos.CrearPedidoDTO;
+
 import com.gifa_api.dto.proveedoresYPedidos.PedidoResponseDTO;
 
 import java.util.List;
 
 public interface IPedidoService {
 
-    void createPedido(PedidoManualDTO pedidoManualDTO);
+    void createPedido(CrearPedidoDTO pedidoManualDTO);
     List<PedidoResponseDTO> obtenerPedidos();
+    void hacerPedidos(Integer idItem);
 }
