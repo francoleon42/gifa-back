@@ -37,7 +37,7 @@ public class ProvedorServiceImpl implements IProvedorService {
                 .orElseThrow(() -> new NotFoundException("No se encontró el proveedor con id: " + id));
     }
 
-    @Scheduled(fixedRate = 86400000)
+    @Scheduled(fixedRate = 86400)
     public void simulacionDeAceptacionORechazoProovedor() {
         List<Pedido> pedidos = pedidoRepository.findPedidosByEstado(EstadoPedido.PENDIENTE);
         for (Pedido pedido : pedidos) {

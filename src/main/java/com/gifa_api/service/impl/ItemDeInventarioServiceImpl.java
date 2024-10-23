@@ -43,7 +43,7 @@ public class ItemDeInventarioServiceImpl implements IItemDeIventarioService {
         if(0 <=  itemIventario.getStock() - utilizarItemDeInventarioDTO.getCantidadADisminuir() ){
             itemIventario.desminuirStock(utilizarItemDeInventarioDTO.getCantidadADisminuir());
         }else{
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Stock insuficiente");
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Stock insuficiente esta en cero");
         }
         itemDeInventarioRepository.save(itemIventario);
         revisarNecesidadDePedido(itemIventario.getId());

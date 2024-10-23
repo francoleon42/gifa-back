@@ -46,37 +46,24 @@ public class PedidoServiceImpl implements IPedidoService {
 
     @Override
     public void hacerPedidos(Integer idItem) {
-        System.out.println("entre hacer pedidos");
         Optional<ItemDeInventario> itemOptional = itemDeInventarioRepository.findById(idItem);
         ItemDeInventario item = itemOptional.get();
         GestorOperacional gestorOperacional = gestorOperacionalService.getGestorOperacional();
+        int cantidad = item.getCantCompraAutomatica() + item.getUmbral();
+        ProveedorDeItem proveerDeItemMasEconomico = proveedorDeItemService.proveedorMasEconomico(item.getId());
 
         if (item.getUmbral() > item.getStock()) {
-            System.out.println("entre hacer pedidos primer if ");
-            int cantidad = item.getCantCompraAutomatica() + item.getUmbral();
-
-            ProveedorDeItem proveerDeItemMasEconomico = proveedorDeItemService.proveedorMasEconomico(item.getId());
             if ((proveerDeItemMasEconomico.getPrecio() * cantidad) < gestorOperacional.getPresupuesto()) {
-                System.out.println("entre hacer pedidos segundo  if ");
-                System.out.println("existe pedido ?? "+ existeElPedidoByItemId(item.getId()));
-                if (existeElPedidoByItemId(item.getId())) {
-                    System.out.println("entre hacer pedidos tercer  if ");
-                    CrearPedidoDTO pedidoManualDTO = CrearPedidoDTO
-                            .builder()
-                            .idItem(item.getId())
-                            .cantidad(cantidad)
-                            .motivo("Solcitud de stock automatica")
-                            .build();
-                    createPedido(pedidoManualDTO);
-                }
+                CrearPedidoDTO pedidoManualDTO = CrearPedidoDTO
+                        .builder()
+                        .idItem(item.getId())
+                        .cantidad(cantidad)
+                        .motivo("Solcitud de stock automatica")
+                        .build();
+                createPedido(pedidoManualDTO);
 
             }
         }
-    }
-
-    // modificar
-    public boolean existeElPedidoByItemId(Integer idItem) {
-        return pedidoRepository.existsByItemId(idItem);
     }
 
     @Override
