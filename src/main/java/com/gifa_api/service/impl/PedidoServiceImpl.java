@@ -1,5 +1,6 @@
 package com.gifa_api.service.impl;
 
+import com.gifa_api.dto.proveedoresYPedidos.PedidoManualDTO;
 import com.gifa_api.dto.proveedoresYPedidos.PedidoResponseDTO;
 import com.gifa_api.exception.NotFoundException;
 import com.gifa_api.model.*;
@@ -27,16 +28,16 @@ public class PedidoServiceImpl implements IPedidoService {
     private final PedidosMapper pedidosMapper;
 
     @Override
-    public void createPedido(Integer idItem, Integer cantidad,String motivo) {
-        ItemDeInventario item = itemDeInventarioRepository.findById(idItem)
-                .orElseThrow(() -> new NotFoundException("No se encontró el item con id: " + idItem));
+    public void createPedido(PedidoManualDTO pedidoManualDTO) {
+        ItemDeInventario item = itemDeInventarioRepository.findById(pedidoManualDTO.getIdItem())
+                .orElseThrow(() -> new NotFoundException("No se encontró el item con id: " + pedidoManualDTO.getIdItem()));
         Pedido pedido = Pedido
                 .builder()
                 .estadoPedido(EstadoPedido.PENDIENTE)
                 .item(item)
-                .cantidad(cantidad)
+                .cantidad(pedidoManualDTO.getCantidad())
                 .fecha(LocalDate.now())
-                .motivo(motivo)
+                .motivo(pedidoManualDTO.getMotivo())
                 .build();
         pedidoRepository.save(pedido);
 
@@ -58,7 +59,13 @@ public class PedidoServiceImpl implements IPedidoService {
                 if ((proveerDeItemMasEconomico.getPrecio() * cantidad) < gestorOperacional.getPresupuesto()) {
 
                     if (!existeElPedidoByItemId(item.getId())) {
-                        createPedido(item.getId(), cantidad, "Solcitud de stock automatica");
+                        PedidoManualDTO pedidoManualDTO = PedidoManualDTO
+                                .builder()
+                                .idItem(item.getId())
+                                .cantidad(cantidad)
+                                .motivo( "Solcitud de stock automatica")
+                                .build();
+                        createPedido(pedidoManualDTO);
                     }
 
                 }
