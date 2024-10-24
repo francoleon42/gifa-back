@@ -108,8 +108,11 @@ public class SecurityConfig {
         authRequest
                 .requestMatchers(HttpMethod.POST, "/pedido/registrarProveedor").hasRole(ADMINISTRADOR)
                 .requestMatchers(HttpMethod.POST, "/pedido/asociarProveedor").hasRole(ADMINISTRADOR)
+                .requestMatchers(HttpMethod.POST, "/pedido/generarPedido").hasRole(SUPERVISOR)
                 .requestMatchers(HttpMethod.GET, "/pedido/verAll").hasRole(SUPERVISOR)
-                .requestMatchers(HttpMethod.POST, "/pedido/generarPedido").hasRole(SUPERVISOR);
+                .requestMatchers(HttpMethod.GET, "/pedido/aceptados").hasRole(ADMINISTRADOR)
+                .requestMatchers(HttpMethod.GET, "/pedido/rechazadosYpendientes").hasRole(SUPERVISOR);
+
     }
 
     private void configureGestorOperacionalEndpoints(AuthorizeHttpRequestsConfigurer<HttpSecurity>.AuthorizationManagerRequestMatcherRegistry authRequest) {

@@ -20,6 +20,14 @@ public class ProveedoresYPedidosController {
     private final IProvedorService provedorService;
     private final IProveedorDeItemService proveedorDeItemService;
 
+    // administrador
+    // pedios aceptados
+    // administrador puedar dar el okey para que aumaticamente se restablezca el stock
+
+    //Supervisor
+    // ver los pedidos rechazados y pendientes
+    // get de ver proveedores
+    // get asociacionProveedoresDelItem
 
     @PostMapping("/registrarProveedor")
     public ResponseEntity<?> registrarProveedor(@RequestBody RegistroProveedorRequestDTO registroProveedorRequestDTO) {
@@ -39,7 +47,14 @@ public class ProveedoresYPedidosController {
         pedidoService.createPedido(pedidoManualDTO);
         return ResponseEntity.ok(HttpStatus.CREATED);
     }
-
+    @GetMapping("/aceptados")
+    public ResponseEntity<List<PedidoResponseDTO>> verPedidosAceptados() {
+        return new ResponseEntity<>(pedidoService.obtenerPedidosAceptados(),HttpStatus.OK);
+    }
+    @GetMapping("/rechazadosYpendientes")
+    public ResponseEntity<List<PedidoResponseDTO>> verPedidosRechazadosYpendientes() {
+        return new ResponseEntity<>(pedidoService.obtenerPedidosRechazadosYpendientes(),HttpStatus.OK);
+    }
     @GetMapping("/verAll")
     public ResponseEntity<List<PedidoResponseDTO>> verPedidos(){
         return ResponseEntity.ok(pedidoService.obtenerPedidos());
