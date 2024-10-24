@@ -27,6 +27,8 @@ public class ProveedorDeItemServiceImpl implements IProveedorDeItemService {
 
     @Override
     public void asociarProveedorAItem(ProveedorDeITemRequestDTO proveedorDeItemRequestDTO) {
+        // Validar el DTO
+        validarProveedorDeItemRequestDTO(proveedorDeItemRequestDTO);
        ItemDeInventario itemDeInventario = itemDeInventarioRepository.findById(proveedorDeItemRequestDTO.getIdItem())
                .orElseThrow(() -> new NotFoundException("No se encontró el id del item para asociacion con proovedor: " + proveedorDeItemRequestDTO.getIdItem()));
 
@@ -49,5 +51,10 @@ public class ProveedorDeItemServiceImpl implements IProveedorDeItemService {
     @Override
     public List<ProveedorDeITemResponseDTO> obtenerAll() {
         return proveedorDeItemMapper.mapToProveedorDeItemResponseDTO(iProveedorDeItemRepository.findAll());
+    }
+    private void validarProveedorDeItemRequestDTO(ProveedorDeITemRequestDTO requestDTO) {
+        if (requestDTO.getPrecio() == null || requestDTO.getPrecio() <= 0) {
+            throw new IllegalArgumentException("El precio debe ser mayor o igual a cero.");
+        }
     }
 }

@@ -26,6 +26,9 @@ public class ProvedorServiceImpl implements IProvedorService {
 
     @Override
     public void registrarProveedor(RegistroProveedorRequestDTO requestDTO) {
+        // Validar el DTO
+        validarRegistroProveedorDTO(requestDTO);
+
         Proveedor proveedor = Proveedor.builder()
                 .nombre(requestDTO.getNombre())
                 .email(requestDTO.getEmail())
@@ -56,6 +59,20 @@ public class ProvedorServiceImpl implements IProvedorService {
                 pedido.setEstadoPedido(EstadoPedido.ACEPTADO);
             }
             pedidoRepository.save(pedido);
+        }
+    }
+    private void validarRegistroProveedorDTO(RegistroProveedorRequestDTO requestDTO) {
+        if (requestDTO.getNombre() == null || requestDTO.getNombre().trim().isEmpty()) {
+            throw new IllegalArgumentException("El nombre no puede estar vacío.");
+        }
+        if (!requestDTO.getNombre().matches("^[a-zA-Z\\s]+$")) {
+            throw new IllegalArgumentException("El nombre no debe contener dígitos ni caracteres especiales.");
+        }
+        if (requestDTO.getEmail() == null || requestDTO.getEmail().trim().isEmpty()) {
+            throw new IllegalArgumentException("El email no puede estar vacío.");
+        }
+        if (!requestDTO.getEmail().matches("^[\\w-\\.]+@([\\w-]+\\.)+[\\w-]{2,4}$")) {
+            throw new IllegalArgumentException("El formato del email no es válido.");
         }
     }
 }

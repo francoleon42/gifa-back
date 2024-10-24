@@ -28,6 +28,8 @@ public class DispositivoServiceImpl implements IDispositivoService {
 
     @Override
     public void crearDispositivo(CrearDispositivoRequestDTO crearDispositivoRequestDTO, Integer idVehiculo) {
+        // Validar el DTO
+        validarCrearDispositivoRequestDTO(crearDispositivoRequestDTO);
         Vehiculo vehiculo = vehiculoRepository.findById(idVehiculo)
                 .orElseThrow(() -> new NotFoundException("No se encontró el vehiculo con id: " + idVehiculo));
         Dispositivo dispositivo = Dispositivo
@@ -97,13 +99,17 @@ public class DispositivoServiceImpl implements IDispositivoService {
             distanciaTotal += distancia;
         }
         int kilometros = (int) distanciaTotal;
-//        int metros = (int) ((distanciaTotal - kilometros) * 1000); // Convertir a metros y obtener el resto
-
-//        // Formatear la distancia en el formato deseado "km,metros"
-//        String distanciaFormateada = kilometros + "," + String.format("%03d", metros);
 
         return kilometros;
     }
 
+    private void validarCrearDispositivoRequestDTO(CrearDispositivoRequestDTO crearDispositivoRequestDTO){
+        if (crearDispositivoRequestDTO.getName() == null || crearDispositivoRequestDTO.getName().trim().isEmpty()) {
+            throw new IllegalArgumentException("El nombre del dispositivo no puede estar vacío.");
+        }
+        if (crearDispositivoRequestDTO.getUniqueId() == null || crearDispositivoRequestDTO.getUniqueId().trim().isEmpty()) {
+            throw new IllegalArgumentException("El uniqueId del dispositivo no puede estar vacío.");
+        }
+    }
 
 }

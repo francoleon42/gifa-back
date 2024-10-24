@@ -31,6 +31,8 @@ public class ChoferServiceImpl implements IChoferService {
 
     @Override
     public void registro(ChoferRegistroDTO choferRegistroDTO) {
+        // Validar el DTO
+        validarChoferRegistroDTO(choferRegistroDTO);
         Usuario usuario = Usuario.builder()
                 .usuario(choferRegistroDTO.getUsername())
                 .contrasena(passwordEncoder.encode(choferRegistroDTO.getPassword()))
@@ -90,5 +92,20 @@ public class ChoferServiceImpl implements IChoferService {
     @Override
     public List<ChoferResponseDTO> obtenerAll() {
         return choferMapper.obtenerListaChoferDTO(choferRepository.findAll());
+    }
+
+    private void validarChoferRegistroDTO(ChoferRegistroDTO choferRegistroDTO) {
+        if (choferRegistroDTO.getUsername() == null || choferRegistroDTO.getUsername().trim().isEmpty()) {
+            throw new IllegalArgumentException("El nombre de usuario no puede estar vacío.");
+        }
+        if ( !choferRegistroDTO.getUsername().matches("^[a-zA-Z0-9]*$")) {
+            throw new IllegalArgumentException("El nombre de usuario no debe contener caracteres especiales.");
+        }
+        if (choferRegistroDTO.getPassword() == null || choferRegistroDTO.getPassword().trim().isEmpty()) {
+            throw new IllegalArgumentException("La contraseña no puede estar vacía.");
+        }
+        if (choferRegistroDTO.getNombre() == null || choferRegistroDTO.getNombre().trim().isEmpty()) {
+            throw new IllegalArgumentException("El nombre del chofer no puede estar vacío.");
+        }
     }
 }

@@ -33,6 +33,8 @@ public class MantenimientoServiceImpl implements IMantenimientoService {
 
     @Override
     public void crearMantenimiento(RegistrarMantenimientoDTO registrarMantenimientoDTO) {
+        // Validar el DTO
+        validarRegistrarMantenimientoDTO(registrarMantenimientoDTO);
         Vehiculo vehiculo = iVehiculoRepository.findById(registrarMantenimientoDTO.getVehiculo_id())
                 .orElseThrow(() -> new NotFoundException("No se encontró el vehiculo con id: " + registrarMantenimientoDTO.getVehiculo_id()));
         vehiculo.setEstadoVehiculo(EstadoVehiculo.EN_REPARACION);
@@ -98,5 +100,10 @@ public class MantenimientoServiceImpl implements IMantenimientoService {
         return mantenimientoMapper.mapListToMantenimientosDTO(IMantenimientoRepository.findByOperadorId(idOperador));
     }
 
+    private void validarRegistrarMantenimientoDTO(RegistrarMantenimientoDTO registrarMantenimientoDTO) {
+        if (registrarMantenimientoDTO.getAsunto() == null || registrarMantenimientoDTO.getAsunto().trim().isEmpty()) {
+            throw new IllegalArgumentException("El asunto no puede estar vacío.");
+        }
+    }
 
 }

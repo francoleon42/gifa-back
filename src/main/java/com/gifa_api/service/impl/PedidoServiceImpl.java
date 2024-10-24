@@ -28,16 +28,18 @@ public class PedidoServiceImpl implements IPedidoService {
     private final PedidosMapper pedidosMapper;
 
     @Override
-    public void createPedido(CrearPedidoDTO pedidoManualDTO) {
-        ItemDeInventario item = itemDeInventarioRepository.findById(pedidoManualDTO.getIdItem())
-                .orElseThrow(() -> new NotFoundException("No se encontró el item con id: " + pedidoManualDTO.getIdItem()));
+    public void createPedido(CrearPedidoDTO crearPedidoDTO) {
+        // Validar el DTO
+        validarCrearPedidoDTO(crearPedidoDTO);
+        ItemDeInventario item = itemDeInventarioRepository.findById(crearPedidoDTO.getIdItem())
+                .orElseThrow(() -> new NotFoundException("No se encontró el item con id: " + crearPedidoDTO.getIdItem()));
         Pedido pedido = Pedido
                 .builder()
                 .estadoPedido(EstadoPedido.PENDIENTE)
                 .item(item)
-                .cantidad(pedidoManualDTO.getCantidad())
+                .cantidad(crearPedidoDTO.getCantidad())
                 .fecha(LocalDate.now())
-                .motivo(pedidoManualDTO.getMotivo())
+                .motivo(crearPedidoDTO.getMotivo())
                 .build();
         pedidoRepository.save(pedido);
 
@@ -91,6 +93,15 @@ public class PedidoServiceImpl implements IPedidoService {
     @Override
     public List<PedidoResponseDTO> obtenerPedidos() {
         return pedidosMapper.mapToPedidoDTO(pedidoRepository.findAll());
+    }
+
+    private void validarCrearPedidoDTO(CrearPedidoDTO crearPedidoDTO) {
+        if (crearPedidoDTO.getCantidad() == null || crearPedidoDTO.getCantidad() <= 0) {
+            throw new IllegalArgumentException("La cantidad debe ser mayor a cero.");
+        }
+        if (crearPedidoDTO.getMotivo() == null || crearPedidoDTO.getMotivo().trim().isEmpty()) {
+            throw new IllegalArgumentException("El motivo no puede estar vacío.");
+        }
     }
 }
 

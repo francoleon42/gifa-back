@@ -38,6 +38,9 @@ public class VehiculoServiceImpl implements IVehiculoService {
 
     @Override
     public void registrar(RegistarVehiculoDTO vehiculoDTO) {
+        // Validar el DTO
+        validarRegistrarVehiculoDTO(vehiculoDTO);
+
         Tarjeta tarjeta = Tarjeta.builder()
                 .numero(generarNumeroTarjeta())
                 .build();
@@ -96,5 +99,24 @@ public class VehiculoServiceImpl implements IVehiculoService {
 
     }
 
-
+    private void validarRegistrarVehiculoDTO(RegistarVehiculoDTO vehiculoDTO) {
+        // Validar patente
+        String patenteRegex = "^(?:[A-Z]{3}\\d{3}|[A-Z]{2}\\d{3}[A-Z]{2})$"; // Regex para ambos formatos de patente
+        if (vehiculoDTO.getPatente() == null || !vehiculoDTO.getPatente().matches(patenteRegex)) {
+            throw new IllegalArgumentException("La patente debe tener el formato correcto (3 letras, 3 números )  or (2 letras, 3 dígitos, 2 letras).");
+        }
+        if (vehiculoDTO.getAntiguedad() == null || vehiculoDTO.getAntiguedad() < 0) {
+            throw new IllegalArgumentException("La antigüedad debe ser mayor o igual a 0.");
+        }
+        if (vehiculoDTO.getKilometraje() == null || vehiculoDTO.getKilometraje() < 0) {
+            throw new IllegalArgumentException("El kilometraje debe ser mayor o igual a 0.");
+        }
+        if (vehiculoDTO.getModelo() == null || vehiculoDTO.getModelo().trim().isEmpty()) {
+            throw new IllegalArgumentException("El modelo no puede estar vacío.");
+        }
+        // Validar fecha de revisión
+        if (vehiculoDTO.getFechaRevision() == null || vehiculoDTO.getFechaRevision().isBefore(LocalDate.now())) {
+            throw new IllegalArgumentException("La fecha de revisión debe ser posterior a la fecha actual.");
+        }
+    }
 }

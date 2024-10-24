@@ -27,6 +27,8 @@ public class ItemDeInventarioServiceImpl implements IItemDeIventarioService {
 
     @Override
     public void registrar(ItemDeInventarioRequestDTO itemDeInventarioDTO) {
+        // Validar el DTO
+        validarItemDeInventarioRequestDTO(itemDeInventarioDTO);
         ItemDeInventario itemDeInventario = ItemDeInventario
                 .builder()
                 .nombre(itemDeInventarioDTO.getNombre())
@@ -64,5 +66,19 @@ public class ItemDeInventarioServiceImpl implements IItemDeIventarioService {
         return itemDeInventarioMapper.mapToItemDeInventarioDTO(itemDeInventarioRepository.findAll());
     }
 
+    private void validarItemDeInventarioRequestDTO(ItemDeInventarioRequestDTO itemDeInventarioDTO) {
+        if (itemDeInventarioDTO.getNombre() == null || itemDeInventarioDTO.getNombre().trim().isEmpty()) {
+            throw new IllegalArgumentException("El nombre del ítem no puede estar vacío.");
+        }
+        if (itemDeInventarioDTO.getUmbral() == null || itemDeInventarioDTO.getUmbral() < 0) {
+            throw new IllegalArgumentException("El umbral debe ser mayor o igual a cero.");
+        }
+        if (itemDeInventarioDTO.getStock() == null || itemDeInventarioDTO.getStock() < 0) {
+            throw new IllegalArgumentException("El stock debe ser mayor o igual a cero.");
+        }
+        if (itemDeInventarioDTO.getCantCompraAutomatica() == null || itemDeInventarioDTO.getCantCompraAutomatica() < 0) {
+            throw new IllegalArgumentException("La cantidad de compra automática debe ser mayor o igual a cero.");
+        }
+    }
 
 }
