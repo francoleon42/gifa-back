@@ -17,7 +17,7 @@ public class ProveedorController {
     private final IProveedorDeItemService proveedorDeItemService;
 
     @PostMapping("/registrar")
-    public ResponseEntity<?> registrarProveedor(@RequestBody RegistroProveedorRequestDTO registroProveedorRequestDTO) {
+    public ResponseEntity<?> registrar(@RequestBody RegistroProveedorRequestDTO registroProveedorRequestDTO) {
         provedorService.registrarProveedor(registroProveedorRequestDTO);
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
@@ -28,12 +28,12 @@ public class ProveedorController {
         return ResponseEntity.ok(HttpStatus.CREATED);
     }
     @GetMapping("/verAll")
-    public ResponseEntity<?> verProveedores(){
+    public ResponseEntity<?> allProveedores(){
         return new ResponseEntity<>(provedorService.obtenerProveedores(), HttpStatus.OK);
     }
 
     @GetMapping("/verProveedoresDeItems")
-    public ResponseEntity<?> verAsociacionesDeProveedoresConItems(){
+    public ResponseEntity<?> allProveedoresConItems(){
         return new ResponseEntity<>(proveedorDeItemService.obtenerAll(), HttpStatus.OK);
     }
 }
