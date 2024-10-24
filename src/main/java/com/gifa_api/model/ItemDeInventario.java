@@ -46,5 +46,8 @@ public class ItemDeInventario {
     public void desminuirStock(Integer cantidad) {
         this.stock -= cantidad;
     }
+    public void aumentarStock(Integer cantidad) {
+        this.stock += cantidad;
+    }
 
 }

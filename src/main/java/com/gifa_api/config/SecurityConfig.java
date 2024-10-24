@@ -50,6 +50,7 @@ public class SecurityConfig {
                     configureVehiculoEndpoints(authRequest);
                     configureChoferEndpoints(authRequest);
                     configurePedidoEndpoints(authRequest);
+                    configureProveedoresEndpoints(authRequest);
                     configureGestorOperacionalEndpoints(authRequest);
                     configureInventarioEndpoints(authRequest);
                     configureMantenimientoEndpoints(authRequest);
@@ -106,14 +107,20 @@ public class SecurityConfig {
 
     private void configurePedidoEndpoints(AuthorizeHttpRequestsConfigurer<HttpSecurity>.AuthorizationManagerRequestMatcherRegistry authRequest) {
         authRequest
-                .requestMatchers(HttpMethod.POST, "/pedido/registrarProveedor").hasRole(ADMINISTRADOR)
-                .requestMatchers(HttpMethod.POST, "/pedido/asociarProveedor").hasRole(ADMINISTRADOR)
                 .requestMatchers(HttpMethod.POST, "/pedido/generarPedido").hasRole(SUPERVISOR)
-                .requestMatchers(HttpMethod.GET, "/pedido/verAll").hasRole(SUPERVISOR)
                 .requestMatchers(HttpMethod.GET, "/pedido/aceptados").hasRole(ADMINISTRADOR)
                 .requestMatchers(HttpMethod.GET, "/pedido/rechazadosYpendientes").hasRole(SUPERVISOR)
-                .requestMatchers(HttpMethod.GET, "/pedido/allProveedores").hasRole(SUPERVISOR)
-                .requestMatchers(HttpMethod.GET, "/pedido/verProveedoresDeItems").hasRole(SUPERVISOR);
+                .requestMatchers(HttpMethod.GET, "/pedido/verAll").hasRole(SUPERVISOR)
+                .requestMatchers(HttpMethod.PATCH, "/pedido/confirmarPedidoRecibido/{id}").hasRole(ADMINISTRADOR);
+
+    }
+
+    private void configureProveedoresEndpoints(AuthorizeHttpRequestsConfigurer<HttpSecurity>.AuthorizationManagerRequestMatcherRegistry authRequest) {
+        authRequest
+                .requestMatchers(HttpMethod.POST, "/proveedor/registrarProveedor").hasRole(ADMINISTRADOR)
+                .requestMatchers(HttpMethod.POST, "/proveedor/asociarProveedor").hasRole(ADMINISTRADOR)
+                .requestMatchers(HttpMethod.GET, "/proveedor/allProveedores").hasRole(SUPERVISOR)
+                .requestMatchers(HttpMethod.GET, "/proveedor/verProveedoresDeItems").hasRole(SUPERVISOR);
 
     }
 

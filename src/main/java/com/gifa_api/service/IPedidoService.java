@@ -13,4 +13,5 @@ public interface IPedidoService {
     void hacerPedidos(Integer idItem);
     List<PedidoResponseDTO> obtenerPedidosAceptados();
     List<PedidoResponseDTO> obtenerPedidosRechazadosYpendientes();
+    void confirmarPedidoRecibido(Integer idPedido);
 }

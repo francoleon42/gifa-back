@@ -46,8 +46,9 @@ public class PedidoServiceImpl implements IPedidoService {
 
     @Override
     public void hacerPedidos(Integer idItem) {
-        Optional<ItemDeInventario> itemOptional = itemDeInventarioRepository.findById(idItem);
-        ItemDeInventario item = itemOptional.get();
+        ItemDeInventario item = itemDeInventarioRepository.findById(idItem)
+                .orElseThrow(() -> new NotFoundException("No se encontró el item con id: " + idItem));
+
         GestorOperacional gestorOperacional = gestorOperacionalService.getGestorOperacional();
         int cantidad = item.getCantCompraAutomatica() + item.getUmbral();
         ProveedorDeItem proveerDeItemMasEconomico = proveedorDeItemService.proveedorMasEconomico(item.getId());
@@ -74,6 +75,17 @@ public class PedidoServiceImpl implements IPedidoService {
     @Override
     public List<PedidoResponseDTO> obtenerPedidosRechazadosYpendientes() {
         return pedidosMapper.mapToPedidoDTO(pedidoRepository.findPedidosByDosEstados(EstadoPedido.PENDIENTE,EstadoPedido.RECHAZADO));
+    }
+
+    @Override
+    public void confirmarPedidoRecibido(Integer idPedido) {
+        Pedido pedido = pedidoRepository.findById(idPedido)
+                .orElseThrow(() -> new NotFoundException("No se encontró el pedido con id: " + idPedido));
+
+        if(pedido.getEstadoPedido().equals(EstadoPedido.ACEPTADO)) {
+            pedido.getItem().aumentarStock(pedido.getCantidad());
+        }
+        pedidoRepository.save(pedido);
     }
 
     @Override
