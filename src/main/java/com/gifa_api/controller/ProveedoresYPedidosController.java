@@ -19,12 +19,6 @@ public class ProveedoresYPedidosController {
     private final IProvedorService provedorService;
     private final IProveedorDeItemService proveedorDeItemService;
 
-    // administrador
-    // administrador puedar dar el okey para que aumaticamente se restablezca el stock
-
-    //Supervisor
-    // get de ver proveedores
-    // get asociacionProveedoresDelItem
 
     @PostMapping("/registrarProveedor")
     public ResponseEntity<?> registrarProveedor(@RequestBody RegistroProveedorRequestDTO registroProveedorRequestDTO) {
@@ -37,10 +31,10 @@ public class ProveedoresYPedidosController {
         proveedorDeItemService.asociarProveedorAItem(asociacionProveedorDeITemRequestDTO);
         return ResponseEntity.ok(HttpStatus.CREATED);
     }
-//    @GetMapping("/allProveedores")
-//    public ResponseEntity<?> verProveedores(){
-//        return new ResponseEntity;
-//    }
+    @GetMapping("/allProveedores")
+    public ResponseEntity<?> verProveedores(){
+        return new ResponseEntity<>(provedorService.obtenerProveedores(), HttpStatus.OK);
+    }
 
     // Pedidos
     @PostMapping("/generarPedido")
