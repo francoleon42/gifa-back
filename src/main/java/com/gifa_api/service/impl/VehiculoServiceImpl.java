@@ -3,7 +3,9 @@ package com.gifa_api.service.impl;
 import com.gifa_api.dto.mantenimiento.RegistrarMantenimientoDTO;
 import com.gifa_api.dto.vehiculo.ListaVehiculosResponseDTO;
 import com.gifa_api.dto.vehiculo.RegistarVehiculoDTO;
+import com.gifa_api.dto.vehiculo.VehiculoResponseConQrDTO;
 import com.gifa_api.exception.NotFoundException;
+import com.gifa_api.model.Mantenimiento;
 import com.gifa_api.model.Tarjeta;
 import com.gifa_api.model.Vehiculo;
 import com.gifa_api.repository.ITarjetaRepository;
@@ -14,6 +16,7 @@ import com.gifa_api.service.IVehiculoService;
 import com.gifa_api.utils.enums.EstadoDeHabilitacion;
 import com.gifa_api.utils.enums.EstadoVehiculo;
 import com.gifa_api.utils.mappers.VehiculoMapper;
+import com.gifa_api.utils.mappers.VehiculoResponseConQrMapper;
 import com.google.zxing.BarcodeFormat;
 import com.google.zxing.WriterException;
 import com.google.zxing.client.j2se.MatrixToImageWriter;
@@ -28,6 +31,7 @@ import java.awt.image.BufferedImage;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
@@ -38,7 +42,7 @@ public class VehiculoServiceImpl implements IVehiculoService {
     private final IMantenimientoService iMantenimientoService;
     private final ITarjetaRepository tarjetaRepository;
     private final VehiculoMapper vehiculoMapper;
-    
+    private final VehiculoResponseConQrMapper vehiculoResponseConQrMapper;
 
 
     @Override
@@ -70,6 +74,7 @@ public class VehiculoServiceImpl implements IVehiculoService {
         vehiculoRepository.save(vehiculo);
         guardarQR(vehiculo);
     }
+
     private void guardarQR(Vehiculo vehiculo) {
         // Generar el código QR
         String contenidoQR = vehiculo.getPatente(); // O cualquier otro identificador
@@ -80,13 +85,14 @@ public class VehiculoServiceImpl implements IVehiculoService {
         try {
             ImageIO.write(qrImage, "png", baos);
             byte[] qrBytes = baos.toByteArray();
-            
+
             vehiculo.setQr(qrBytes);
             vehiculoRepository.save(vehiculo);
         } catch (IOException e) {
             throw new RuntimeException("Error al generar el QR", e);
         }
     }
+
     private BufferedImage generarQRCode(String contenidoQR) {
         try {
             QRCodeWriter qrCodeWriter = new QRCodeWriter();
@@ -120,6 +126,17 @@ public class VehiculoServiceImpl implements IVehiculoService {
         vehiculo.habilitar();
         vehiculoRepository.save(vehiculo);
     }
+
+    // mejorar fix
+    @Override
+    public VehiculoResponseConQrDTO obtenerHistorialDeVehiculo(String patente) {
+        Vehiculo vehiculo = vehiculoRepository.findByPatente(patente)
+                .orElseThrow(() -> new NotFoundException("No se encontró el vehiculo con patente: " + patente));
+
+        List<Mantenimiento> listaMantenimientos = new ArrayList<>(vehiculo.getMantenimientos());
+        return vehiculoResponseConQrMapper.toVehiculoResponseConQrDTO(vehiculo, listaMantenimientos);
+    }
+
 
     @Scheduled(fixedRate = 86400000)  // Ejecuta cada 24 horas (86400000 milisegundos)
     public void verificarFechaVencimiento() {

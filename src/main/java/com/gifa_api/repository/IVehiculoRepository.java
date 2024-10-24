@@ -11,6 +11,7 @@ import java.util.Optional;
 public interface IVehiculoRepository extends JpaRepository<Vehiculo, Integer> {
 //    @Query("select v from Vehiculo v where v.dispositivo.unicoId=:unicoId")
 //    public Optional<Vehiculo> findVehiculosDeDispositivo(@Param("unicoId") String unicoId);
-
+    @Query("select v from Vehiculo v where v.patente=:patente")
+    public Optional<Vehiculo> findByPatente(@Param("patente") String patente);
 
 }

@@ -34,13 +34,13 @@ public class MantenimientoMapper {
                 .build();
     }
 
-    private List<MantenimientoResponseDTO> mapToMantenimientosDTO(List<Mantenimiento> mantenimientos) {
+    public List<MantenimientoResponseDTO> mapToMantenimientosDTO(List<Mantenimiento> mantenimientos) {
         return mantenimientos.stream()
                 .map(this::mapToMantenimientoResponseDTO)
                 .collect(Collectors.toList());
     }
 
-    private MantenimientoResponseDTO mapToMantenimientoResponseDTO(Mantenimiento mantenimiento) {
+    MantenimientoResponseDTO mapToMantenimientoResponseDTO(Mantenimiento mantenimiento) {
         MantenimientoResponseDTO responseDTO = MantenimientoResponseDTO.builder()
                 .id(mantenimiento.getId())
                 .fechaInicio(mantenimiento.getFechaInicio())
