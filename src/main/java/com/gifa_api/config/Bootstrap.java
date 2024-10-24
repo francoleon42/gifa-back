@@ -202,7 +202,12 @@ public class Bootstrap implements ApplicationRunner {
                 .email("proveedor2@email.com")
                 .build();
 
-        proveedorRepository.saveAll(List.of(proveedor1, proveedor2));
+        Proveedor proveedor3 = Proveedor.builder()
+                .nombre("Proveedor3")
+                .email("proveedor3@email.com")
+                .build();
+
+        proveedorRepository.saveAll(List.of(proveedor1, proveedor2,proveedor3));
 
         ProveedorDeItem proveedorDeItem1 = ProveedorDeItem.builder()
 

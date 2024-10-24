@@ -1,7 +1,6 @@
 package com.gifa_api.controller;
 
 import com.gifa_api.dto.proveedoresYPedidos.*;
-import com.gifa_api.service.IGestorOperacionalService;
 import com.gifa_api.service.IPedidoService;
 import com.gifa_api.service.IProvedorService;
 import com.gifa_api.service.IProveedorDeItemService;
@@ -21,11 +20,9 @@ public class ProveedoresYPedidosController {
     private final IProveedorDeItemService proveedorDeItemService;
 
     // administrador
-    // pedios aceptados
     // administrador puedar dar el okey para que aumaticamente se restablezca el stock
 
     //Supervisor
-    // ver los pedidos rechazados y pendientes
     // get de ver proveedores
     // get asociacionProveedoresDelItem
 
@@ -36,10 +33,14 @@ public class ProveedoresYPedidosController {
     }
 
     @PostMapping("/asociarProveedor")
-    public ResponseEntity<?> asociarProveedorAItem(@RequestBody AsociacionProveedorDeITemDTO asociacionProveedorDeITemDTO) {
-        proveedorDeItemService.asociarProveedorAItem(asociacionProveedorDeITemDTO);
+    public ResponseEntity<?> asociarProveedorAItem(@RequestBody AsociacionProveedorDeITemRequestDTO asociacionProveedorDeITemRequestDTO) {
+        proveedorDeItemService.asociarProveedorAItem(asociacionProveedorDeITemRequestDTO);
         return ResponseEntity.ok(HttpStatus.CREATED);
     }
+//    @GetMapping("/allProveedores")
+//    public ResponseEntity<?> verProveedores(){
+//        return new ResponseEntity;
+//    }
 
     // Pedidos
     @PostMapping("/generarPedido")

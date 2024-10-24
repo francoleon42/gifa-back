@@ -1,6 +1,6 @@
 package com.gifa_api.testUnitario.service;
 
-import com.gifa_api.dto.proveedoresYPedidos.AsociacionProveedorDeITemDTO;
+import com.gifa_api.dto.proveedoresYPedidos.AsociacionProveedorDeITemRequestDTO;
 import com.gifa_api.exception.NotFoundException;
 import com.gifa_api.model.ItemDeInventario;
 import com.gifa_api.model.Proveedor;
@@ -32,13 +32,13 @@ class ProveedorDeItemServiceImplTest {
     @InjectMocks
     private ProveedorDeItemServiceImpl proveedorDeItemService;
 
-    private AsociacionProveedorDeITemDTO asociacion;
+    private AsociacionProveedorDeITemRequestDTO asociacion;
     private   ItemDeInventario itemDeInventario;
     private Proveedor proveedor;
 
     @BeforeEach
     void setUp(){
-        asociacion = new AsociacionProveedorDeITemDTO(1,1,3.0);
+        asociacion = new AsociacionProveedorDeITemRequestDTO(1,1,3.0);
         itemDeInventario = new ItemDeInventario();
         proveedor = new Proveedor();
     }

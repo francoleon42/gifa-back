@@ -51,7 +51,7 @@
 //
 //    @Test
 //    void testAsociarProveedorAItem() {
-//        AsociacionProveedorDeITemDTO requestDTO = new AsociacionProveedorDeITemDTO();
+//        AsociacionProveedorDeITemRequestDTO requestDTO = new AsociacionProveedorDeITemRequestDTO();
 //        // Configura requestDTO según sea necesario
 //
 //        ResponseEntity<?> response = proveedoresYPedidosController.asociarProveedorAItem(requestDTO);
