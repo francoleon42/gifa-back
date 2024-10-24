@@ -10,7 +10,7 @@ import lombok.NoArgsConstructor;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class AsociacionProveedorDeITemRequestDTO {
+public class ProveedorDeITemRequestDTO {
     Integer idItem;
     Integer idProveedor;
     Double precio;

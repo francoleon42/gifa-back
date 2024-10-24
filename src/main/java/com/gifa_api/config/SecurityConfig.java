@@ -112,7 +112,8 @@ public class SecurityConfig {
                 .requestMatchers(HttpMethod.GET, "/pedido/verAll").hasRole(SUPERVISOR)
                 .requestMatchers(HttpMethod.GET, "/pedido/aceptados").hasRole(ADMINISTRADOR)
                 .requestMatchers(HttpMethod.GET, "/pedido/rechazadosYpendientes").hasRole(SUPERVISOR)
-                .requestMatchers(HttpMethod.GET, "/pedido/allProveedores").hasRole(SUPERVISOR);
+                .requestMatchers(HttpMethod.GET, "/pedido/allProveedores").hasRole(SUPERVISOR)
+                .requestMatchers(HttpMethod.GET, "/pedido/verProveedoresDeItems").hasRole(SUPERVISOR);
 
     }
 

@@ -10,7 +10,7 @@ import lombok.NoArgsConstructor;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class AsociacionProveedorDeITemResponseDTO {
+public class ProveedorDeITemResponseDTO {
 
     ItemDeInventarioDTO item;
     ProveedorResponseDTO proveedor;

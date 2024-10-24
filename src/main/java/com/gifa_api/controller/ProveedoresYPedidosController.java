@@ -27,14 +27,20 @@ public class ProveedoresYPedidosController {
     }
 
     @PostMapping("/asociarProveedor")
-    public ResponseEntity<?> asociarProveedorAItem(@RequestBody AsociacionProveedorDeITemRequestDTO asociacionProveedorDeITemRequestDTO) {
-        proveedorDeItemService.asociarProveedorAItem(asociacionProveedorDeITemRequestDTO);
+    public ResponseEntity<?> asociarProveedorAItem(@RequestBody ProveedorDeITemRequestDTO proveedorDeITemRequestDTO) {
+        proveedorDeItemService.asociarProveedorAItem(proveedorDeITemRequestDTO);
         return ResponseEntity.ok(HttpStatus.CREATED);
     }
     @GetMapping("/allProveedores")
     public ResponseEntity<?> verProveedores(){
         return new ResponseEntity<>(provedorService.obtenerProveedores(), HttpStatus.OK);
     }
+
+    @GetMapping("/verProveedoresDeItems")
+    public ResponseEntity<?> verAsociacionesDeProveedoresConItems(){
+        return new ResponseEntity<>(proveedorDeItemService.obtenerAll(), HttpStatus.OK);
+    }
+
 
     // Pedidos
     @PostMapping("/generarPedido")
