@@ -36,4 +36,9 @@ public class VehiculoController {
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
+//    @GetMapping("historialVehiculo/{patente}")
+//    public ResponseEntity<?> historialVehiculo(@PathVariable String patente) {
+//        return new ResponseEntity<>(vehiculoService, HttpStatus.OK);
+//    }
+
 }
