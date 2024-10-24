@@ -42,6 +42,7 @@ public class Vehiculo {
     @Column(name = "habilitado", nullable = false)
     private EstadoDeHabilitacion estadoDeHabilitacion;
 
+    @Lob
     @Column(name = "qr")
     private byte[] qr;
 

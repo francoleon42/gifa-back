@@ -142,7 +142,7 @@ public class CargaCombustibleServiceImpl implements ICargaCombustibleService {
             throw new IllegalArgumentException("La cantidad de litros debe ser mayor a cero.");
         }
         // Validar numeroTarjeta (mínimo 16 dígitos)
-        if (cargaCombustibleRequestDTO.getNumeroTarjeta() == null || cargaCombustibleRequestDTO.getNumeroTarjeta().toString().length() < 16) {
+        if (cargaCombustibleRequestDTO.getNumeroTarjeta() == null || cargaCombustibleRequestDTO.getNumeroTarjeta().toString().isEmpty() ) {
             throw new IllegalArgumentException("El número de tarjeta debe tener al menos 16 dígitos.");
         }
     }

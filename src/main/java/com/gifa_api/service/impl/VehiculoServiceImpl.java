@@ -14,10 +14,19 @@ import com.gifa_api.service.IVehiculoService;
 import com.gifa_api.utils.enums.EstadoDeHabilitacion;
 import com.gifa_api.utils.enums.EstadoVehiculo;
 import com.gifa_api.utils.mappers.VehiculoMapper;
+import com.google.zxing.BarcodeFormat;
+import com.google.zxing.WriterException;
+import com.google.zxing.client.j2se.MatrixToImageWriter;
+import com.google.zxing.common.BitMatrix;
+import com.google.zxing.qrcode.QRCodeWriter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
+import javax.imageio.ImageIO;
+import java.awt.image.BufferedImage;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Random;
@@ -29,6 +38,7 @@ public class VehiculoServiceImpl implements IVehiculoService {
     private final IMantenimientoService iMantenimientoService;
     private final ITarjetaRepository tarjetaRepository;
     private final VehiculoMapper vehiculoMapper;
+    
 
 
     @Override
@@ -40,7 +50,6 @@ public class VehiculoServiceImpl implements IVehiculoService {
     public void registrar(RegistarVehiculoDTO vehiculoDTO) {
         // Validar el DTO
         validarRegistrarVehiculoDTO(vehiculoDTO);
-
         Tarjeta tarjeta = Tarjeta.builder()
                 .numero(generarNumeroTarjeta())
                 .build();
@@ -59,6 +68,35 @@ public class VehiculoServiceImpl implements IVehiculoService {
                 .build();
 
         vehiculoRepository.save(vehiculo);
+        guardarQR(vehiculo);
+    }
+    private void guardarQR(Vehiculo vehiculo) {
+        // Generar el código QR
+        String contenidoQR = vehiculo.getPatente(); // O cualquier otro identificador
+        BufferedImage qrImage = generarQRCode(contenidoQR);
+
+        // Convertir BufferedImage a byte[]
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        try {
+            ImageIO.write(qrImage, "png", baos);
+            byte[] qrBytes = baos.toByteArray();
+            
+            vehiculo.setQr(qrBytes);
+            vehiculoRepository.save(vehiculo);
+        } catch (IOException e) {
+            throw new RuntimeException("Error al generar el QR", e);
+        }
+    }
+    private BufferedImage generarQRCode(String contenidoQR) {
+        try {
+            QRCodeWriter qrCodeWriter = new QRCodeWriter();
+            BitMatrix bitMatrix = qrCodeWriter.encode(contenidoQR, BarcodeFormat.QR_CODE, 300, 300); // Tamaño 300x300 píxeles
+
+            // Convertir BitMatrix a BufferedImage
+            return MatrixToImageWriter.toBufferedImage(bitMatrix);
+        } catch (WriterException e) {
+            throw new RuntimeException("Error al generar el código QR", e);
+        }
     }
 
     private Integer generarNumeroTarjeta() {
@@ -101,10 +139,10 @@ public class VehiculoServiceImpl implements IVehiculoService {
 
     private void validarRegistrarVehiculoDTO(RegistarVehiculoDTO vehiculoDTO) {
         // Validar patente
-        String patenteRegex = "^(?:[A-Z]{3}\\d{3}|[A-Z]{2}\\d{3}[A-Z]{2})$"; // Regex para ambos formatos de patente
-        if (vehiculoDTO.getPatente() == null || !vehiculoDTO.getPatente().matches(patenteRegex)) {
-            throw new IllegalArgumentException("La patente debe tener el formato correcto (3 letras, 3 números )  or (2 letras, 3 dígitos, 2 letras).");
-        }
+//        String patenteRegex = "^(?:[A-Z]{3}\\d{3}|[A-Z]{2}\\d{3}[A-Z]{2})$"; // Regex para ambos formatos de patente
+//        if (vehiculoDTO.getPatente() == null || !vehiculoDTO.getPatente().matches(patenteRegex)) {
+//            throw new IllegalArgumentException("La patente debe tener el formato correcto (3 letras, 3 números )  or (2 letras, 3 dígitos, 2 letras).");
+//        }
         if (vehiculoDTO.getAntiguedad() == null || vehiculoDTO.getAntiguedad() < 0) {
             throw new IllegalArgumentException("La antigüedad debe ser mayor o igual a 0.");
         }
