@@ -1,5 +1,6 @@
 package com.gifa_api.dto.proveedoresYPedidos;
 
+import com.gifa_api.dto.item.ItemDeInventarioDTO;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -15,6 +16,6 @@ public class PedidoResponseDTO {
     LocalDate fecha;
     Integer cantidad;
     String motivo;
-    String item;
+    ItemDeInventarioDTO item;
     String estadoPedido;
 }

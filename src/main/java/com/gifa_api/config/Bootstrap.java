@@ -234,7 +234,15 @@ public class Bootstrap implements ApplicationRunner {
                 .estadoPedido(EstadoPedido.PENDIENTE)
                 .build();
 
-        pedidoRepository.saveAll(List.of(pedido1, pedido2));
+        Pedido pedido3 = Pedido.builder()
+                .fecha(LocalDate.now())
+                .cantidad(3)
+                .motivo("Reemplazo de neumático")
+                .item(item2)
+                .estadoPedido(EstadoPedido.ACEPTADO)
+                .build();
+
+        pedidoRepository.saveAll(List.of(pedido1, pedido2,pedido3));
 
         // Crear mantenimientos con builder
         Mantenimiento mantenimiento1 = Mantenimiento.builder()
