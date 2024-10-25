@@ -1,7 +1,7 @@
 package com.gifa_api.service.impl;
 
-import com.gifa_api.dto.proveedoresYPedidos.CrearPedidoDTO;
-import com.gifa_api.dto.proveedoresYPedidos.PedidoResponseDTO;
+import com.gifa_api.dto.pedido.CrearPedidoDTO;
+import com.gifa_api.dto.pedido.PedidoResponseDTO;
 import com.gifa_api.exception.NotFoundException;
 import com.gifa_api.model.*;
 import com.gifa_api.repository.IPedidoRepository;
@@ -16,7 +16,6 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor

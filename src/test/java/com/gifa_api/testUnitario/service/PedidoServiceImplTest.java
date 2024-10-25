@@ -1,7 +1,7 @@
 package com.gifa_api.testUnitario.service;
 
-import com.gifa_api.dto.proveedoresYPedidos.CrearPedidoDTO;
-import com.gifa_api.dto.proveedoresYPedidos.PedidoResponseDTO;
+import com.gifa_api.dto.pedido.CrearPedidoDTO;
+import com.gifa_api.dto.pedido.PedidoResponseDTO;
 import com.gifa_api.exception.NotFoundException;
 import com.gifa_api.model.*;
 import com.gifa_api.repository.IPedidoRepository;

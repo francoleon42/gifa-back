@@ -1,4 +1,4 @@
-package com.gifa_api.dto.proveedoresYPedidos;
+package com.gifa_api.dto.proveedor;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

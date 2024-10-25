@@ -1,5 +1,4 @@
-package com.gifa_api.dto.proveedoresYPedidos;
-
+package com.gifa_api.dto.pedido;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -10,8 +9,8 @@ import lombok.NoArgsConstructor;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class ProveedorDeITemRequestDTO {
+public class CrearPedidoDTO {
+    Integer cantidad;
+    String motivo;
     Integer idItem;
-    Integer idProveedor;
-    Double precio;
 }

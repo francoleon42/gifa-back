@@ -1,8 +1,8 @@
 package com.gifa_api.service;
 
-import com.gifa_api.dto.proveedoresYPedidos.CrearPedidoDTO;
+import com.gifa_api.dto.pedido.CrearPedidoDTO;
 
-import com.gifa_api.dto.proveedoresYPedidos.PedidoResponseDTO;
+import com.gifa_api.dto.pedido.PedidoResponseDTO;
 
 import java.util.List;
 

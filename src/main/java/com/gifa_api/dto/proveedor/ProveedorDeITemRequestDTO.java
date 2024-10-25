@@ -1,4 +1,5 @@
-package com.gifa_api.dto.proveedoresYPedidos;
+package com.gifa_api.dto.proveedor;
+
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -9,7 +10,8 @@ import lombok.NoArgsConstructor;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class ProveedorResponseDTO {
-    String email;
-    String nombre;
+public class ProveedorDeITemRequestDTO {
+    Integer idItem;
+    Integer idProveedor;
+    Double precio;
 }

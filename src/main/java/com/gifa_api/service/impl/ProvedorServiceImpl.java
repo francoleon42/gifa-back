@@ -1,7 +1,7 @@
 package com.gifa_api.service.impl;
 
-import com.gifa_api.dto.proveedoresYPedidos.ProveedorResponseDTO;
-import com.gifa_api.dto.proveedoresYPedidos.RegistroProveedorRequestDTO;
+import com.gifa_api.dto.proveedor.ProveedorResponseDTO;
+import com.gifa_api.dto.proveedor.RegistroProveedorRequestDTO;
 import com.gifa_api.exception.NotFoundException;
 import com.gifa_api.model.*;
 import com.gifa_api.repository.IPedidoRepository;

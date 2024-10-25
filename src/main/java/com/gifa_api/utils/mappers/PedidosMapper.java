@@ -2,7 +2,7 @@ package com.gifa_api.utils.mappers;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.gifa_api.dto.item.ItemDeInventarioDTO;
-import com.gifa_api.dto.proveedoresYPedidos.PedidoResponseDTO;
+import com.gifa_api.dto.pedido.PedidoResponseDTO;
 import com.gifa_api.model.ItemDeInventario;
 import com.gifa_api.model.Pedido;
 import com.gifa_api.utils.enums.EstadoPedido;

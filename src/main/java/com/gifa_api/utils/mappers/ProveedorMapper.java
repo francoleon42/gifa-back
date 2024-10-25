@@ -2,7 +2,7 @@ package com.gifa_api.utils.mappers;
 
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.gifa_api.dto.proveedoresYPedidos.ProveedorResponseDTO;
+import com.gifa_api.dto.proveedor.ProveedorResponseDTO;
 import com.gifa_api.model.Proveedor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;

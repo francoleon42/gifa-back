@@ -1,10 +1,7 @@
 package com.gifa_api.testUnitario.service;
 
-import com.gifa_api.dto.chofer.AsignarChoferDTO;
-import com.gifa_api.dto.chofer.ChoferRegistroDTO;
-import com.gifa_api.dto.proveedoresYPedidos.RegistroProveedorRequestDTO;
+import com.gifa_api.dto.proveedor.RegistroProveedorRequestDTO;
 import com.gifa_api.exception.NotFoundException;
-import com.gifa_api.model.Chofer;
 import com.gifa_api.utils.enums.EstadoPedido;
 import com.gifa_api.model.Pedido;
 import com.gifa_api.model.Proveedor;

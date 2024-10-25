@@ -1,9 +1,7 @@
 package com.gifa_api.controller;
 
-import com.gifa_api.dto.proveedoresYPedidos.*;
+import com.gifa_api.dto.pedido.*;
 import com.gifa_api.service.IPedidoService;
-import com.gifa_api.service.IProvedorService;
-import com.gifa_api.service.IProveedorDeItemService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
