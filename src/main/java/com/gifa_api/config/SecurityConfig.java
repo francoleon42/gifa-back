@@ -100,10 +100,10 @@ public class SecurityConfig {
     private void configureChoferEndpoints(AuthorizeHttpRequestsConfigurer<HttpSecurity>.AuthorizationManagerRequestMatcherRegistry authRequest) {
         authRequest
                 .requestMatchers(HttpMethod.POST, "/chofer/registrar").hasRole(ADMINISTRADOR)
-                .requestMatchers(HttpMethod.PATCH, "/chofer/asignarChofer").hasRole(ADMINISTRADOR)
+                .requestMatchers(HttpMethod.PATCH, "/chofer/asignarChofer").hasRole(SUPERVISOR)
                 .requestMatchers(HttpMethod.PATCH, "/chofer/inhabilitar/{id}").hasRole(ADMINISTRADOR)
                 .requestMatchers(HttpMethod.PATCH, "/chofer/habilitar/{id}").hasRole(ADMINISTRADOR)
-                .requestMatchers(HttpMethod.GET, "/chofer/verChoferes").hasRole(ADMINISTRADOR);
+                .requestMatchers(HttpMethod.GET, "/chofer/verChoferes").hasAnyRole(ADMINISTRADOR, SUPERVISOR);
     }
 
     private void configurePedidoEndpoints(AuthorizeHttpRequestsConfigurer<HttpSecurity>.AuthorizationManagerRequestMatcherRegistry authRequest) {
