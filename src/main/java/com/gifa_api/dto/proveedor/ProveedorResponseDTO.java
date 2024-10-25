@@ -10,6 +10,8 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class ProveedorResponseDTO {
+
+    Integer id;
     String email;
     String nombre;
 }

@@ -30,6 +30,7 @@ public class ProveedorMapper {
     // Mapea un Proveedor a ProveedorResponseDTO
     public ProveedorResponseDTO mapToProveedorResponseDTO(Proveedor proveedor) {
         return ProveedorResponseDTO.builder()
+                .id(proveedor.getId())
                 .email(proveedor.getEmail())
                 .nombre(proveedor.getNombre())
                 .build();

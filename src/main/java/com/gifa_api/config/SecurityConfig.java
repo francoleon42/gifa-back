@@ -119,7 +119,7 @@ public class SecurityConfig {
     private void configureProveedoresEndpoints(AuthorizeHttpRequestsConfigurer<HttpSecurity>.AuthorizationManagerRequestMatcherRegistry authRequest) {
         authRequest
                 .requestMatchers(HttpMethod.POST, "/proveedor/registrar").hasRole(ADMINISTRADOR)
-                .requestMatchers(HttpMethod.POST, "/proveedor/asociarAitem").hasRole(ADMINISTRADOR)
+                .requestMatchers(HttpMethod.POST, "/proveedor/asociarAitem").hasRole(SUPERVISOR)
                 .requestMatchers(HttpMethod.GET, "/proveedor/verAll").hasRole(SUPERVISOR)
                 .requestMatchers(HttpMethod.GET, "/proveedor/verProveedoresDeItems").hasRole(SUPERVISOR);
 
