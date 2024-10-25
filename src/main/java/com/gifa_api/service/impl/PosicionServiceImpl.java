@@ -3,6 +3,7 @@ package com.gifa_api.service.impl;
 import com.gifa_api.client.ITraccarCliente;
 import com.gifa_api.dto.traccar.ObtenerDispositivoRequestDTO;
 import com.gifa_api.dto.traccar.PosicionDispositivoDTO;
+import com.gifa_api.dto.traccar.PosicionResponseDTO;
 import com.gifa_api.exception.NotFoundException;
 import com.gifa_api.model.Dispositivo;
 import com.gifa_api.model.Posicion;
@@ -10,7 +11,9 @@ import com.gifa_api.repository.IPosicionRepository;
 import com.gifa_api.service.IDispositivoService;
 import com.gifa_api.service.IPosicionService;
 import com.gifa_api.service.ITraccarService;
+import com.gifa_api.utils.mappers.PosicionMapper;
 import lombok.RequiredArgsConstructor;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
 import java.time.OffsetDateTime;
@@ -23,8 +26,9 @@ public class PosicionServiceImpl implements IPosicionService {
     private final ITraccarCliente traccarCliente;
     private final ITraccarService traccarService;
     private final IDispositivoService dispositivoService;
+    private final PosicionMapper posicionMapper;
 
-//    @Scheduled(fixedRate = 8640)
+    @Scheduled(fixedRate = 8640)
     private void actualizarPosicionesDeDispositivo() {
 
         List<ObtenerDispositivoRequestDTO> dispositivosDTO = traccarService.obtenerDispositivos();
@@ -77,8 +81,8 @@ public class PosicionServiceImpl implements IPosicionService {
 
 
     @Override
-    public List<Posicion> getPosicionesDeDispositivo(String unicoID) {
-        return posicionRepository.findByUnicoId(unicoID);
+    public List<PosicionResponseDTO> getPosicionesDeDispositivo(String unicoID) {
+        return posicionMapper.toPosicionResponseDTOList(posicionRepository.findByUnicoId(unicoID));
     }
 
     @Override

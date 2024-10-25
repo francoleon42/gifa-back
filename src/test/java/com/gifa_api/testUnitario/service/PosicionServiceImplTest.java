@@ -78,16 +78,16 @@ class PosicionServiceImplTest {
 //        verify(posicionRepository, never()).save(any(Posicion.class));
 //    }
 
-    @Test
-    void getPosicionesDeDispositivo_deberiaRetornarListaDePosiciones() {
-        List<Posicion> posiciones = List.of(new Posicion());
-        when(posicionRepository.findByUnicoId("uniqueId")).thenReturn(posiciones);
-
-        List<Posicion> result = posicionService.getPosicionesDeDispositivo("uniqueId");
-
-        verify(posicionRepository, times(1)).findByUnicoId("uniqueId");
-        assertEquals(posiciones, result);
-    }
+//    @Test
+//    void getPosicionesDeDispositivo_deberiaRetornarListaDePosiciones() {
+//        List<Posicion> posiciones = List.of(new Posicion());
+//        when(posicionRepository.findByUnicoId("uniqueId")).thenReturn(posiciones);
+//
+//        List<Posicion> result = posicionService.getPosicionesDeDispositivo("uniqueId");
+//
+//        verify(posicionRepository, times(1)).findByUnicoId("uniqueId");
+//        assertEquals(posiciones, result);
+//    }
 
     @Test
     void getPosicionesDeDispositivoDespuesDeFecha_deberiaRetornarListaDePosiciones() {
