@@ -3,7 +3,7 @@ package com.gifa_api.testUnitario.service;
 import com.gifa_api.dto.item.ItemDeInventarioDTO;
 import com.gifa_api.dto.item.ItemDeInventarioRequestDTO;
 import com.gifa_api.dto.item.UtilizarItemDeInventarioDTO;
-import com.gifa_api.exception.BadRequestException;
+
 import com.gifa_api.exception.BadRoleException;
 import com.gifa_api.exception.NotFoundException;
 import com.gifa_api.model.ItemDeInventario;
