@@ -155,11 +155,11 @@ public class VehiculoServiceImpl implements IVehiculoService {
     }
 
     private void validarRegistrarVehiculoDTO(RegistarVehiculoDTO vehiculoDTO) {
-        // Validar patente
-//        String patenteRegex = "^(?:[A-Z]{3}\\d{3}|[A-Z]{2}\\d{3}[A-Z]{2})$"; // Regex para ambos formatos de patente
-//        if (vehiculoDTO.getPatente() == null || !vehiculoDTO.getPatente().matches(patenteRegex)) {
-//            throw new IllegalArgumentException("La patente debe tener el formato correcto (3 letras, 3 números )  or (2 letras, 3 dígitos, 2 letras).");
-//        }
+//         Validar patente
+        String patenteRegex = "^(?:[A-Za-z]{3}\\d{3}|[A-Za-z]{2}\\d{3}[A-Za-z]{2})$";
+        if (vehiculoDTO.getPatente() == null || !vehiculoDTO.getPatente().matches(patenteRegex)) {
+            throw new IllegalArgumentException("La patente debe tener el formato correcto (3 letras, 3 números )  or (2 letras, 3 dígitos, 2 letras).");
+        }
         if (vehiculoDTO.getAntiguedad() == null || vehiculoDTO.getAntiguedad() < 0) {
             throw new IllegalArgumentException("La antigüedad debe ser mayor o igual a 0.");
         }
