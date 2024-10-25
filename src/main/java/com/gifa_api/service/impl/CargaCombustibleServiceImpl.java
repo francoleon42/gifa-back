@@ -31,7 +31,6 @@ import java.time.LocalDateTime;
 public class CargaCombustibleServiceImpl implements ICargaCombustibleService {
     private final ITarjetaRepository tarjetaRepository;
     private final ICargaCombustibleRepository cargaCombustibleRepository;
-
     private List<Float> preciosCombustiblesCache;
     private LocalDate ultimaActualizacionPrecio;
 
@@ -141,7 +140,6 @@ public class CargaCombustibleServiceImpl implements ICargaCombustibleService {
         if (cargaCombustibleRequestDTO.getCantidadLitros() == null || cargaCombustibleRequestDTO.getCantidadLitros() <= 0) {
             throw new IllegalArgumentException("La cantidad de litros debe ser mayor a cero.");
         }
-        // Validar numeroTarjeta (mínimo 16 dígitos)
         if (cargaCombustibleRequestDTO.getNumeroTarjeta() == null || cargaCombustibleRequestDTO.getNumeroTarjeta().toString().isEmpty() ) {
             throw new IllegalArgumentException("El número de tarjeta debe tener al menos 16 dígitos.");
         }

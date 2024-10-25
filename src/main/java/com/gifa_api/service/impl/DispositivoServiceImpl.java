@@ -50,7 +50,6 @@ public class DispositivoServiceImpl implements IDispositivoService {
         return dispositivo;
     }
 
-
     @Override
     public int calcularKmDeDispositivoDespuesDeFecha(String unicoIdDeDispositivo, OffsetDateTime fecha) {
         List<Posicion> posiciones = posicionRepository.findByUnicoIdAndDespuesFecha(unicoIdDeDispositivo, fecha);

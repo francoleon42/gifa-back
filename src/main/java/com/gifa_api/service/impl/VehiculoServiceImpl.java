@@ -77,18 +77,12 @@ public class VehiculoServiceImpl implements IVehiculoService {
     }
 
     private  byte[] obtenerQR(String patente) {
-        // Generar el código QR
         String contenidoQR = patente; // O cualquier otro identificador
         BufferedImage qrImage = generarQRCode(contenidoQR);
-
-        // Convertir BufferedImage a byte[]
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         try {
             ImageIO.write(qrImage, "png", baos);
             byte[] qrBytes = baos.toByteArray();
-
-//            vehiculo.setQr(qrBytes);
-//            vehiculoRepository.save(vehiculo);
             return qrBytes;
         } catch (IOException e) {
             throw new RuntimeException("Error al generar el QR", e);
@@ -99,8 +93,6 @@ public class VehiculoServiceImpl implements IVehiculoService {
         try {
             QRCodeWriter qrCodeWriter = new QRCodeWriter();
             BitMatrix bitMatrix = qrCodeWriter.encode(contenidoQR, BarcodeFormat.QR_CODE, 300, 300); // Tamaño 300x300 píxeles
-
-            // Convertir BitMatrix a BufferedImage
             return MatrixToImageWriter.toBufferedImage(bitMatrix);
         } catch (WriterException e) {
             throw new RuntimeException("Error al generar el código QR", e);
