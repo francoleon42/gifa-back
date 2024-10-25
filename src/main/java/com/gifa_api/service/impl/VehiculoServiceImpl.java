@@ -58,7 +58,7 @@ public class VehiculoServiceImpl implements IVehiculoService {
                 .numero(generarNumeroTarjeta())
                 .build();
         tarjetaRepository.save(tarjeta);
-
+        byte[] qr = obtenerQR(vehiculoDTO.getPatente());
         Vehiculo vehiculo = Vehiculo
                 .builder()
                 .patente(vehiculoDTO.getPatente())
@@ -69,15 +69,16 @@ public class VehiculoServiceImpl implements IVehiculoService {
                 .estadoVehiculo(EstadoVehiculo.REPARADO)
                 .fechaVencimiento(vehiculoDTO.getFechaRevision())
                 .tarjeta(tarjeta)
+                .qr(qr)
                 .build();
 
         vehiculoRepository.save(vehiculo);
-        guardarQR(vehiculo);
+
     }
 
-    private void guardarQR(Vehiculo vehiculo) {
+    private  byte[] obtenerQR(String patente) {
         // Generar el código QR
-        String contenidoQR = vehiculo.getPatente(); // O cualquier otro identificador
+        String contenidoQR = patente; // O cualquier otro identificador
         BufferedImage qrImage = generarQRCode(contenidoQR);
 
         // Convertir BufferedImage a byte[]
@@ -86,8 +87,9 @@ public class VehiculoServiceImpl implements IVehiculoService {
             ImageIO.write(qrImage, "png", baos);
             byte[] qrBytes = baos.toByteArray();
 
-            vehiculo.setQr(qrBytes);
-            vehiculoRepository.save(vehiculo);
+//            vehiculo.setQr(qrBytes);
+//            vehiculoRepository.save(vehiculo);
+            return qrBytes;
         } catch (IOException e) {
             throw new RuntimeException("Error al generar el QR", e);
         }

@@ -51,4 +51,11 @@ public class Mantenimiento {
     public void finalizar() {
         this.estadoMantenimiento = EstadoMantenimiento.FINALIZADO;
     }
+    public void addOperador(Usuario usuario) {
+        this.operador = usuario;
+    }
+    public void aprobar(){
+        this.estadoMantenimiento = EstadoMantenimiento.APROBADO;
+    }
+
 }

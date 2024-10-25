@@ -7,7 +7,9 @@ import lombok.*;
 
 import java.time.LocalDate;
 import java.util.LinkedHashSet;
+import java.util.Objects;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 @Getter
 @Setter
@@ -72,6 +74,23 @@ public class Vehiculo {
     }
     public void habilitar(){
         this.estadoDeHabilitacion= EstadoDeHabilitacion.HABILITADO;
+    }
+
+    public void removerChofer(Chofer chofer) {
+        if (chofers != null) {
+            chofers = chofers.stream()
+                    .filter(c -> !Objects.equals(c.getId(), chofer.getId()))
+                    .collect(Collectors.toSet());
+        }
+    }
+    public void actualizarKilometraje(Integer kilometraje){
+        this.kilometraje = kilometraje;
+    }
+    public void addDispositivo(Dispositivo dispositivo){
+        this.dispositivo = dispositivo;
+    }
+    public void enReparacion(){
+        this.estadoVehiculo = EstadoVehiculo.EN_REPARACION;
     }
 
 }

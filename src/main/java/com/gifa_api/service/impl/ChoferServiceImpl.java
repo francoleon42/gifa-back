@@ -55,7 +55,7 @@ public class ChoferServiceImpl implements IChoferService {
         Chofer chofer = choferRepository.findById(asignarChoferDTO.getIdChofer())
                 .orElseThrow(() -> new NotFoundException("No se encontró el chofer del id " + asignarChoferDTO.getIdChofer() ));
 
-        chofer.setVehiculo(vehiculo);
+        chofer.addVehiculo(vehiculo);
         choferRepository.save(chofer);
     }
 
@@ -64,7 +64,7 @@ public class ChoferServiceImpl implements IChoferService {
         Chofer chofer = choferRepository.findById(idChofer)
                 .orElseThrow(() -> new NotFoundException("No se encontró el chofer del id " + idChofer));
         if(chofer.getEstadoChofer().equals(EstadoChofer.INHABILITADO)) {
-            chofer.setEstadoChofer(EstadoChofer.HABILITADO);
+            chofer.cambiarEstadoChofer(EstadoChofer.HABILITADO);
         }
         choferRepository.save(chofer);
     }
@@ -76,15 +76,15 @@ public class ChoferServiceImpl implements IChoferService {
 
         if(chofer.getEstadoChofer().equals(EstadoChofer.HABILITADO)) {
            designarVehiculosDeChoferInhabilitado(chofer);
-            chofer.setEstadoChofer(EstadoChofer.INHABILITADO);
-            chofer.setVehiculo(null);
+           chofer.cambiarEstadoChofer(EstadoChofer.INHABILITADO);
+            chofer.desvincularVehiculo();
             choferRepository.save(chofer);
         }
     }
     private void designarVehiculosDeChoferInhabilitado(Chofer chofer){
         if(chofer.getVehiculo() != null) {
             Vehiculo vehiculo = chofer.getVehiculo();
-            vehiculo.setChofers(vehiculo.getChofers().stream().filter(c -> !Objects.equals(c.getId(), chofer.getId())).collect(Collectors.toSet()));
+            vehiculo.removerChofer(chofer);
             vehiculoRepository.save(vehiculo);
         }
     }

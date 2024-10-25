@@ -73,10 +73,8 @@ public class MantenimientoServiceImpl implements IMantenimientoService {
 
     public void asignarMantenimiento(Integer mantenimientoId, Usuario operador) {
         Mantenimiento mantenimiento = findById(mantenimientoId);
-
-        mantenimiento.setOperador(operador);
-        mantenimiento.setEstadoMantenimiento(EstadoMantenimiento.APROBADO);
-
+        mantenimiento.addOperador(operador);
+        mantenimiento.aprobar();
         IMantenimientoRepository.save(mantenimiento);
     }
 
@@ -88,9 +86,9 @@ public class MantenimientoServiceImpl implements IMantenimientoService {
     @Override
     public void finalizarMantenimiento(Integer mantenimientoId) {
         Mantenimiento mantenimiento = findById(mantenimientoId);
-        mantenimiento.setEstadoMantenimiento(EstadoMantenimiento.FINALIZADO);
-        mantenimiento.getVehiculo().setEstadoVehiculo(EstadoVehiculo.REPARADO);
-                    mantenimiento.setFechaFinalizacion(LocalDate.now());
+        mantenimiento.finalizar();
+        mantenimiento.getVehiculo().enReparacion();
+        mantenimiento.setFechaFinalizacion(LocalDate.now());
 
         IMantenimientoRepository.save(mantenimiento);
     }

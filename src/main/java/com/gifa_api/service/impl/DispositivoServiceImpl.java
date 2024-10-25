@@ -38,7 +38,8 @@ public class DispositivoServiceImpl implements IDispositivoService {
                 .unicoId(crearDispositivoRequestDTO.getUniqueId())
                 .vehiculo(vehiculo)
                 .build();
-        vehiculo.setDispositivo(dispositivo);
+
+        vehiculo.addDispositivo(dispositivo);
         vehiculoRepository.save(vehiculo);
     }
 
@@ -68,7 +69,7 @@ public class DispositivoServiceImpl implements IDispositivoService {
             int kilometrosAgregados = kilometrajeRecorridoActual - vehiculo.getKilometraje();
             if( kilometrosAgregados  > 0){
                 kilometrajeVehiculoService.addKilometrajeVehiculo(kilometrosAgregados,OffsetDateTime.now(),vehiculo.getId());
-                vehiculo.setKilometraje(kilometrajeRecorridoActual);
+                vehiculo.actualizarKilometraje(kilometrajeRecorridoActual);
                 vehiculoRepository.save(vehiculo);
             }
         }
