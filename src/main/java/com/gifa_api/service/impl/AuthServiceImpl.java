@@ -16,6 +16,7 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -106,14 +107,16 @@ public class AuthServiceImpl implements IAuthService {
     }
 
     @Override
-    public GetUserByUsernameResponseDTO getUserByUsername(String username) {
-        Usuario user = userRepository
-                .findByUsuario(username)
-                .orElseThrow(() -> new NotFoundException("No se encontro el usuario con username: " + username));
+    public List<GetUserDTO> getAll() {
+        return userRepository.findAll().stream()
+                .map(this::convertToGetUserDTO)
+                .toList();
+    }
 
-        return GetUserByUsernameResponseDTO.builder()
+    private GetUserDTO convertToGetUserDTO(Usuario user) {
+        return GetUserDTO.builder()
                 .id(user.getId())
-                .username(user.getUsername())
+                .username(user.getUsuario())
                 .role(user.getRol())
                 .build();
     }

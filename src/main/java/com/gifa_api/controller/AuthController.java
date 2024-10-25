@@ -1,6 +1,6 @@
 package com.gifa_api.controller;
 
-import com.gifa_api.dto.login.GetUserByUsernameResponseDTO;
+import com.gifa_api.dto.login.GetUserDTO;
 import com.gifa_api.dto.login.LoginRequestDTO;
 import com.gifa_api.dto.login.RegisterRequestDTO;
 import com.gifa_api.dto.login.UpdateRequestDTO;
@@ -9,6 +9,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/auth")
@@ -38,8 +40,8 @@ public class AuthController {
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
-    @GetMapping("/getUserByUsername/{username}")
-    public ResponseEntity<GetUserByUsernameResponseDTO> getUserByUsername(@PathVariable String username) {
-        return new ResponseEntity<>(authService.getUserByUsername(username), HttpStatus.OK);
+    @GetMapping("/getAllUsers")
+    public ResponseEntity<List<GetUserDTO>> getAll() {
+        return new ResponseEntity<>(authService.getAll(), HttpStatus.OK);
     }
 }

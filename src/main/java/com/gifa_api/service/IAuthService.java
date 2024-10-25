@@ -2,10 +2,12 @@ package com.gifa_api.service;
 
 import com.gifa_api.dto.login.*;
 
+import java.util.List;
+
 public interface IAuthService {
     LoginResponseDTO login(LoginRequestDTO userDto);
     LoginResponseDTO register(RegisterRequestDTO userToRegisterDto);
     void logout(String token);
     void update(Integer id, UpdateRequestDTO userToUpdateDto);
-    GetUserByUsernameResponseDTO getUserByUsername(String username);
+    List<GetUserDTO> getAll();
 }
