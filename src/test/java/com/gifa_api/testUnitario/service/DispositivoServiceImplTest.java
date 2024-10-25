@@ -2,94 +2,141 @@ package com.gifa_api.testUnitario.service;
 
 import com.gifa_api.dto.traccar.CrearDispositivoRequestDTO;
 import com.gifa_api.exception.NotFoundException;
-import com.gifa_api.model.Dispositivo;
-import com.gifa_api.model.Posicion;
+
 import com.gifa_api.model.Vehiculo;
-import com.gifa_api.repository.IDispositivoRepository;
-import com.gifa_api.repository.IPosicionRepository;
 import com.gifa_api.repository.IVehiculoRepository;
 import com.gifa_api.service.impl.DispositivoServiceImpl;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import java.util.Arrays;
-import java.util.List;
+
 import java.util.Optional;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 public class DispositivoServiceImplTest {
-
-    @Mock
-    private IDispositivoRepository dispositivoRepository;
-
     @Mock
     private IVehiculoRepository vehiculoRepository;
 
-    @Mock
-    private IPosicionRepository posicionRepository;
+
 
     @InjectMocks
     private DispositivoServiceImpl serviceDispositivo;
+
+    private CrearDispositivoRequestDTO dispositivoRequestDTO;
+
+    @BeforeEach
+    void setUp(){
+         dispositivoRequestDTO = CrearDispositivoRequestDTO.builder().name("name").uniqueId("uniqueid").build();
+    }
 
     // Tests originales
     @Test
     public void crearDispositivo_vehiculoInvalidoExcepcion() {
         Integer idVehiculo = 1;
-        CrearDispositivoRequestDTO dispositivo = new CrearDispositivoRequestDTO();
+
         when(vehiculoRepository.findById(idVehiculo)).thenReturn(Optional.empty());
 
-        assertThrows(NotFoundException.class, () -> serviceDispositivo.crearDispositivo(dispositivo, idVehiculo));
+        assertThrows(NotFoundException.class, () -> serviceDispositivo.crearDispositivo(dispositivoRequestDTO, idVehiculo));
         verify(vehiculoRepository, times(1)).findById(idVehiculo);
-        verify(dispositivoRepository, never()).save(any(Dispositivo.class));
+        verify(vehiculoRepository, never()).save(any(Vehiculo.class));
     }
 
     @Test
     public void crearDispositivo_seGuardaDispositivo() {
         Integer idVehiculo = 1;
-        CrearDispositivoRequestDTO dispositivo = new CrearDispositivoRequestDTO();
+        Vehiculo vehiculo = Vehiculo
+                .builder()
+                .id(idVehiculo)
+                .build();
 
-        when(vehiculoRepository.findById(idVehiculo)).thenReturn(Optional.of(new Vehiculo()));
+        when(vehiculoRepository.findById(idVehiculo)).thenReturn(Optional.of(vehiculo));
 
-        serviceDispositivo.crearDispositivo(dispositivo, idVehiculo);
+        serviceDispositivo.crearDispositivo(dispositivoRequestDTO, idVehiculo);
         verify(vehiculoRepository, times(1)).findById(idVehiculo);
-        verify(dispositivoRepository, times(1)).save(any(Dispositivo.class));
     }
 
-//    // Tests añadidos para calcularDistanciaRecorrida
+    @Test
+    void crearDispositivo_nombreNoPuedeSerVacio(){
+        dispositivoRequestDTO.setName("");
+        assertThrows(IllegalArgumentException.class,() -> serviceDispositivo.crearDispositivo(dispositivoRequestDTO,1));
+    }
+
+    @Test
+    void crearDispositivo_uniqueIdNoPuedeSerVacio(){
+        dispositivoRequestDTO.setName("");
+        assertThrows(IllegalArgumentException.class,() -> serviceDispositivo.crearDispositivo(dispositivoRequestDTO,1));
+    }
+
+
 //    @Test
-//    public void testCalcularDistanciaRecorrida() {
-//        // Creamos posiciones simuladas
-//        Posicion pos1 = Posicion.builder().latitude(-34.603722).longitude(-58.381592).build(); // Buenos Aires
-//        Posicion pos2 = Posicion.builder().latitude(-34.609722).longitude(-58.381592).build(); // Punto cercano
-//        Posicion pos3 = Posicion.builder().latitude(-34.615722).longitude(-58.381592).build(); // Punto más lejano
+//    public void calcularKmDeDispositivoDespuesDeFecha_formulaHaversineCorrecta() {
+//        String unicoId = "12345";
+//        OffsetDateTime fecha = OffsetDateTime.now().minusDays(1);
 //
-//        List<Posicion> posiciones = Arrays.asList(pos1, pos2, pos3);
-//        when(posicionRepository.findByUnicoId("device123")).thenReturn(posiciones);
+//        // Creación de posiciones utilizando el patrón Builder
+//        Posicion pos1 =  Posicion.builder()
+//                .latitude(10.0)
+//                .longitude(10.0)
+//                .build();
 //
+//        Posicion pos2 =  Posicion.builder()
+//                .latitude(20.0)
+//                .longitude(20.0)
+//                .build();
 //
-//        int distanciaRecorrida = serviceDispositivo.calcularDistanciaRecorrida("device123");
+//        List<Posicion> posiciones = Arrays.asList(pos1, pos2);
 //
-//        // Verificamos el resultado esperado. Para este caso, espera una distancia en kilómetros.
-//        assertEquals(1, distanciaRecorrida); // Verifica si la distancia es correcta
+//        when(posicionRepository.findByUnicoIdAndDespuesFecha(unicoId, fecha)).thenReturn(posiciones);
+//
+//        // Se espera que se calcule la distancia entre las posiciones
+//        int kilometraje = serviceDispositivo.calcularKmDeDispositivoDespuesDeFecha(unicoId, fecha);
+//
+//        // Verificación de que se utilizó la fórmula de Haversine
+//        verify(posicionRepository, times(1)).findByUnicoIdAndDespuesFecha(unicoId, fecha);
+//        assertEquals(1512, kilometraje); // Valor esperado basado en la fórmula Haversine
 //    }
 //
+//    // Test para actualizarKilometrajeDeVehiculos (invocado indirectamente)
 //    @Test
-//    public void testCalcularDistanciaConUnSoloPunto() {
-//        Posicion pos1 = Posicion.builder().latitude(-34.603722).longitude(-58.381592).build(); // Buenos Aires
+//    public void calcularKmDeDispositivoDespuesDeFecha_actualizaKilometrajeVehiculo() {
+//        String unicoId = "12345";
+//        OffsetDateTime fecha = OffsetDateTime.now().minusDays(1);
 //
-//        List<Posicion> posiciones = Arrays.asList(pos1);
-//        when(posicionRepository.findByUnicoId("device123")).thenReturn(posiciones);
+//        Dispositivo dispositivo = new Dispositivo();
+//        dispositivo.setUnicoId(unicoId);
 //
-//        int distanciaRecorrida = serviceDispositivo.calcularDistanciaRecorrida("device123");
+//        Posicion pos1 =  Posicion.builder()
+//                .latitude(10.0)
+//                .longitude(10.0)
+//                .build();
 //
-//        // Con solo una posición, la distancia recorrida debe ser 0
-//        assertEquals(0, distanciaRecorrida);
+//        Posicion pos2 =  Posicion.builder()
+//                .latitude(20.0)
+//                .longitude(20.0)
+//                .build();
+//
+//        List<Posicion> posiciones = Arrays.asList(pos1, pos2);
+//
+//        Vehiculo vehiculo = new Vehiculo();
+//        vehiculo.setKilometraje(1000);
+//
+//        when(dispositivoRepository.findByUnicoId(unicoId)).thenReturn(Optional.of(dispositivo));
+//        when(posicionRepository.findByUnicoId(unicoId)).thenReturn(posiciones);
+//        when(dispositivoRepository.findVehiculosDeDispositivo(unicoId)).thenReturn(Optional.of(vehiculo));
+//
+//        // Método indirecto que actualiza el kilometraje
+//        serviceDispositivo.calcularKmDeDispositivoDespuesDeFecha(unicoId, fecha);
+//
+//        // Verificación de que el kilometraje se actualiza correctamente
+//        verify(dispositivoRepository, times(1)).findVehiculosDeDispositivo(unicoId);
+//        verify(kilometrajeVehiculoService, times(1)).addKilometrajeVehiculo(anyInt(), any(OffsetDateTime.class), eq(vehiculo.getId()));
+//        verify(vehiculoRepository, times(1)).save(vehiculo);
 //    }
 }

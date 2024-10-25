@@ -4,6 +4,8 @@ import com.gifa_api.config.jwt.JwtService;
 import com.gifa_api.dto.login.LoginRequestDTO;
 import com.gifa_api.dto.login.LoginResponseDTO;
 import com.gifa_api.dto.login.RegisterRequestDTO;
+import com.gifa_api.exception.BadRoleException;
+import com.gifa_api.exception.NotFoundException;
 import com.gifa_api.exception.RegisterException;
 import com.gifa_api.model.Usuario;
 import com.gifa_api.repository.IUsuarioRepository;
@@ -155,7 +157,7 @@ class AuthServiceImplTest {
                 .thenReturn(null); // Simular autenticación NO exitosa
         when(userRepository.findByUsuario(usuarioInexistente)).thenReturn(Optional.empty());
 
-        assertThrows(NoSuchElementException.class, () -> authService.login(loginRequest));
+        assertThrows(NotFoundException.class, () -> authService.login(loginRequest));
         verify(authenticationManager).authenticate(any(UsernamePasswordAuthenticationToken.class));
         verify(userRepository).findByUsuario(usuarioInexistente);
     }

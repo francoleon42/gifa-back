@@ -55,6 +55,12 @@ public class MantenimientoServiceImplTest {
     }
 
     @Test
+    void crearMantenimiento_asuntoNoPuedeSerVacio(){
+        RegistrarMantenimientoDTO mantenimiento = RegistrarMantenimientoDTO.builder().asunto("").build();
+        assertThrows(IllegalArgumentException.class, () -> mantenimientoService.crearMantenimiento(mantenimiento));
+    }
+
+    @Test
     void crearMantenimiento_debeGuardarMantenimiento() {
         // Arrange
         Integer id = 1;

@@ -1,13 +1,17 @@
 package com.gifa_api.testUnitario.service;
 
+import com.gifa_api.dto.chofer.AsignarChoferDTO;
+import com.gifa_api.dto.chofer.ChoferRegistroDTO;
 import com.gifa_api.dto.proveedoresYPedidos.RegistroProveedorRequestDTO;
 import com.gifa_api.exception.NotFoundException;
+import com.gifa_api.model.Chofer;
 import com.gifa_api.utils.enums.EstadoPedido;
 import com.gifa_api.model.Pedido;
 import com.gifa_api.model.Proveedor;
 import com.gifa_api.repository.IPedidoRepository;
 import com.gifa_api.repository.IProveedorRepository;
 import com.gifa_api.service.impl.ProvedorServiceImpl;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -37,6 +41,114 @@ class ProvedorServiceImplTest {
     @InjectMocks
     private ProvedorServiceImpl provedorService;
 
+    private RegistroProveedorRequestDTO proveedorRequestDTO;
+
+    @BeforeEach
+    void setUp(){
+        proveedorRequestDTO = RegistroProveedorRequestDTO.builder()
+                .nombre("nombre")
+                .email("emailvalido@gmail.com")
+                .build();
+    }
+
+    @Test
+    void nombreNoPuedeSerNull(){
+        proveedorRequestDTO.setNombre(null);
+        assertThrows(IllegalArgumentException.class,() -> provedorService.registrarProveedor(proveedorRequestDTO));
+        verify(proveedorRepository, never() ).save(any(Proveedor.class));
+    }
+
+    @Test
+    void nombreNoPuedeEstarVacio(){
+        proveedorRequestDTO.setNombre("");
+        assertThrows(IllegalArgumentException.class,() -> provedorService.registrarProveedor(proveedorRequestDTO));
+        verify(proveedorRepository, never() ).save(any(Proveedor.class));
+    }
+
+    @Test
+    void nombreNoPuedeTenerDigitos(){
+        proveedorRequestDTO.setNombre("fede1");
+        assertThrows(IllegalArgumentException.class,() -> provedorService.registrarProveedor(proveedorRequestDTO));
+        verify(proveedorRepository, never() ).save(any(Proveedor.class));
+    }
+
+    @Test
+    void nombreNoPuedeTenerCaracteresEspeciales(){
+        proveedorRequestDTO.setNombre("fede#");
+        assertThrows(IllegalArgumentException.class,() -> provedorService.registrarProveedor(proveedorRequestDTO));
+        verify(proveedorRepository, never() ).save(any(Proveedor.class));
+    }
+
+    @Test
+    void emailNoPuedeEstarNull(){
+        proveedorRequestDTO.setEmail(null);
+        assertThrows(IllegalArgumentException.class,() -> provedorService.registrarProveedor(proveedorRequestDTO));
+        verify(proveedorRepository, never() ).save(any(Proveedor.class));
+    }
+
+    @Test
+    void emailNoPuedeEstarVacio(){
+        proveedorRequestDTO.setEmail("");
+        assertThrows(IllegalArgumentException.class,() -> provedorService.registrarProveedor(proveedorRequestDTO));
+        verify(proveedorRepository, never() ).save(any(Proveedor.class));
+    }
+
+    @Test
+    void emailNoDebeTenerFormatoInvalido_FaltaArroba() {
+        proveedorRequestDTO.setEmail("emailinvalidogmail.com");
+        assertThrows(IllegalArgumentException.class, () -> provedorService.registrarProveedor(proveedorRequestDTO));
+        verify(proveedorRepository, never()).save(any(Proveedor.class));
+    }
+
+    @Test
+    void emailNoDebeTenerFormatoInvalido_DominioFaltante() {
+        proveedorRequestDTO.setEmail("emailvalido@.com");
+        assertThrows(IllegalArgumentException.class, () -> provedorService.registrarProveedor(proveedorRequestDTO));
+        verify(proveedorRepository, never()).save(any(Proveedor.class));
+    }
+
+    @Test
+    void emailNoDebeTenerFormatoInvalido_ExtensionCorta() {
+        proveedorRequestDTO.setEmail("emailvalido@gmail.c");
+        assertThrows(IllegalArgumentException.class, () -> provedorService.registrarProveedor(proveedorRequestDTO));
+        verify(proveedorRepository, never()).save(any(Proveedor.class));
+    }
+
+    @Test
+    void emailNoDebeTenerFormatoInvalido_ExtensionLarga() {
+        proveedorRequestDTO.setEmail("emailvalido@gmail.corporate");
+        assertThrows(IllegalArgumentException.class, () -> provedorService.registrarProveedor(proveedorRequestDTO));
+        verify(proveedorRepository, never()).save(any(Proveedor.class));
+    }
+
+    @Test
+    void emailNoDebeTenerFormatoInvalido_CaracteresEspecialesAntesDelArroba() {
+        proveedorRequestDTO.setEmail("nombre#usuario@gmail.com");
+        assertThrows(IllegalArgumentException.class, () -> provedorService.registrarProveedor(proveedorRequestDTO));
+        verify(proveedorRepository, never()).save(any(Proveedor.class));
+    }
+
+    @Test
+    void emailNoDebeTenerFormatoInvalido_CaracteresEspecialesEnDominio() {
+        proveedorRequestDTO.setEmail("nombre@dominio#.com");
+        assertThrows(IllegalArgumentException.class, () -> provedorService.registrarProveedor(proveedorRequestDTO));
+        verify(proveedorRepository, never()).save(any(Proveedor.class));
+    }
+
+    @Test
+    void emailNoDebeTenerFormatoInvalido_SinParteLocal() {
+        proveedorRequestDTO.setEmail("@gmail.com");
+        assertThrows(IllegalArgumentException.class, () -> provedorService.registrarProveedor(proveedorRequestDTO));
+        verify(proveedorRepository, never()).save(any(Proveedor.class));
+    }
+
+    @Test
+    void emailNoDebeTenerFormatoInvalido_EspaciosEnBlanco() {
+        proveedorRequestDTO.setEmail("email valido@gmail.com");
+        assertThrows(IllegalArgumentException.class, () -> provedorService.registrarProveedor(proveedorRequestDTO));
+        verify(proveedorRepository, never()).save(any(Proveedor.class));
+    }
+
     @Test
     void obtenerByid_debeLanzarNotFoundExceptionSiNoExiste() {
         when(proveedorRepository.findById(1)).thenReturn(Optional.empty());
@@ -49,10 +161,7 @@ class ProvedorServiceImplTest {
 
     @Test
     void registrarProveedor_debeGuardarProveedor() {
-        RegistroProveedorRequestDTO requestDTO = new RegistroProveedorRequestDTO("Proveedor1", "email@proveedor.com");
-
-        provedorService.registrarProveedor(requestDTO);
-
+        provedorService.registrarProveedor(proveedorRequestDTO);
 
         verify(proveedorRepository, times(1)).save(any(Proveedor.class));
     }

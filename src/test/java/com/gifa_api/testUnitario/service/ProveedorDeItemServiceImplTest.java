@@ -1,100 +1,148 @@
-//package com.gifa_api.testUnitario.service;
-//
-//import com.gifa_api.dto.proveedoresYPedidos.AsociacionProveedorDeITemRequestDTO;
-//import com.gifa_api.exception.NotFoundException;
-//import com.gifa_api.model.ItemDeInventario;
-//import com.gifa_api.model.Proveedor;
-//import com.gifa_api.model.ProveedorDeItem;
-//import com.gifa_api.repository.IProveedorDeItemRepository;
-//import com.gifa_api.service.IItemDeIventarioService;
-//import com.gifa_api.service.IProvedorService;
-//import com.gifa_api.service.impl.ProveedorDeItemServiceImpl;
-//import org.junit.jupiter.api.BeforeEach;
-//import org.junit.jupiter.api.Test;
-//import org.junit.jupiter.api.extension.ExtendWith;
-//import org.mockito.InjectMocks;
-//import org.mockito.Mock;
-//import org.mockito.junit.jupiter.MockitoExtension;
-//
-//import static org.junit.jupiter.api.Assertions.*;
-//import static org.mockito.Mockito.*;
-//@ExtendWith(MockitoExtension.class)
-//class ProveedorDeItemServiceImplTest {
-//    @Mock
-//    private IItemDeIventarioService itemDeIventarioService;
-//
-//    @Mock
-//    private IProvedorService provedorService;
-//
-//    @Mock
-//    private IProveedorDeItemRepository proveedorDeItemRepository;
-//
-//    @InjectMocks
-//    private ProveedorDeItemServiceImpl proveedorDeItemService;
-//
-//    private AsociacionProveedorDeITemRequestDTO asociacion;
-//    private   ItemDeInventario itemDeInventario;
-//    private Proveedor proveedor;
-//
-//    @BeforeEach
-//    void setUp(){
-//        asociacion = new AsociacionProveedorDeITemRequestDTO(1,1,3.0);
-//        itemDeInventario = new ItemDeInventario();
-//        proveedor = new Proveedor();
-//    }
-//
-//    @Test
-//    void asociarProveedorAItem_noEncuentraItem() {
-//        when(itemDeIventarioService.obtenerById(asociacion.getIdItem())).thenThrow(NotFoundException.class);
-//
-//        assertThrows(NotFoundException.class, () -> proveedorDeItemService.asociarProveedorAItem(asociacion));
-//
-//        verify(itemDeIventarioService, times(1)).obtenerById(asociacion.getIdItem());
-//        verify(provedorService,never()).obtenerByid(asociacion.getIdProveedor());
-//        verify(proveedorDeItemRepository,never()).save(any(ProveedorDeItem.class));
-//
-//    }
-//
-//    @Test
-//    void asociarProveedorAItem_noEncuentraProveedor() {
-//        when(itemDeIventarioService.obtenerById(asociacion.getIdItem())).thenReturn(new ItemDeInventario());
-//        when(provedorService.obtenerByid(asociacion.getIdProveedor())).thenThrow(NotFoundException.class);
-//
-//
-//        assertThrows(NotFoundException.class, () -> proveedorDeItemService.asociarProveedorAItem(asociacion));
-//
-//        verify(itemDeIventarioService, times(1)).obtenerById(asociacion.getIdItem());
-//        verify(provedorService,times(1)).obtenerByid(asociacion.getIdProveedor());
-//        verify(proveedorDeItemRepository,never()).save(any(ProveedorDeItem.class));
-//
-//    }
-//
-//        @Test
-//    void asociarProveedorAItem_debeGuardarProveedorDeItem() {
-//        // Arrange
-//        when(itemDeIventarioService.obtenerById(asociacion.getIdItem())).thenReturn(itemDeInventario);
-//        when(provedorService.obtenerByid(asociacion.getIdProveedor())).thenReturn(proveedor);
-//
-//        // Act
-//        proveedorDeItemService.asociarProveedorAItem(asociacion);
-//
-//        // Assert
-//        verify(itemDeIventarioService, times(1)).obtenerById(asociacion.getIdItem());
-//        verify(provedorService, times(1)).obtenerByid(asociacion.getIdProveedor());
-//        verify(proveedorDeItemRepository, times(1)).save(any(ProveedorDeItem.class));
-//    }
-//
-//    @Test
-//    void proveedorMasEconomico_debeRetornarProveedorConPrecioMasBajo() {
-//        Integer idItem = 1;
-//        ProveedorDeItem proveedorDeItem = new ProveedorDeItem();
-//
-//        when(proveedorDeItemRepository.findProveedorMasEconomicoByItemId(idItem)).thenReturn(proveedorDeItem);
-//
-//        ProveedorDeItem result = proveedorDeItemService.proveedorMasEconomico(idItem);
-//
-//        assertNotNull(result);
-//        assertEquals(proveedorDeItem, result);
-//        verify(proveedorDeItemRepository, times(1)).findProveedorMasEconomicoByItemId(idItem);
-//    }
-//}
+package com.gifa_api.testUnitario.service;
+
+import com.gifa_api.dto.proveedoresYPedidos.ProveedorDeITemRequestDTO;
+import com.gifa_api.dto.proveedoresYPedidos.ProveedorDeITemResponseDTO;
+import com.gifa_api.exception.NotFoundException;
+import com.gifa_api.model.ItemDeInventario;
+import com.gifa_api.model.Proveedor;
+import com.gifa_api.model.ProveedorDeItem;
+import com.gifa_api.repository.IProveedorDeItemRepository;
+import com.gifa_api.repository.ItemDeInventarioRepository;
+import com.gifa_api.service.IProvedorService;
+import com.gifa_api.service.impl.ProveedorDeItemServiceImpl;
+import com.gifa_api.utils.mappers.ProveedorDeItemMapper;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
+
+import java.util.Collections;
+import java.util.List;
+import java.util.Optional;
+
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.*;
+@ExtendWith(MockitoExtension.class)
+class ProveedorDeItemServiceImplTest {
+
+    @Mock
+    private ItemDeInventarioRepository itemDeInventarioRepository;
+    @Mock
+    private IProvedorService provedorService;
+    @Mock
+    private IProveedorDeItemRepository iProveedorDeItemRepository;
+    @Mock
+    private ProveedorDeItemMapper proveedorDeItemMapper;
+
+    @InjectMocks
+    private ProveedorDeItemServiceImpl proveedorDeItemService;
+
+    private ProveedorDeITemRequestDTO proveedorDeItemRequestDTO;
+
+    @BeforeEach
+    void setUp() {
+        proveedorDeItemRequestDTO = ProveedorDeITemRequestDTO.builder()
+                .idItem(1)
+                .idProveedor(2)
+                .precio(150.0)
+                .build();
+    }
+
+    @Test
+    void asociarProveedorAItem_ItemNoEncontrado_DeberiaLanzarNotFoundException() {
+        when(itemDeInventarioRepository.findById(proveedorDeItemRequestDTO.getIdItem())).thenReturn(Optional.empty());
+
+        assertThrows(NotFoundException.class, () -> proveedorDeItemService.asociarProveedorAItem(proveedorDeItemRequestDTO));
+
+        verify(itemDeInventarioRepository).findById(proveedorDeItemRequestDTO.getIdItem());
+        verify(iProveedorDeItemRepository, never()).save(any(ProveedorDeItem.class));
+    }
+
+    @Test
+    void asociarProveedorAItem_ProveedorNoEncontrado_DeberiaLanzarNotFoundException() {
+        ItemDeInventario item = new ItemDeInventario();
+        when(itemDeInventarioRepository.findById(proveedorDeItemRequestDTO.getIdItem())).thenReturn(Optional.of(item));
+        when(provedorService.obtenerByid(proveedorDeItemRequestDTO.getIdProveedor())).thenThrow(NotFoundException.class);
+
+        assertThrows(NotFoundException.class, () -> proveedorDeItemService.asociarProveedorAItem(proveedorDeItemRequestDTO));
+
+        verify(itemDeInventarioRepository).findById(proveedorDeItemRequestDTO.getIdItem());
+        verify(provedorService).obtenerByid(proveedorDeItemRequestDTO.getIdProveedor());
+        verify(iProveedorDeItemRepository, never()).save(any(ProveedorDeItem.class));
+    }
+
+    @Test
+    void asociarProveedorAItem_ValidData_GuardarProveedorDeItem() {
+        ItemDeInventario item = new ItemDeInventario();
+        Proveedor proveedor = new Proveedor();
+        when(itemDeInventarioRepository.findById(proveedorDeItemRequestDTO.getIdItem())).thenReturn(Optional.of(item));
+        when(provedorService.obtenerByid(proveedorDeItemRequestDTO.getIdProveedor())).thenReturn(proveedor);
+
+        proveedorDeItemService.asociarProveedorAItem(proveedorDeItemRequestDTO);
+
+        verify(itemDeInventarioRepository).findById(proveedorDeItemRequestDTO.getIdItem());
+        verify(provedorService).obtenerByid(proveedorDeItemRequestDTO.getIdProveedor());
+        verify(iProveedorDeItemRepository).save(any(ProveedorDeItem.class));
+    }
+
+    @Test
+    void proveedorMasEconomico_ItemExiste_DeberiaRetornarProveedorDeItem() {
+        Integer idItem = 1;
+        ProveedorDeItem proveedorDeItem = new ProveedorDeItem();
+        when(iProveedorDeItemRepository.findProveedorMasEconomicoByItemId(idItem)).thenReturn(proveedorDeItem);
+
+        ProveedorDeItem result = proveedorDeItemService.proveedorMasEconomico(idItem);
+
+        assertEquals(proveedorDeItem, result);
+        verify(iProveedorDeItemRepository).findProveedorMasEconomicoByItemId(idItem);
+    }
+
+    @Test
+    void proveedorMasEconomico_ItemNoExiste_DeberiaRetornarNull() {
+        Integer idItem = 1;
+        when(iProveedorDeItemRepository.findProveedorMasEconomicoByItemId(idItem)).thenReturn(null);
+
+        ProveedorDeItem result = proveedorDeItemService.proveedorMasEconomico(idItem);
+
+        assertNull(result);
+        verify(iProveedorDeItemRepository).findProveedorMasEconomicoByItemId(idItem);
+    }
+
+    @Test
+    void obtenerAll_DeberiaRetornarListaDeProveedorDeItemResponseDTO() {
+        ProveedorDeItem proveedorDeItem = new ProveedorDeItem();
+        ProveedorDeITemResponseDTO proveedorDeItemResponseDTO = new ProveedorDeITemResponseDTO();
+        when(iProveedorDeItemRepository.findAll()).thenReturn(Collections.singletonList(proveedorDeItem));
+        when(proveedorDeItemMapper.mapToProveedorDeItemResponseDTO(anyList())).thenReturn(Collections.singletonList(proveedorDeItemResponseDTO));
+
+        List<ProveedorDeITemResponseDTO> result = proveedorDeItemService.obtenerAll();
+
+        assertEquals(1, result.size());
+        assertEquals(proveedorDeItemResponseDTO, result.get(0));
+        verify(iProveedorDeItemRepository).findAll();
+        verify(proveedorDeItemMapper).mapToProveedorDeItemResponseDTO(anyList());
+    }
+
+    @Test
+    void validarProveedorDeItemRequestDTO_PrecioEsNull_DeberiaLanzarIllegalArgumentException() {
+        proveedorDeItemRequestDTO.setPrecio(null);
+        assertThrows(IllegalArgumentException.class, () -> proveedorDeItemService.asociarProveedorAItem(proveedorDeItemRequestDTO));
+        verify(iProveedorDeItemRepository,never()).save(any(ProveedorDeItem.class));
+    }
+
+    @Test
+    void validarProveedorDeItemRequestDTO_PrecioEsCero_DeberiaLanzarIllegalArgumentException() {
+        proveedorDeItemRequestDTO.setPrecio(0.0);
+        assertThrows(IllegalArgumentException.class, () -> proveedorDeItemService.asociarProveedorAItem(proveedorDeItemRequestDTO));
+        verify(iProveedorDeItemRepository,never()).save(any(ProveedorDeItem.class));
+    }
+
+    @Test
+    void validarProveedorDeItemRequestDTO_PrecioEsNegativo_DeberiaLanzarIllegalArgumentException() {
+        proveedorDeItemRequestDTO.setPrecio(-10.0);
+        assertThrows(IllegalArgumentException.class, () -> proveedorDeItemService.asociarProveedorAItem(proveedorDeItemRequestDTO));
+        verify(iProveedorDeItemRepository,never()).save(any(ProveedorDeItem.class));
+    }
+}
