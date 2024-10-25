@@ -3,8 +3,10 @@ package com.gifa_api.config;
 import com.gifa_api.client.ITraccarCliente;
 import com.gifa_api.dto.traccar.CrearDispositivoRequestDTO;
 import com.gifa_api.dto.traccar.ObtenerDispositivoRequestDTO;
+import com.gifa_api.dto.vehiculo.RegistarVehiculoDTO;
 import com.gifa_api.model.*;
 import com.gifa_api.repository.*;
+import com.gifa_api.service.impl.VehiculoServiceImpl;
 import com.gifa_api.utils.enums.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.ApplicationArguments;
@@ -12,12 +14,8 @@ import org.springframework.boot.ApplicationRunner;
 import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Component;
 
-import java.math.BigDecimal;
-import java.time.Instant;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.time.OffsetDateTime;
-import java.util.ArrayList;
 import java.util.List;
 
 @Profile("!prod")
@@ -28,7 +26,6 @@ public class Bootstrap implements ApplicationRunner {
     private final IVehiculoRepository vehiculoRepository;
     private final ITarjetaRepository tarjetaRepository;
     private final ICargaCombustibleRepository cargaCombustibleRepository;
-    private final IPosicionRepository gpsDataRepository;
     private final ItemDeInventarioRepository itemDeInventarioRepository;
     private final IPedidoRepository pedidoRepository;
     private final IMantenimientoRepository mantenimientoRepository;
@@ -39,6 +36,8 @@ public class Bootstrap implements ApplicationRunner {
     private final IChoferRepository choferRepository;
     private final IDispositivoRepository dispositivoRepository;
     private final ITraccarCliente traccarCliente;
+    private final IKilometrajeVehiculoRepository kilometrajeVehiculoRepository;
+    private final VehiculoServiceImpl vehiculoServiceImpl;
 
     @Override
     public void run(ApplicationArguments args) throws Exception {
@@ -87,31 +86,25 @@ public class Bootstrap implements ApplicationRunner {
 
         tarjetaRepository.saveAll(List.of(tarjeta1, tarjeta2));
 
+        RegistarVehiculoDTO dto1 = new RegistarVehiculoDTO();
+        dto1.setPatente("ABC123");
+        dto1.setAntiguedad(5);
+        dto1.setKilometraje(0);
+        dto1.setModelo("Modelo X");
+        dto1.setFechaRevision(LocalDate.now().plusYears(1));
 
-        // Crear vehículos con builder
-        Vehiculo vehiculo1 = Vehiculo.builder()
-                .patente("ABC123")
-                .antiguedad(5)
-                .kilometraje(0)
-                .modelo("Modelo X")
-                .estadoVehiculo(EstadoVehiculo.REPARADO)
-                .estadoDeHabilitacion(EstadoDeHabilitacion.HABILITADO)
-                .fechaVencimiento(LocalDate.now().plusYears(1))
-                .tarjeta(tarjeta1)
-                .build();
+        RegistarVehiculoDTO dto2 = new RegistarVehiculoDTO();
+        dto2.setPatente("XYZ789");
+        dto2.setAntiguedad(3);
+        dto2.setKilometraje(0);
+        dto2.setModelo("Modelo Y");
+        dto2.setFechaRevision(LocalDate.now().plusYears(1));
 
-        Vehiculo vehiculo2 = Vehiculo.builder()
-                .patente("XYZ789")
-                .antiguedad(3)
-                .kilometraje(0)
-                .modelo("Modelo Y")
-                .estadoVehiculo(EstadoVehiculo.EN_REPARACION)
-                .estadoDeHabilitacion(EstadoDeHabilitacion.HABILITADO)
-                .fechaVencimiento(LocalDate.now().plusYears(1))
-                .tarjeta(tarjeta2)
-                .build();
+        vehiculoServiceImpl.registrar(dto1);
+        vehiculoServiceImpl.registrar(dto2);
 
-        vehiculoRepository.saveAll(List.of(vehiculo1, vehiculo2));
+        Vehiculo vehiculo1 = vehiculoRepository.findById(1).orElseThrow();
+        Vehiculo vehiculo2 = vehiculoRepository.findById(2).orElseThrow();
 
         Usuario usuarioChofer = Usuario.builder()
                 .usuario("chofer")
@@ -129,14 +122,14 @@ public class Bootstrap implements ApplicationRunner {
         choferRepository.saveAll(List.of(chofer));
 
         // Crear cargas de combustible con builder
-        for (int i = 1; i <= 10; i++) {
+        for (int i = 1; i <= 60; i++) {
             OffsetDateTime fechaHora = OffsetDateTime.now().plusDays(i).plusHours(i);
             CargaCombustible carga = CargaCombustible.builder()
-                    .cantidadLitros(i * 50)
+                    .cantidadLitros(i * 5)
                     // Sumamos i días y horas para que cada registro tenga una fecha y hora diferentes
                     .fechaHora(fechaHora)
                     .precioPorLitro(100f + i)
-                    .tarjeta(tarjeta1)
+                    .tarjeta(i % 2 == 0 ? tarjeta1 : tarjeta2)
                     .build();
             cargaCombustibleRepository.save(carga);
         }
@@ -171,7 +164,12 @@ public class Bootstrap implements ApplicationRunner {
                     .build();
 
             dispositivoRepository.save(dispositivo);
+
+            vehiculos.get(Integer.parseInt(dispositivoTraccar.getUniqueId()) - 1).setDispositivo(dispositivo);
         }
+
+        //Agrego dispositivos
+        vehiculoRepository.saveAll(vehiculos);
 
         // Crear ítems de inventario con builder
         ItemDeInventario item1 = ItemDeInventario.builder()
@@ -274,20 +272,15 @@ public class Bootstrap implements ApplicationRunner {
 
         itemUsadoMantenimientoRepository.saveAll(List.of(itemUsadoMantenimiento1, itemUsadoMantenimiento2));
 
-
-
-//        // Crear kilometrajes asociados a vehiculo1
-//        for (int i = 1; i <= 5; i++) {
-//            KilometrajeVehiculo kilometraje = KilometrajeVehiculo.builder()
-//                    .kilometrosRecorridos(100 * (float) i) // Convertir i a Float
-//                    .kilometroAlFinTrayecto(1000 + (100 * (float) i))
-//                    .kilometroInicioTrayecto(900 + (100 * (float) i))
-//                    .fechaInicio(LocalDate.now().minusDays(i))
-//                    .fechaFin(LocalDate.now().minusDays(i - 1))
-//                    .vehiculo(vehiculo1)
-//                    .build();
-//            kilometrajeVehiculoRepository.save(kilometraje);
-//        }
-
+        // Crear kilometrajes asociados a vehiculo1
+        for (int i = 1; i <= 60; i++) {
+            OffsetDateTime fechaHora = OffsetDateTime.now().plusDays(i + 5).plusHours(i);
+            KilometrajeVehiculo kilometraje = KilometrajeVehiculo.builder()
+                    .kilometrosRecorridos(40 + i)
+                    .fecha(fechaHora)
+                    .vehiculo(i % 2 == 0 ? vehiculo1 : vehiculo2)
+                    .build();
+            kilometrajeVehiculoRepository.save(kilometraje);
+        }
     }
 }
