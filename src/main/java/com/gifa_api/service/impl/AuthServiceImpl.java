@@ -34,7 +34,7 @@ public class AuthServiceImpl implements IAuthService {
 
         Usuario user = userRepository
                 .findByUsuario(userDto.getUsername())
-                .orElseThrow();
+                .orElseThrow(() -> new NotFoundException("No se encontro el usuario con username: " + userDto.getUsername()));
 
         String token = jwtService.getToken(user);
 
@@ -103,5 +103,18 @@ public class AuthServiceImpl implements IAuthService {
         Optional.ofNullable(passwordEncoder.encode(userToUpdateDto.getPassword())).ifPresent(user::setContrasena);
 
         userRepository.save(user);
+    }
+
+    @Override
+    public GetUserByUsernameResponseDTO getUserByUsername(String username) {
+        Usuario user = userRepository
+                .findByUsuario(username)
+                .orElseThrow(() -> new NotFoundException("No se encontro el usuario con username: " + username));
+
+        return GetUserByUsernameResponseDTO.builder()
+                .id(user.getId())
+                .username(user.getUsername())
+                .role(user.getRol())
+                .build();
     }
 }

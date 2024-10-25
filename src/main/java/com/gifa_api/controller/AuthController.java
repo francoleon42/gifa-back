@@ -1,5 +1,6 @@
 package com.gifa_api.controller;
 
+import com.gifa_api.dto.login.GetUserByUsernameResponseDTO;
 import com.gifa_api.dto.login.LoginRequestDTO;
 import com.gifa_api.dto.login.RegisterRequestDTO;
 import com.gifa_api.dto.login.UpdateRequestDTO;
@@ -35,5 +36,10 @@ public class AuthController {
     public ResponseEntity<?> logout(@RequestHeader("Authorization") String token) {
         authService.logout(token);
         return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    @GetMapping("/getUserByUsername/{username}")
+    public ResponseEntity<GetUserByUsernameResponseDTO> getUserByUsername(@PathVariable String username) {
+        return new ResponseEntity<>(authService.getUserByUsername(username), HttpStatus.OK);
     }
 }

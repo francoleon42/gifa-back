@@ -172,7 +172,8 @@ public class SecurityConfig {
     private void configureAuthenticatedEndpoints(AuthorizeHttpRequestsConfigurer<HttpSecurity>.AuthorizationManagerRequestMatcherRegistry authRequest) {
         authRequest
                 .requestMatchers(HttpMethod.POST, "/auth/logout").authenticated()
-                .requestMatchers(HttpMethod.PUT, "/auth/update/{id}").hasRole(ADMINISTRADOR);
+                .requestMatchers(HttpMethod.PUT, "/auth/update/{id}").hasRole(ADMINISTRADOR)
+                .requestMatchers(HttpMethod.GET, "/auth/getUserByUsername/{username}").hasRole(ADMINISTRADOR);
     }
 
     private void configureCargarCombustibleEndpoints(AuthorizeHttpRequestsConfigurer<HttpSecurity>.AuthorizationManagerRequestMatcherRegistry authRequest) {
