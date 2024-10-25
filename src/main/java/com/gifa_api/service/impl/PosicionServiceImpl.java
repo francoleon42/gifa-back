@@ -11,16 +11,10 @@ import com.gifa_api.service.IDispositivoService;
 import com.gifa_api.service.IPosicionService;
 import com.gifa_api.service.ITraccarService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
-import java.awt.print.Pageable;
-import java.time.LocalDateTime;
 import java.time.OffsetDateTime;
-import java.time.ZoneOffset;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
