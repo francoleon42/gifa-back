@@ -220,7 +220,7 @@ public class Bootstrap implements ApplicationRunner {
         // Crear pedidos con builder
         Pedido pedido1 = Pedido.builder()
                 .fecha(LocalDate.now())
-                .cantidad(5)
+                .cantidad(30)
                 .motivo("Reponer stock")
                 .item(item1)
                 .estadoPedido(EstadoPedido.PENDIENTE)
@@ -228,7 +228,7 @@ public class Bootstrap implements ApplicationRunner {
 
         Pedido pedido2 = Pedido.builder()
                 .fecha(LocalDate.now())
-                .cantidad(3)
+                .cantidad(20)
                 .motivo("Reemplazo de neumático")
                 .item(item2)
                 .estadoPedido(EstadoPedido.PENDIENTE)
@@ -236,7 +236,7 @@ public class Bootstrap implements ApplicationRunner {
 
         Pedido pedido3 = Pedido.builder()
                 .fecha(LocalDate.now())
-                .cantidad(3)
+                .cantidad(15)
                 .motivo("Reemplazo de neumático")
                 .item(item2)
                 .estadoPedido(EstadoPedido.ACEPTADO)

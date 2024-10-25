@@ -82,9 +82,10 @@ public class PedidoServiceImpl implements IPedidoService {
     public void confirmarPedidoRecibido(Integer idPedido) {
         Pedido pedido = pedidoRepository.findById(idPedido)
                 .orElseThrow(() -> new NotFoundException("No se encontró el pedido con id: " + idPedido));
-
+        System.out.println("confirmo");
         if(pedido.getEstadoPedido().equals(EstadoPedido.ACEPTADO)) {
             pedido.getItem().aumentarStock(pedido.getCantidad());
+            pedido.setEstadoPedido(EstadoPedido.FINALIZADO);
         }
         pedidoRepository.save(pedido);
     }
