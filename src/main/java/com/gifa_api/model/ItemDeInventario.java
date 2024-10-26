@@ -32,7 +32,7 @@ public class ItemDeInventario {
     @Column(name = "cant_compra_automatica")
     private Integer cantCompraAutomatica;
 
-    @OneToMany(mappedBy = "item")
+    @OneToMany(mappedBy = "item", cascade = CascadeType.ALL)
     private Set<Pedido> pedidos = new LinkedHashSet<>();
 
     @OneToMany(mappedBy = "itemDeInventario", cascade = CascadeType.ALL)
