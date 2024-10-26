@@ -29,6 +29,7 @@ public class PedidosMapper {
 
     public PedidoResponseDTO mapToPedidoDTO(Pedido pedido) {
         return PedidoResponseDTO.builder()
+                .idPedido(pedido.getId())
                 .fecha(pedido.getFecha())
                 .cantidad(pedido.getCantidad())
                 .motivo(pedido.getMotivo())

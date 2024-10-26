@@ -13,6 +13,7 @@ import java.time.LocalDate;
 @AllArgsConstructor
 @NoArgsConstructor
 public class PedidoResponseDTO {
+    Integer idPedido;
     LocalDate fecha;
     Integer cantidad;
     String motivo;
