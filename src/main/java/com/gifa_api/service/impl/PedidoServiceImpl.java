@@ -63,7 +63,7 @@ public class PedidoServiceImpl implements IPedidoService {
                         .motivo("Solcitud de stock automatica")
                         .build();
                 createPedido(pedidoManualDTO);
-            }else{
+            } else {
                 throw new RuntimeException("Presupuesto insuficiente para realizar el pedido.");
             }
         }
@@ -71,23 +71,23 @@ public class PedidoServiceImpl implements IPedidoService {
 
     @Override
     public List<PedidoResponseDTO> obtenerPedidosAceptados() {
-        return  pedidosMapper.mapToPedidoDTO(pedidoRepository.findPedidosByEstado(EstadoPedido.ACEPTADO));
+        return pedidosMapper.mapToPedidoDTO(pedidoRepository.findPedidosByEstado(EstadoPedido.ACEPTADO));
     }
 
     @Override
     public List<PedidoResponseDTO> obtenerPedidosRechazadosYpendientes() {
-        return pedidosMapper.mapToPedidoDTO(pedidoRepository.findPedidosByDosEstados(EstadoPedido.PENDIENTE,EstadoPedido.RECHAZADO));
+        return pedidosMapper.mapToPedidoDTO(pedidoRepository.findPedidosByDosEstados(EstadoPedido.PENDIENTE, EstadoPedido.RECHAZADO));
     }
 
     @Override
     public void confirmarPedidoRecibido(Integer idPedido) {
         Pedido pedido = pedidoRepository.findById(idPedido)
                 .orElseThrow(() -> new NotFoundException("No se encontró el pedido con id: " + idPedido));
+
+
+        pedido.getItem().aumentarStock(pedido.getCantidad());
+        pedido.setEstadoPedido(EstadoPedido.FINALIZADO);
         
-        if(pedido.getEstadoPedido().equals(EstadoPedido.ACEPTADO)) {
-            pedido.getItem().aumentarStock(pedido.getCantidad());
-            pedido.setEstadoPedido(EstadoPedido.FINALIZADO);
-        }
         pedidoRepository.save(pedido);
     }
 
