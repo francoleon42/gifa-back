@@ -6,4 +6,5 @@ apptraccar:
     username: gifaemail@email.com
     password: 123456
   api:
-    base-url: http://54.227.167.207:8082/api
+
+    base-url: http://54.225.27.194/api
