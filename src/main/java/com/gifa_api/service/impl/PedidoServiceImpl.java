@@ -87,6 +87,8 @@ public class PedidoServiceImpl implements IPedidoService {
         if(pedido.getEstadoPedido().equals(EstadoPedido.ACEPTADO)) {
             pedido.getItem().aumentarStock(pedido.getCantidad());
             pedido.setEstadoPedido(EstadoPedido.FINALIZADO);
+        }else{
+            throw new RuntimeException("No se pudo confirmar el pedido recibido.");
         }
 
         pedidoRepository.save(pedido);
