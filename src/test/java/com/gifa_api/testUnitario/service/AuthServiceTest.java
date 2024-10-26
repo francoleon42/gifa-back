@@ -4,7 +4,6 @@ import com.gifa_api.config.jwt.JwtService;
 import com.gifa_api.dto.login.LoginRequestDTO;
 import com.gifa_api.dto.login.LoginResponseDTO;
 import com.gifa_api.dto.login.RegisterRequestDTO;
-import com.gifa_api.exception.BadRoleException;
 import com.gifa_api.exception.NotFoundException;
 import com.gifa_api.exception.RegisterException;
 import com.gifa_api.model.Usuario;
@@ -22,7 +21,6 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
-import java.util.NoSuchElementException;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;

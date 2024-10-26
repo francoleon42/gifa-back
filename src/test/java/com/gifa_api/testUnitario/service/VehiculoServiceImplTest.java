@@ -23,6 +23,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.time.LocalDate;
+import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
@@ -49,6 +50,11 @@ class VehiculoServiceImplTest {
 
     private RegistarVehiculoDTO vehiculoDTO;
 
+    private Tarjeta tarjeta;
+    private Vehiculo vehiculo;
+
+    private List<Mantenimiento> mantenimientos;
+
     @BeforeEach
     void setUp(){
          vehiculoDTO = RegistarVehiculoDTO
@@ -58,6 +64,18 @@ class VehiculoServiceImplTest {
                 .kilometraje(0)
                 .modelo("toyota")
                 .fechaRevision(LocalDate.now().plusDays(1))
+                .build();
+         tarjeta = Tarjeta.builder().numero(12345678).build();
+
+         vehiculo = Vehiculo.builder()
+                .patente(vehiculoDTO.getPatente())
+                .antiguedad(vehiculoDTO.getAntiguedad())
+                .kilometraje(vehiculoDTO.getKilometraje())
+                .modelo(vehiculoDTO.getModelo())
+                .estadoDeHabilitacion(EstadoDeHabilitacion.HABILITADO)
+                .estadoVehiculo(EstadoVehiculo.REPARADO)
+                .fechaVencimiento(vehiculoDTO.getFechaRevision())
+                .tarjeta(tarjeta)
                 .build();
     }
 
@@ -138,19 +156,6 @@ class VehiculoServiceImplTest {
                 .fechaRevision(LocalDate.now().plusDays(11))
                 .build();
 
-        Tarjeta tarjeta = Tarjeta.builder().numero(12345678).build();
-
-        Vehiculo vehiculo = Vehiculo.builder()
-                .patente(vehiculoDTO.getPatente())
-                .antiguedad(vehiculoDTO.getAntiguedad())
-                .kilometraje(vehiculoDTO.getKilometraje())
-                .modelo(vehiculoDTO.getModelo())
-                .estadoDeHabilitacion(EstadoDeHabilitacion.HABILITADO)
-                .estadoVehiculo(EstadoVehiculo.REPARADO)
-                .fechaVencimiento(vehiculoDTO.getFechaRevision())
-                .tarjeta(tarjeta)
-                .build();
-
         vehiculoService.registrar(vehiculoDTO);
 
         verify(tarjetaRepository, times(1)).save(any(Tarjeta.class));
@@ -166,23 +171,21 @@ class VehiculoServiceImplTest {
     }
 
     @Test
-    void testInhabilitarVehiculoFound() {
-        Integer vehiculoId = 1;
-        Vehiculo vehiculo = mock(Vehiculo.class);
-        when(vehiculoRepository.findById(vehiculoId)).thenReturn(Optional.of(vehiculo));
+    void testInhabilitarVehiculoQueEstaHabilitado() {
+        when(vehiculoRepository.findById(vehiculo.getId())).thenReturn(Optional.of(vehiculo));
 
-        vehiculoService.inhabilitar(vehiculoId);
+        vehiculoService.inhabilitar(vehiculo.getId());
 
-        verify(vehiculo, times(1)).inhabilitar();
         verify(vehiculoRepository, times(1)).save(vehiculo);
+        assertEquals(EstadoDeHabilitacion.INHABILITADO,vehiculo.getEstadoDeHabilitacion());
     }
 
     @Test
     void testObtenerHistorialDeVehiculoNotFound() {
-        String patente = "XYZ123";
-        when(vehiculoRepository.findByPatente(patente)).thenReturn(Optional.empty());
+        when(vehiculoRepository.findByPatente(vehiculo.getPatente())).thenReturn(Optional.empty());
 
-        assertThrows(NotFoundException.class, () -> vehiculoService.obtenerHistorialDeVehiculo(patente));
+        assertThrows(NotFoundException.class, () -> vehiculoService.obtenerHistorialDeVehiculo(vehiculo.getPatente()));
+        verify(vehiculoResponseConQrMapper,never()).toVehiculoResponseConQrDTO(vehiculo,mantenimientos);
     }
 
     @Test
@@ -199,12 +202,12 @@ class VehiculoServiceImplTest {
         when(vehiculoRepository.findByPatente(patente)).thenReturn(Optional.of(vehiculo));
 
         VehiculoResponseConQrDTO responseDTO = new VehiculoResponseConQrDTO();
-        when(vehiculoResponseConQrMapper.toVehiculoResponseConQrDTO(any(), any())).thenReturn(responseDTO);
+        when(vehiculoResponseConQrMapper.toVehiculoResponseConQrDTO(vehiculo, mantenimientos)).thenReturn(responseDTO);
 
         VehiculoResponseConQrDTO result = vehiculoService.obtenerHistorialDeVehiculo(patente);
 
         assertNotNull(result);
-        verify(vehiculoResponseConQrMapper, times(1)).toVehiculoResponseConQrDTO(any(), any());
+        verify(vehiculoResponseConQrMapper, times(1)).toVehiculoResponseConQrDTO(vehiculo, mantenimientos);
     }
 
 }

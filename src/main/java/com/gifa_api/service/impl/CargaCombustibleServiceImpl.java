@@ -8,7 +8,7 @@ import com.gifa_api.repository.ICargaCombustibleRepository;
 import com.gifa_api.repository.ITarjetaRepository;
 
 import com.gifa_api.service.ICargaCombustibleService;
-import com.gifa_api.service.IDispositivoService;
+import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -24,7 +24,6 @@ import java.util.List;
 import java.util.Locale;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDateTime;
 
 @Service
 @RequiredArgsConstructor
