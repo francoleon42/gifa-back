@@ -100,6 +100,7 @@ public class MantenimientoServiceImplTest {
         mantenimientoService.finalizarMantenimiento(1);
 
         assertEquals(EstadoMantenimiento.FINALIZADO, mantenimiento.getEstadoMantenimiento());
+        // si se finaliza el mantenimiento, el vehiculo no deberia estar reparado?
         assertEquals(EstadoVehiculo.REPARADO, vehiculo.getEstadoVehiculo());
         verify(mantenimientoRepository, times(1)).save(mantenimiento);
     }

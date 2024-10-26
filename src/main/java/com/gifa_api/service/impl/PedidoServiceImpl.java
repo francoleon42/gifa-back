@@ -44,7 +44,6 @@ public class PedidoServiceImpl implements IPedidoService {
 
     }
 
-
     @Override
     public void hacerPedidos(Integer idItem) {
         ItemDeInventario item = itemDeInventarioRepository.findById(idItem)
