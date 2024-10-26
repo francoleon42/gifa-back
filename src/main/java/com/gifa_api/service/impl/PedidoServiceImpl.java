@@ -63,7 +63,8 @@ public class PedidoServiceImpl implements IPedidoService {
                         .motivo("Solcitud de stock automatica")
                         .build();
                 createPedido(pedidoManualDTO);
-
+            }else{
+                throw new RuntimeException("Presupuesto insuficiente para realizar el pedido.");
             }
         }
     }
