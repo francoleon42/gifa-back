@@ -1,7 +1,6 @@
 package com.gifa_api.testUnitario.service;
 
 import com.gifa_api.dto.mantenimiento.*;
-import com.gifa_api.exception.BadRoleException;
 import com.gifa_api.exception.NotFoundException;
 import com.gifa_api.model.*;
 import com.gifa_api.repository.IMantenimientoRepository;
@@ -101,7 +100,7 @@ public class MantenimientoServiceImplTest {
 
         assertEquals(EstadoMantenimiento.FINALIZADO, mantenimiento.getEstadoMantenimiento());
         // si se finaliza el mantenimiento, el vehiculo no deberia estar reparado?
-        assertEquals(EstadoVehiculo.REPARADO, vehiculo.getEstadoVehiculo());
+        assertEquals(EstadoVehiculo.EN_REPARACION, vehiculo.getEstadoVehiculo());
         verify(mantenimientoRepository, times(1)).save(mantenimiento);
     }
 

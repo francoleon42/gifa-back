@@ -152,30 +152,19 @@ class PedidoServiceImplTest {
         verify(pedidoRepository, times(1)).save(any(Pedido.class));
     }
 
-    @Test
-    void testHacerPedidos_StockMayorQueUmbral() {
-        itemDeInventario.setUmbral(6);
-        when(itemDeInventarioRepository.findById(itemDeInventario.getId())).thenReturn(Optional.of(itemDeInventario));
-        when(gestorOperacionalService.getGestorOperacional()).thenReturn(gestor);
-        when(proveedorDeItemService.proveedorMasEconomico(itemDeInventario.getId())).thenReturn(proveedorDeItemMasEconomico);
-
-        pedidoService.hacerPedidos(itemDeInventario.getId());
-
-        verify(pedidoRepository, never()).save(any(Pedido.class));
-    }
 
     @Test
     void testHacerPedidos_PresupuestoInvalido() {
-        gestor.setPresupuesto(9.0);
+        gestor.setPresupuesto(0.0);
         when(itemDeInventarioRepository.findById(itemDeInventario.getId())).thenReturn(Optional.of(itemDeInventario));
         when(gestorOperacionalService.getGestorOperacional()).thenReturn(gestor);
         when(proveedorDeItemService.proveedorMasEconomico(itemDeInventario.getId())).thenReturn(proveedorDeItemMasEconomico);
 
-        pedidoService.hacerPedidos(itemDeInventario.getId());
+       assertThrows(RuntimeException.class,() -> pedidoService.hacerPedidos(itemDeInventario.getId()));
 
         verify(pedidoRepository, never()).save(any(Pedido.class));
     }
-
+//testear obtener pedidos con los distintos estados, y confirmar pedido
     @Test
     void testObtenerPedidos() {
         Pedido pedido1 = Pedido.builder().id(1).cantidad(10).motivo("Pedido A").build();

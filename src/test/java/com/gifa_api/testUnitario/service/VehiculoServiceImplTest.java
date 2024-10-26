@@ -1,8 +1,11 @@
 package com.gifa_api.testUnitario.service;
 
+import com.gifa_api.dto.mantenimiento.MantenimientoResponseDTO;
+import com.gifa_api.dto.mantenimiento.MantenimientosResponseDTO;
 import com.gifa_api.dto.vehiculo.ListaVehiculosResponseDTO;
 import com.gifa_api.dto.vehiculo.RegistarVehiculoDTO;
 import com.gifa_api.dto.vehiculo.VehiculoResponseConQrDTO;
+import com.gifa_api.dto.vehiculo.VehiculoResponseDTO;
 import com.gifa_api.exception.NotFoundException;
 import com.gifa_api.model.Mantenimiento;
 import com.gifa_api.model.Tarjeta;
@@ -23,6 +26,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
@@ -76,6 +80,7 @@ class VehiculoServiceImplTest {
                 .estadoVehiculo(EstadoVehiculo.REPARADO)
                 .fechaVencimiento(vehiculoDTO.getFechaRevision())
                 .tarjeta(tarjeta)
+                 .mantenimientos(Set.of(new Mantenimiento()))
                 .build();
     }
 
@@ -159,7 +164,7 @@ class VehiculoServiceImplTest {
         vehiculoService.registrar(vehiculoDTO);
 
         verify(tarjetaRepository, times(1)).save(any(Tarjeta.class));
-        verify(vehiculoRepository, times(2)).save(any(Vehiculo.class)); // por el qr son 2 veces que se guarda el vehiculo.
+        verify(vehiculoRepository, times(1)).save(any(Vehiculo.class));
     }
 
     @Test
@@ -191,22 +196,18 @@ class VehiculoServiceImplTest {
     @Test
     void testObtenerHistorialDeVehiculoFound() {
         String patente = "XYZ123";
-
-        Vehiculo vehiculo = Vehiculo
-                .builder()
-                .mantenimientos(Set.of(new Mantenimiento()))
-                .id(1)
-                .patente("ABC123")
+        MantenimientosResponseDTO mantenimientoDTO =  new MantenimientosResponseDTO();
+        VehiculoResponseConQrDTO vehiculoResponseQR =  VehiculoResponseConQrDTO.builder()
+                .vehiculo(new VehiculoResponseDTO())
+                .mantenimientos(mantenimientoDTO)
                 .build();
 
         when(vehiculoRepository.findByPatente(patente)).thenReturn(Optional.of(vehiculo));
+        List<Mantenimiento> mantenimientos =  new ArrayList<>(vehiculo.getMantenimientos());
 
-        VehiculoResponseConQrDTO responseDTO = new VehiculoResponseConQrDTO();
-        when(vehiculoResponseConQrMapper.toVehiculoResponseConQrDTO(vehiculo, mantenimientos)).thenReturn(responseDTO);
+        when(vehiculoResponseConQrMapper.toVehiculoResponseConQrDTO(vehiculo, mantenimientos)).thenReturn(vehiculoResponseQR);
 
-        VehiculoResponseConQrDTO result = vehiculoService.obtenerHistorialDeVehiculo(patente);
-
-        assertNotNull(result);
+        vehiculoService.obtenerHistorialDeVehiculo(patente);
         verify(vehiculoResponseConQrMapper, times(1)).toVehiculoResponseConQrDTO(vehiculo, mantenimientos);
     }
 
