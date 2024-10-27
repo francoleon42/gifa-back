@@ -73,7 +73,6 @@ public class VehiculoServiceImpl implements IVehiculoService {
                 .build();
 
         vehiculoRepository.save(vehiculo);
-
     }
 
     private  byte[] obtenerQR(String patente) {

@@ -40,7 +40,6 @@ class ItemUsadoMantenimientoServiceImplTest {
 
     @Test
     void testAgregaritemUtilizadoEnMantenimiento_mantenimientoNoEncontrado() {
-
         Integer idMantenimiento = 1;
         FinalizarMantenimientoDTO finalizarMantenimientoDTO = new FinalizarMantenimientoDTO();
         when(iMantenimientoRepository.findById(idMantenimiento)).thenReturn(Optional.empty());

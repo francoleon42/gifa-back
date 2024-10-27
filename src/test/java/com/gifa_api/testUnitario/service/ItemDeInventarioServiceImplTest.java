@@ -4,6 +4,7 @@ import com.gifa_api.dto.item.ItemDeInventarioDTO;
 import com.gifa_api.dto.item.ItemDeInventarioRequestDTO;
 import com.gifa_api.dto.item.UtilizarItemDeInventarioDTO;
 
+import com.gifa_api.exception.BadRequestException;
 import com.gifa_api.exception.BadRoleException;
 import com.gifa_api.exception.NotFoundException;
 import com.gifa_api.model.ItemDeInventario;
@@ -113,7 +114,6 @@ class ItemDeInventarioServiceImplTest {
 
     @Test
     void testUtilizarItemsinStockSuficiente() {
-        // Arrange
         Integer cantidadDisminuir = 6;
         UtilizarItemDeInventarioDTO utilizacionItem = new UtilizarItemDeInventarioDTO(cantidadDisminuir);
         Integer itemId = 1;
@@ -125,7 +125,7 @@ class ItemDeInventarioServiceImplTest {
                 .build();
         when(itemDeInventarioRepository.findById(itemId)).thenReturn(Optional.of(itemDeInventario));
 
-        assertThrows(BadRoleException.class,() -> itemDeInventarioService.utilizarItem(itemId,utilizacionItem));
+        assertThrows(BadRequestException.class,() -> itemDeInventarioService.utilizarItem(itemId,utilizacionItem));
 
         assertEquals(5, itemDeInventario.getStock()); // el stock no tiene que cambiar
         verify(itemDeInventarioRepository, never()).save(itemDeInventario); // no se esta guardando
@@ -133,11 +133,9 @@ class ItemDeInventarioServiceImplTest {
 
     @Test
     void testObtenerByIdconIdInvalido() {
-        // Arrange
         Integer itemId = 1;
         when(itemDeInventarioRepository.findById(itemId)).thenReturn(Optional.empty());
 
-        // Act & Assert
         assertThrows(NotFoundException.class, () -> itemDeInventarioService.obtenerById(itemId));
 
         verify(itemDeInventarioRepository, times(1)).findById(itemId);

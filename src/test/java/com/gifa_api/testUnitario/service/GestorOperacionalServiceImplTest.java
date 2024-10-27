@@ -34,14 +34,22 @@ class GestorOperacionalServiceImplTest {
 
     @BeforeEach
     void setUp() {
-
-
-        // Configuración de un objeto de prueba
         gestorOperacional = new GestorOperacional();
         gestorOperacional.setPresupuesto(10000.0); // Establecer un presupuesto de ejemplo
 
         gestorOperacionalDTO = new GestorOperacionalDTO();
         gestorOperacionalDTO.setPresupuesto(15000.0); // Establecer un nuevo presupuesto de ejemplo
+    }
+
+    @Test
+    void getGestorOperacionalInvalido() {
+        when(gestorOperacionalRepository.findById(1)).thenReturn(Optional.empty());
+
+        NotFoundException exception = assertThrows(NotFoundException.class, () -> {
+            gestorOperacionalService.getGestorOperacional();
+        });
+
+        assertEquals("No se encontró el gestor de pedido con id: 1", exception.getMessage());
     }
 
     @Test
@@ -66,17 +74,6 @@ class GestorOperacionalServiceImplTest {
         assertNotNull(result);
         assertEquals(gestorOperacional.getPresupuesto(), result.getPresupuesto());
         verify(gestorOperacionalRepository).findById(1);
-    }
-
-    @Test
-    void getGestorOperacional_ShouldThrowNotFoundException() {
-        when(gestorOperacionalRepository.findById(1)).thenReturn(Optional.empty());
-
-        NotFoundException exception = assertThrows(NotFoundException.class, () -> {
-            gestorOperacionalService.getGestorOperacional();
-        });
-
-        assertEquals("No se encontró el gestor de pedido con id: 1", exception.getMessage());
     }
 
     @Test

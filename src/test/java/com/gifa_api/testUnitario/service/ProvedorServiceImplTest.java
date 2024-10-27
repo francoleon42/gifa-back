@@ -180,7 +180,6 @@ class ProvedorServiceImplTest {
 
     @Test
     void simulacionDeAceptacionORechazoProovedor_debeActualizarEstadoPedidos() {
-        // Arrange
         Pedido pedido1 = new Pedido();
         pedido1.setEstadoPedido(EstadoPedido.PENDIENTE);
         Pedido pedido2 = new Pedido();

@@ -82,7 +82,6 @@ public class MantenimientoServiceImplTest {
 
         mantenimientoService.asignarMantenimiento(1, operador);
 
-
         assertEquals(operador, mantenimiento.getOperador());
         assertEquals(EstadoMantenimiento.APROBADO, mantenimiento.getEstadoMantenimiento());
     }

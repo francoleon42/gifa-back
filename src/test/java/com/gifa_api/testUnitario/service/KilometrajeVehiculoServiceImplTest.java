@@ -48,20 +48,6 @@ class KilometrajeVehiculoServiceImplTest {
     }
 
     @Test
-    void addKilometrajeVehiculo_ShouldSaveKilometrajeVehiculo() {
-        Integer kilometraje = 150;
-        OffsetDateTime fecha = OffsetDateTime.now();
-        Integer idVehiculo = 1;
-
-        when(vehiculoRepository.findById(idVehiculo)).thenReturn(Optional.of(vehiculo));
-        when(kilometrajeVehiculoRepository.save(any(KilometrajeVehiculo.class))).thenReturn(kilometrajeVehiculo);
-
-        kilometrajeVehiculoService.addKilometrajeVehiculo(kilometraje, fecha, idVehiculo);
-
-        verify(kilometrajeVehiculoRepository).save(any(KilometrajeVehiculo.class));
-    }
-
-    @Test
     void addKilometrajeVehiculo_ShouldThrowNotFoundException_WhenVehiculoNotFound() {
         Integer kilometraje = 150;
         OffsetDateTime fecha = OffsetDateTime.now();
@@ -75,4 +61,20 @@ class KilometrajeVehiculoServiceImplTest {
 
         assertEquals("No se encontró el vehiculo para KilometrajeVehiculo " + idVehiculo, exception.getMessage());
     }
+
+
+    @Test
+    void addKilometrajeVehiculo_ShouldSaveKilometrajeVehiculo() {
+        Integer kilometraje = 150;
+        OffsetDateTime fecha = OffsetDateTime.now();
+        Integer idVehiculo = 1;
+
+        when(vehiculoRepository.findById(idVehiculo)).thenReturn(Optional.of(vehiculo));
+        when(kilometrajeVehiculoRepository.save(any(KilometrajeVehiculo.class))).thenReturn(kilometrajeVehiculo);
+
+        kilometrajeVehiculoService.addKilometrajeVehiculo(kilometraje, fecha, idVehiculo);
+
+        verify(kilometrajeVehiculoRepository).save(any(KilometrajeVehiculo.class));
+    }
+
 }

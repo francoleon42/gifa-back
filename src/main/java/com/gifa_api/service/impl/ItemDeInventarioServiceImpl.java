@@ -3,6 +3,7 @@ package com.gifa_api.service.impl;
 import com.gifa_api.dto.item.ItemDeInventarioDTO;
 import com.gifa_api.dto.item.ItemDeInventarioRequestDTO;
 import com.gifa_api.dto.item.UtilizarItemDeInventarioDTO;
+import com.gifa_api.exception.BadRequestException;
 import com.gifa_api.exception.BadRoleException;
 import com.gifa_api.exception.NotFoundException;
 import com.gifa_api.model.ItemDeInventario;
@@ -46,7 +47,8 @@ public class ItemDeInventarioServiceImpl implements IItemDeIventarioService {
         if(0 <=  itemIventario.getStock() - utilizarItemDeInventarioDTO.getCantidadADisminuir() ){
             itemIventario.desminuirStock(utilizarItemDeInventarioDTO.getCantidadADisminuir());
         }else{
-            throw new BadRoleException("Stock insuficiente esta en cero");
+
+            throw new BadRequestException("Stock insuficiente esta en cero");
         }
         itemDeInventarioRepository.save(itemIventario);
         revisarNecesidadDePedido(itemIventario.getId());

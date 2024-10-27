@@ -1,6 +1,5 @@
 package com.gifa_api.testUnitario.service;
 
-import com.gifa_api.dto.mantenimiento.MantenimientoResponseDTO;
 import com.gifa_api.dto.mantenimiento.MantenimientosResponseDTO;
 import com.gifa_api.dto.vehiculo.ListaVehiculosResponseDTO;
 import com.gifa_api.dto.vehiculo.RegistarVehiculoDTO;
@@ -12,7 +11,6 @@ import com.gifa_api.model.Tarjeta;
 import com.gifa_api.model.Vehiculo;
 import com.gifa_api.repository.ITarjetaRepository;
 import com.gifa_api.repository.IVehiculoRepository;
-import com.gifa_api.service.IMantenimientoService;
 import com.gifa_api.service.impl.VehiculoServiceImpl;
 import com.gifa_api.utils.enums.EstadoDeHabilitacion;
 import com.gifa_api.utils.enums.EstadoVehiculo;
@@ -57,7 +55,7 @@ class VehiculoServiceImplTest {
     private Tarjeta tarjeta;
     private Vehiculo vehiculo;
 
-    private List<Mantenimiento> mantenimientos;
+     List<Mantenimiento> mantenimientos;
 
     @BeforeEach
     void setUp(){
@@ -68,8 +66,7 @@ class VehiculoServiceImplTest {
                 .kilometraje(0)
                 .modelo("toyota")
                 .fechaRevision(LocalDate.now().plusDays(1))
-                .build();
-         tarjeta = Tarjeta.builder().numero(12345678).build();
+                .build();tarjeta = Tarjeta.builder().numero(12345678).build();
 
          vehiculo = Vehiculo.builder()
                 .patente(vehiculoDTO.getPatente())
@@ -139,6 +136,20 @@ class VehiculoServiceImplTest {
         assertThrows(IllegalArgumentException.class,() -> vehiculoService.registrar(vehiculoDTO));
         verify(vehiculoRepository,never()).save(any(Vehiculo.class));
     }
+    @Test
+    void testRegistrarConPatenteVieja() {
+        vehiculoService.registrar(vehiculoDTO);
+        verify(tarjetaRepository, times(1)).save(any(Tarjeta.class));
+        verify(vehiculoRepository, times(1)).save(any(Vehiculo.class));
+    }
+
+    @Test
+    void testRegistrarConPatenteNueva() {
+        vehiculo.setPatente("AB123CD");
+        vehiculoService.registrar(vehiculoDTO);
+        verify(tarjetaRepository, times(1)).save(any(Tarjeta.class));
+        verify(vehiculoRepository, times(1)).save(any(Vehiculo.class));
+    }
 
     @Test
     void testGetVehiculos() {
@@ -149,22 +160,6 @@ class VehiculoServiceImplTest {
 
         assertNotNull(result);
         verify(vehiculoMapper, times(1)).toListaVehiculosResponseDTO(any());
-    }
-
-    @Test
-    void testRegistrar() {
-        RegistarVehiculoDTO vehiculoDTO = RegistarVehiculoDTO.builder()
-                .patente("ABC123")
-                .antiguedad(2)
-                .kilometraje(50000)
-                .modelo("Toyota")
-                .fechaRevision(LocalDate.now().plusDays(11))
-                .build();
-
-        vehiculoService.registrar(vehiculoDTO);
-
-        verify(tarjetaRepository, times(1)).save(any(Tarjeta.class));
-        verify(vehiculoRepository, times(1)).save(any(Vehiculo.class));
     }
 
     @Test
@@ -184,6 +179,26 @@ class VehiculoServiceImplTest {
         verify(vehiculoRepository, times(1)).save(vehiculo);
         assertEquals(EstadoDeHabilitacion.INHABILITADO,vehiculo.getEstadoDeHabilitacion());
     }
+
+    @Test
+    void habilitarVehiculoNotFound() {
+        Integer vehiculoId = 1;
+        when(vehiculoRepository.findById(vehiculoId)).thenReturn(Optional.empty());
+
+        assertThrows(NotFoundException.class, () -> vehiculoService.habilitar(vehiculoId));
+    }
+
+    @Test
+    void testHabilitarVehiculoQueEstaInhabilitado() {
+        vehiculo.setEstadoDeHabilitacion(EstadoDeHabilitacion.INHABILITADO);
+        when(vehiculoRepository.findById(vehiculo.getId())).thenReturn(Optional.of(vehiculo));
+
+        vehiculoService.habilitar(vehiculo.getId());
+
+        verify(vehiculoRepository, times(1)).save(vehiculo);
+        assertEquals(EstadoDeHabilitacion.HABILITADO,vehiculo.getEstadoDeHabilitacion());
+    }
+
 
     @Test
     void testObtenerHistorialDeVehiculoNotFound() {

@@ -53,7 +53,6 @@ public class PedidoServiceImpl implements IPedidoService {
         GestorOperacional gestorOperacional = gestorOperacionalService.getGestorOperacional();
         int cantidad = item.getCantCompraAutomatica() + item.getUmbral();
         ProveedorDeItem proveerDeItemMasEconomico = proveedorDeItemService.proveedorMasEconomico(item.getId());
-
         if (item.getUmbral() > item.getStock()) {
             if ((proveerDeItemMasEconomico.getPrecio() * cantidad) < gestorOperacional.getPresupuesto()) {
                 CrearPedidoDTO pedidoManualDTO = CrearPedidoDTO
