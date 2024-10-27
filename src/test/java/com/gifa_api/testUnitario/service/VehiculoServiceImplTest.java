@@ -236,7 +236,7 @@ class VehiculoServiceImplTest {
         verify(vehiculoResponseConQrMapper, times(1)).toVehiculoResponseConQrDTO(vehiculo, mantenimientos);
     }
 
-    private void verificacionDeNoRegistroDeVehiculoInvalido(){
+    public void verificacionDeNoRegistroDeVehiculoInvalido(){
         assertThrows(IllegalArgumentException.class,() -> vehiculoService.registrar(vehiculoDTO));
         verify(vehiculoRepository,never()).save(any(Vehiculo.class));
     }

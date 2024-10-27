@@ -241,7 +241,7 @@ class ChoferServiceImplTest {
         assertEquals(choferesMostrados.get(1).getIdChofer(),choferes.get(1).getIdChofer());
     }
 
-    private void verificarNoRegistroDeChoferInvalido(){
+    public void verificarNoRegistroDeChoferInvalido(){
         assertThrows(IllegalArgumentException.class, () -> choferService.registro(choferRegistro));
         verify(choferRepository, never()).save(any(Chofer.class));
     }

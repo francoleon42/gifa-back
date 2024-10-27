@@ -10,6 +10,7 @@ import com.gifa_api.service.impl.MantenimientoServiceImpl;
 import com.gifa_api.utils.enums.EstadoMantenimiento;
 import com.gifa_api.utils.enums.EstadoVehiculo;
 import com.gifa_api.utils.enums.Rol;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -37,14 +38,18 @@ public class MantenimientoServiceImplTest {
     @Mock
     private IVehiculoRepository vehiculoRepository;
 
+    private RegistrarMantenimientoDTO mantenimiento;
+    @BeforeEach
+    void setUp(){
+         mantenimiento = RegistrarMantenimientoDTO.builder().asunto("asunto").build();
+    }
     @Test
     void crearMantenimiento_debeLanzarNotFoundException_siVehiculoNoExiste() {
-        // Arrange
-        Integer id = 1;
-        RegistrarMantenimientoDTO dto = new RegistrarMantenimientoDTO("cambio de aceite", id);
-        when(vehiculoRepository.findById(dto.getVehiculo_id())).thenReturn(Optional.empty());
+        when(vehiculoRepository.findById(mantenimiento.getVehiculo_id())).thenReturn(Optional.empty());
 
-        assertThrows(NotFoundException.class, () -> mantenimientoService.crearMantenimiento(dto));
+        assertThrows(NotFoundException.class, () -> mantenimientoService.crearMantenimiento(mantenimiento));
+        verify(mantenimientoRepository,never()).save(any(Mantenimiento.class));
+        verify(vehiculoRepository,times(1)).findById(mantenimiento.getVehiculo_id());
     }
 
     @Test
@@ -55,29 +60,25 @@ public class MantenimientoServiceImplTest {
 
     @Test
     void crearMantenimiento_asuntoNoPuedeSerVacio(){
-        RegistrarMantenimientoDTO mantenimiento = RegistrarMantenimientoDTO.builder().asunto("").build();
-        assertThrows(IllegalArgumentException.class, () -> mantenimientoService.crearMantenimiento(mantenimiento));
-        verify(mantenimientoRepository,never()).save(any(Mantenimiento.class));
+        mantenimiento.setAsunto("");
+        verificarNoRegistroDeMantenimientoInvalido();
     }
 
     @Test
     void crearMantenimiento_asuntoNoPuedeSerNulo(){
-        RegistrarMantenimientoDTO mantenimiento = RegistrarMantenimientoDTO.builder().asunto(null).build();
-        assertThrows(IllegalArgumentException.class, () -> mantenimientoService.crearMantenimiento(mantenimiento));
-        verify(mantenimientoRepository,never()).save(any(Mantenimiento.class));
+        mantenimiento.setAsunto(null);
+        verificarNoRegistroDeMantenimientoInvalido();
     }
 
     @Test
     void crearMantenimiento_debeGuardarMantenimiento() {
-        // Arrange
-        Integer id = 1;
-        RegistrarMantenimientoDTO dto = new RegistrarMantenimientoDTO("Cambio de aceite", id);
         Vehiculo vehiculo = new Vehiculo();
-        when(vehiculoRepository.findById(dto.getVehiculo_id())).thenReturn(Optional.of(vehiculo));
+        when(vehiculoRepository.findById(mantenimiento.getVehiculo_id())).thenReturn(Optional.of(vehiculo));
 
-        mantenimientoService.crearMantenimiento(dto);
+        mantenimientoService.crearMantenimiento(mantenimiento);
 
         verify(mantenimientoRepository, times(1)).save(any(Mantenimiento.class));
+        verify(vehiculoRepository,times(1)).findById(mantenimiento.getVehiculo_id());
     }
 
     @Test
@@ -111,5 +112,8 @@ public class MantenimientoServiceImplTest {
         verify(mantenimientoRepository, times(1)).save(mantenimiento);
     }
 
-
+    public void verificarNoRegistroDeMantenimientoInvalido(){
+        assertThrows(IllegalArgumentException.class, () -> mantenimientoService.crearMantenimiento(mantenimiento));
+        verify(mantenimientoRepository,never()).save(any(Mantenimiento.class));
+    }
 }

@@ -136,7 +136,7 @@ class ProveedorDeItemServiceImplTest {
         verify(iProveedorDeItemRepository).findAll();
         verify(proveedorDeItemMapper).mapToProveedorDeItemResponseDTO(anyList());
     }
-    private void verificarNoAsociacionDePrecioInvalido(){
+    public void verificarNoAsociacionDePrecioInvalido(){
         assertThrows(IllegalArgumentException.class, () -> proveedorDeItemService.asociarProveedorAItem(proveedorDeItemRequestDTO));
         verify(iProveedorDeItemRepository,never()).save(any(ProveedorDeItem.class));
     }

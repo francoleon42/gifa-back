@@ -98,7 +98,7 @@ class CargaCombustibleServiceImplTest {
         verify(cargaCombustibleRepository, times(1)).save(any(CargaCombustible.class));
     }
 
-    private void verificarNoRegistroDeCargaDeCombustibleInvalida(){
+    public void verificarNoRegistroDeCargaDeCombustibleInvalida(){
         assertThrows(IllegalArgumentException.class, () -> cargaCombustibleService.cargarCombustible(cargaCombustible));
         verify(cargaCombustibleRepository,never()).save(any(CargaCombustible.class));
     }

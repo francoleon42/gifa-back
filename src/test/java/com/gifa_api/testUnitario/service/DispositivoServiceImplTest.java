@@ -155,7 +155,7 @@ public class DispositivoServiceImplTest {
         assertEquals(0, km);
         verify(posicionRepository, times(1)).findByUnicoIdAndDespuesFecha(unicoIdDispositivo, fecha);
     }
-    private void verificarNoRegistroDeDispositivo(){
+    public void verificarNoRegistroDeDispositivo(){
         assertThrows(IllegalArgumentException.class,() -> serviceDispositivo.crearDispositivo(dispositivoRequestDTO,1));
         verify(dispositivoRepository,never()).save(any(Dispositivo.class));
     }

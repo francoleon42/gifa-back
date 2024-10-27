@@ -116,7 +116,7 @@ class ItemDeInventarioServiceImplTest {
                 .stock(5)  // Stock justo en el umbral
                 .build();
         when(itemDeInventarioRepository.findById(itemId)).thenReturn(Optional.of(itemDeInventario));
-
+        //TIENE QUE SER BADREQUEST, NO BADROLEEXCEPTION, hay otros con este mismo error.
         assertThrows(BadRequestException.class,() -> itemDeInventarioService.utilizarItem(itemId,utilizacionItem));
 
         assertEquals(5, itemDeInventario.getStock()); // el stock no tiene que cambiar
@@ -223,7 +223,7 @@ class ItemDeInventarioServiceImplTest {
         verify(itemDeInventarioMapper, times(1)).mapToItemDeInventarioDTO(itemList);
     }
 
-    private void verificarNoRegistroDeItemInvalido(){
+    public void verificarNoRegistroDeItemInvalido(){
         assertThrows(IllegalArgumentException.class,() ->itemDeInventarioService.registrar(itemDeInventario)) ;
         verify(itemDeInventarioRepository, never()).save(any(ItemDeInventario.class)); // no se esta guardando
     }

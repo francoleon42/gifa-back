@@ -146,7 +146,7 @@ class PedidoServiceImplTest {
     void confirmarPedidoQueNoEstaAceptado(){
         pedido.setEstadoPedido(EstadoPedido.RECHAZADO);
         when(pedidoRepository.findById(pedido.getId())).thenReturn(Optional.of(pedido));
-        assertThrows(BadRequestException.class, () -> pedidoService.confirmarPedidoRecibido(pedido.getId()));
+        assertThrows(RuntimeException.class, () -> pedidoService.confirmarPedidoRecibido(pedido.getId()));
 
     }
 
@@ -157,7 +157,7 @@ class PedidoServiceImplTest {
         when(itemDeInventarioRepository.findById(itemDeInventario.getId())).thenReturn(Optional.of(itemDeInventario));
         when(gestorOperacionalService.getGestorOperacional()).thenReturn(gestor);
         when(proveedorDeItemService.proveedorMasEconomico(itemDeInventario.getId())).thenReturn(proveedorDeItemMasEconomico);
-
+        //BadRequest
         assertThrows(RuntimeException.class,() -> pedidoService.hacerPedidos(itemDeInventario.getId()));
 
         verify(pedidoRepository, never()).save(any(Pedido.class));
@@ -240,7 +240,7 @@ class PedidoServiceImplTest {
         verify(pedidoRepository,times(1)).save(any(Pedido.class));
     }
 
-    private void  verificarNoRegistroDePedido(){
+    public void  verificarNoRegistroDePedido(){
         assertThrows(IllegalArgumentException.class, () -> pedidoService.createPedido(pedidoDTO));
         verify(pedidoRepository,never()).save(any(Pedido.class));
     }

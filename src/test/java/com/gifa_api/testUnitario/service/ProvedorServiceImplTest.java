@@ -182,7 +182,7 @@ class ProvedorServiceImplTest {
         verify(pedidoRepository, times(2)).save(any(Pedido.class));
     }
 
-    private void verificarQueNoseRegistreProveedorInvalido(){
+    public void verificarQueNoseRegistreProveedorInvalido(){
         assertThrows(IllegalArgumentException.class,() -> provedorService.registrarProveedor(proveedorRequestDTO));
         verify(proveedorRepository, never() ).save(any(Proveedor.class));
     }
