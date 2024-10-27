@@ -18,6 +18,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import java.time.OffsetDateTime;
 import java.util.Optional;
 
+import static java.util.Optional.empty;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.*;
 
@@ -48,24 +49,23 @@ class CargaCombustibleServiceImplTest {
     @Test
     void cargarCombustible_cantidadDeLitrosNoPuedeSerNull() {
         cargaCombustible.setCantidadLitros(null);
-        assertThrows(IllegalArgumentException.class, () -> cargaCombustibleService.cargarCombustible(cargaCombustible));
+        verificarNoRegistroDeCargaDeCombustibleInvalida();
     }
 
     @Test
     void cargarCombustible_cantidadDeLitrosDebeSerPositiva() {
         cargaCombustible.setCantidadLitros(0);
-        assertThrows(IllegalArgumentException.class, () -> cargaCombustibleService.cargarCombustible(cargaCombustible));
-    }
+        verificarNoRegistroDeCargaDeCombustibleInvalida() ;   }
 
     @Test
     void cargarCombustible_campoTarjetaNoPuedeSerNull() {
         cargaCombustible.setNumeroTarjeta(null);
-        assertThrows(IllegalArgumentException.class, () -> cargaCombustibleService.cargarCombustible(cargaCombustible));
+        verificarNoRegistroDeCargaDeCombustibleInvalida();
     }
 
     @Test
     void cargarCombustible_tarjetaInvalidaLanzaExcepcion() {
-        when(tarjetaRepository.findById(cargaCombustible.getNumeroTarjeta())).thenReturn(Optional.empty());
+        when(tarjetaRepository.findById(cargaCombustible.getNumeroTarjeta())).thenReturn(empty());
 
         assertThrows(NotFoundException.class, () -> cargaCombustibleService.cargarCombustible(cargaCombustible));
         verify(tarjetaRepository, times(1)).findById(cargaCombustible.getNumeroTarjeta());
@@ -97,4 +97,10 @@ class CargaCombustibleServiceImplTest {
 
         verify(cargaCombustibleRepository, times(1)).save(any(CargaCombustible.class));
     }
+
+    private void verificarNoRegistroDeCargaDeCombustibleInvalida(){
+        assertThrows(IllegalArgumentException.class, () -> cargaCombustibleService.cargarCombustible(cargaCombustible));
+        verify(cargaCombustibleRepository,never()).save(any(CargaCombustible.class));
+    }
+
 }

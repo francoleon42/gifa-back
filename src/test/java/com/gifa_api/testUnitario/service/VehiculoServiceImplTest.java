@@ -82,60 +82,70 @@ class VehiculoServiceImplTest {
     }
 
     @Test
+    void registrar_patenteViejaInvalidaLanzaExcepcion(){
+        vehiculoDTO.setPatente("AD1234");
+        verificacionDeNoRegistroDeVehiculoInvalido();
+    }
+
+    @Test
+    void registrar_patenteNuevanvalidaLanzaExcepcion(){
+        vehiculoDTO.setPatente("AD1821K");
+        verificacionDeNoRegistroDeVehiculoInvalido();
+    }
+
+    @Test
+    void registrar_PatenteNulaLanzaExcepcion(){
+        vehiculoDTO.setPatente(null);
+        verificacionDeNoRegistroDeVehiculoInvalido();
+    }
+    @Test
     void registrar_antiguedadNoPuedeSerNull(){
         vehiculoDTO.setAntiguedad(null);
-        assertThrows(IllegalArgumentException.class,() -> vehiculoService.registrar(vehiculoDTO));
-        verify(vehiculoRepository,never()).save(any(Vehiculo.class));
+        verificacionDeNoRegistroDeVehiculoInvalido();
     }
 
     @Test
     void registrar_antiguedadNoPuedeSerNegativa(){
         vehiculoDTO.setAntiguedad(-1);
-        assertThrows(IllegalArgumentException.class,() -> vehiculoService.registrar(vehiculoDTO));
-        verify(vehiculoRepository,never()).save(any(Vehiculo.class));
+        verificacionDeNoRegistroDeVehiculoInvalido();
     }
 
     @Test
     void registrar_kilometrajeNoPuedeSerNull(){
         vehiculoDTO.setKilometraje(null);
-        assertThrows(IllegalArgumentException.class,() -> vehiculoService.registrar(vehiculoDTO));
-        verify(vehiculoRepository,never()).save(any(Vehiculo.class));
+        verificacionDeNoRegistroDeVehiculoInvalido();
     }
 
     @Test
     void registrar_kilometrajeNoPuedeSerNegativa(){
         vehiculoDTO.setKilometraje(-1);
-        assertThrows(IllegalArgumentException.class,() -> vehiculoService.registrar(vehiculoDTO));
-        verify(vehiculoRepository,never()).save(any(Vehiculo.class));
+        verificacionDeNoRegistroDeVehiculoInvalido();
     }
 
     @Test
     void modeloNoPuedeSerVacio(){
         vehiculoDTO.setModelo("");
-        assertThrows(IllegalArgumentException.class,() -> vehiculoService.registrar(vehiculoDTO));
-        verify(vehiculoRepository,never()).save(any(Vehiculo.class));
+        verificacionDeNoRegistroDeVehiculoInvalido();
     }
 
     @Test
     void modeloNoPuedeSerNull(){
         vehiculoDTO.setModelo(null);
-        assertThrows(IllegalArgumentException.class,() -> vehiculoService.registrar(vehiculoDTO));
-        verify(vehiculoRepository,never()).save(any(Vehiculo.class));
+        verificacionDeNoRegistroDeVehiculoInvalido();
     }
 
     @Test
     void fechaRevisionNoPuedeSerNull(){
         vehiculoDTO.setFechaRevision(null);
-        assertThrows(IllegalArgumentException.class,() -> vehiculoService.registrar(vehiculoDTO));
-        verify(vehiculoRepository,never()).save(any(Vehiculo.class));
+        verificacionDeNoRegistroDeVehiculoInvalido();
     }
 
     @Test
     void fechaRevisionNoPuedeSerAnteriorAlaFechaActual(){
         vehiculoDTO.setFechaRevision(LocalDate.now().minusDays(1));
-        assertThrows(IllegalArgumentException.class,() -> vehiculoService.registrar(vehiculoDTO));
-        verify(vehiculoRepository,never()).save(any(Vehiculo.class));
+        verificacionDeNoRegistroDeVehiculoInvalido();
     }
+
     @Test
     void testRegistrarConPatenteVieja() {
         vehiculoService.registrar(vehiculoDTO);
@@ -211,7 +221,7 @@ class VehiculoServiceImplTest {
     @Test
     void testObtenerHistorialDeVehiculoFound() {
         String patente = "XYZ123";
-        MantenimientosResponseDTO mantenimientoDTO =  new MantenimientosResponseDTO();
+        MantenimientosResponseDTO mantenimientoDTO =   MantenimientosResponseDTO.builder().build();
         VehiculoResponseConQrDTO vehiculoResponseQR =  VehiculoResponseConQrDTO.builder()
                 .vehiculo(new VehiculoResponseDTO())
                 .mantenimientos(mantenimientoDTO)
@@ -226,4 +236,8 @@ class VehiculoServiceImplTest {
         verify(vehiculoResponseConQrMapper, times(1)).toVehiculoResponseConQrDTO(vehiculo, mantenimientos);
     }
 
+    private void verificacionDeNoRegistroDeVehiculoInvalido(){
+        assertThrows(IllegalArgumentException.class,() -> vehiculoService.registrar(vehiculoDTO));
+        verify(vehiculoRepository,never()).save(any(Vehiculo.class));
+    }
 }

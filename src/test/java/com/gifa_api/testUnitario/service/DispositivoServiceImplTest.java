@@ -130,12 +130,6 @@ public class DispositivoServiceImplTest {
         assertEquals(dispositivo.getId(),1);
     }
 
-    private void verificarNoRegistroDeDispositivo(){
-        assertThrows(IllegalArgumentException.class,() -> serviceDispositivo.crearDispositivo(dispositivoRequestDTO,1));
-        verify(dispositivoRepository,never()).save(any(Dispositivo.class));
-    }
-
-
     @Test
     void calcularKmDeDispositivoDespuesDeFecha_calculaCorrectamenteConPosiciones() {
         OffsetDateTime fecha = OffsetDateTime.now().minusDays(1);
@@ -160,6 +154,10 @@ public class DispositivoServiceImplTest {
 
         assertEquals(0, km);
         verify(posicionRepository, times(1)).findByUnicoIdAndDespuesFecha(unicoIdDispositivo, fecha);
+    }
+    private void verificarNoRegistroDeDispositivo(){
+        assertThrows(IllegalArgumentException.class,() -> serviceDispositivo.crearDispositivo(dispositivoRequestDTO,1));
+        verify(dispositivoRepository,never()).save(any(Dispositivo.class));
     }
 
 //    @Test

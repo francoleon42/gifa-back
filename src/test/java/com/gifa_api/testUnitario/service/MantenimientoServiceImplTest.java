@@ -57,6 +57,14 @@ public class MantenimientoServiceImplTest {
     void crearMantenimiento_asuntoNoPuedeSerVacio(){
         RegistrarMantenimientoDTO mantenimiento = RegistrarMantenimientoDTO.builder().asunto("").build();
         assertThrows(IllegalArgumentException.class, () -> mantenimientoService.crearMantenimiento(mantenimiento));
+        verify(mantenimientoRepository,never()).save(any(Mantenimiento.class));
+    }
+
+    @Test
+    void crearMantenimiento_asuntoNoPuedeSerNulo(){
+        RegistrarMantenimientoDTO mantenimiento = RegistrarMantenimientoDTO.builder().asunto(null).build();
+        assertThrows(IllegalArgumentException.class, () -> mantenimientoService.crearMantenimiento(mantenimiento));
+        verify(mantenimientoRepository,never()).save(any(Mantenimiento.class));
     }
 
     @Test

@@ -60,6 +60,47 @@ class ChoferServiceImplTest {
     }
 
     @Test
+    void campoUserNameNoPuedeEstarVacio(){
+        choferRegistro.setUsername("");
+        verificarNoRegistroDeChoferInvalido();
+    }
+    @Test
+    void campoUserNameNoPuedeSerNulo(){
+        choferRegistro.setUsername(null);
+        verificarNoRegistroDeChoferInvalido();
+    }
+
+    @Test
+    void campoUserNameNoPuedeContenerCaracteresEspeciales(){
+        choferRegistro.setUsername("fede#");
+        verificarNoRegistroDeChoferInvalido();
+    }
+
+    @Test
+    void campoContraseniaoPuedeSerNulo(){
+        choferRegistro.setPassword(null);
+        verificarNoRegistroDeChoferInvalido();
+    }
+
+    @Test
+    void campoContraseniaNoPuedeEstarVacio(){
+        choferRegistro.setPassword("");
+        verificarNoRegistroDeChoferInvalido();
+    }
+
+    @Test
+    void campoNombreNoPuedeEstarVacio(){
+        choferRegistro.setNombre("");
+        verificarNoRegistroDeChoferInvalido();
+    }
+
+    @Test
+    void campoNombreNoPuedeSerNulo(){
+        choferRegistro.setNombre(null);
+        verificarNoRegistroDeChoferInvalido();
+    }
+
+    @Test
     void habilitarChofer_debeLanzarExcepcionSiNoExiste() {
         when(choferRepository.findById(1)).thenReturn(Optional.empty());
         assertThrows(NotFoundException.class, () -> choferService.habilitar(1));
@@ -189,7 +230,6 @@ class ChoferServiceImplTest {
     void obtenerTodosLosChoferes(){
         ChoferResponseDTO chofer1 = ChoferResponseDTO.builder().nombre("chofer1").build();
         ChoferResponseDTO chofer2 = ChoferResponseDTO.builder().nombre("chofer2").build();
-
         List<ChoferResponseDTO> choferes = List.of(chofer1,chofer2);
 
         when(choferMapper.obtenerListaChoferDTO(choferRepository.findAll())).thenReturn(choferes);
@@ -199,7 +239,11 @@ class ChoferServiceImplTest {
         assertEquals(choferesMostrados.size(),choferes.size());
         assertEquals(choferesMostrados.get(0).getIdChofer(),choferes.get(0).getIdChofer());
         assertEquals(choferesMostrados.get(1).getIdChofer(),choferes.get(1).getIdChofer());
+    }
 
+    private void verificarNoRegistroDeChoferInvalido(){
+        assertThrows(IllegalArgumentException.class, () -> choferService.registro(choferRegistro));
+        verify(choferRepository, never()).save(any(Chofer.class));
     }
 
 }

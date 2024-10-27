@@ -54,7 +54,7 @@ public class ProveedorDeItemServiceImpl implements IProveedorDeItemService {
     }
     private void validarProveedorDeItemRequestDTO(ProveedorDeITemRequestDTO requestDTO) {
         if (requestDTO.getPrecio() == null || requestDTO.getPrecio() <= 0) {
-            throw new IllegalArgumentException("El precio debe ser mayor o igual a cero.");
+            throw new IllegalArgumentException("El precio debe ser mayor a cero.");
         }
     }
 }

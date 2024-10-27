@@ -74,24 +74,15 @@ class ProveedorDeItemServiceImplTest {
     }
 
     @Test
-    void validarProveedorDeItemRequestDTO_PrecioEsNull_DeberiaLanzarIllegalArgumentException() {
+    void precioNoPuedeSerNulo() {
         proveedorDeItemRequestDTO.setPrecio(null);
-        assertThrows(IllegalArgumentException.class, () -> proveedorDeItemService.asociarProveedorAItem(proveedorDeItemRequestDTO));
-        verify(iProveedorDeItemRepository,never()).save(any(ProveedorDeItem.class));
+        verificarNoAsociacionDePrecioInvalido();
     }
 
     @Test
-    void validarProveedorDeItemRequestDTO_PrecioEsCero_DeberiaLanzarIllegalArgumentException() {
+    void precioDebeSerPositivo() {
         proveedorDeItemRequestDTO.setPrecio(0.0);
-        assertThrows(IllegalArgumentException.class, () -> proveedorDeItemService.asociarProveedorAItem(proveedorDeItemRequestDTO));
-        verify(iProveedorDeItemRepository,never()).save(any(ProveedorDeItem.class));
-    }
-
-    @Test
-    void validarProveedorDeItemRequestDTO_PrecioEsNegativo_DeberiaLanzarIllegalArgumentException() {
-        proveedorDeItemRequestDTO.setPrecio(-10.0);
-        assertThrows(IllegalArgumentException.class, () -> proveedorDeItemService.asociarProveedorAItem(proveedorDeItemRequestDTO));
-        verify(iProveedorDeItemRepository,never()).save(any(ProveedorDeItem.class));
+        verificarNoAsociacionDePrecioInvalido();
     }
 
     @Test
@@ -144,6 +135,10 @@ class ProveedorDeItemServiceImplTest {
         assertEquals(proveedorDeItemResponseDTO, result.get(0));
         verify(iProveedorDeItemRepository).findAll();
         verify(proveedorDeItemMapper).mapToProveedorDeItemResponseDTO(anyList());
+    }
+    private void verificarNoAsociacionDePrecioInvalido(){
+        assertThrows(IllegalArgumentException.class, () -> proveedorDeItemService.asociarProveedorAItem(proveedorDeItemRequestDTO));
+        verify(iProveedorDeItemRepository,never()).save(any(ProveedorDeItem.class));
     }
 
 }

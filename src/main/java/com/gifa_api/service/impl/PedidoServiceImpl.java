@@ -2,6 +2,7 @@ package com.gifa_api.service.impl;
 
 import com.gifa_api.dto.pedido.CrearPedidoDTO;
 import com.gifa_api.dto.pedido.PedidoResponseDTO;
+import com.gifa_api.exception.BadRequestException;
 import com.gifa_api.exception.NotFoundException;
 import com.gifa_api.model.*;
 import com.gifa_api.repository.IPedidoRepository;
@@ -28,7 +29,6 @@ public class PedidoServiceImpl implements IPedidoService {
 
     @Override
     public void createPedido(CrearPedidoDTO crearPedidoDTO) {
-        // Validar el DTO
         validarCrearPedidoDTO(crearPedidoDTO);
         ItemDeInventario item = itemDeInventarioRepository.findById(crearPedidoDTO.getIdItem())
                 .orElseThrow(() -> new NotFoundException("No se encontró el item con id: " + crearPedidoDTO.getIdItem()));
@@ -88,10 +88,10 @@ public class PedidoServiceImpl implements IPedidoService {
             pedido.setEstadoPedido(EstadoPedido.FINALIZADO);
             pedidoRepository.save(pedido);
         }else{
-            throw new RuntimeException("No se pudo confirmar el pedido recibido.");
+
+            //aca es bad request, porque estas pasando un pedido que no esta aceptado
+             throw new BadRequestException("No se pudo confirmar el pedido recibido.");
         }
-
-
     }
 
     @Override

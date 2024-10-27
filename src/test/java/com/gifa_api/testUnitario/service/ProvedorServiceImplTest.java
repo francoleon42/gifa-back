@@ -51,105 +51,90 @@ class ProvedorServiceImplTest {
     @Test
     void nombreNoPuedeSerNull(){
         proveedorRequestDTO.setNombre(null);
-        assertThrows(IllegalArgumentException.class,() -> provedorService.registrarProveedor(proveedorRequestDTO));
-        verify(proveedorRepository, never() ).save(any(Proveedor.class));
+        verificarQueNoseRegistreProveedorInvalido();
     }
 
     @Test
     void nombreNoPuedeEstarVacio(){
         proveedorRequestDTO.setNombre("");
-        assertThrows(IllegalArgumentException.class,() -> provedorService.registrarProveedor(proveedorRequestDTO));
-        verify(proveedorRepository, never() ).save(any(Proveedor.class));
+        verificarQueNoseRegistreProveedorInvalido();
     }
 
     @Test
     void nombreNoPuedeTenerDigitos(){
         proveedorRequestDTO.setNombre("fede1");
-        assertThrows(IllegalArgumentException.class,() -> provedorService.registrarProveedor(proveedorRequestDTO));
-        verify(proveedorRepository, never() ).save(any(Proveedor.class));
+        verificarQueNoseRegistreProveedorInvalido();
     }
 
     @Test
     void nombreNoPuedeTenerCaracteresEspeciales(){
         proveedorRequestDTO.setNombre("fede#");
-        assertThrows(IllegalArgumentException.class,() -> provedorService.registrarProveedor(proveedorRequestDTO));
-        verify(proveedorRepository, never() ).save(any(Proveedor.class));
+        verificarQueNoseRegistreProveedorInvalido();
     }
 
     @Test
     void emailNoPuedeEstarNull(){
         proveedorRequestDTO.setEmail(null);
-        assertThrows(IllegalArgumentException.class,() -> provedorService.registrarProveedor(proveedorRequestDTO));
-        verify(proveedorRepository, never() ).save(any(Proveedor.class));
+        verificarQueNoseRegistreProveedorInvalido();
     }
 
     @Test
     void emailNoPuedeEstarVacio(){
         proveedorRequestDTO.setEmail("");
-        assertThrows(IllegalArgumentException.class,() -> provedorService.registrarProveedor(proveedorRequestDTO));
-        verify(proveedorRepository, never() ).save(any(Proveedor.class));
+        verificarQueNoseRegistreProveedorInvalido();
     }
 
     @Test
     void emailNoDebeTenerFormatoInvalido_FaltaArroba() {
         proveedorRequestDTO.setEmail("emailinvalidogmail.com");
-        assertThrows(IllegalArgumentException.class, () -> provedorService.registrarProveedor(proveedorRequestDTO));
-        verify(proveedorRepository, never()).save(any(Proveedor.class));
+        verificarQueNoseRegistreProveedorInvalido();
     }
 
     @Test
     void emailNoDebeTenerFormatoInvalido_DominioFaltante() {
         proveedorRequestDTO.setEmail("emailvalido@.com");
-        assertThrows(IllegalArgumentException.class, () -> provedorService.registrarProveedor(proveedorRequestDTO));
-        verify(proveedorRepository, never()).save(any(Proveedor.class));
+        verificarQueNoseRegistreProveedorInvalido();
     }
 
     @Test
     void emailNoDebeTenerFormatoInvalido_ExtensionCorta() {
         proveedorRequestDTO.setEmail("emailvalido@gmail.c");
-        assertThrows(IllegalArgumentException.class, () -> provedorService.registrarProveedor(proveedorRequestDTO));
-        verify(proveedorRepository, never()).save(any(Proveedor.class));
+        verificarQueNoseRegistreProveedorInvalido();
     }
 
     @Test
     void emailNoDebeTenerFormatoInvalido_ExtensionLarga() {
         proveedorRequestDTO.setEmail("emailvalido@gmail.corporate");
-        assertThrows(IllegalArgumentException.class, () -> provedorService.registrarProveedor(proveedorRequestDTO));
-        verify(proveedorRepository, never()).save(any(Proveedor.class));
+        verificarQueNoseRegistreProveedorInvalido();
     }
 
     @Test
     void emailNoDebeTenerFormatoInvalido_CaracteresEspecialesAntesDelArroba() {
         proveedorRequestDTO.setEmail("nombre#usuario@gmail.com");
-        assertThrows(IllegalArgumentException.class, () -> provedorService.registrarProveedor(proveedorRequestDTO));
-        verify(proveedorRepository, never()).save(any(Proveedor.class));
+        verificarQueNoseRegistreProveedorInvalido();
     }
 
     @Test
     void emailNoDebeTenerFormatoInvalido_CaracteresEspecialesEnDominio() {
         proveedorRequestDTO.setEmail("nombre@dominio#.com");
-        assertThrows(IllegalArgumentException.class, () -> provedorService.registrarProveedor(proveedorRequestDTO));
-        verify(proveedorRepository, never()).save(any(Proveedor.class));
+        verificarQueNoseRegistreProveedorInvalido();
     }
 
     @Test
     void emailNoDebeTenerFormatoInvalido_SinParteLocal() {
         proveedorRequestDTO.setEmail("@gmail.com");
-        assertThrows(IllegalArgumentException.class, () -> provedorService.registrarProveedor(proveedorRequestDTO));
-        verify(proveedorRepository, never()).save(any(Proveedor.class));
+        verificarQueNoseRegistreProveedorInvalido();
     }
 
     @Test
     void emailNoDebeTenerFormatoInvalido_EspaciosEnBlanco() {
         proveedorRequestDTO.setEmail("email valido@gmail.com");
-        assertThrows(IllegalArgumentException.class, () -> provedorService.registrarProveedor(proveedorRequestDTO));
-        verify(proveedorRepository, never()).save(any(Proveedor.class));
+        verificarQueNoseRegistreProveedorInvalido();
     }
 
     @Test
     void obtenerByid_debeLanzarNotFoundExceptionSiNoExiste() {
         when(proveedorRepository.findById(1)).thenReturn(Optional.empty());
-
         assertThrows(NotFoundException.class, () -> provedorService.obtenerByid(1));
 
         verify(proveedorRepository, times(1)).findById(1);
@@ -196,4 +181,10 @@ class ProvedorServiceImplTest {
         assertEquals(EstadoPedido.ACEPTADO, pedido2.getEstadoPedido());  // Segundo pedido debe ser aceptado
         verify(pedidoRepository, times(2)).save(any(Pedido.class));
     }
+
+    private void verificarQueNoseRegistreProveedorInvalido(){
+        assertThrows(IllegalArgumentException.class,() -> provedorService.registrarProveedor(proveedorRequestDTO));
+        verify(proveedorRepository, never() ).save(any(Proveedor.class));
+    }
+
 }

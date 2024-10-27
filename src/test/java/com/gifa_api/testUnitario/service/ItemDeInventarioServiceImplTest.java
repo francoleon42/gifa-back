@@ -58,58 +58,50 @@ class ItemDeInventarioServiceImplTest {
     @Test
     void registrar_nombreNoPuedeSerVacio(){
         itemDeInventario.setNombre("");
-        assertThrows(IllegalArgumentException.class,() ->itemDeInventarioService.registrar(itemDeInventario)) ;
-        verify(itemDeInventarioRepository, never()).save(any(ItemDeInventario.class)); // no se esta guardando
+        verificarNoRegistroDeItemInvalido();
     }
 
     @Test
     void registrar_nombreNoPuedeSerNull(){
         itemDeInventario.setNombre(null);
-        assertThrows(IllegalArgumentException.class,() ->itemDeInventarioService.registrar(itemDeInventario)) ;
-        verify(itemDeInventarioRepository, never()).save(any(ItemDeInventario.class)); // no se esta guardando
+        verificarNoRegistroDeItemInvalido();
     }
 
     @Test
     void registrar_stockNoPuedeSerNull(){
         itemDeInventario.setStock(null);
-        assertThrows(IllegalArgumentException.class,() ->itemDeInventarioService.registrar(itemDeInventario)) ;
-        verify(itemDeInventarioRepository, never()).save(any(ItemDeInventario.class)); // no se esta guardando
+        verificarNoRegistroDeItemInvalido();
 
     }
     @Test
     void registrar_umbralNoPuedeSerNull(){
         itemDeInventario.setUmbral(null);
-        assertThrows(IllegalArgumentException.class,() ->itemDeInventarioService.registrar(itemDeInventario)) ;
-        verify(itemDeInventarioRepository, never()).save(any(ItemDeInventario.class)); // no se esta guardando
+        verificarNoRegistroDeItemInvalido();
 
     }
 
     @Test
     void registrar_compraAutomaticaNoPuedeSerNull(){
         itemDeInventario.setUmbral(null);
-        assertThrows(IllegalArgumentException.class,() ->itemDeInventarioService.registrar(itemDeInventario)) ;
-        verify(itemDeInventarioRepository, never()).save(any(ItemDeInventario.class)); // no se esta guardando
+        verificarNoRegistroDeItemInvalido();
     }
 
     @Test
     void registrar_stockNoPuedeSerNegativo(){
         itemDeInventario.setStock(-1);
-        assertThrows(IllegalArgumentException.class,() ->itemDeInventarioService.registrar(itemDeInventario)) ;
-        verify(itemDeInventarioRepository, never()).save(any(ItemDeInventario.class)); // no se esta guardando
+        verificarNoRegistroDeItemInvalido();
     }
 
     @Test
     void registrar_umbralNoPuedeSerNegativo(){
         itemDeInventario.setUmbral(-1);
-        assertThrows(IllegalArgumentException.class,() ->itemDeInventarioService.registrar(itemDeInventario)) ;
-        verify(itemDeInventarioRepository, never()).save(any(ItemDeInventario.class)); // no se esta guardando
+        verificarNoRegistroDeItemInvalido();
     }
 
     @Test
     void registrar_compraAutomaticaNoPuedeSerNegativo(){
         itemDeInventario.setCantCompraAutomatica(-1);
-        assertThrows(IllegalArgumentException.class,() ->itemDeInventarioService.registrar(itemDeInventario)) ;
-        verify(itemDeInventarioRepository, never()).save(any(ItemDeInventario.class)); // no se esta guardando
+        verificarNoRegistroDeItemInvalido();
     }
 
     @Test
@@ -229,5 +221,10 @@ class ItemDeInventarioServiceImplTest {
         assertEquals(2, result.size());
         verify(itemDeInventarioRepository, times(1)).findAll();
         verify(itemDeInventarioMapper, times(1)).mapToItemDeInventarioDTO(itemList);
+    }
+
+    private void verificarNoRegistroDeItemInvalido(){
+        assertThrows(IllegalArgumentException.class,() ->itemDeInventarioService.registrar(itemDeInventario)) ;
+        verify(itemDeInventarioRepository, never()).save(any(ItemDeInventario.class)); // no se esta guardando
     }
 }
