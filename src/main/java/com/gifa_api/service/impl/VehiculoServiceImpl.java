@@ -58,7 +58,7 @@ public class VehiculoServiceImpl implements IVehiculoService {
                 .numero(generarNumeroTarjeta())
                 .build();
         tarjetaRepository.save(tarjeta);
-        byte[] qr = obtenerQR(vehiculoDTO.getPatente());
+
         Vehiculo vehiculo = Vehiculo
                 .builder()
                 .patente(vehiculoDTO.getPatente())
@@ -69,14 +69,17 @@ public class VehiculoServiceImpl implements IVehiculoService {
                 .estadoVehiculo(EstadoVehiculo.REPARADO)
                 .fechaVencimiento(vehiculoDTO.getFechaRevision())
                 .tarjeta(tarjeta)
-                .qr(qr)
                 .build();
+
+        vehiculoRepository.save(vehiculo);
+
+        vehiculo.setQr(obtenerQR(vehiculo.getId().toString()));
 
         vehiculoRepository.save(vehiculo);
     }
 
-    private  byte[] obtenerQR(String patente) {
-        String contenidoQR = patente; // O cualquier otro identificador
+    private  byte[] obtenerQR(String id) {
+        String contenidoQR = id; // O cualquier otro identificador
         BufferedImage qrImage = generarQRCode(contenidoQR);
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         try {
@@ -122,9 +125,9 @@ public class VehiculoServiceImpl implements IVehiculoService {
 
     // mejorar fix
     @Override
-    public VehiculoResponseConQrDTO obtenerHistorialDeVehiculo(String patente) {
-        Vehiculo vehiculo = vehiculoRepository.findByPatente(patente)
-                .orElseThrow(() -> new NotFoundException("No se encontró el vehiculo con patente: " + patente));
+    public VehiculoResponseConQrDTO obtenerHistorialDeVehiculo(Integer vehiculoId) {
+        Vehiculo vehiculo = vehiculoRepository.findById(vehiculoId)
+                .orElseThrow(() -> new NotFoundException("No se encontró el vehiculo con id: " + vehiculoId));
 
         List<Mantenimiento> listaMantenimientos = new ArrayList<>(vehiculo.getMantenimientos());
         return vehiculoResponseConQrMapper.toVehiculoResponseConQrDTO(vehiculo, listaMantenimientos);

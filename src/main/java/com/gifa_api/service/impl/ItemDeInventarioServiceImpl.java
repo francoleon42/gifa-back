@@ -4,7 +4,6 @@ import com.gifa_api.dto.item.ItemDeInventarioDTO;
 import com.gifa_api.dto.item.ItemDeInventarioRequestDTO;
 import com.gifa_api.dto.item.UtilizarItemDeInventarioDTO;
 import com.gifa_api.exception.BadRequestException;
-import com.gifa_api.exception.BadRoleException;
 import com.gifa_api.exception.NotFoundException;
 import com.gifa_api.model.ItemDeInventario;
 import com.gifa_api.repository.ItemDeInventarioRepository;
@@ -12,9 +11,7 @@ import com.gifa_api.service.IItemDeIventarioService;
 import com.gifa_api.service.IPedidoService;
 import com.gifa_api.utils.mappers.ItemDeInventarioMapper;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
-import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 

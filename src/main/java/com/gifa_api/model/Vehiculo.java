@@ -1,5 +1,6 @@
 package com.gifa_api.model;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.gifa_api.utils.enums.EstadoDeHabilitacion;
 import com.gifa_api.utils.enums.EstadoVehiculo;
 import jakarta.persistence.*;
@@ -48,6 +49,7 @@ public class Vehiculo {
     @Column(name = "qr")
     private byte[] qr;
 
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
     @Column(name = "fecha_vencimiento")
     private LocalDate fechaVencimiento;
 

@@ -1,5 +1,6 @@
 package com.gifa_api.dto.vehiculo;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.gifa_api.utils.enums.EstadoDeHabilitacion;
 import com.gifa_api.utils.enums.EstadoVehiculo;
 import lombok.AllArgsConstructor;
@@ -22,5 +23,6 @@ public class VehiculoResponseDTO {
     private EstadoVehiculo estadoVehiculo;
     private EstadoDeHabilitacion estadoDeHabilitacion;
     private byte[] qr;
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
     private LocalDate fechaVencimiento;
 }
