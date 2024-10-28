@@ -50,12 +50,12 @@ jobs:
              -e DB_NAME=${{ secrets.DB_NAME }} \
              -e DB_USERNAME=${{ secrets.DB_USERNAME }} \
              -e DB_PASSWORD=${{ secrets.DB_PASSWORD }} \
-             -e HOST_MYSQL=${{ secrets.HOST_MYSQL }}  \
+             -e HOST_MYSQL=${{ secrets.HOST_MYSQL }} \
              -e METABASE_SECRET_KEY=${{ secrets.METABASE_SECRET_KEY }} \
              -e TRACCAR_BASE_URL=${{ secrets.TRACCAR_BASE_URL }} \
              -e TRACCAR_PASSWORD=${{ secrets.TRACCAR_PASSWORD }} \
              -e TRACCAR_USERNAME=${{ secrets.TRACCAR_USERNAME }} \
-             -e SPRING_PROFILES_ACTIVE=${{ secrets.SPRING_PROFILES_ACTIVE  }}  \
+             -e SPRING_PROFILES_ACTIVE=${{ secrets.SPRING_PROFILES_ACTIVE  }} \
              -d --name JavaBackend \
              -p 8080:8080 \
              --memory=1g 692859936218.dkr.ecr.us-east-1.amazonaws.com/gifa:back_latest
