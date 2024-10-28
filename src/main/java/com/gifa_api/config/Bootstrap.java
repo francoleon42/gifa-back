@@ -67,8 +67,7 @@ public class Bootstrap implements ApplicationRunner {
                 .build();
 
         userRepository.saveAll(List.of(admin, operador, supervisor, gerente));
-
-
+        
         GestorOperacional gestorDePedidos = GestorOperacional.builder()
                 .presupuesto(100.00)
                 .build();
