@@ -51,7 +51,7 @@ jobs:
              -e DB_USERNAME=${{ secrets.DB_USERNAME }} \
              -e DB_PASSWORD=${{ secrets.DB_PASSWORD }} \
              -e HOST_MYSQL=${{ secrets.HOST_MYSQL }}  \
-             -e METABASE_SECRET_KEY="hola" \
+             -e METABASE_SECRET_KEY=${{ secrets.METABASE_SECRET_KEY }} \
              -e TRACCAR_BASE_URL=${{ secrets.TRACCAR_BASE_URL }} \
              -e TRACCAR_PASSWORD=${{ secrets.TRACCAR_PASSWORD }} \
              -e TRACCAR_USERNAME=${{ secrets.TRACCAR_USERNAME }} \
