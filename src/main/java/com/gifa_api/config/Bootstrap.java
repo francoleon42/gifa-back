@@ -237,6 +237,7 @@ public class Bootstrap implements ApplicationRunner {
 
         pedidoRepository.saveAll(List.of(pedido1, pedido2));
 
+        
         // Crear mantenimientos con builder
         Mantenimiento mantenimiento1 = Mantenimiento.builder()
                 .fechaInicio(LocalDate.now())
