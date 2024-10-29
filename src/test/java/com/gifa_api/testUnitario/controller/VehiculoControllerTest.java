@@ -36,9 +36,9 @@ class VehiculoControllerTest {
     }
 
     @Test
-    void registrar_ShouldReturnCreated() {
+    void registrarVehiculo_ShouldReturnCreated() {
         RegistarVehiculoDTO registarVehiculoDTO = new RegistarVehiculoDTO();
-
+        doNothing().when(vehiculoService).registrar(registarVehiculoDTO);
         ResponseEntity<?> response = vehiculoController.registrar(registarVehiculoDTO);
 
         assertEquals(HttpStatus.CREATED, response.getStatusCode());
@@ -47,21 +47,20 @@ class VehiculoControllerTest {
 
     @Test
     void inhabilitar_ShouldReturnOk() {
-        Integer id = 1;
-
-        ResponseEntity<?> response = vehiculoController.inhabilitar(id);
+        doNothing().when(vehiculoService).inhabilitar(anyInt());
+        ResponseEntity<?> response = vehiculoController.inhabilitar(1);
 
         assertEquals(HttpStatus.OK, response.getStatusCode());
-        verify(vehiculoService).inhabilitar(id);
+        verify(vehiculoService).inhabilitar(1);
     }
 
     @Test
     void habilitar_ShouldReturnOk() {
-        Integer id = 1;
+        doNothing().when(vehiculoService).habilitar(anyInt());
 
-        ResponseEntity<?> response = vehiculoController.habilitar(id);
+        ResponseEntity<?> response = vehiculoController.habilitar(1);
 
         assertEquals(HttpStatus.OK, response.getStatusCode());
-        verify(vehiculoService).habilitar(id);
+        verify(vehiculoService).habilitar(1);
     }
 }

@@ -75,6 +75,7 @@ class VehiculoServiceImplTest {
 
          tarjeta = Tarjeta.builder().numero(12345678).build();
 
+         //Integer id = 1;
          vehiculo = Vehiculo.builder()
                  .id(1)
                 .patente(vehiculoDTO.getPatente())

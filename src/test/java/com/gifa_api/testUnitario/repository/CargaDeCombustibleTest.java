@@ -36,20 +36,18 @@ public class CargaDeCombustibleTest {
     @Transactional
     @Rollback
     void testGuardarCargaCombustible() {
-        // Crear y guardar una Tarjeta
         Tarjeta tarjeta1 = Tarjeta.builder()
                 .numero(12345)
                 .build();
-        tarjeta1 = tarjetaRepository.save(tarjeta1); // Guardar la tarjeta
+        tarjeta1 = tarjetaRepository.save(tarjeta1);
 
-        // Crear una Carga de Combustible
         OffsetDateTime fechaHora = OffsetDateTime.now();
         CargaCombustible cargaCombustible = CargaCombustible.builder()
                 .cantidadLitros(50)
                 .costoTotal(5000f)
                 .fechaHora(fechaHora)
                 .precioPorLitro(100f)
-                .tarjeta(tarjeta1) // Usar la tarjeta guardada
+                .tarjeta(tarjeta1)
                 .build();
 
         // Guardar la Carga de Combustible
@@ -73,7 +71,6 @@ public class CargaDeCombustibleTest {
                 .build();
         tarjeta1 = tarjetaRepository.save(tarjeta1); // Guardar la tarjeta
 
-        // Crear dos Cargas de Combustible, una para el mismo día y otra para el día anterior
         OffsetDateTime fechaHora1 = OffsetDateTime.now().minusDays(1); // Un día atrás
         CargaCombustible carga1 = CargaCombustible.builder()
                 .cantidadLitros(50)
@@ -82,12 +79,12 @@ public class CargaDeCombustibleTest {
                 .tarjeta(tarjeta1) // Usar la tarjeta guardada
                 .build();
 
-        OffsetDateTime fechaHora2 = OffsetDateTime.now(); // Hoy
+        OffsetDateTime fechaHora2 = OffsetDateTime.now();
         CargaCombustible carga2 = CargaCombustible.builder()
                 .cantidadLitros(60)
                 .fechaHora(fechaHora2)
                 .precioPorLitro(105f)
-                .tarjeta(tarjeta1) // Usar la tarjeta guardada
+                .tarjeta(tarjeta1)
                 .build();
 
         cargaCombustibleRepository.save(carga1);

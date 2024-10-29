@@ -29,6 +29,8 @@ public class PedidoRepositoryTest {
     @Autowired
     private ItemDeInventarioRepository itemDeInventarioRepository;
     private  Pedido pedido;
+    private  Pedido pedido2;
+
     private ItemDeInventario itemDeInventario;
 
 
@@ -44,16 +46,22 @@ public class PedidoRepositoryTest {
 
         itemDeInventarioRepository.save(itemDeInventario);
 
-        // Crear un Pedido
-                 pedido = Pedido.builder()
+        pedido = Pedido.builder()
                 .fecha(LocalDate.now())
                 .cantidad(5)
                 .motivo("Reponer stock")
                 .item(itemDeInventario)
                 .estadoPedido(EstadoPedido.PENDIENTE)
                 .build();
+        pedido2 = Pedido.builder()
+                .fecha(LocalDate.now())
+                .cantidad(5)
+                .motivo("Reponer stock")
+                .item(itemDeInventario)
+                .estadoPedido(EstadoPedido.RECHAZADO)
+                .build();
 
-        pedidoRepository.save(pedido);
+        pedidoRepository.saveAll(List.of(pedido,pedido2));
     }
 
     @Test
@@ -80,6 +88,16 @@ public class PedidoRepositoryTest {
         List<Pedido> pedidos = pedidoRepository.findPedidosByEstado(EstadoPedido.PENDIENTE);
         assertEquals(1,pedidos.size());
         assertThat(pedidos.get(0).getEstadoPedido()).isEqualTo(EstadoPedido.PENDIENTE);
+    }
+
+    @Test
+    @Transactional
+    @Rollback
+    void testFindPedidosByDosEstados() {
+        List<Pedido> pedidos = pedidoRepository.findPedidosByDosEstados(EstadoPedido.PENDIENTE,EstadoPedido.RECHAZADO);
+        assertEquals(2,pedidos.size());
+        assertThat(pedidos.get(0).getEstadoPedido()).isEqualTo(EstadoPedido.PENDIENTE);
+        assertThat(pedidos.get(1).getEstadoPedido()).isEqualTo(EstadoPedido.RECHAZADO);
     }
 
 }
