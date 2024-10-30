@@ -27,14 +27,11 @@ public class TraccarClient implements ITraccarCliente {
 
     private final RestTemplate restTemplate;
 
-    @Value("${apptraccar.email.username}")
-    private  String username;
+    private  String username = System.getenv("TRACCAR_USERNAME");
 
-    @Value("${apptraccar.email.password}")
-    private  String password;
+    private  String password = System.getenv("TRACCAR_PASSWORD");
 
-    @Value("${apptraccar.api.base-url}")
-    private String baseUrl;
+    private String baseUrl = System.getenv("TRACCAR_BASE_URL");
 
     @Override
     public CrearDispositivoResponseDTO postCrearDispositivoTraccar(CrearDispositivoRequestDTO request) {

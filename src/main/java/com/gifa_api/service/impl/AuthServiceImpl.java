@@ -16,6 +16,9 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+import java.util.Optional;
+
 @Service
 @RequiredArgsConstructor
 public class AuthServiceImpl implements IAuthService {
@@ -32,7 +35,7 @@ public class AuthServiceImpl implements IAuthService {
 
         Usuario user = userRepository
                 .findByUsuario(userDto.getUsername())
-                .orElseThrow();
+                .orElseThrow(() -> new NotFoundException("No se encontro el usuario con username: " + userDto.getUsername()));
 
         String token = jwtService.getToken(user);
 
@@ -91,5 +94,30 @@ public class AuthServiceImpl implements IAuthService {
     public void logout(String token) {
         String jwt = token.substring(7);
         jwtService.addToBlacklist(jwt);
+    }
+
+    @Override
+    public void update(Integer id, UpdateRequestDTO userToUpdateDto) {
+        Usuario user = userRepository.findById(id).orElseThrow(() -> new NotFoundException("No se encontró el usuario con id: " + id));
+
+        Optional.ofNullable(userToUpdateDto.getUsername()).ifPresent(user::setUsuario);
+        Optional.ofNullable(passwordEncoder.encode(userToUpdateDto.getPassword())).ifPresent(user::setContrasena);
+
+        userRepository.save(user);
+    }
+
+    @Override
+    public List<GetUserDTO> getAll() {
+        return userRepository.findAll().stream()
+                .map(this::convertToGetUserDTO)
+                .toList();
+    }
+
+    private GetUserDTO convertToGetUserDTO(Usuario user) {
+        return GetUserDTO.builder()
+                .id(user.getId())
+                .username(user.getUsuario())
+                .role(user.getRol())
+                .build();
     }
 }

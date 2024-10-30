@@ -37,8 +37,8 @@ public class ControllerExceptionHandler {
         return ResponseEntity.status(apiError.getStatus()).body(apiError);
     }
 
-    @ExceptionHandler(BadRoleException.class)
-    protected ResponseEntity<ApiError> handleNotFoundException(BadRoleException e){
+    @ExceptionHandler(BadRequestException.class)
+    protected ResponseEntity<ApiError> handleBadRequestException(BadRequestException e){
         ApiError apiError = ApiError.builder()
                 .error("bad_request")
                 .message(e.getMessage())

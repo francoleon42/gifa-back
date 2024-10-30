@@ -24,25 +24,10 @@ public class MetaBaseTokenServiceImplTest {
 
     private static final String SECRET_KEY = "my-secret-key-for-jwt-which-should-be-very-long";
 
-    // Test que lanza una excepción al fallar la generación del token
-//    @Test
-//    public void generateTokenForDashboard_shouldThrowException_whenTokenGenerationFails() {
-//        Long dashboardId = 123L;
-//
-//        // Crear el SecretKey desde el String, simulando el comportamiento real
-//        SecretKey secretKey = Keys.hmacShaKeyFor(SECRET_KEY.getBytes());
-//
-//        // Mockear Jwts para lanzar una excepción en la creación del token
-//        try (MockedStatic<Jwts> jwtsMockedStatic = mockStatic(Jwts.class)) {
-//            // Simular el comportamiento del builder para lanzar una excepción
-//            jwtsMockedStatic.when(Jwts::builder).thenThrow(new RuntimeException("Token generation error"));
-//
-//            // Act & Assert: verificar que se lance la excepción esperada
-//            RuntimeException thrownException = assertThrows(RuntimeException.class,
-//                    () -> metabaseService.generateTokenForDashboard(dashboardId));
-//            assertEquals("Error al generar el token: Token generation error", thrownException.getMessage());
-//        }
-//    }
+    @Test
+    public void generateTokenForDashboard_RunTimeException() {
+        assertThrows(RuntimeException.class,() -> metabaseService.generateTokenForDashboard(1L));
+    }
 
     // Test que genera un token válido
     @Test

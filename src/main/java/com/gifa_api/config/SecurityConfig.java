@@ -50,6 +50,7 @@ public class SecurityConfig {
                     configureVehiculoEndpoints(authRequest);
                     configureChoferEndpoints(authRequest);
                     configurePedidoEndpoints(authRequest);
+                    configureProveedoresEndpoints(authRequest);
                     configureGestorOperacionalEndpoints(authRequest);
                     configureInventarioEndpoints(authRequest);
                     configureMantenimientoEndpoints(authRequest);
@@ -92,23 +93,36 @@ public class SecurityConfig {
                 .requestMatchers(HttpMethod.POST, "/vehiculo/registrar").hasRole(ADMINISTRADOR)
                 .requestMatchers(HttpMethod.GET, "/vehiculo/verAll").hasAnyRole(ADMINISTRADOR, SUPERVISOR)
                 .requestMatchers(HttpMethod.PATCH, "/vehiculo/habilitar/{id}").hasRole(ADMINISTRADOR)
-                .requestMatchers(HttpMethod.PATCH, "/vehiculo/inhabilitar/{id}").hasRole(ADMINISTRADOR);
+                .requestMatchers(HttpMethod.PATCH, "/vehiculo/inhabilitar/{id}").hasRole(ADMINISTRADOR)
+                .requestMatchers(HttpMethod.GET, "/vehiculo/historialVehiculo/{id}").hasRole(OPERADOR);
     }
 
     private void configureChoferEndpoints(AuthorizeHttpRequestsConfigurer<HttpSecurity>.AuthorizationManagerRequestMatcherRegistry authRequest) {
         authRequest
                 .requestMatchers(HttpMethod.POST, "/chofer/registrar").hasRole(ADMINISTRADOR)
-                .requestMatchers(HttpMethod.PATCH, "/chofer/asignarChofer").hasRole(ADMINISTRADOR)
+                .requestMatchers(HttpMethod.PATCH, "/chofer/asignarChofer").hasRole(SUPERVISOR)
                 .requestMatchers(HttpMethod.PATCH, "/chofer/inhabilitar/{id}").hasRole(ADMINISTRADOR)
                 .requestMatchers(HttpMethod.PATCH, "/chofer/habilitar/{id}").hasRole(ADMINISTRADOR)
-                .requestMatchers(HttpMethod.GET, "/chofer/verChoferes").hasRole(ADMINISTRADOR);
+                .requestMatchers(HttpMethod.GET, "/chofer/verChoferes").hasAnyRole(ADMINISTRADOR, SUPERVISOR);
     }
 
     private void configurePedidoEndpoints(AuthorizeHttpRequestsConfigurer<HttpSecurity>.AuthorizationManagerRequestMatcherRegistry authRequest) {
         authRequest
-                .requestMatchers(HttpMethod.POST, "/pedido/registrarProveedor").hasRole(ADMINISTRADOR)
-                .requestMatchers(HttpMethod.POST, "/pedido/asociarProveedor").hasRole(ADMINISTRADOR)
-                .requestMatchers(HttpMethod.GET, "/pedido/verAll").hasRole(SUPERVISOR);
+                .requestMatchers(HttpMethod.POST, "/pedido/generarPedido").hasRole(SUPERVISOR)
+                .requestMatchers(HttpMethod.GET, "/pedido/aceptados").hasRole(ADMINISTRADOR)
+                .requestMatchers(HttpMethod.GET, "/pedido/rechazadosYpendientes").hasRole(SUPERVISOR)
+                .requestMatchers(HttpMethod.GET, "/pedido/verAll").hasRole(SUPERVISOR)
+                .requestMatchers(HttpMethod.PATCH, "/pedido/confirmarPedidoRecibido/{id}").hasRole(ADMINISTRADOR);
+
+    }
+
+    private void configureProveedoresEndpoints(AuthorizeHttpRequestsConfigurer<HttpSecurity>.AuthorizationManagerRequestMatcherRegistry authRequest) {
+        authRequest
+                .requestMatchers(HttpMethod.POST, "/proveedor/registrar").hasRole(ADMINISTRADOR)
+                .requestMatchers(HttpMethod.POST, "/proveedor/asociarAitem").hasRole(SUPERVISOR)
+                .requestMatchers(HttpMethod.GET, "/proveedor/verAll").hasRole(SUPERVISOR)
+                .requestMatchers(HttpMethod.GET, "/proveedor/verProveedoresDeItems").hasRole(SUPERVISOR);
+
     }
 
     private void configureGestorOperacionalEndpoints(AuthorizeHttpRequestsConfigurer<HttpSecurity>.AuthorizationManagerRequestMatcherRegistry authRequest) {
@@ -144,7 +158,8 @@ public class SecurityConfig {
         authRequest
                 .requestMatchers(HttpMethod.POST, "/traccar/crearDispositivo").hasRole(ADMINISTRADOR)
                 .requestMatchers(HttpMethod.GET, "/traccar/getDispositivos").hasRole(ADMINISTRADOR)
-                .requestMatchers(HttpMethod.GET, "/traccar/verInconsistenciasDeCombustible").hasRole(ADMINISTRADOR);
+                .requestMatchers(HttpMethod.GET, "/traccar/verInconsistenciasDeCombustible").hasRole(ADMINISTRADOR)
+                .requestMatchers(HttpMethod.GET, "/traccar/getPosiciones/{unicoId}").hasRole(ADMINISTRADOR);
 
 
     }
@@ -157,7 +172,9 @@ public class SecurityConfig {
 
     private void configureAuthenticatedEndpoints(AuthorizeHttpRequestsConfigurer<HttpSecurity>.AuthorizationManagerRequestMatcherRegistry authRequest) {
         authRequest
-                .requestMatchers(HttpMethod.POST, "/auth/logout").authenticated();
+                .requestMatchers(HttpMethod.POST, "/auth/logout").authenticated()
+                .requestMatchers(HttpMethod.PUT, "/auth/update/{id}").hasRole(ADMINISTRADOR)
+                .requestMatchers(HttpMethod.GET, "/auth/getAllUsers").hasRole(ADMINISTRADOR);
     }
 
     private void configureCargarCombustibleEndpoints(AuthorizeHttpRequestsConfigurer<HttpSecurity>.AuthorizationManagerRequestMatcherRegistry authRequest) {

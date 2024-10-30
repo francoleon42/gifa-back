@@ -8,7 +8,7 @@ import com.gifa_api.repository.ICargaCombustibleRepository;
 import com.gifa_api.repository.ITarjetaRepository;
 
 import com.gifa_api.service.ICargaCombustibleService;
-import com.gifa_api.service.IDispositivoService;
+import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -24,20 +24,20 @@ import java.util.List;
 import java.util.Locale;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDateTime;
 
 @Service
 @RequiredArgsConstructor
 public class CargaCombustibleServiceImpl implements ICargaCombustibleService {
     private final ITarjetaRepository tarjetaRepository;
     private final ICargaCombustibleRepository cargaCombustibleRepository;
-
     private List<Float> preciosCombustiblesCache;
     private LocalDate ultimaActualizacionPrecio;
 
     @Override
     public void cargarCombustible(CargaCombustibleRequestDTO cargaCombustibleRequestDTO) {
-        // cargaCombustible conseguir preciosporlitro y asi calcular el total de esa carga.
+        // Validar el DTO
+        validarCargaCombustibleRequestDTO(cargaCombustibleRequestDTO);
+
         Tarjeta tarjeta = tarjetaRepository.findById(cargaCombustibleRequestDTO.getNumeroTarjeta())
                 .orElseThrow(() -> new NotFoundException("No se encontró la tarjeta con id: " + cargaCombustibleRequestDTO.getNumeroTarjeta()));
 
@@ -133,5 +133,14 @@ public class CargaCombustibleServiceImpl implements ICargaCombustibleService {
             cargaTotal += carga.getCantidadLitros();
         }
         return cargaTotal;
+    }
+
+    private void validarCargaCombustibleRequestDTO(CargaCombustibleRequestDTO cargaCombustibleRequestDTO) {
+        if (cargaCombustibleRequestDTO.getCantidadLitros() == null || cargaCombustibleRequestDTO.getCantidadLitros() <= 0) {
+            throw new IllegalArgumentException("La cantidad de litros debe ser mayor a cero.");
+        }
+        if (cargaCombustibleRequestDTO.getNumeroTarjeta() == null || cargaCombustibleRequestDTO.getNumeroTarjeta().toString().isEmpty() ) {
+            throw new IllegalArgumentException("El número de tarjeta debe tener al menos 16 dígitos.");
+        }
     }
 }

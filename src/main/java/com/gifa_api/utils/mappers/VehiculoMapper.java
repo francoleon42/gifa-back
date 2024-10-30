@@ -1,22 +1,28 @@
 package com.gifa_api.utils.mappers;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.gifa_api.dto.mantenimiento.MantenimientoResponseDTO;
+import com.gifa_api.dto.mantenimiento.MantenimientosResponseDTO;
 import com.gifa_api.dto.vehiculo.ListaVehiculosResponseDTO;
+import com.gifa_api.dto.vehiculo.VehiculoResponseConQrDTO;
 import com.gifa_api.dto.vehiculo.VehiculoResponseDTO;
+import com.gifa_api.model.Mantenimiento;
 import com.gifa_api.model.Vehiculo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @Component
 public class VehiculoMapper {
     private final ObjectMapper objectMapper;
-
+    private final MantenimientoMapper mantenimientoMapper;
     @Autowired
-    public VehiculoMapper(ObjectMapper objectMapper) {
+    public VehiculoMapper(ObjectMapper objectMapper, MantenimientoMapper mantenimientoMapper) {
         this.objectMapper = objectMapper;
+        this.mantenimientoMapper = mantenimientoMapper;
     }
 
     public ListaVehiculosResponseDTO toListaVehiculosResponseDTO(List<Vehiculo> vehiculos) {

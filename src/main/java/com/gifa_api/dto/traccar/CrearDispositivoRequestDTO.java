@@ -14,6 +14,5 @@ public class CrearDispositivoRequestDTO {
     private String uniqueId;
 
 
-
     // ver si agregar Mas datos
 }

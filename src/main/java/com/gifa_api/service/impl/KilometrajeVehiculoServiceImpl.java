@@ -16,6 +16,7 @@ import java.time.OffsetDateTime;
 public class KilometrajeVehiculoServiceImpl implements IKilometrajeVehiculoService {
     private final IKilometrajeVehiculoRepository kilometrajeVehiculoRepository;
     private final IVehiculoRepository vehiculoRepository;
+
     @Override
     public void addKilometrajeVehiculo(Integer kilometraje, OffsetDateTime fecha, Integer idVehiculo) {
         Vehiculo vehiculo = vehiculoRepository.findById(idVehiculo)

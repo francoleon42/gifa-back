@@ -33,6 +33,8 @@ public class MantenimientoServiceImpl implements IMantenimientoService {
 
     @Override
     public void crearMantenimiento(RegistrarMantenimientoDTO registrarMantenimientoDTO) {
+        // Validar el DTO
+        validarRegistrarMantenimientoDTO(registrarMantenimientoDTO);
         Vehiculo vehiculo = iVehiculoRepository.findById(registrarMantenimientoDTO.getVehiculo_id())
                 .orElseThrow(() -> new NotFoundException("No se encontró el vehiculo con id: " + registrarMantenimientoDTO.getVehiculo_id()));
         vehiculo.setEstadoVehiculo(EstadoVehiculo.EN_REPARACION);
@@ -71,10 +73,8 @@ public class MantenimientoServiceImpl implements IMantenimientoService {
 
     public void asignarMantenimiento(Integer mantenimientoId, Usuario operador) {
         Mantenimiento mantenimiento = findById(mantenimientoId);
-
-        mantenimiento.setOperador(operador);
-        mantenimiento.setEstadoMantenimiento(EstadoMantenimiento.APROBADO);
-
+        mantenimiento.addOperador(operador);
+        mantenimiento.aprobar();
         IMantenimientoRepository.save(mantenimiento);
     }
 
@@ -86,9 +86,9 @@ public class MantenimientoServiceImpl implements IMantenimientoService {
     @Override
     public void finalizarMantenimiento(Integer mantenimientoId) {
         Mantenimiento mantenimiento = findById(mantenimientoId);
-        mantenimiento.setEstadoMantenimiento(EstadoMantenimiento.FINALIZADO);
-        mantenimiento.getVehiculo().setEstadoVehiculo(EstadoVehiculo.REPARADO);
-                    mantenimiento.setFechaFinalizacion(LocalDate.now());
+        mantenimiento.finalizar();
+        mantenimiento.getVehiculo().enReparacion();
+        mantenimiento.setFechaFinalizacion(LocalDate.now());
 
         IMantenimientoRepository.save(mantenimiento);
     }
@@ -98,5 +98,10 @@ public class MantenimientoServiceImpl implements IMantenimientoService {
         return mantenimientoMapper.mapListToMantenimientosDTO(IMantenimientoRepository.findByOperadorId(idOperador));
     }
 
+    private void validarRegistrarMantenimientoDTO(RegistrarMantenimientoDTO registrarMantenimientoDTO) {
+        if (registrarMantenimientoDTO.getAsunto() == null || registrarMantenimientoDTO.getAsunto().trim().isEmpty()) {
+            throw new IllegalArgumentException("El asunto no puede estar vacío.");
+        }
+    }
 
 }

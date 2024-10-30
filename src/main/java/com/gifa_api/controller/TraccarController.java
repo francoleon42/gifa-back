@@ -3,6 +3,7 @@ package com.gifa_api.controller;
 import com.gifa_api.dto.traccar.CrearDispositivoRequestDTO;
 import com.gifa_api.dto.traccar.VerInconsistenciasRequestDTO;
 import com.gifa_api.service.IDispositivoService;
+import com.gifa_api.service.IPosicionService;
 import com.gifa_api.service.ITraccarService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -17,6 +18,7 @@ import java.time.OffsetDateTime;
 public class TraccarController {
     private final ITraccarService traccarService;
     private  final IDispositivoService dispositivoService;
+    private  final IPosicionService posicionService;
 
     @PostMapping("/crearDispositivo")
     public ResponseEntity<?> crearDispositivo(@RequestBody CrearDispositivoRequestDTO crearDispositivoRequestDTO,@RequestParam("idVehiculo") Integer idVehiculo){
@@ -33,6 +35,11 @@ public class TraccarController {
     @GetMapping("/verInconsistenciasDeCombustible")
     public ResponseEntity<?> verInconsistenciasDeCombustible(@RequestBody  VerInconsistenciasRequestDTO verInconsistenciasRequestDTO){
         return new ResponseEntity<>(traccarService.getInconsistencias(verInconsistenciasRequestDTO.getFecha()),HttpStatus.OK);
+    }
+
+    @GetMapping("/getPosiciones/{unicoId}")
+    public ResponseEntity<?> getgetPosiciones(@PathVariable String unicoId){
+        return new ResponseEntity<>(posicionService.getPosicionesDeDispositivo(unicoId),HttpStatus.OK);
     }
 
 }

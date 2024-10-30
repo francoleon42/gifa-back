@@ -30,4 +30,14 @@ public class Chofer {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "id_vehiculo")
     private Vehiculo vehiculo;
+
+    public void cambiarEstadoChofer(EstadoChofer estadoChofer) {
+        this.estadoChofer = estadoChofer;
+    }
+    public void addVehiculo(Vehiculo vehiculo){
+        this.vehiculo = vehiculo;
+    }
+    public void desvincularVehiculo(){
+        this.vehiculo = null;
+    }
 }

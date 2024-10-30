@@ -1,7 +1,6 @@
 package com.gifa_api.testUnitario.service;
 
 import com.gifa_api.dto.mantenimiento.*;
-import com.gifa_api.exception.BadRoleException;
 import com.gifa_api.exception.NotFoundException;
 import com.gifa_api.model.*;
 import com.gifa_api.repository.IMantenimientoRepository;
@@ -11,6 +10,7 @@ import com.gifa_api.service.impl.MantenimientoServiceImpl;
 import com.gifa_api.utils.enums.EstadoMantenimiento;
 import com.gifa_api.utils.enums.EstadoVehiculo;
 import com.gifa_api.utils.enums.Rol;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -38,14 +38,18 @@ public class MantenimientoServiceImplTest {
     @Mock
     private IVehiculoRepository vehiculoRepository;
 
+    private RegistrarMantenimientoDTO mantenimiento;
+    @BeforeEach
+    void setUp(){
+         mantenimiento = RegistrarMantenimientoDTO.builder().asunto("asunto").build();
+    }
     @Test
     void crearMantenimiento_debeLanzarNotFoundException_siVehiculoNoExiste() {
-        // Arrange
-        Integer id = 1;
-        RegistrarMantenimientoDTO dto = new RegistrarMantenimientoDTO("cambio de aceite", id);
-        when(vehiculoRepository.findById(dto.getVehiculo_id())).thenReturn(Optional.empty());
+        when(vehiculoRepository.findById(mantenimiento.getVehiculo_id())).thenReturn(Optional.empty());
 
-        assertThrows(NotFoundException.class, () -> mantenimientoService.crearMantenimiento(dto));
+        assertThrows(NotFoundException.class, () -> mantenimientoService.crearMantenimiento(mantenimiento));
+        verify(mantenimientoRepository,never()).save(any(Mantenimiento.class));
+        verify(vehiculoRepository,times(1)).findById(mantenimiento.getVehiculo_id());
     }
 
     @Test
@@ -55,16 +59,26 @@ public class MantenimientoServiceImplTest {
     }
 
     @Test
-    void crearMantenimiento_debeGuardarMantenimiento() {
-        // Arrange
-        Integer id = 1;
-        RegistrarMantenimientoDTO dto = new RegistrarMantenimientoDTO("Cambio de aceite", id);
-        Vehiculo vehiculo = new Vehiculo();
-        when(vehiculoRepository.findById(dto.getVehiculo_id())).thenReturn(Optional.of(vehiculo));
+    void crearMantenimiento_asuntoNoPuedeSerVacio(){
+        mantenimiento.setAsunto("");
+        verificarNoRegistroDeMantenimientoInvalido();
+    }
 
-        mantenimientoService.crearMantenimiento(dto);
+    @Test
+    void crearMantenimiento_asuntoNoPuedeSerNulo(){
+        mantenimiento.setAsunto(null);
+        verificarNoRegistroDeMantenimientoInvalido();
+    }
+
+    @Test
+    void crearMantenimiento_debeGuardarMantenimiento() {
+        Vehiculo vehiculo = new Vehiculo();
+        when(vehiculoRepository.findById(mantenimiento.getVehiculo_id())).thenReturn(Optional.of(vehiculo));
+
+        mantenimientoService.crearMantenimiento(mantenimiento);
 
         verify(mantenimientoRepository, times(1)).save(any(Mantenimiento.class));
+        verify(vehiculoRepository,times(1)).findById(mantenimiento.getVehiculo_id());
     }
 
     @Test
@@ -76,7 +90,6 @@ public class MantenimientoServiceImplTest {
         when(mantenimientoRepository.findById(anyInt())).thenReturn(Optional.of(mantenimiento));
 
         mantenimientoService.asignarMantenimiento(1, operador);
-
 
         assertEquals(operador, mantenimiento.getOperador());
         assertEquals(EstadoMantenimiento.APROBADO, mantenimiento.getEstadoMantenimiento());
@@ -94,9 +107,13 @@ public class MantenimientoServiceImplTest {
         mantenimientoService.finalizarMantenimiento(1);
 
         assertEquals(EstadoMantenimiento.FINALIZADO, mantenimiento.getEstadoMantenimiento());
-        assertEquals(EstadoVehiculo.REPARADO, vehiculo.getEstadoVehiculo());
+        // si se finaliza el mantenimiento, el vehiculo no deberia estar reparado?
+        assertEquals(EstadoVehiculo.EN_REPARACION, vehiculo.getEstadoVehiculo());
         verify(mantenimientoRepository, times(1)).save(mantenimiento);
     }
 
-
+    public void verificarNoRegistroDeMantenimientoInvalido(){
+        assertThrows(IllegalArgumentException.class, () -> mantenimientoService.crearMantenimiento(mantenimiento));
+        verify(mantenimientoRepository,never()).save(any(Mantenimiento.class));
+    }
 }

@@ -28,6 +28,8 @@ public class DispositivoServiceImpl implements IDispositivoService {
 
     @Override
     public void crearDispositivo(CrearDispositivoRequestDTO crearDispositivoRequestDTO, Integer idVehiculo) {
+        // Validar el DTO
+        validarCrearDispositivoRequestDTO(crearDispositivoRequestDTO);
         Vehiculo vehiculo = vehiculoRepository.findById(idVehiculo)
                 .orElseThrow(() -> new NotFoundException("No se encontró el vehiculo con id: " + idVehiculo));
         Dispositivo dispositivo = Dispositivo
@@ -36,7 +38,8 @@ public class DispositivoServiceImpl implements IDispositivoService {
                 .unicoId(crearDispositivoRequestDTO.getUniqueId())
                 .vehiculo(vehiculo)
                 .build();
-        vehiculo.setDispositivo(dispositivo);
+
+        vehiculo.addDispositivo(dispositivo);
         vehiculoRepository.save(vehiculo);
     }
 
@@ -47,7 +50,6 @@ public class DispositivoServiceImpl implements IDispositivoService {
         return dispositivo;
     }
 
-
     @Override
     public int calcularKmDeDispositivoDespuesDeFecha(String unicoIdDeDispositivo, OffsetDateTime fecha) {
         List<Posicion> posiciones = posicionRepository.findByUnicoIdAndDespuesFecha(unicoIdDeDispositivo, fecha);
@@ -55,7 +57,7 @@ public class DispositivoServiceImpl implements IDispositivoService {
         return kmDeDispositivoDespuesDeFecha;
     }
 
-//    @Scheduled(fixedRate = 19999)
+    @Scheduled(fixedRate = 86400000)
     private void actualizarKilometrajeDeVehiculos() {
         for (Dispositivo dispositivo : dispositivoRepository.findAll()) {
             List<Posicion> posisicionesDeVehiculo = posicionRepository.findByUnicoId(dispositivo.getUnicoId());
@@ -66,7 +68,7 @@ public class DispositivoServiceImpl implements IDispositivoService {
             int kilometrosAgregados = kilometrajeRecorridoActual - vehiculo.getKilometraje();
             if( kilometrosAgregados  > 0){
                 kilometrajeVehiculoService.addKilometrajeVehiculo(kilometrosAgregados,OffsetDateTime.now(),vehiculo.getId());
-                vehiculo.setKilometraje(kilometrajeRecorridoActual);
+                vehiculo.actualizarKilometraje(kilometrajeRecorridoActual);
                 vehiculoRepository.save(vehiculo);
             }
         }
@@ -97,13 +99,17 @@ public class DispositivoServiceImpl implements IDispositivoService {
             distanciaTotal += distancia;
         }
         int kilometros = (int) distanciaTotal;
-//        int metros = (int) ((distanciaTotal - kilometros) * 1000); // Convertir a metros y obtener el resto
-
-//        // Formatear la distancia en el formato deseado "km,metros"
-//        String distanciaFormateada = kilometros + "," + String.format("%03d", metros);
 
         return kilometros;
     }
 
+    private void validarCrearDispositivoRequestDTO(CrearDispositivoRequestDTO crearDispositivoRequestDTO){
+        if (crearDispositivoRequestDTO.getName() == null || crearDispositivoRequestDTO.getName().trim().isEmpty()) {
+            throw new IllegalArgumentException("El nombre del dispositivo no puede estar vacío.");
+        }
+        if (crearDispositivoRequestDTO.getUniqueId() == null || crearDispositivoRequestDTO.getUniqueId().trim().isEmpty()) {
+            throw new IllegalArgumentException("El uniqueId del dispositivo no puede estar vacío.");
+        }
+    }
 
 }

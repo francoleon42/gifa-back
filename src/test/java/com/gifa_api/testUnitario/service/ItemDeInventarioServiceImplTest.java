@@ -3,11 +3,17 @@ package com.gifa_api.testUnitario.service;
 import com.gifa_api.dto.item.ItemDeInventarioDTO;
 import com.gifa_api.dto.item.ItemDeInventarioRequestDTO;
 import com.gifa_api.dto.item.UtilizarItemDeInventarioDTO;
+
+import com.gifa_api.exception.BadRequestException;
+import com.gifa_api.exception.BadRoleException;
 import com.gifa_api.exception.NotFoundException;
 import com.gifa_api.model.ItemDeInventario;
 import com.gifa_api.repository.ItemDeInventarioRepository;
+import com.gifa_api.service.IPedidoService;
 import com.gifa_api.service.impl.ItemDeInventarioServiceImpl;
 import com.gifa_api.utils.mappers.ItemDeInventarioMapper;
+import net.bytebuddy.implementation.bind.MethodDelegationBinder;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -29,14 +35,77 @@ class ItemDeInventarioServiceImplTest {
     private ItemDeInventarioServiceImpl itemDeInventarioService;
 
     @Mock
+    private IPedidoService pedidoService;
+
+    @Mock
     private ItemDeInventarioRepository itemDeInventarioRepository;
 
     @Mock
     private ItemDeInventarioMapper itemDeInventarioMapper;
 
+    private ItemDeInventarioRequestDTO itemDeInventario;
+
+    @BeforeEach
+    void setUp(){
+        itemDeInventario = ItemDeInventarioRequestDTO.builder()
+                .nombre("item")
+                .umbral(0)
+                .stock(0)
+                .cantCompraAutomatica(0)
+                .build();
+    }
+
+    @Test
+    void registrar_nombreNoPuedeSerVacio(){
+        itemDeInventario.setNombre("");
+        verificarNoRegistroDeItemInvalido();
+    }
+
+    @Test
+    void registrar_nombreNoPuedeSerNull(){
+        itemDeInventario.setNombre(null);
+        verificarNoRegistroDeItemInvalido();
+    }
+
+    @Test
+    void registrar_stockNoPuedeSerNull(){
+        itemDeInventario.setStock(null);
+        verificarNoRegistroDeItemInvalido();
+
+    }
+    @Test
+    void registrar_umbralNoPuedeSerNull(){
+        itemDeInventario.setUmbral(null);
+        verificarNoRegistroDeItemInvalido();
+
+    }
+
+    @Test
+    void registrar_compraAutomaticaNoPuedeSerNull(){
+        itemDeInventario.setUmbral(null);
+        verificarNoRegistroDeItemInvalido();
+    }
+
+    @Test
+    void registrar_stockNoPuedeSerNegativo(){
+        itemDeInventario.setStock(-1);
+        verificarNoRegistroDeItemInvalido();
+    }
+
+    @Test
+    void registrar_umbralNoPuedeSerNegativo(){
+        itemDeInventario.setUmbral(-1);
+        verificarNoRegistroDeItemInvalido();
+    }
+
+    @Test
+    void registrar_compraAutomaticaNoPuedeSerNegativo(){
+        itemDeInventario.setCantCompraAutomatica(-1);
+        verificarNoRegistroDeItemInvalido();
+    }
+
     @Test
     void testUtilizarItemsinStockSuficiente() {
-        // Arrange
         Integer cantidadDisminuir = 6;
         UtilizarItemDeInventarioDTO utilizacionItem = new UtilizarItemDeInventarioDTO(cantidadDisminuir);
         Integer itemId = 1;
@@ -46,21 +115,19 @@ class ItemDeInventarioServiceImplTest {
                 .umbral(5)
                 .stock(5)  // Stock justo en el umbral
                 .build();
+        when(itemDeInventarioRepository.findById(itemId)).thenReturn(Optional.of(itemDeInventario));
+        //TIENE QUE SER BADREQUEST, NO BADROLEEXCEPTION, hay otros con este mismo error.
+        assertThrows(BadRequestException.class,() -> itemDeInventarioService.utilizarItem(itemId,utilizacionItem));
 
-        assertThrows(NotFoundException.class,() -> itemDeInventarioService.utilizarItem(itemId,utilizacionItem));
-
-        // Assert
         assertEquals(5, itemDeInventario.getStock()); // el stock no tiene que cambiar
         verify(itemDeInventarioRepository, never()).save(itemDeInventario); // no se esta guardando
     }
 
     @Test
     void testObtenerByIdconIdInvalido() {
-        // Arrange
         Integer itemId = 1;
         when(itemDeInventarioRepository.findById(itemId)).thenReturn(Optional.empty());
 
-        // Act & Assert
         assertThrows(NotFoundException.class, () -> itemDeInventarioService.obtenerById(itemId));
 
         verify(itemDeInventarioRepository, times(1)).findById(itemId);
@@ -90,7 +157,7 @@ class ItemDeInventarioServiceImplTest {
     @Test
     void testUtilizarItemconStockSuficiente() {
         // Arrange
-        Integer cantidadDisminuir = 1;
+        Integer cantidadDisminuir = 9;
         UtilizarItemDeInventarioDTO utilizarItem = new UtilizarItemDeInventarioDTO(cantidadDisminuir);
         Integer itemId = 1;
         ItemDeInventario itemDeInventario = ItemDeInventario.builder()
@@ -106,7 +173,8 @@ class ItemDeInventarioServiceImplTest {
         itemDeInventarioService.utilizarItem(itemId,utilizarItem);
 
         // Assert
-        assertEquals(9, itemDeInventario.getStock());
+        System.out.println("stock actual del repuesto :"+itemDeInventario.getStock());
+        assertEquals(1, itemDeInventario.getStock());
         verify(itemDeInventarioRepository, times(1)).save(itemDeInventario);
     }
 
@@ -153,5 +221,10 @@ class ItemDeInventarioServiceImplTest {
         assertEquals(2, result.size());
         verify(itemDeInventarioRepository, times(1)).findAll();
         verify(itemDeInventarioMapper, times(1)).mapToItemDeInventarioDTO(itemList);
+    }
+
+    public void verificarNoRegistroDeItemInvalido(){
+        assertThrows(IllegalArgumentException.class,() ->itemDeInventarioService.registrar(itemDeInventario)) ;
+        verify(itemDeInventarioRepository, never()).save(any(ItemDeInventario.class)); // no se esta guardando
     }
 }

@@ -1,12 +1,16 @@
 package com.gifa_api.controller;
 
+import com.gifa_api.dto.login.GetUserDTO;
 import com.gifa_api.dto.login.LoginRequestDTO;
 import com.gifa_api.dto.login.RegisterRequestDTO;
+import com.gifa_api.dto.login.UpdateRequestDTO;
 import com.gifa_api.service.IAuthService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/auth")
@@ -24,9 +28,20 @@ public class AuthController {
         return new ResponseEntity<>(authService.register(registerRequestDto), HttpStatus.CREATED);
     }
 
+    @PutMapping("/update/{id}")
+    public ResponseEntity<?> update(@PathVariable Integer id, @RequestBody UpdateRequestDTO updateRequestDto){
+        authService.update(id, updateRequestDto);
+        return new ResponseEntity<>(HttpStatus.CREATED);
+    }
+
     @PostMapping("/logout")
     public ResponseEntity<?> logout(@RequestHeader("Authorization") String token) {
         authService.logout(token);
         return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    @GetMapping("/getAllUsers")
+    public ResponseEntity<List<GetUserDTO>> getAll() {
+        return new ResponseEntity<>(authService.getAll(), HttpStatus.OK);
     }
 }
