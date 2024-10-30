@@ -129,6 +129,18 @@ public class Bootstrap implements ApplicationRunner {
 //
 //        choferRepository.saveAll(List.of(chofer));
 
+        Vehiculo vehiculo1 = vehiculoRepository.findById(1).orElseThrow();
+        Vehiculo vehiculo2 = vehiculoRepository.findById(2).orElseThrow();
+
+        Tarjeta tarjeta1 = tarjetaRepository.findById(1).orElseThrow();
+        Tarjeta tarjeta2 = tarjetaRepository.findById(1).orElseThrow();
+
+        vehiculo1.setTarjeta(tarjeta1);
+        vehiculo2.setTarjeta(tarjeta2);
+
+        vehiculoRepository.save(vehiculo1);
+        vehiculoRepository.save(vehiculo2);
+
         cargaCombustibleRepository.deleteAll();
 
         // Crear cargas de combustible con builder
