@@ -145,7 +145,7 @@ public class SecurityConfig {
                 .requestMatchers(HttpMethod.POST, "/mantenimiento/asignar/{mantenimientoId}").hasRole(OPERADOR)
                 .requestMatchers(HttpMethod.POST, "/mantenimiento/finalizar/{mantenimientoId}").hasRole(OPERADOR)
                 .requestMatchers(HttpMethod.GET, "/mantenimiento/finalizados").hasRole(ADMINISTRADOR)
-                .requestMatchers(HttpMethod.GET, "/mantenimiento/porVehiculo/{id}").hasRole(ADMINISTRADOR)
+                .requestMatchers(HttpMethod.GET, "/mantenimiento/porVehiculo/{id}").hasAnyRole(ADMINISTRADOR, OPERADOR)
                 .requestMatchers(HttpMethod.GET, "/mantenimiento/verMisMantenimientos").hasRole(OPERADOR);
     }
 
