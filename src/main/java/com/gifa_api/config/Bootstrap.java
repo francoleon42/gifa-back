@@ -1,12 +1,14 @@
 package com.gifa_api.config;
 
 import com.gifa_api.client.ITraccarCliente;
+import com.gifa_api.dto.gestionDeCombustilble.CargaCombustibleRequestDTO;
 import com.gifa_api.dto.traccar.CrearDispositivoRequestDTO;
 import com.gifa_api.dto.traccar.ObtenerDispositivoRequestDTO;
 import com.gifa_api.dto.vehiculo.RegistarVehiculoDTO;
 import com.gifa_api.model.*;
 import com.gifa_api.repository.*;
 import com.gifa_api.service.impl.VehiculoServiceImpl;
+import com.gifa_api.service.impl.CargaCombustibleServiceImpl;
 import com.gifa_api.utils.enums.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.ApplicationArguments;
@@ -38,6 +40,7 @@ public class Bootstrap implements ApplicationRunner {
     private final ITraccarCliente traccarCliente;
     private final IKilometrajeVehiculoRepository kilometrajeVehiculoRepository;
     private final VehiculoServiceImpl vehiculoServiceImpl;
+    private final CargaCombustibleServiceImpl cargaCombustibleService;
 
     @Override
     public void run(ApplicationArguments args) throws Exception {
@@ -67,7 +70,6 @@ public class Bootstrap implements ApplicationRunner {
                 .build();
 
         userRepository.saveAll(List.of(admin, operador, supervisor, gerente));
-
 
         GestorOperacional gestorDePedidos = GestorOperacional.builder()
                 .presupuesto(100.00)
@@ -124,14 +126,12 @@ public class Bootstrap implements ApplicationRunner {
         // Crear cargas de combustible con builder
         for (int i = 1; i <= 60; i++) {
             OffsetDateTime fechaHora = OffsetDateTime.now().plusDays(i).plusHours(i);
-            CargaCombustible carga = CargaCombustible.builder()
+            CargaCombustibleRequestDTO carga = CargaCombustibleRequestDTO.builder()
+                    .numeroTarjeta(i % 2 == 0 ? 1 : 2)
+                    .FechaYhora(fechaHora)
                     .cantidadLitros(i * 5)
-                    // Sumamos i días y horas para que cada registro tenga una fecha y hora diferentes
-                    .fechaHora(fechaHora)
-                    .precioPorLitro(100f + i)
-                    .tarjeta(i % 2 == 0 ? tarjeta1 : tarjeta2)
                     .build();
-            cargaCombustibleRepository.save(carga);
+            cargaCombustibleService.cargarCombustible(carga);
         }
 
         List<ObtenerDispositivoRequestDTO> dispositivosEnTraccar = traccarCliente.getDispositivos();
@@ -243,6 +243,7 @@ public class Bootstrap implements ApplicationRunner {
                 .build();
 
         pedidoRepository.saveAll(List.of(pedido1, pedido2,pedido3));
+
 
         // Crear mantenimientos con builder
         Mantenimiento mantenimiento1 = Mantenimiento.builder()
