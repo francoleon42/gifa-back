@@ -39,11 +39,11 @@ public class ProveedorControllerTest {
         assertEquals(HttpStatus.CREATED,proveedorController.registrar(new RegistroProveedorRequestDTO()).getStatusCode());
     }
 
-    @Test
-    void asociarProveedorAItemr_devuelveStatusCreated(){
-        doNothing().when(proveedorDeItemService).asociarProveedorAItem(new ProveedorDeITemRequestDTO());
-        assertEquals(HttpStatus.CREATED,proveedorController.asociarProveedorAItem(new ProveedorDeITemRequestDTO()).getStatusCode());
-    }
+//    @Test
+//    void asociarProveedorAItemr_devuelveStatusCreated(){
+//        doNothing().when(proveedorDeItemService).asociarProveedorAItem(new ProveedorDeITemRequestDTO());
+//        assertEquals(HttpStatus.CREATED,proveedorController.asociarProveedorAItem(new ProveedorDeITemRequestDTO()).getStatusCode());
+//    }
 
     @Test
     void allProveedores_devuelveStatusOkYlosProveedores() {

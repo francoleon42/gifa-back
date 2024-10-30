@@ -10,8 +10,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.time.OffsetDateTime;
-
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/traccar")
@@ -38,7 +36,7 @@ public class TraccarController {
     }
 
     @GetMapping("/getPosiciones/{unicoId}")
-    public ResponseEntity<?> getgetPosiciones(@PathVariable String unicoId){
+    public ResponseEntity<?> getPosiciones(@PathVariable String unicoId){
         return new ResponseEntity<>(posicionService.getPosicionesDeDispositivo(unicoId),HttpStatus.OK);
     }
 

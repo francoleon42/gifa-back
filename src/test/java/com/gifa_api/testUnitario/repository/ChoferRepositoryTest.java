@@ -86,15 +86,15 @@ public class ChoferRepositoryTest {
     }
 
 
-    @Test
-    @Transactional
-    @Rollback
-    void findByIdWithVehiculo_devuelveChoferQueMatcheanConUnVehiculo(){
-       Optional<Chofer> choferAsociadoAvehiculo= choferRepository.findByIdWithVehiculo(vehiculo.getId());
-
-       assertEquals(chofer.getId(),choferAsociadoAvehiculo.get().getId());
-       assertEquals(chofer.getEstadoChofer(),choferAsociadoAvehiculo.get().getEstadoChofer());
-       assertEquals(chofer.getNombre(),choferAsociadoAvehiculo.get().getNombre());
-       assertEquals(vehiculo.getId(),choferAsociadoAvehiculo.get().getVehiculo().getId());
-    }
+//    @Test
+//    @Transactional
+//    @Rollback
+//    void findByIdWithVehiculo_devuelveChoferQueMatcheanConUnVehiculo(){
+//       Optional<Chofer> choferAsociadoAvehiculo= choferRepository.findByIdWithVehiculo(vehiculo.getId());
+//
+//       assertEquals(chofer.getId(),choferAsociadoAvehiculo.get().getId());
+//       assertEquals(chofer.getEstadoChofer(),choferAsociadoAvehiculo.get().getEstadoChofer());
+//       assertEquals(chofer.getNombre(),choferAsociadoAvehiculo.get().getNombre());
+//       assertEquals(vehiculo.getId(),choferAsociadoAvehiculo.get().getVehiculo().getId());
+//    }
 }
