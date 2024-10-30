@@ -4,7 +4,6 @@ import com.gifa_api.client.ITraccarCliente;
 import com.gifa_api.dto.traccar.ObtenerDispositivoRequestDTO;
 import com.gifa_api.dto.traccar.PosicionDispositivoDTO;
 import com.gifa_api.dto.traccar.PosicionResponseDTO;
-import com.gifa_api.exception.NotFoundException;
 import com.gifa_api.model.Dispositivo;
 import com.gifa_api.model.Posicion;
 import com.gifa_api.repository.IPosicionRepository;
@@ -28,7 +27,7 @@ public class PosicionServiceImpl implements IPosicionService {
     private final IDispositivoService dispositivoService;
     private final PosicionMapper posicionMapper;
 
-    @Scheduled(fixedRate = 864000)
+    @Scheduled(fixedRate = 86400000)
     private void actualizarPosicionesDeDispositivo() {
 
         List<ObtenerDispositivoRequestDTO> dispositivosDTO = traccarService.obtenerDispositivos();
