@@ -46,7 +46,7 @@ public class Vehiculo {
     private EstadoDeHabilitacion estadoDeHabilitacion;
 
     @Lob
-    @Column(name = "qr")
+    @Column(name = "qr", columnDefinition = "MEDIUMBLOB")
     private byte[] qr;
 
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
