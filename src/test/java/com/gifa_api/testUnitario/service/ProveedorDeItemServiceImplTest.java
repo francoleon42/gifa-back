@@ -2,6 +2,8 @@ package com.gifa_api.testUnitario.service;
 
 import com.gifa_api.dto.proveedor.ProveedorDeITemRequestDTO;
 import com.gifa_api.dto.proveedor.ProveedorDeITemResponseDTO;
+import com.gifa_api.exception.BadRequestException;
+
 import com.gifa_api.exception.NotFoundException;
 import com.gifa_api.model.ItemDeInventario;
 import com.gifa_api.model.Proveedor;
@@ -137,7 +139,7 @@ class ProveedorDeItemServiceImplTest {
         verify(proveedorDeItemMapper).mapToProveedorDeItemResponseDTO(anyList());
     }
     public void verificarNoAsociacionDePrecioInvalido(){
-        assertThrows(IllegalArgumentException.class, () -> proveedorDeItemService.asociarProveedorAItem(proveedorDeItemRequestDTO));
+        assertThrows(BadRequestException.class, () -> proveedorDeItemService.asociarProveedorAItem(proveedorDeItemRequestDTO));
         verify(iProveedorDeItemRepository,never()).save(any(ProveedorDeItem.class));
     }
 

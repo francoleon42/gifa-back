@@ -241,7 +241,7 @@ class PedidoServiceImplTest {
     }
 
     public void  verificarNoRegistroDePedido(){
-        assertThrows(IllegalArgumentException.class, () -> pedidoService.createPedido(pedidoDTO));
+        assertThrows(BadRequestException.class, () -> pedidoService.createPedido(pedidoDTO));
         verify(pedidoRepository,never()).save(any(Pedido.class));
     }
 }

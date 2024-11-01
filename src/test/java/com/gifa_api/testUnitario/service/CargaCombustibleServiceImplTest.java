@@ -1,6 +1,7 @@
 package com.gifa_api.testUnitario.service;
 
 import com.gifa_api.dto.gestionDeCombustilble.CargaCombustibleRequestDTO;
+import com.gifa_api.exception.BadRequestException;
 import com.gifa_api.exception.NotFoundException;
 import com.gifa_api.model.CargaCombustible;
 import com.gifa_api.model.Tarjeta;
@@ -99,7 +100,7 @@ class CargaCombustibleServiceImplTest {
     }
 
     public void verificarNoRegistroDeCargaDeCombustibleInvalida(){
-        assertThrows(IllegalArgumentException.class, () -> cargaCombustibleService.cargarCombustible(cargaCombustible));
+        assertThrows(BadRequestException.class, () -> cargaCombustibleService.cargarCombustible(cargaCombustible));
         verify(cargaCombustibleRepository,never()).save(any(CargaCombustible.class));
     }
 

@@ -2,11 +2,14 @@ package com.gifa_api.controller;
 
 import com.gifa_api.dto.vehiculo.ListaVehiculosResponseDTO;
 import com.gifa_api.dto.vehiculo.RegistarVehiculoDTO;
+import com.gifa_api.exception.BadRequestException;
 import com.gifa_api.service.IVehiculoService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.time.LocalDate;
 
 @RestController
 @RequestMapping("/vehiculo")
@@ -42,4 +45,4 @@ public class VehiculoController {
     }
 
 
-}
+    }

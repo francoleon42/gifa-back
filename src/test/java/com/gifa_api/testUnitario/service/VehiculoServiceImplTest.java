@@ -5,6 +5,7 @@ import com.gifa_api.dto.vehiculo.ListaVehiculosResponseDTO;
 import com.gifa_api.dto.vehiculo.RegistarVehiculoDTO;
 import com.gifa_api.dto.vehiculo.VehiculoResponseConQrDTO;
 import com.gifa_api.dto.vehiculo.VehiculoResponseDTO;
+import com.gifa_api.exception.BadRequestException;
 import com.gifa_api.exception.NotFoundException;
 import com.gifa_api.model.Mantenimiento;
 import com.gifa_api.model.Tarjeta;
@@ -256,7 +257,7 @@ class VehiculoServiceImplTest {
     }
 
     public void verificacionDeNoRegistroDeVehiculoInvalido(){
-        assertThrows(IllegalArgumentException.class,() -> vehiculoService.registrar(vehiculoDTO));
+        assertThrows(BadRequestException.class,() -> vehiculoService.registrar(vehiculoDTO));
         verify(vehiculoRepository,never()).save(any(Vehiculo.class));
     }
 }

@@ -3,6 +3,7 @@ package com.gifa_api.testUnitario.service;
 import com.gifa_api.dto.chofer.AsignarChoferDTO;
 import com.gifa_api.dto.chofer.ChoferRegistroDTO;
 import com.gifa_api.dto.chofer.ChoferResponseDTO;
+import com.gifa_api.exception.BadRequestException;
 import com.gifa_api.exception.NotFoundException;
 import com.gifa_api.model.Chofer;
 import com.gifa_api.model.Vehiculo;
@@ -142,28 +143,24 @@ class ChoferServiceImplTest {
     @Test
     void registrarChofer_usuarioVacioLanzaExcepcion(){
         choferRegistro.setUsername("");
-        assertThrows(IllegalArgumentException.class,() ->choferService.registro(choferRegistro)) ;
-        verify(choferRepository,never()).save(any(Chofer.class));
+        verificarNoRegistroDeChoferInvalido();
     }
 
     @Test
     void registrarChofer_usuarioConCaracteresEspecialesLanzaExcepcion(){
         choferRegistro.setUsername("diegote#");
-        assertThrows(IllegalArgumentException.class,() ->choferService.registro(choferRegistro)) ;
-        verify(choferRepository,never()).save(any(Chofer.class));
+        verificarNoRegistroDeChoferInvalido();
     }
     @Test
     void registrarChofer_contraseniaVaciaLanzaExcepcion(){
         choferRegistro.setPassword("");
-        assertThrows(IllegalArgumentException.class,() ->choferService.registro(choferRegistro)) ;
-        verify(choferRepository,never()).save(any(Chofer.class));
+        verificarNoRegistroDeChoferInvalido();
     }
 
     @Test
     void registrarChofer_nombreVacioLanzaExcepcion(){
         choferRegistro.setNombre("");
-        assertThrows(IllegalArgumentException.class,() ->choferService.registro(choferRegistro)) ;
-        verify(choferRepository,never()).save(any(Chofer.class));
+        verificarNoRegistroDeChoferInvalido();
     }
 
     @Test
@@ -242,7 +239,7 @@ class ChoferServiceImplTest {
     }
 
     public void verificarNoRegistroDeChoferInvalido(){
-        assertThrows(IllegalArgumentException.class, () -> choferService.registro(choferRegistro));
+        assertThrows(BadRequestException.class, () -> choferService.registro(choferRegistro));
         verify(choferRepository, never()).save(any(Chofer.class));
     }
 

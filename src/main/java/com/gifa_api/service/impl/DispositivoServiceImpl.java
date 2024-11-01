@@ -4,7 +4,6 @@ import com.gifa_api.dto.traccar.CrearDispositivoRequestDTO;
 import com.gifa_api.exception.BadRequestException;
 import com.gifa_api.exception.NotFoundException;
 import com.gifa_api.model.Dispositivo;
-import com.gifa_api.model.KilometrajeVehiculo;
 import com.gifa_api.model.Posicion;
 import com.gifa_api.model.Vehiculo;
 import com.gifa_api.repository.IDispositivoRepository;

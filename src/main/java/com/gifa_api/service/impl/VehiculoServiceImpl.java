@@ -53,7 +53,6 @@ public class VehiculoServiceImpl implements IVehiculoService {
 
     @Override
     public void registrar(RegistarVehiculoDTO vehiculoDTO) {
-        // Validar el DTO
         validarRegistrarVehiculoDTO(vehiculoDTO);
         Tarjeta tarjeta = Tarjeta.builder()
                 .numero(generarNumeroTarjeta())
@@ -79,7 +78,7 @@ public class VehiculoServiceImpl implements IVehiculoService {
         vehiculoRepository.save(vehiculo);
     }
 
-    private  byte[] obtenerQR(String id) {
+    private byte[] obtenerQR(String id) {
         String contenidoQR = id; // O cualquier otro identificador
         BufferedImage qrImage = generarQRCode(contenidoQR);
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
@@ -170,5 +169,8 @@ public class VehiculoServiceImpl implements IVehiculoService {
         if (vehiculoDTO.getFechaRevision() == null || vehiculoDTO.getFechaRevision().isBefore(LocalDate.now())) {
             throw new BadRequestException("La fecha de revisión debe ser posterior a la fecha actual.");
         }
+
+
     }
+
 }

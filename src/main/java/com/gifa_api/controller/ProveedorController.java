@@ -2,6 +2,7 @@ package com.gifa_api.controller;
 
 import com.gifa_api.dto.proveedor.ProveedorDeITemRequestDTO;
 import com.gifa_api.dto.proveedor.RegistroProveedorRequestDTO;
+import com.gifa_api.exception.BadRequestException;
 import com.gifa_api.service.IProvedorService;
 import com.gifa_api.service.IProveedorDeItemService;
 import lombok.RequiredArgsConstructor;
@@ -36,4 +37,6 @@ public class ProveedorController {
     public ResponseEntity<?> allProveedoresConItems(){
         return new ResponseEntity<>(proveedorDeItemService.obtenerAll(), HttpStatus.OK);
     }
+
+
 }

@@ -1,6 +1,7 @@
 package com.gifa_api.testUnitario.service;
 
 import com.gifa_api.dto.traccar.CrearDispositivoRequestDTO;
+import com.gifa_api.exception.BadRequestException;
 import com.gifa_api.exception.NotFoundException;
 
 import com.gifa_api.model.Dispositivo;
@@ -156,7 +157,7 @@ public class DispositivoServiceImplTest {
         verify(posicionRepository, times(1)).findByUnicoIdAndDespuesFecha(unicoIdDispositivo, fecha);
     }
     public void verificarNoRegistroDeDispositivo(){
-        assertThrows(IllegalArgumentException.class,() -> serviceDispositivo.crearDispositivo(dispositivoRequestDTO,1));
+        assertThrows(BadRequestException.class,() -> serviceDispositivo.crearDispositivo(dispositivoRequestDTO,1));
         verify(dispositivoRepository,never()).save(any(Dispositivo.class));
     }
 

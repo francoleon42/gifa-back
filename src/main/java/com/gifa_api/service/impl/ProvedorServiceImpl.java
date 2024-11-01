@@ -27,9 +27,7 @@ public class ProvedorServiceImpl implements IProvedorService {
 
     @Override
     public void registrarProveedor(RegistroProveedorRequestDTO requestDTO) {
-        // Validar el DTO
         validarRegistroProveedorDTO(requestDTO);
-
         Proveedor proveedor = Proveedor.builder()
                 .nombre(requestDTO.getNombre())
                 .email(requestDTO.getEmail())
@@ -56,12 +54,13 @@ public class ProvedorServiceImpl implements IProvedorService {
             int decision = random.nextInt(100);  // Utiliza el Random inyectado
             if (decision < 30) {
                 pedido.setEstadoPedido(EstadoPedido.RECHAZADO);
-            } else if (decision > 30) {
+            } else if (decision >= 30) {
                 pedido.setEstadoPedido(EstadoPedido.ACEPTADO);
             }
             pedidoRepository.save(pedido);
         }
     }
+
     private void validarRegistroProveedorDTO(RegistroProveedorRequestDTO requestDTO) {
         if (requestDTO.getNombre() == null || requestDTO.getNombre().trim().isEmpty()) {
             throw new BadRequestException("El nombre no puede estar vacío.");
@@ -76,5 +75,6 @@ public class ProvedorServiceImpl implements IProvedorService {
             throw new BadRequestException("El formato del email no es válido.");
         }
     }
+
 }
 

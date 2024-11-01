@@ -1,6 +1,7 @@
 package com.gifa_api.testUnitario.service;
 
 import com.gifa_api.dto.mantenimiento.*;
+import com.gifa_api.exception.BadRequestException;
 import com.gifa_api.exception.NotFoundException;
 import com.gifa_api.model.*;
 import com.gifa_api.repository.IMantenimientoRepository;
@@ -113,7 +114,7 @@ public class MantenimientoServiceImplTest {
     }
 
     public void verificarNoRegistroDeMantenimientoInvalido(){
-        assertThrows(IllegalArgumentException.class, () -> mantenimientoService.crearMantenimiento(mantenimiento));
+        assertThrows(BadRequestException.class, () -> mantenimientoService.crearMantenimiento(mantenimiento));
         verify(mantenimientoRepository,never()).save(any(Mantenimiento.class));
     }
 }
