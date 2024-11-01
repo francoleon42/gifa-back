@@ -67,16 +67,16 @@ public class ItemDeInventarioServiceImpl implements IItemDeIventarioService {
 
     private void validarItemDeInventarioRequestDTO(ItemDeInventarioRequestDTO itemDeInventarioDTO) {
         if (itemDeInventarioDTO.getNombre() == null || itemDeInventarioDTO.getNombre().trim().isEmpty()) {
-            throw new IllegalArgumentException("El nombre del ítem no puede estar vacío.");
+            throw new BadRequestException("El nombre del ítem no puede estar vacío.");
         }
         if (itemDeInventarioDTO.getUmbral() == null || itemDeInventarioDTO.getUmbral() < 0) {
-            throw new IllegalArgumentException("El umbral debe ser mayor o igual a cero.");
+            throw new BadRequestException("El umbral debe ser mayor o igual a cero.");
         }
         if (itemDeInventarioDTO.getStock() == null || itemDeInventarioDTO.getStock() < 0) {
-            throw new IllegalArgumentException("El stock debe ser mayor o igual a cero.");
+            throw new BadRequestException("El stock debe ser mayor o igual a cero.");
         }
         if (itemDeInventarioDTO.getCantCompraAutomatica() == null || itemDeInventarioDTO.getCantCompraAutomatica() < 0) {
-            throw new IllegalArgumentException("La cantidad de compra automática debe ser mayor o igual a cero.");
+            throw new BadRequestException("La cantidad de compra automática debe ser mayor o igual a cero.");
         }
     }
 

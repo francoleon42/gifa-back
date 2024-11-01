@@ -4,6 +4,7 @@ import com.gifa_api.dto.mantenimiento.RegistrarMantenimientoDTO;
 import com.gifa_api.dto.vehiculo.ListaVehiculosResponseDTO;
 import com.gifa_api.dto.vehiculo.RegistarVehiculoDTO;
 import com.gifa_api.dto.vehiculo.VehiculoResponseConQrDTO;
+import com.gifa_api.exception.BadRequestException;
 import com.gifa_api.exception.NotFoundException;
 import com.gifa_api.model.Mantenimiento;
 import com.gifa_api.model.Tarjeta;
@@ -154,20 +155,20 @@ public class VehiculoServiceImpl implements IVehiculoService {
 //         Validar patente
         String patenteRegex = "^(?:[A-Za-z]{3}\\d{3}|[A-Za-z]{2}\\d{3}[A-Za-z]{2})$";
         if (vehiculoDTO.getPatente() == null || !vehiculoDTO.getPatente().matches(patenteRegex)) {
-            throw new IllegalArgumentException("La patente debe tener el formato correcto (3 letras, 3 números )  or (2 letras, 3 dígitos, 2 letras).");
+            throw new BadRequestException("La patente debe tener el formato correcto (3 letras, 3 números )  or (2 letras, 3 dígitos, 2 letras).");
         }
         if (vehiculoDTO.getAntiguedad() == null || vehiculoDTO.getAntiguedad() < 0) {
-            throw new IllegalArgumentException("La antigüedad debe ser mayor o igual a 0.");
+            throw new BadRequestException("La antigüedad debe ser mayor o igual a 0.");
         }
         if (vehiculoDTO.getKilometraje() == null || vehiculoDTO.getKilometraje() < 0) {
-            throw new IllegalArgumentException("El kilometraje debe ser mayor o igual a 0.");
+            throw new BadRequestException("El kilometraje debe ser mayor o igual a 0.");
         }
         if (vehiculoDTO.getModelo() == null || vehiculoDTO.getModelo().trim().isEmpty()) {
-            throw new IllegalArgumentException("El modelo no puede estar vacío.");
+            throw new BadRequestException("El modelo no puede estar vacío.");
         }
         // Validar fecha de revisión
         if (vehiculoDTO.getFechaRevision() == null || vehiculoDTO.getFechaRevision().isBefore(LocalDate.now())) {
-            throw new IllegalArgumentException("La fecha de revisión debe ser posterior a la fecha actual.");
+            throw new BadRequestException("La fecha de revisión debe ser posterior a la fecha actual.");
         }
     }
 }

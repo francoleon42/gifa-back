@@ -3,6 +3,7 @@ package com.gifa_api.service.impl;
 
 import com.gifa_api.dto.proveedor.ProveedorDeITemRequestDTO;
 import com.gifa_api.dto.proveedor.ProveedorDeITemResponseDTO;
+import com.gifa_api.exception.BadRequestException;
 import com.gifa_api.exception.NotFoundException;
 import com.gifa_api.model.ItemDeInventario;
 import com.gifa_api.model.Proveedor;
@@ -54,7 +55,7 @@ public class ProveedorDeItemServiceImpl implements IProveedorDeItemService {
     }
     private void validarProveedorDeItemRequestDTO(ProveedorDeITemRequestDTO requestDTO) {
         if (requestDTO.getPrecio() == null || requestDTO.getPrecio() <= 0) {
-            throw new IllegalArgumentException("El precio debe ser mayor a cero.");
+            throw new BadRequestException("El precio debe ser mayor a cero.");
         }
     }
 }

@@ -1,6 +1,7 @@
 package com.gifa_api.service.impl;
 
 import com.gifa_api.dto.traccar.CrearDispositivoRequestDTO;
+import com.gifa_api.exception.BadRequestException;
 import com.gifa_api.exception.NotFoundException;
 import com.gifa_api.model.Dispositivo;
 import com.gifa_api.model.KilometrajeVehiculo;
@@ -105,10 +106,10 @@ public class DispositivoServiceImpl implements IDispositivoService {
 
     private void validarCrearDispositivoRequestDTO(CrearDispositivoRequestDTO crearDispositivoRequestDTO){
         if (crearDispositivoRequestDTO.getName() == null || crearDispositivoRequestDTO.getName().trim().isEmpty()) {
-            throw new IllegalArgumentException("El nombre del dispositivo no puede estar vacío.");
+            throw new BadRequestException("El nombre del dispositivo no puede estar vacío.");
         }
         if (crearDispositivoRequestDTO.getUniqueId() == null || crearDispositivoRequestDTO.getUniqueId().trim().isEmpty()) {
-            throw new IllegalArgumentException("El uniqueId del dispositivo no puede estar vacío.");
+            throw new BadRequestException("El uniqueId del dispositivo no puede estar vacío.");
         }
     }
 

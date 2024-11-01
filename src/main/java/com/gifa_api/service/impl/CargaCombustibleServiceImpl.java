@@ -1,6 +1,7 @@
 package com.gifa_api.service.impl;
 
 import com.gifa_api.dto.gestionDeCombustilble.CargaCombustibleRequestDTO;
+import com.gifa_api.exception.BadRequestException;
 import com.gifa_api.exception.NotFoundException;
 import com.gifa_api.model.CargaCombustible;
 import com.gifa_api.model.Tarjeta;
@@ -137,10 +138,10 @@ public class CargaCombustibleServiceImpl implements ICargaCombustibleService {
 
     private void validarCargaCombustibleRequestDTO(CargaCombustibleRequestDTO cargaCombustibleRequestDTO) {
         if (cargaCombustibleRequestDTO.getCantidadLitros() == null || cargaCombustibleRequestDTO.getCantidadLitros() <= 0) {
-            throw new IllegalArgumentException("La cantidad de litros debe ser mayor a cero.");
+            throw new BadRequestException("La cantidad de litros debe ser mayor a cero.");
         }
         if (cargaCombustibleRequestDTO.getNumeroTarjeta() == null || cargaCombustibleRequestDTO.getNumeroTarjeta().toString().isEmpty() ) {
-            throw new IllegalArgumentException("El número de tarjeta debe tener al menos 16 dígitos.");
+            throw new BadRequestException("El número de tarjeta no debe estar vacio");
         }
     }
 }

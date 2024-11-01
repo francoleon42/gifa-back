@@ -5,14 +5,12 @@ import com.gifa_api.dto.item.ItemDeInventarioRequestDTO;
 import com.gifa_api.dto.item.UtilizarItemDeInventarioDTO;
 
 import com.gifa_api.exception.BadRequestException;
-import com.gifa_api.exception.BadRoleException;
 import com.gifa_api.exception.NotFoundException;
 import com.gifa_api.model.ItemDeInventario;
 import com.gifa_api.repository.ItemDeInventarioRepository;
 import com.gifa_api.service.IPedidoService;
 import com.gifa_api.service.impl.ItemDeInventarioServiceImpl;
 import com.gifa_api.utils.mappers.ItemDeInventarioMapper;
-import net.bytebuddy.implementation.bind.MethodDelegationBinder;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

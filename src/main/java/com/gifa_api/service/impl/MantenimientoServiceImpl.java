@@ -2,6 +2,7 @@ package com.gifa_api.service.impl;
 
 import com.gifa_api.controller.MantenimientoController;
 import com.gifa_api.dto.mantenimiento.*;
+import com.gifa_api.exception.BadRequestException;
 import com.gifa_api.exception.BadRoleException;
 import com.gifa_api.exception.NotFoundException;
 import com.gifa_api.model.*;
@@ -100,7 +101,7 @@ public class MantenimientoServiceImpl implements IMantenimientoService {
 
     private void validarRegistrarMantenimientoDTO(RegistrarMantenimientoDTO registrarMantenimientoDTO) {
         if (registrarMantenimientoDTO.getAsunto() == null || registrarMantenimientoDTO.getAsunto().trim().isEmpty()) {
-            throw new IllegalArgumentException("El asunto no puede estar vacío.");
+            throw new BadRequestException("El asunto no puede estar vacío.");
         }
     }
 

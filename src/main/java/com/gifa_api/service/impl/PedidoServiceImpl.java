@@ -101,10 +101,10 @@ public class PedidoServiceImpl implements IPedidoService {
 
     private void validarCrearPedidoDTO(CrearPedidoDTO crearPedidoDTO) {
         if (crearPedidoDTO.getCantidad() == null || crearPedidoDTO.getCantidad() <= 0) {
-            throw new IllegalArgumentException("La cantidad debe ser mayor a cero.");
+            throw new BadRequestException("La cantidad debe ser mayor a cero.");
         }
         if (crearPedidoDTO.getMotivo() == null || crearPedidoDTO.getMotivo().trim().isEmpty()) {
-            throw new IllegalArgumentException("El motivo no puede estar vacío.");
+            throw new BadRequestException("El motivo no puede estar vacío.");
         }
     }
 }
