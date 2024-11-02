@@ -68,7 +68,7 @@ public class TraccarServiceImpl implements ITraccarService {
                         .kilometrajeRecorrido(kmRecorridos)
                         .nombresDeResponsables(nombreDeresponsables)
                         .vehiculo(vehiculoResponseDTO)
-//                        .litrosInconsistente()
+                        .litrosInconsistente(litrosCargados - kmRecorridos)
                         .build();
                 inconsistencias.add(inconsistencia);
             }

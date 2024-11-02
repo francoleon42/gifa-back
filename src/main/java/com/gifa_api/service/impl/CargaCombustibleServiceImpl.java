@@ -48,7 +48,7 @@ public class CargaCombustibleServiceImpl implements ICargaCombustibleService {
                 .builder()
                 .tarjeta(tarjeta)
                 .cantidadLitros(cargaCombustibleRequestDTO.getCantidadLitros())
-                .fechaHora(cargaCombustibleRequestDTO.getFechaYhora())
+                .fechaHora(OffsetDateTime.now())
                 .precioPorLitro(precioSuper)
                 .costoTotal(precioSuper * cargaCombustibleRequestDTO.getCantidadLitros())
                 .build();
