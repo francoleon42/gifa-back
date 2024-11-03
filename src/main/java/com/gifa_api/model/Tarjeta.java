@@ -22,7 +22,7 @@ public class Tarjeta {
     @Column(name = "numero")
     private Integer numero;
 
-    @OneToOne(fetch = FetchType.LAZY)
+    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "vehiculo_id")
     private Vehiculo vehiculo;
 

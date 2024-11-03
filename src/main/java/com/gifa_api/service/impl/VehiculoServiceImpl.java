@@ -54,10 +54,12 @@ public class VehiculoServiceImpl implements IVehiculoService {
     @Override
     public void registrar(RegistarVehiculoDTO vehiculoDTO) {
         validarRegistrarVehiculoDTO(vehiculoDTO);
+
         Tarjeta tarjeta = Tarjeta.builder()
                 .numero(generarNumeroTarjeta())
                 .build();
-        tarjetaRepository.save(tarjeta);
+        
+        byte[] qr = obtenerQR(vehiculoDTO.getPatente());
 
         Vehiculo vehiculo = Vehiculo
                 .builder()
@@ -68,12 +70,12 @@ public class VehiculoServiceImpl implements IVehiculoService {
                 .estadoDeHabilitacion(EstadoDeHabilitacion.HABILITADO)
                 .estadoVehiculo(EstadoVehiculo.REPARADO)
                 .fechaVencimiento(vehiculoDTO.getFechaRevision())
-                .tarjeta(tarjeta)
+                .tarjeta(tarjeta) // Asignamos la tarjeta al vehículo
+                .qr(qr)
                 .build();
 
-        vehiculoRepository.save(vehiculo);
-
-        vehiculo.setQr(obtenerQR(vehiculo.getId().toString()));
+        // Asigna el vehículo a la tarjeta para establecer la relación bidireccional
+        tarjeta.setVehiculo(vehiculo);
 
         vehiculoRepository.save(vehiculo);
     }
