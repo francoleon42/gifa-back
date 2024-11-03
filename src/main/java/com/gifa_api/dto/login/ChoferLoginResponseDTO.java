@@ -10,4 +10,5 @@ import lombok.experimental.SuperBuilder;
 public class ChoferLoginResponseDTO extends RolEntityDTO {
     private String nombre;
     private Integer numeroTarjeta;
+    private Integer tarjetaId;
 }

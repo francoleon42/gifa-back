@@ -66,6 +66,7 @@ public class AuthServiceImpl implements IAuthService {
                 .id(chofer.getId())
                 .nombre(chofer.getNombre())
                 .numeroTarjeta(chofer.getVehiculo().getTarjeta().getNumero())
+                .tarjetaId(chofer.getVehiculo().getTarjeta().getId())
                 .build();
     }
 
