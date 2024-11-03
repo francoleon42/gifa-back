@@ -9,4 +9,5 @@ import lombok.experimental.SuperBuilder;
 @Getter
 public class ChoferLoginResponseDTO extends RolEntityDTO {
     private String nombre;
+    private Integer numeroTarjeta;
 }

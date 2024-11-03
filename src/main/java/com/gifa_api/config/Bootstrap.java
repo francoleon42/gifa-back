@@ -128,7 +128,6 @@ public class Bootstrap implements ApplicationRunner {
             OffsetDateTime fechaHora = OffsetDateTime.now().plusDays(i).plusHours(i);
             CargaCombustibleRequestDTO carga = CargaCombustibleRequestDTO.builder()
                     .numeroTarjeta(i % 2 == 0 ? 1 : 2)
-                    .FechaYhora(fechaHora)
                     .cantidadLitros(i * 5)
                     .build();
             cargaCombustibleService.cargarCombustible(carga);

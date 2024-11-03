@@ -43,7 +43,6 @@ class CargaCombustibleServiceImplTest {
                 .builder()
                 .cantidadLitros(10)
                 .numeroTarjeta(12345678) // Usando un número entero para la tarjeta
-                .FechaYhora(OffsetDateTime.now())
                 .build();
     }
 

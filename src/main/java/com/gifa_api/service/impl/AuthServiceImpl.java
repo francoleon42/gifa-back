@@ -65,6 +65,7 @@ public class AuthServiceImpl implements IAuthService {
         return ChoferLoginResponseDTO.builder()
                 .id(chofer.getId())
                 .nombre(chofer.getNombre())
+                .numeroTarjeta(chofer.getVehiculo().getTarjeta().getNumero())
                 .build();
     }
 
