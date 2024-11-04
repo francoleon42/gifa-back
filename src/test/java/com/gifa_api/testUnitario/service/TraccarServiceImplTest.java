@@ -2,7 +2,7 @@
 //
 //import com.gifa_api.client.TraccarClient;
 //import com.gifa_api.dto.traccar.CrearDispositivoRequestDTO;
-//import com.gifa_api.dto.traccar.ObtenerDispositivoRequestDTO;
+//import com.gifa_api.dto.traccar.DispositivoResponseDTO;
 //import com.gifa_api.service.impl.TraccarServiceImpl;
 //import org.junit.jupiter.api.Test;
 //import org.junit.jupiter.api.extension.ExtendWith;
@@ -35,15 +35,15 @@
 //
 //    @Test
 //    void obtenerDispositivos(){
-//        ObtenerDispositivoRequestDTO dispositivo1 = ObtenerDispositivoRequestDTO.builder().id(1).name("a").status("a").uniqueId("1").build();
-//        ObtenerDispositivoRequestDTO dispositivo2 = ObtenerDispositivoRequestDTO.builder().id(2).name("a").status("a").uniqueId("1").build();
-//        ObtenerDispositivoRequestDTO dispositivo3 = ObtenerDispositivoRequestDTO.builder().id(3).name("a").status("a").uniqueId("1").build();
+//        DispositivoResponseDTO dispositivo1 = DispositivoResponseDTO.builder().id(1).name("a").status("a").uniqueId("1").build();
+//        DispositivoResponseDTO dispositivo2 = DispositivoResponseDTO.builder().id(2).name("a").status("a").uniqueId("1").build();
+//        DispositivoResponseDTO dispositivo3 = DispositivoResponseDTO.builder().id(3).name("a").status("a").uniqueId("1").build();
 //
-//        List<ObtenerDispositivoRequestDTO> dispositivos = Arrays.asList(dispositivo1, dispositivo2, dispositivo3);
+//        List<DispositivoResponseDTO> dispositivos = Arrays.asList(dispositivo1, dispositivo2, dispositivo3);
 //
 //        when(traccarCliente.getDispositivos()).thenReturn(dispositivos);
 //
-//        List<ObtenerDispositivoRequestDTO> dispositivosPrueba = serviceTraccar.obtenerDispositivos();
+//        List<DispositivoResponseDTO> dispositivosPrueba = serviceTraccar.obtenerDispositivos();
 //        assertEquals(dispositivos,dispositivosPrueba);
 //        assertEquals(dispositivos.size(),dispositivosPrueba.size());
 //    }

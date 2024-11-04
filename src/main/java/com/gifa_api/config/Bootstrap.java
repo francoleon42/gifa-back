@@ -2,8 +2,7 @@ package com.gifa_api.config;
 
 import com.gifa_api.client.ITraccarCliente;
 import com.gifa_api.dto.gestionDeCombustilble.CargaCombustibleRequestDTO;
-import com.gifa_api.dto.traccar.CrearDispositivoRequestDTO;
-import com.gifa_api.dto.traccar.ObtenerDispositivoRequestDTO;
+import com.gifa_api.dto.traccar.DispositivoResponseDTO;
 import com.gifa_api.dto.vehiculo.RegistarVehiculoDTO;
 import com.gifa_api.model.*;
 import com.gifa_api.repository.*;
@@ -138,7 +137,7 @@ public class Bootstrap implements ApplicationRunner {
             cargaCombustibleService.cargarCombustible(carga);
         }
 
-        List<ObtenerDispositivoRequestDTO> dispositivosEnTraccar = traccarCliente.getDispositivos();
+        List<DispositivoResponseDTO> dispositivosEnTraccar = traccarCliente.getDispositivos();
 
 //        if(dispositivosEnTraccar == null || dispositivosEnTraccar.isEmpty()) {
 //            List<CrearDispositivoRequestDTO> dispositivosParaCrear = List.of(
@@ -160,7 +159,7 @@ public class Bootstrap implements ApplicationRunner {
 //        }
 
 //        List<Vehiculo> vehiculos = vehiculoRepository.findAll();
-//        for(ObtenerDispositivoRequestDTO dispositivoTraccar : dispositivosEnTraccar) {
+//        for(DispositivoResponseDTO dispositivoTraccar : dispositivosEnTraccar) {
 //            Dispositivo dispositivo = Dispositivo.builder()
 //                    .unicoId(dispositivoTraccar.getUniqueId())
 //                    .nombre(dispositivoTraccar.getName())

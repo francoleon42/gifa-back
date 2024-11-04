@@ -40,7 +40,7 @@
 //
 ////    @Test
 ////    void actualizarPosicionesDeDispositivo_deberiaActualizarPosiciones() {
-////        List<ObtenerDispositivoRequestDTO> dispositivosDTO = List.of(new ObtenerDispositivoRequestDTO(1, "uniqueId","name","status"));
+////        List<DispositivoResponseDTO> dispositivosDTO = List.of(new DispositivoResponseDTO(1, "uniqueId","name","status"));
 ////        when(traccarService.obtenerDispositivos()).thenReturn(dispositivosDTO);
 ////
 ////        Dispositivo dispositivo = new Dispositivo();
@@ -61,7 +61,7 @@
 ////
 ////    @Test
 ////    void actualizarPosicionesDeDispositivo_noDeberiaGuardarSiLaPosicionYaExiste() {
-////        List<ObtenerDispositivoRequestDTO> dispositivosDTO = List.of(new ObtenerDispositivoRequestDTO(1, "uniqueId","name","status"));
+////        List<DispositivoResponseDTO> dispositivosDTO = List.of(new DispositivoResponseDTO(1, "uniqueId","name","status"));
 ////        when(traccarService.obtenerDispositivos()).thenReturn(dispositivosDTO);
 ////
 ////        Dispositivo dispositivo = new Dispositivo();

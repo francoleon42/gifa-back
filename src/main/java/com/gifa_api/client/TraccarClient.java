@@ -2,11 +2,10 @@ package com.gifa_api.client;
 
 import com.gifa_api.dto.traccar.CrearDispositivoRequestDTO;
 import com.gifa_api.dto.traccar.CrearDispositivoResponseDTO;
-import com.gifa_api.dto.traccar.ObtenerDispositivoRequestDTO;
+import com.gifa_api.dto.traccar.DispositivoResponseDTO;
 import com.gifa_api.dto.traccar.PosicionDispositivoDTO;
 import com.gifa_api.model.Dispositivo;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
@@ -84,16 +83,16 @@ public class TraccarClient implements ITraccarCliente {
     }
 
     @Override
-    public List<ObtenerDispositivoRequestDTO> getDispositivos() {
+    public List<DispositivoResponseDTO> getDispositivos() {
         HttpHeaders headers = getHeaders();
         HttpEntity<Void> entity = new HttpEntity<>(headers);
         UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(baseUrl + "/devices");
 
-        ResponseEntity<ObtenerDispositivoRequestDTO[]> response = restTemplate.exchange(
+        ResponseEntity<DispositivoResponseDTO[]> response = restTemplate.exchange(
                 builder.toUriString(),
                 HttpMethod.GET,
                 entity,
-                ObtenerDispositivoRequestDTO[].class
+                DispositivoResponseDTO[].class
         );
 
 
@@ -106,7 +105,7 @@ public class TraccarClient implements ITraccarCliente {
     }
 
     @Override
-    public ObtenerDispositivoRequestDTO getDispositivo(Integer deviceId) {
+    public DispositivoResponseDTO getDispositivo(Integer deviceId) {
         HttpHeaders headers = getHeaders();
         HttpEntity<Void> entity = new HttpEntity<>(headers);
         UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(baseUrl + "/devices");
@@ -115,15 +114,15 @@ public class TraccarClient implements ITraccarCliente {
             builder.queryParam("id", deviceId);
         }
 
-        ResponseEntity<ObtenerDispositivoRequestDTO[]> response = restTemplate.exchange(
+        ResponseEntity<DispositivoResponseDTO[]> response = restTemplate.exchange(
                 builder.toUriString(),
                 HttpMethod.GET,
                 entity,
-                ObtenerDispositivoRequestDTO[].class
+                DispositivoResponseDTO[].class
         );
 
         if (response.getStatusCode() == HttpStatus.OK && response.getBody() != null) {
-            ObtenerDispositivoRequestDTO[] dispositivos = response.getBody();
+            DispositivoResponseDTO[] dispositivos = response.getBody();
             return Arrays.stream(dispositivos)
                     .filter(dispositivo -> dispositivo.getId().equals(deviceId)) // Comparar los IDs
                     .findFirst()
