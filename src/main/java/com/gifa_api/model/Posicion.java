@@ -1,5 +1,6 @@
 package com.gifa_api.model;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -24,6 +25,7 @@ public class Posicion {
 
     @Column(name = "longitude")
     private double longitude;
+
 
     @Column(name = "fecha_hora")
     private OffsetDateTime fechaHora;

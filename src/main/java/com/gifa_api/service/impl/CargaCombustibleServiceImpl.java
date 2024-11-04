@@ -48,7 +48,7 @@ public class CargaCombustibleServiceImpl implements ICargaCombustibleService {
                 .builder()
                 .tarjeta(tarjeta)
                 .cantidadLitros(cargaCombustibleRequestDTO.getCantidadLitros())
-                .fechaHora(OffsetDateTime.now())
+                .fechaHora(LocalDate.now())
                 .precioPorLitro(precioSuper)
                 .costoTotal(precioSuper * cargaCombustibleRequestDTO.getCantidadLitros())
                 .build();
@@ -123,13 +123,10 @@ public class CargaCombustibleServiceImpl implements ICargaCombustibleService {
     }
 
     @Override
-    public double combustibleCargadoEn(Integer numeroTarjeta, OffsetDateTime fecha) {
-        System.out.println("fechaSolicitada" + fecha);
+    public double combustibleCargadoEn(Integer numeroTarjeta, LocalDate fecha) {
         int cargaTotal = 0;
         List<CargaCombustible> cargasCombustible = cargaCombustibleRepository.findByNumeroTarjetaAndFechaAfter(numeroTarjeta, fecha);
-        if(cargasCombustible.isEmpty()){
-            System.out.println("Esta vacia en las cargas las posiciones despues de fecha");
-        }
+
         for (CargaCombustible carga : cargasCombustible) {
             cargaTotal += carga.getCantidadLitros();
         }

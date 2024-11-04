@@ -15,7 +15,9 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.time.OffsetDateTime;
+import java.time.ZoneOffset;
 import java.util.List;
 
 @Service
@@ -52,6 +54,7 @@ public class DispositivoServiceImpl implements IDispositivoService {
 
     @Override
     public int calcularKmDeDispositivoDespuesDeFecha(String unicoIdDeDispositivo, OffsetDateTime fecha) {
+
         List<Posicion> posiciones = posicionRepository.findByUnicoIdAndDespuesFecha(unicoIdDeDispositivo, fecha);
         int kmDeDispositivoDespuesDeFecha = formulaDeHaversine(posiciones);
         return kmDeDispositivoDespuesDeFecha;

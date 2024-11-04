@@ -2,10 +2,12 @@ package com.gifa_api.repository;
 
 
 import com.gifa_api.model.Posicion;
+import jakarta.persistence.Column;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
+import java.time.LocalDate;
 import java.time.OffsetDateTime;
 import java.util.List;
 import java.util.Optional;
@@ -20,9 +22,10 @@ public interface IPosicionRepository extends JpaRepository<Posicion, Integer> {
     @Query("SELECT p FROM Posicion p WHERE p.dispositivo.unicoId=:unicoId AND p.fechaHora = :fecha")
     Optional<Posicion> obtenerPosicionDeDispositivoPorFecha(@Param("unicoId") String unicoId, @Param("fecha") OffsetDateTime fecha);
 
+    @Query("SELECT p FROM Posicion p WHERE p.dispositivo.unicoId=:unicoId AND p.latitude = :latitude AND p.longitude = :longitude")
+    Optional<Posicion> obtenerPosicionDeDispositivoPorUbicacion(@Param("unicoId") String unicoId, @Param("latitude") double latitude, @Param("longitude") double longitude);
+
     @Query("SELECT p FROM Posicion p WHERE p.dispositivo.unicoId = :unicoId ORDER BY p.fechaHora DESC")
     List<Posicion> obtenerUltimaPosicion(@Param("unicoId") String unicoId);
-
-
 
 }

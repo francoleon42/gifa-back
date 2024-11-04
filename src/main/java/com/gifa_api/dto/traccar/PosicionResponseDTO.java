@@ -11,6 +11,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDate;
 import java.time.OffsetDateTime;
 
 @Builder
@@ -23,6 +24,6 @@ public class PosicionResponseDTO {
     double latitude;
     double longitude;
 
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ssXXX")
-    OffsetDateTime fechaHora;
+
+    LocalDate fechaHora;
 }

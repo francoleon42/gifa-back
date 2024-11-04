@@ -15,7 +15,9 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.time.OffsetDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 @Service
@@ -27,7 +29,7 @@ public class PosicionServiceImpl implements IPosicionService {
     private final IDispositivoService dispositivoService;
     private final PosicionMapper posicionMapper;
 
-    @Scheduled(fixedRate = 86400000)
+    @Scheduled(fixedRate = 8640)
     private void actualizarPosicionesDeDispositivo() {
 
         List<ObtenerDispositivoRequestDTO> dispositivosDTO = traccarService.obtenerDispositivos();
@@ -37,6 +39,7 @@ public class PosicionServiceImpl implements IPosicionService {
             for (PosicionDispositivoDTO posicionDTO : posicionesDeDispositivio) {
 
                 if (!estaPosicion(dispositivoDTO.getUniqueId(), posicionDTO.getServerTime()) && suficienteDiferencia(dispositivoDTO.getUniqueId(), posicionDTO.getLatitude(), posicionDTO.getLongitude())) {
+
                     Posicion posicion = Posicion
                             .builder()
                             .latitude(posicionDTO.getLatitude())

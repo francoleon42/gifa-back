@@ -4,6 +4,7 @@ import com.gifa_api.dto.traccar.PosicionDispositivoDTO;
 import com.gifa_api.dto.traccar.PosicionResponseDTO;
 import com.gifa_api.model.Posicion;
 
+import java.time.LocalDate;
 import java.time.OffsetDateTime;
 import java.util.List;
 

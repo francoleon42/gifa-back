@@ -124,11 +124,11 @@ public class Bootstrap implements ApplicationRunner {
         choferRepository.saveAll(List.of(chofer));
 
         // Crear cargas de combustible con builder
-        for (int i = 1; i <= 60; i++) {
+        for (int i = 1; i <= 7; i++) {
             OffsetDateTime fechaHora = OffsetDateTime.now().plusDays(i).plusHours(i);
             CargaCombustibleRequestDTO carga = CargaCombustibleRequestDTO.builder()
                     .id(i % 2 == 0 ? 1 : 2)
-                    .cantidadLitros(i * 5)
+                    .cantidadLitros(i * 2)
                     .build();
             cargaCombustibleService.cargarCombustible(carga);
         }
