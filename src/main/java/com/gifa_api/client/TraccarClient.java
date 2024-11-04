@@ -4,6 +4,7 @@ import com.gifa_api.dto.traccar.CrearDispositivoRequestDTO;
 import com.gifa_api.dto.traccar.CrearDispositivoResponseDTO;
 import com.gifa_api.dto.traccar.ObtenerDispositivoRequestDTO;
 import com.gifa_api.dto.traccar.PosicionDispositivoDTO;
+import com.gifa_api.model.Dispositivo;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
@@ -34,8 +35,9 @@ public class TraccarClient implements ITraccarCliente {
     private String baseUrl = System.getenv("TRACCAR_BASE_URL");
 
     @Override
-    public CrearDispositivoResponseDTO postCrearDispositivoTraccar(CrearDispositivoRequestDTO request) {
+    public CrearDispositivoResponseDTO postCrearDispositivoTraccar(Dispositivo dispositivo) {
         // Crear la entidad que encapsula los encabezados y el cuerpo
+        CrearDispositivoRequestDTO request = CrearDispositivoRequestDTO.builder().name(dispositivo.getNombre()).uniqueId(dispositivo.getUnicoId()).build();
         HttpHeaders headers = getHeaders();
         HttpEntity<CrearDispositivoRequestDTO> entity = new HttpEntity<>(request, headers);
 

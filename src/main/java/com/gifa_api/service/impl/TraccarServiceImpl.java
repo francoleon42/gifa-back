@@ -5,6 +5,7 @@ import com.gifa_api.dto.traccar.CrearDispositivoRequestDTO;
 import com.gifa_api.dto.traccar.InconsistenciasKMconCombustiblesResponseDTO;
 import com.gifa_api.dto.traccar.ObtenerDispositivoRequestDTO;
 import com.gifa_api.dto.vehiculo.VehiculoResponseDTO;
+import com.gifa_api.model.Dispositivo;
 import com.gifa_api.model.Vehiculo;
 import com.gifa_api.repository.IChoferRepository;
 import com.gifa_api.repository.IDispositivoRepository;
@@ -33,9 +34,20 @@ public class TraccarServiceImpl implements ITraccarService {
 
     private final IDispositivoRepository dispositivoRepository;
 
+
     @Override
-    public void crearDispositivo(CrearDispositivoRequestDTO crearDispositivoRequestDTO) {
-        traccarCliente.postCrearDispositivoTraccar(crearDispositivoRequestDTO);
+    public void crearDispositivo(Dispositivo dispositivo) {
+        if(!existeDispositivoEnTraccar(dispositivo.getUnicoId())) {
+            traccarCliente.postCrearDispositivoTraccar(dispositivo);
+        }
+
+    }
+    private boolean existeDispositivoEnTraccar(String uniqueId){
+        for ( ObtenerDispositivoRequestDTO dispositivo : obtenerDispositivos() ){
+            if (dispositivo.getUniqueId().equals(uniqueId))
+                return true;
+        }
+        return false;
     }
 
     @Override

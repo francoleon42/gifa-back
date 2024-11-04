@@ -1,18 +1,23 @@
 package com.gifa_api.service.impl;
 
+import com.gifa_api.client.ITraccarCliente;
 import com.gifa_api.dto.mantenimiento.RegistrarMantenimientoDTO;
 import com.gifa_api.dto.vehiculo.ListaVehiculosResponseDTO;
 import com.gifa_api.dto.vehiculo.RegistarVehiculoDTO;
 import com.gifa_api.dto.vehiculo.VehiculoResponseConQrDTO;
 import com.gifa_api.exception.BadRequestException;
 import com.gifa_api.exception.NotFoundException;
+import com.gifa_api.model.Dispositivo;
 import com.gifa_api.model.Mantenimiento;
 import com.gifa_api.model.Tarjeta;
 import com.gifa_api.model.Vehiculo;
+import com.gifa_api.repository.IDispositivoRepository;
 import com.gifa_api.repository.ITarjetaRepository;
 import com.gifa_api.repository.IVehiculoRepository;
 import com.gifa_api.repository.ItemDeInventarioRepository;
+import com.gifa_api.service.IDispositivoService;
 import com.gifa_api.service.IMantenimientoService;
+import com.gifa_api.service.ITraccarService;
 import com.gifa_api.service.IVehiculoService;
 import com.gifa_api.utils.enums.EstadoDeHabilitacion;
 import com.gifa_api.utils.enums.EstadoVehiculo;
@@ -44,6 +49,8 @@ public class VehiculoServiceImpl implements IVehiculoService {
     private final ITarjetaRepository tarjetaRepository;
     private final VehiculoMapper vehiculoMapper;
     private final VehiculoResponseConQrMapper vehiculoResponseConQrMapper;
+    private  final ITraccarService traccarService;
+    private final IDispositivoRepository dispositivoRepository;
 
 
     @Override
@@ -58,9 +65,15 @@ public class VehiculoServiceImpl implements IVehiculoService {
         Tarjeta tarjeta = Tarjeta.builder()
                 .numero(generarNumeroTarjeta())
                 .build();
-        
-        byte[] qr = obtenerQR(vehiculoDTO.getPatente());
 
+        Dispositivo dispositivo = Dispositivo
+                .builder()
+                .unicoId(vehiculoDTO.getPatente())
+                .nombre("Creacion automatica")
+                .build();
+
+
+        byte[] qr = obtenerQR(vehiculoDTO.getPatente());
         Vehiculo vehiculo = Vehiculo
                 .builder()
                 .patente(vehiculoDTO.getPatente())
@@ -70,14 +83,17 @@ public class VehiculoServiceImpl implements IVehiculoService {
                 .estadoDeHabilitacion(EstadoDeHabilitacion.HABILITADO)
                 .estadoVehiculo(EstadoVehiculo.REPARADO)
                 .fechaVencimiento(vehiculoDTO.getFechaRevision())
-                .tarjeta(tarjeta) // Asignamos la tarjeta al vehículo
+                .tarjeta(tarjeta)
+                .dispositivo(dispositivo)
                 .qr(qr)
                 .build();
 
         // Asigna el vehículo a la tarjeta para establecer la relación bidireccional
         tarjeta.setVehiculo(vehiculo);
+        dispositivo.setVehiculo(vehiculo);
 
         vehiculoRepository.save(vehiculo);
+        traccarService.crearDispositivo(dispositivo);
     }
 
     private byte[] obtenerQR(String id) {

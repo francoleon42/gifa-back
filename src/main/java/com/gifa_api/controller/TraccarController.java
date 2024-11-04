@@ -18,12 +18,6 @@ public class TraccarController {
     private  final IDispositivoService dispositivoService;
     private  final IPosicionService posicionService;
 
-    @PostMapping("/crearDispositivo")
-    public ResponseEntity<?> crearDispositivo(@RequestBody CrearDispositivoRequestDTO crearDispositivoRequestDTO,@RequestParam("idVehiculo") Integer idVehiculo){
-        traccarService.crearDispositivo(crearDispositivoRequestDTO);
-        dispositivoService.crearDispositivo(crearDispositivoRequestDTO,idVehiculo);
-        return new ResponseEntity<>(HttpStatus.CREATED);
-    }
 
     @GetMapping("/getDispositivos")
     public ResponseEntity<?> getDispositivos(){

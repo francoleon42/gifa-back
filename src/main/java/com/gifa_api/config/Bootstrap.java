@@ -135,40 +135,40 @@ public class Bootstrap implements ApplicationRunner {
 
         List<ObtenerDispositivoRequestDTO> dispositivosEnTraccar = traccarCliente.getDispositivos();
 
-        if(dispositivosEnTraccar == null || dispositivosEnTraccar.isEmpty()) {
-            List<CrearDispositivoRequestDTO> dispositivosParaCrear = List.of(
-                    CrearDispositivoRequestDTO.builder()
-                            .name("vehiculazo")
-                            .uniqueId("1")
-                            .build(),
-                    CrearDispositivoRequestDTO.builder()
-                            .name("vehiculito")
-                            .uniqueId("2")
-                            .build()
-            );
+//        if(dispositivosEnTraccar == null || dispositivosEnTraccar.isEmpty()) {
+//            List<CrearDispositivoRequestDTO> dispositivosParaCrear = List.of(
+//                    CrearDispositivoRequestDTO.builder()
+//                            .name("vehiculazo")
+//                            .uniqueId("1")
+//                            .build(),
+//                    CrearDispositivoRequestDTO.builder()
+//                            .name("vehiculito")
+//                            .uniqueId("2")
+//                            .build()
+//            );
+//
+//            for(CrearDispositivoRequestDTO request : dispositivosParaCrear) {
+//                traccarCliente.postCrearDispositivoTraccar(request);
+//            }
+//
+//            dispositivosEnTraccar = traccarCliente.getDispositivos();
+//        }
 
-            for(CrearDispositivoRequestDTO request : dispositivosParaCrear) {
-                traccarCliente.postCrearDispositivoTraccar(request);
-            }
-
-            dispositivosEnTraccar = traccarCliente.getDispositivos();
-        }
-
-        List<Vehiculo> vehiculos = vehiculoRepository.findAll();
-        for(ObtenerDispositivoRequestDTO dispositivoTraccar : dispositivosEnTraccar) {
-            Dispositivo dispositivo = Dispositivo.builder()
-                    .unicoId(dispositivoTraccar.getUniqueId())
-                    .nombre(dispositivoTraccar.getName())
-                    .vehiculo(vehiculos.get(Integer.parseInt(dispositivoTraccar.getUniqueId()) - 1))
-                    .build();
-
-            dispositivoRepository.save(dispositivo);
-
-            vehiculos.get(Integer.parseInt(dispositivoTraccar.getUniqueId()) - 1).setDispositivo(dispositivo);
-        }
-
-        //Agrego dispositivos
-        vehiculoRepository.saveAll(vehiculos);
+//        List<Vehiculo> vehiculos = vehiculoRepository.findAll();
+//        for(ObtenerDispositivoRequestDTO dispositivoTraccar : dispositivosEnTraccar) {
+//            Dispositivo dispositivo = Dispositivo.builder()
+//                    .unicoId(dispositivoTraccar.getUniqueId())
+//                    .nombre(dispositivoTraccar.getName())
+//                    .vehiculo(vehiculos.get(Integer.parseInt(dispositivoTraccar.getUniqueId()) - 1))
+//                    .build();
+//
+//            dispositivoRepository.save(dispositivo);
+//
+//            vehiculos.get(Integer.parseInt(dispositivoTraccar.getUniqueId()) - 1).setDispositivo(dispositivo);
+//        }
+//
+//        //Agrego dispositivos
+//        vehiculoRepository.saveAll(vehiculos);
 
         // Crear ítems de inventario con builder
         ItemDeInventario item1 = ItemDeInventario.builder()

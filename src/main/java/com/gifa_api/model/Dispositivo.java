@@ -25,7 +25,7 @@ public class Dispositivo {
     @Column(name = "nombre", nullable = false, length = 100)
     private String nombre;
 
-    @OneToOne(fetch = FetchType.LAZY)
+    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "vehiculo_id")
     private Vehiculo vehiculo;
 
