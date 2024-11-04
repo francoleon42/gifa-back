@@ -94,7 +94,7 @@ public class SecurityConfig {
                 .requestMatchers(HttpMethod.GET, "/vehiculo/verAll").hasAnyRole(ADMINISTRADOR, SUPERVISOR)
                 .requestMatchers(HttpMethod.PATCH, "/vehiculo/habilitar/{id}").hasRole(ADMINISTRADOR)
                 .requestMatchers(HttpMethod.PATCH, "/vehiculo/inhabilitar/{id}").hasRole(ADMINISTRADOR)
-                .requestMatchers(HttpMethod.GET, "/vehiculo/historialVehiculo/{id}").hasRole(OPERADOR);
+                .requestMatchers(HttpMethod.GET, "/vehiculo/historialVehiculo/{patente}").hasRole(OPERADOR);
     }
 
     private void configureChoferEndpoints(AuthorizeHttpRequestsConfigurer<HttpSecurity>.AuthorizationManagerRequestMatcherRegistry authRequest) {

@@ -127,9 +127,9 @@ public class VehiculoServiceImpl implements IVehiculoService {
 
     // mejorar fix
     @Override
-    public VehiculoResponseConQrDTO obtenerHistorialDeVehiculo(Integer vehiculoId) {
-        Vehiculo vehiculo = vehiculoRepository.findById(vehiculoId)
-                .orElseThrow(() -> new NotFoundException("No se encontró el vehiculo con id: " + vehiculoId));
+    public VehiculoResponseConQrDTO obtenerHistorialDeVehiculo(String patente) {
+        Vehiculo vehiculo = vehiculoRepository.findByPatente(patente)
+                .orElseThrow(() -> new NotFoundException("No se encontró el vehiculo con la patente : " + patente));
 
         List<Mantenimiento> listaMantenimientos = new ArrayList<>(vehiculo.getMantenimientos());
         return vehiculoResponseConQrMapper.toVehiculoResponseConQrDTO(vehiculo, listaMantenimientos);

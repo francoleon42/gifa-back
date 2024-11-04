@@ -9,5 +9,5 @@ public interface IVehiculoService {
     void registrar(RegistarVehiculoDTO registarVehiculoDTO);
     void inhabilitar(Integer idVehiculoToInhabilitar);
     void habilitar(Integer idVehiculoToInhabilitar);
-    VehiculoResponseConQrDTO obtenerHistorialDeVehiculo(Integer vehiculoId);
+    VehiculoResponseConQrDTO obtenerHistorialDeVehiculo(String patente);
 }
