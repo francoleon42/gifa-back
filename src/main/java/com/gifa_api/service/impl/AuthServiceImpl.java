@@ -2,6 +2,7 @@ package com.gifa_api.service.impl;
 
 import com.gifa_api.config.jwt.JwtService;
 import com.gifa_api.dto.login.*;
+import com.gifa_api.exception.LoginException;
 import com.gifa_api.exception.NotFoundException;
 import com.gifa_api.model.Chofer;
 import com.gifa_api.repository.IChoferRepository;
@@ -38,6 +39,9 @@ public class AuthServiceImpl implements IAuthService {
                 .findByUsuario(userDto.getUsername())
                 .orElseThrow(() -> new NotFoundException("No se encontro el usuario con username: " + userDto.getUsername()));
 
+        if(user.getEstadoUsuario() == EstadoUsuario.INHABILITADO){
+           throw new LoginException("El usuario esta inhabilitado");
+        }
         String token = jwtService.getToken(user);
 
         return LoginResponseDTO
@@ -127,6 +131,12 @@ public class AuthServiceImpl implements IAuthService {
             userRepository.save(user);
         }
     }
+
+//    @Override
+//    public void remove(Integer id) {
+//        Usuario user = userRepository.findById(id).orElseThrow(() -> new NotFoundException("No se encontró el usuario con id: " + id));
+//        userRepository.delete(user);
+//    }
 
 
     @Override

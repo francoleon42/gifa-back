@@ -43,6 +43,7 @@ public class AuthController {
         authService.habilitar(id);
         return new ResponseEntity<>(HttpStatus.OK);
     }
+
     @PostMapping("/logout")
     public ResponseEntity<?> logout(@RequestHeader("Authorization") String token) {
         authService.logout(token);

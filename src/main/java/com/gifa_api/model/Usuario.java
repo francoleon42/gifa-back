@@ -39,7 +39,7 @@ public class Usuario implements UserDetails {
     private Rol rol;
 
     @JsonManagedReference
-    @OneToMany(mappedBy = "operador")
+    @OneToMany(mappedBy = "operador",cascade = CascadeType.ALL)
     private Set<Mantenimiento> mantenimientos = new LinkedHashSet<>();
 
     @Enumerated(EnumType.STRING)
