@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
-public class ObtenerDispositivoRequestDTO {
+public class DispositivoResponseDTO {
     Integer id;
     String name;
     String uniqueId;
