@@ -39,8 +39,8 @@ public class CargaCombustibleServiceImpl implements ICargaCombustibleService {
         // Validar el DTO
         validarCargaCombustibleRequestDTO(cargaCombustibleRequestDTO);
 
-        Tarjeta tarjeta = tarjetaRepository.findById(cargaCombustibleRequestDTO.getNumeroTarjeta())
-                .orElseThrow(() -> new NotFoundException("No se encontró la tarjeta con id: " + cargaCombustibleRequestDTO.getNumeroTarjeta()));
+        Tarjeta tarjeta = tarjetaRepository.findById(cargaCombustibleRequestDTO.getId())
+                .orElseThrow(() -> new NotFoundException("No se encontró la tarjeta con id: " + cargaCombustibleRequestDTO.getId()));
 
         Float precioSuper = obtenerPrecioCombustible().get(0);
 
@@ -140,7 +140,7 @@ public class CargaCombustibleServiceImpl implements ICargaCombustibleService {
         if (cargaCombustibleRequestDTO.getCantidadLitros() == null || cargaCombustibleRequestDTO.getCantidadLitros() <= 0) {
             throw new BadRequestException("La cantidad de litros debe ser mayor a cero.");
         }
-        if (cargaCombustibleRequestDTO.getNumeroTarjeta() == null || cargaCombustibleRequestDTO.getNumeroTarjeta().toString().isEmpty() ) {
+        if (cargaCombustibleRequestDTO.getId()  == null || cargaCombustibleRequestDTO.getId().toString().isEmpty() ) {
             throw new BadRequestException("El número de tarjeta no debe estar vacio");
         }
     }

@@ -16,5 +16,5 @@ import java.time.OffsetDateTime;
 @NoArgsConstructor
 public class CargaCombustibleRequestDTO {
      Integer cantidadLitros;
-     Integer numeroTarjeta;
+     Integer id;
 }
