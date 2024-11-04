@@ -1,6 +1,8 @@
 package com.gifa_api.model;
 
 import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.gifa_api.utils.enums.EstadoUsuario;
+import com.gifa_api.utils.enums.EstadoVehiculo;
 import com.gifa_api.utils.enums.Rol;
 import jakarta.persistence.*;
 import lombok.*;
@@ -39,6 +41,10 @@ public class Usuario implements UserDetails {
     @JsonManagedReference
     @OneToMany(mappedBy = "operador")
     private Set<Mantenimiento> mantenimientos = new LinkedHashSet<>();
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "estado_usuario", nullable = false)
+    private EstadoUsuario estadoUsuario;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

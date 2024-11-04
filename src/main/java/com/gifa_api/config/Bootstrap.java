@@ -48,24 +48,28 @@ public class Bootstrap implements ApplicationRunner {
         Usuario admin = Usuario.builder()
                 .usuario("admin")
                 .contrasena("$2a$10$RRAzywJFxaAG3pRlHXep6u6VNKi5KOTT3M8GCxDPHpAyZ0ofX2Bcu")
+                .estadoUsuario(EstadoUsuario.HABILITADO)
                 .rol(Rol.ADMINISTRADOR)
                 .build();
 
         Usuario operador = Usuario.builder()
                 .usuario("operador")
                 .contrasena("$2a$10$RRAzywJFxaAG3pRlHXep6u6VNKi5KOTT3M8GCxDPHpAyZ0ofX2Bcu")
+                .estadoUsuario(EstadoUsuario.HABILITADO)
                 .rol(Rol.OPERADOR)
                 .build();
 
         Usuario supervisor = Usuario.builder()
                 .usuario("supervisor")
                 .contrasena("$2a$10$RRAzywJFxaAG3pRlHXep6u6VNKi5KOTT3M8GCxDPHpAyZ0ofX2Bcu")
+                .estadoUsuario(EstadoUsuario.HABILITADO)
                 .rol(Rol.SUPERVISOR)
                 .build();
 
         Usuario gerente = Usuario.builder()
                 .usuario("gerente")
                 .contrasena("$2a$10$RRAzywJFxaAG3pRlHXep6u6VNKi5KOTT3M8GCxDPHpAyZ0ofX2Bcu")
+                .estadoUsuario(EstadoUsuario.HABILITADO)
                 .rol(Rol.GERENTE)
                 .build();
 
@@ -112,6 +116,7 @@ public class Bootstrap implements ApplicationRunner {
                 .usuario("chofer")
                 .contrasena("$2a$10$RRAzywJFxaAG3pRlHXep6u6VNKi5KOTT3M8GCxDPHpAyZ0ofX2Bcu")
                 .rol(Rol.CHOFER)
+                .estadoUsuario(EstadoUsuario.HABILITADO)
                 .build();
 
         Chofer chofer = Chofer.builder()

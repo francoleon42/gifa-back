@@ -33,7 +33,16 @@ public class AuthController {
         authService.update(id, updateRequestDto);
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
-
+    @PatchMapping("/inhabilitar/{id}")
+    public ResponseEntity<?> inhabilitar(@PathVariable Integer id){
+        authService.inhabilitar(id);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+    @PatchMapping("/habilitar/{id}")
+    public ResponseEntity<?> habilitar(@PathVariable Integer id){
+        authService.habilitar(id);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
     @PostMapping("/logout")
     public ResponseEntity<?> logout(@RequestHeader("Authorization") String token) {
         authService.logout(token);

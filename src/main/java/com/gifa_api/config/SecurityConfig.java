@@ -154,6 +154,7 @@ public class SecurityConfig {
                 .requestMatchers(HttpMethod.POST, "/gestionDeCombustible/cargarCombustible").hasRole(CHOFER);
 
     }
+
     private void configureFuncionesTraccarEndpoints(AuthorizeHttpRequestsConfigurer<HttpSecurity>.AuthorizationManagerRequestMatcherRegistry authRequest) {
         authRequest
                 .requestMatchers(HttpMethod.POST, "/traccar/crearDispositivo").hasRole(ADMINISTRADOR)
@@ -174,7 +175,10 @@ public class SecurityConfig {
         authRequest
                 .requestMatchers(HttpMethod.POST, "/auth/logout").authenticated()
                 .requestMatchers(HttpMethod.PUT, "/auth/update/{id}").hasRole(ADMINISTRADOR)
-                .requestMatchers(HttpMethod.GET, "/auth/getAllUsers").hasRole(ADMINISTRADOR);
+                .requestMatchers(HttpMethod.GET, "/auth/getAllUsers").hasRole(ADMINISTRADOR)
+                .requestMatchers(HttpMethod.POST, "/auth/register").hasRole(ADMINISTRADOR)
+                .requestMatchers(HttpMethod.PATCH, "/auth/habilitar/{id}").hasRole(ADMINISTRADOR)
+                .requestMatchers(HttpMethod.PATCH, "/auth/inhabilitar/{id}").hasRole(ADMINISTRADOR);
     }
 
     private void configureCargarCombustibleEndpoints(AuthorizeHttpRequestsConfigurer<HttpSecurity>.AuthorizationManagerRequestMatcherRegistry authRequest) {

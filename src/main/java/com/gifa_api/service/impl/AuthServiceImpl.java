@@ -5,6 +5,7 @@ import com.gifa_api.dto.login.*;
 import com.gifa_api.exception.NotFoundException;
 import com.gifa_api.model.Chofer;
 import com.gifa_api.repository.IChoferRepository;
+import com.gifa_api.utils.enums.EstadoUsuario;
 import com.gifa_api.utils.enums.Rol;
 import com.gifa_api.exception.RegisterException;
 import com.gifa_api.model.Usuario;
@@ -80,6 +81,7 @@ public class AuthServiceImpl implements IAuthService {
                 .usuario(userToRegisterDto.getUsername())
                 .contrasena(passwordEncoder.encode(userToRegisterDto.getPassword()))
                 .rol(Rol.getRol(userToRegisterDto.getRole()))
+                .estadoUsuario(EstadoUsuario.HABILITADO)
                 .build();
 
         userRepository.save(user);
@@ -107,6 +109,25 @@ public class AuthServiceImpl implements IAuthService {
 
         userRepository.save(user);
     }
+
+    @Override
+    public void habilitar(Integer id) {
+        Usuario user = userRepository.findById(id).orElseThrow(() -> new NotFoundException("No se encontró el usuario con id: " + id));
+        if(user.getEstadoUsuario() == EstadoUsuario.INHABILITADO) {
+            user.setEstadoUsuario(EstadoUsuario.HABILITADO);
+            userRepository.save(user);
+        }
+    }
+
+    @Override
+    public void inhabilitar(Integer id) {
+        Usuario user = userRepository.findById(id).orElseThrow(() -> new NotFoundException("No se encontró el usuario con id: " + id));
+        if(user.getEstadoUsuario() == EstadoUsuario.HABILITADO) {
+            user.setEstadoUsuario(EstadoUsuario.INHABILITADO);
+            userRepository.save(user);
+        }
+    }
+
 
     @Override
     public List<GetUserDTO> getAll() {
