@@ -18,7 +18,7 @@ public class PedidoController {
     // Pedidos
     @PostMapping("/generarPedido")
     public ResponseEntity<?> generarPedidoManual(@RequestBody CrearPedidoDTO pedidoManualDTO){
-        pedidoService.createPedido(pedidoManualDTO);
+        pedidoService.crearPedidoManual(pedidoManualDTO);
         return ResponseEntity.ok(HttpStatus.CREATED);
     }
     @GetMapping("/aceptados")

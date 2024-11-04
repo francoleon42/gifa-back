@@ -4,5 +4,6 @@ public enum EstadoPedido {
     ACEPTADO,
     PENDIENTE,
     RECHAZADO,
-    FINALIZADO
+    FINALIZADO,
+    PRESUPUESTO_INSUFICIENTE
 }
