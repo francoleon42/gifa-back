@@ -156,6 +156,7 @@ public class AuthServiceImpl implements IAuthService {
                 .id(user.getId())
                 .username(user.getUsuario())
                 .role(user.getRol())
+                .estado(user.getEstadoUsuario().toString())
                 .build();
     }
 }

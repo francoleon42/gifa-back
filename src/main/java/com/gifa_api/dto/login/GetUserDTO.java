@@ -10,4 +10,5 @@ public class GetUserDTO {
     private Integer id;
     private String username;
     private Rol role;
+    private String estado;
 }
