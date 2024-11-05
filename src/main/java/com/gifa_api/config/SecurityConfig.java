@@ -101,8 +101,6 @@ public class SecurityConfig {
         authRequest
                 .requestMatchers(HttpMethod.POST, "/chofer/registrar").hasRole(ADMINISTRADOR)
                 .requestMatchers(HttpMethod.PATCH, "/chofer/asignarChofer").hasRole(SUPERVISOR)
-                .requestMatchers(HttpMethod.PATCH, "/chofer/inhabilitar/{id}").hasRole(ADMINISTRADOR)
-                .requestMatchers(HttpMethod.PATCH, "/chofer/habilitar/{id}").hasRole(ADMINISTRADOR)
                 .requestMatchers(HttpMethod.GET, "/chofer/verChoferes").hasAnyRole(ADMINISTRADOR, SUPERVISOR);
     }
 
