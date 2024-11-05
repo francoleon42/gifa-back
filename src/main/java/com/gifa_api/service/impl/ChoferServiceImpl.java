@@ -11,6 +11,7 @@ import com.gifa_api.model.Vehiculo;
 import com.gifa_api.repository.IChoferRepository;
 import com.gifa_api.repository.IVehiculoRepository;
 import com.gifa_api.service.IChoferService;
+import com.gifa_api.utils.enums.EstadoUsuario;
 import com.gifa_api.utils.enums.Rol;
 import com.gifa_api.utils.mappers.ChoferMapper;
 import lombok.RequiredArgsConstructor;
@@ -35,6 +36,7 @@ public class ChoferServiceImpl implements IChoferService {
                 .usuario(choferRegistroDTO.getUsername())
                 .contrasena(passwordEncoder.encode(choferRegistroDTO.getPassword()))
                 .rol(Rol.CHOFER)
+                .estadoUsuario(EstadoUsuario.HABILITADO)
                 .build();
 
         Chofer chofer = Chofer.builder()
