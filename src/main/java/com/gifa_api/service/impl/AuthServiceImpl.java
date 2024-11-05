@@ -6,6 +6,7 @@ import com.gifa_api.exception.LoginException;
 import com.gifa_api.exception.NotFoundException;
 import com.gifa_api.model.Chofer;
 import com.gifa_api.repository.IChoferRepository;
+import com.gifa_api.service.IChoferService;
 import com.gifa_api.utils.enums.EstadoUsuario;
 import com.gifa_api.utils.enums.Rol;
 import com.gifa_api.exception.RegisterException;
@@ -29,6 +30,7 @@ public class AuthServiceImpl implements IAuthService {
     private final PasswordEncoder passwordEncoder;
     private final AuthenticationManager authenticationManager;
     private final IChoferRepository choferRepository;
+    private final IChoferService choferService;
 
     @Override
     public LoginResponseDTO login(LoginRequestDTO userDto) {
@@ -129,6 +131,9 @@ public class AuthServiceImpl implements IAuthService {
         if(user.getEstadoUsuario() == EstadoUsuario.HABILITADO) {
             user.setEstadoUsuario(EstadoUsuario.INHABILITADO);
             userRepository.save(user);
+            if(user.getRol().equals(Rol.CHOFER)){
+                choferService.inhabilitarUsuarioChofer(user.getId());
+            }
         }
     }
 

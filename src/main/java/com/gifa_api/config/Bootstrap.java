@@ -120,7 +120,6 @@ public class Bootstrap implements ApplicationRunner {
 
         Chofer chofer = Chofer.builder()
                 .usuario(usuarioChofer)
-                .estadoChofer(EstadoChofer.HABILITADO)
                 .nombre("chofer1")
                 .vehiculo(vehiculo1)
                 .build();

@@ -25,17 +25,6 @@ public class ChoferController {
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
-    @PatchMapping("/habilitar/{id}")
-    public ResponseEntity<?> habilitar(@PathVariable Integer id) {
-        choferService.habilitar(id);
-        return new ResponseEntity<>(HttpStatus.OK);
-    }
-    @PatchMapping("/inhabilitar/{id}")
-    public ResponseEntity<?> createChofer(@PathVariable Integer id) {
-        choferService.inhabilitar(id);
-        return new ResponseEntity<>(HttpStatus.OK);
-    }
-
     @GetMapping("/verChoferes")
     public ResponseEntity<?> getAllChofers() {
         return new ResponseEntity<>(choferService.obtenerAll(),HttpStatus.OK);

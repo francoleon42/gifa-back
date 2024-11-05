@@ -1,6 +1,5 @@
 package com.gifa_api.model;
 
-import com.gifa_api.utils.enums.EstadoChofer;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -23,21 +22,17 @@ public class Chofer {
     @Column(name = "nombre", nullable = false, length = 10)
     private String nombre;
 
-    @Enumerated(EnumType.STRING)
-    @Column(name = "estadoChofer", nullable = false)
-    private EstadoChofer estadoChofer;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "id_vehiculo")
     private Vehiculo vehiculo;
 
-    public void cambiarEstadoChofer(EstadoChofer estadoChofer) {
-        this.estadoChofer = estadoChofer;
-    }
-    public void addVehiculo(Vehiculo vehiculo){
+
+    public void addVehiculo(Vehiculo vehiculo) {
         this.vehiculo = vehiculo;
     }
-    public void desvincularVehiculo(){
+
+    public void desvincularVehiculo() {
         this.vehiculo = null;
     }
 }
