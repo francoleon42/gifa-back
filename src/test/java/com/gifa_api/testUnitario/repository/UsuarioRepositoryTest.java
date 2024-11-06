@@ -2,6 +2,7 @@ package com.gifa_api.testUnitario.repository;
 
 import com.gifa_api.model.Usuario;
 import com.gifa_api.repository.IUsuarioRepository;
+import com.gifa_api.utils.enums.EstadoUsuario;
 import com.gifa_api.utils.enums.Rol;
 import jakarta.transaction.Transactional;
 import org.junit.jupiter.api.Test;
@@ -27,6 +28,7 @@ public class UsuarioRepositoryTest {
                 .usuario("operador")
                 .contrasena("$2a$10$RRAzywJFxaAG3pRlHXep6u6VNKi5KOTT3M8GCxDPHpAyZ0ofX2Bcu")
                 .rol(Rol.OPERADOR)
+                .estadoUsuario(EstadoUsuario.HABILITADO)
                 .build();
 
         Usuario usuarioGuardado = usuarioRepository.save(usuario);
@@ -43,6 +45,7 @@ public class UsuarioRepositoryTest {
                 .usuario("operador")
                 .contrasena("$2a$10$RRAzywJFxaAG3pRlHXep6u6VNKi5KOTT3M8GCxDPHpAyZ0ofX2Bcu")
                 .rol(Rol.OPERADOR)
+                .estadoUsuario(EstadoUsuario.HABILITADO)
                 .build();
 
         usuarioRepository.save(usuario);
@@ -59,6 +62,7 @@ public class UsuarioRepositoryTest {
                 .usuario("operador")
                 .contrasena("$2a$10$RRAzywJFxaAG3pRlHXep6u6VNKi5KOTT3M8GCxDPHpAyZ0ofX2Bcu")
                 .rol(Rol.OPERADOR)
+                .estadoUsuario(EstadoUsuario.HABILITADO)
                 .build();
 
         usuarioRepository.save(usuario);
