@@ -10,6 +10,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDate;
+
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/traccar")
@@ -24,9 +26,9 @@ public class TraccarController {
         return new ResponseEntity<>(traccarService.obtenerDispositivos(),HttpStatus.OK);
     }
 
-    @GetMapping("/verInconsistenciasDeCombustible")
-    public ResponseEntity<?> verInconsistenciasDeCombustible(@RequestBody  VerInconsistenciasRequestDTO verInconsistenciasRequestDTO){
-        return new ResponseEntity<>(traccarService.getInconsistencias(verInconsistenciasRequestDTO.getFecha()),HttpStatus.OK);
+    @GetMapping("/verInconsistenciasDeCombustible/{fecha}")
+    public ResponseEntity<?> verInconsistenciasDeCombustible(@PathVariable LocalDate fecha){
+        return new ResponseEntity<>(traccarService.getInconsistencias(fecha),HttpStatus.OK);
     }
 
     @GetMapping("/getPosiciones/{unicoId}")

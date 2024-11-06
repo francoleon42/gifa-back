@@ -157,7 +157,7 @@ public class SecurityConfig {
         authRequest
                 .requestMatchers(HttpMethod.POST, "/traccar/crearDispositivo").hasRole(ADMINISTRADOR)
                 .requestMatchers(HttpMethod.GET, "/traccar/getDispositivos").hasRole(ADMINISTRADOR)
-                .requestMatchers(HttpMethod.GET, "/traccar/verInconsistenciasDeCombustible").hasRole(ADMINISTRADOR)
+                .requestMatchers(HttpMethod.GET, "/traccar/verInconsistenciasDeCombustible/{fecha}").hasRole(ADMINISTRADOR)
                 .requestMatchers(HttpMethod.GET, "/traccar/getPosiciones/{unicoId}").hasRole(ADMINISTRADOR);
 
 
