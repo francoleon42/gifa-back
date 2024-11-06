@@ -17,6 +17,7 @@ import org.springframework.stereotype.Component;
 
 import java.time.LocalDate;
 import java.time.OffsetDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 @Profile("!prod")
@@ -80,16 +81,16 @@ public class Bootstrap implements ApplicationRunner {
 
         iGestorOperacionalRepository.save(gestorDePedidos);
 
-//        // Crear tarjetas con builder
-//        Tarjeta tarjeta1 = Tarjeta.builder()
-//                .numero(12345)
-//                .build();
-//
-//        Tarjeta tarjeta2 = Tarjeta.builder()
-//                .numero(54321)
-//                .build();
-//
-//        tarjetaRepository.saveAll(List.of(tarjeta1, tarjeta2));
+        // Crear tarjetas con builder
+        Tarjeta tarjeta1 = Tarjeta.builder()
+                .numero(12345)
+                .build();
+
+        Tarjeta tarjeta2 = Tarjeta.builder()
+                .numero(54321)
+                .build();
+
+        tarjetaRepository.saveAll(List.of(tarjeta1, tarjeta2));
 
         RegistarVehiculoDTO dto1 = new RegistarVehiculoDTO();
         dto1.setPatente("ABC123");
@@ -138,40 +139,35 @@ public class Bootstrap implements ApplicationRunner {
 
         List<DispositivoResponseDTO> dispositivosEnTraccar = traccarCliente.getDispositivos();
 
-//        if(dispositivosEnTraccar == null || dispositivosEnTraccar.isEmpty()) {
-//            List<CrearDispositivoRequestDTO> dispositivosParaCrear = List.of(
-//                    CrearDispositivoRequestDTO.builder()
-//                            .name("vehiculazo")
-//                            .uniqueId("1")
-//                            .build(),
-//                    CrearDispositivoRequestDTO.builder()
-//                            .name("vehiculito")
-//                            .uniqueId("2")
-//                            .build()
-//            );
-//
-//            for(CrearDispositivoRequestDTO request : dispositivosParaCrear) {
-//                traccarCliente.postCrearDispositivoTraccar(request);
-//            }
-//
-//            dispositivosEnTraccar = traccarCliente.getDispositivos();
-//        }
+        if(dispositivosEnTraccar == null || dispositivosEnTraccar.isEmpty()) {
+            List<Dispositivo> dispositivosParaCrear = new ArrayList();
 
-//        List<Vehiculo> vehiculos = vehiculoRepository.findAll();
-//        for(DispositivoResponseDTO dispositivoTraccar : dispositivosEnTraccar) {
-//            Dispositivo dispositivo = Dispositivo.builder()
-//                    .unicoId(dispositivoTraccar.getUniqueId())
-//                    .nombre(dispositivoTraccar.getName())
-//                    .vehiculo(vehiculos.get(Integer.parseInt(dispositivoTraccar.getUniqueId()) - 1))
-//                    .build();
-//
-//            dispositivoRepository.save(dispositivo);
-//
-//            vehiculos.get(Integer.parseInt(dispositivoTraccar.getUniqueId()) - 1).setDispositivo(dispositivo);
-//        }
-//
-//        //Agrego dispositivos
-//        vehiculoRepository.saveAll(vehiculos);
+            int cont = 1;
+            for(DispositivoResponseDTO dispositivoTraccar : dispositivosEnTraccar) {
+                Dispositivo dispositivo = Dispositivo.builder()
+                        .unicoId(dispositivoTraccar.getUniqueId())
+                        .nombre(dispositivoTraccar.getName())
+                        .vehiculo(cont == 1 ? vehiculo1 : vehiculo2)
+                        .build();
+
+                dispositivosParaCrear.add(dispositivo);
+
+                if (cont == 1) {
+                    vehiculo1.setDispositivo(dispositivo);
+                } else {
+                    vehiculo2.setDispositivo(dispositivo);
+                }
+
+                cont++;
+            }
+
+            for(Dispositivo request : dispositivosParaCrear) {
+                traccarCliente.postCrearDispositivoTraccar(request);
+            }
+        }
+
+        //Agrego dispositivos
+        vehiculoRepository.saveAll(List.of(vehiculo1, vehiculo2));
 
         // Crear ítems de inventario con builder
         ItemDeInventario item1 = ItemDeInventario.builder()
