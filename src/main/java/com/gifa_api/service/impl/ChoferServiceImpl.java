@@ -36,7 +36,7 @@ public class ChoferServiceImpl implements IChoferService {
                 .usuario(choferRegistroDTO.getUsername())
                 .contrasena(passwordEncoder.encode(choferRegistroDTO.getPassword()))
                 .rol(Rol.CHOFER)
-                .estadoUsuario(EstadoUsuario.HABILITADO)
+                .estadoUsuario(EstadoUsuario.INHABILITADO)
                 .build();
 
         Chofer chofer = Chofer.builder()
