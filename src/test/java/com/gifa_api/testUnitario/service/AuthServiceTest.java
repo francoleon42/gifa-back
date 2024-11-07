@@ -1,15 +1,17 @@
 package com.gifa_api.testUnitario.service;
 
 import com.gifa_api.config.jwt.JwtService;
-import com.gifa_api.dto.login.LoginRequestDTO;
-import com.gifa_api.dto.login.LoginResponseDTO;
-import com.gifa_api.dto.login.RegisterRequestDTO;
+import com.gifa_api.dto.login.*;
 import com.gifa_api.exception.NotFoundException;
 import com.gifa_api.exception.RegisterException;
 import com.gifa_api.model.Usuario;
 import com.gifa_api.repository.IUsuarioRepository;
+import com.gifa_api.service.IChoferService;
 import com.gifa_api.service.impl.AuthServiceImpl;
+import com.gifa_api.utils.enums.EstadoUsuario;
 import com.gifa_api.utils.enums.Rol;
+import org.aspectj.lang.annotation.Before;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -21,6 +23,7 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
+import java.util.List;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -43,6 +46,9 @@ class AuthServiceImplTest {
     @Mock
     private AuthenticationManager authenticationManager;
 
+    @Mock
+    private IChoferService choferService;
+
     @InjectMocks
     private AuthServiceImpl authService;
 
@@ -56,6 +62,112 @@ class AuthServiceImplTest {
     private final String supervisorUsername = "supervisor";
     private final String operadorUsername = "operador";
     private final String gerenteUsername = "gerente";
+
+    private UpdateRequestDTO updateUsuarioDTO;
+    private  Usuario usuario;
+    private  Usuario chofer;
+    private List<Usuario> usuarios;
+    
+    @BeforeEach
+     void setUp(){
+        updateUsuarioDTO = UpdateRequestDTO.builder()
+                .username("usuario")
+                .password("password")
+                .build();
+        chofer = Usuario.builder()
+
+                .id(1)
+                .rol(Rol.CHOFER)
+                .estadoUsuario(EstadoUsuario.HABILITADO)
+                .build();
+        usuario = Usuario.builder()
+                .id(2)
+                .estadoUsuario(EstadoUsuario.INHABILITADO)
+                .contrasena("asdsa")
+                .rol(Rol.ADMINISTRADOR)
+                .build();
+        usuarios = List.of(usuario,chofer);
+    }
+
+   @Test
+   void habilitar_lanzaNotFoundException(){
+       when(userRepository.findById(anyInt())).thenReturn(Optional.empty());
+       assertThrows(NotFoundException.class,() -> authService.habilitar(anyInt()));
+
+       verify(userRepository,never()).save(any(Usuario.class));
+
+   }
+
+    @Test
+    void habilitar_cambiaEstadoDelUsuarioAhabilitado(){
+        when(userRepository.findById(usuario.getId())).thenReturn(Optional.of(usuario));
+        authService.habilitar(usuario.getId());
+
+        assertEquals(usuario.getEstadoUsuario(),EstadoUsuario.HABILITADO);
+        verify(userRepository,times(1)).save(any(Usuario.class));
+
+    }
+
+    @Test
+    void inhabilitar_lanzaNotFoundException(){
+        when(userRepository.findById(usuario.getId())).thenReturn(Optional.empty());
+        assertThrows(NotFoundException.class,() -> authService.inhabilitar(usuario.getId()));
+
+        verify(userRepository,never()).save(any(Usuario.class));
+    }
+
+    @Test
+    void inhabilitar_cambiaEstadoDelUsuarioAinhabilitado(){
+        usuario.setEstadoUsuario(EstadoUsuario.HABILITADO);
+        when(userRepository.findById(usuario.getId())).thenReturn(Optional.of(usuario));
+        authService.inhabilitar(usuario.getId());
+
+        assertEquals(usuario.getEstadoUsuario(),EstadoUsuario.INHABILITADO);
+        verify(userRepository,times(1)).save(any(Usuario.class));
+        verify(choferService,never()).inhabilitarUsuarioChofer(usuario.getId());
+
+    }
+
+    @Test
+    void inhabilitar_cambiaEstadoDelUsuarioYchoferAinhabilitado(){
+        chofer.setEstadoUsuario(EstadoUsuario.HABILITADO);
+        when(userRepository.findById(chofer.getId())).thenReturn(Optional.of(chofer));
+        authService.inhabilitar(chofer.getId());
+
+        assertEquals(chofer.getEstadoUsuario(),EstadoUsuario.INHABILITADO);
+        verify(userRepository,times(1)).save(any(Usuario.class));
+        verify(choferService,times(1)).inhabilitarUsuarioChofer(chofer.getId());
+
+    }
+
+    @Test
+    void getAll_devuelveTodosLosUsuarios(){
+        when(userRepository.findAll()).thenReturn(usuarios);
+        List<GetUserDTO> usuariosRegistrados = authService.getAll();
+
+        assertEquals(usuariosRegistrados.size(),usuarios.size());
+        assertEquals(usuariosRegistrados.get(0).getId(),usuarios.get(0).getId());
+        assertEquals(usuariosRegistrados.get(1).getId(),usuarios.get(1).getId());
+    }
+
+    @Test
+    void updateUsuarioInvalido_lanzaNotFounException(){
+        when(userRepository.findById(usuario.getId())).thenReturn(Optional.empty());
+        assertThrows(NotFoundException.class,() -> authService.update(usuario.getId(),updateUsuarioDTO));
+
+        verify(userRepository,never()).save(any(Usuario.class));
+    }
+
+    @Test
+    void update_seActualizaUsuario(){
+        when(userRepository.findById(usuario.getId())).thenReturn(Optional.of(usuario));
+        when(passwordEncoder.encode(updateUsuarioDTO.getPassword())).thenReturn(updateUsuarioDTO.getPassword());
+        authService.update(usuario.getId(),updateUsuarioDTO);
+
+        assertEquals(updateUsuarioDTO.getUsername(),usuario.getUsername());
+        assertEquals(updateUsuarioDTO.getPassword(),usuario.getPassword());
+        verify(userRepository,times(1)).save(any(Usuario.class));
+    }
 
     @Test
     void testLogin_Success_Admin() {
@@ -170,4 +282,6 @@ class AuthServiceImplTest {
         assertThrows(RegisterException.class, () -> authService.register(registerRequest));
         verify(userRepository, never()).save(any(Usuario.class));
     }
+
+
 }
