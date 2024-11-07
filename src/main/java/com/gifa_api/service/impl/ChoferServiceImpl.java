@@ -3,6 +3,7 @@ package com.gifa_api.service.impl;
 import com.gifa_api.dto.chofer.AsignarChoferDTO;
 import com.gifa_api.dto.chofer.ChoferRegistroDTO;
 import com.gifa_api.dto.chofer.ChoferResponseDTO;
+import com.gifa_api.dto.vehiculo.VehiculoResponseDTO;
 import com.gifa_api.exception.BadRequestException;
 import com.gifa_api.exception.NotFoundException;
 import com.gifa_api.model.Chofer;
@@ -14,6 +15,7 @@ import com.gifa_api.service.IChoferService;
 import com.gifa_api.utils.enums.EstadoUsuario;
 import com.gifa_api.utils.enums.Rol;
 import com.gifa_api.utils.mappers.ChoferMapper;
+import com.gifa_api.utils.mappers.VehiculoMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -27,6 +29,7 @@ public class ChoferServiceImpl implements IChoferService {
     private final IChoferRepository choferRepository;
     private final ChoferMapper choferMapper;
     private final PasswordEncoder passwordEncoder;
+    private final VehiculoMapper vehiculoMapper;
 
     @Override
     public void registro(ChoferRegistroDTO choferRegistroDTO) {
@@ -83,6 +86,12 @@ public class ChoferServiceImpl implements IChoferService {
     @Override
     public List<ChoferResponseDTO> obtenerAll() {
         return choferMapper.obtenerListaChoferDTO(choferRepository.findAll());
+    }
+
+    @Override
+    public VehiculoResponseDTO obtenerVehiculo(Integer idUsuario) {
+
+        return vehiculoMapper.toVehiculoResponseDTO(choferRepository.findVehiculoByChofer(idUsuario));
     }
 
     private void validarChoferRegistroDTO(ChoferRegistroDTO choferRegistroDTO) {

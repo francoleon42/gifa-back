@@ -14,7 +14,7 @@ import com.gifa_api.service.IDispositivoService;
 import com.gifa_api.service.ITraccarService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-
+import java.time.format.DateTimeFormatter;
 import java.time.LocalDate;
 import java.time.OffsetDateTime;
 import java.time.ZoneOffset;
@@ -56,6 +56,7 @@ public class TraccarServiceImpl implements ITraccarService {
 
     @Override
     public List<InconsistenciasKMconCombustiblesResponseDTO> getInconsistencias(LocalDate fecha) {
+
         List<InconsistenciasKMconCombustiblesResponseDTO> inconsistencias = new ArrayList<>();
         for (Vehiculo vehiculo : vehiculoRepository.findAll()) {
             OffsetDateTime fechaCasteadaAOffset = fecha.atStartOfDay().atOffset(ZoneOffset.UTC);
@@ -96,5 +97,7 @@ public class TraccarServiceImpl implements ITraccarService {
         int kmPorLitro = 1;
         return kilometrajeRecorrido < combustibleCargado * kmPorLitro;
     }
+
+
 
 }

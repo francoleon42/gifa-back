@@ -101,7 +101,9 @@ public class SecurityConfig {
         authRequest
                 .requestMatchers(HttpMethod.POST, "/chofer/registrar").hasRole(ADMINISTRADOR)
                 .requestMatchers(HttpMethod.PATCH, "/chofer/asignarChofer").hasRole(SUPERVISOR)
-                .requestMatchers(HttpMethod.GET, "/chofer/verChoferes").hasAnyRole(ADMINISTRADOR, SUPERVISOR);
+                .requestMatchers(HttpMethod.GET, "/chofer/verChoferes").hasAnyRole(ADMINISTRADOR, SUPERVISOR)
+                .requestMatchers(HttpMethod.GET, "/chofer/verVehiculo").hasAnyRole(CHOFER);
+
     }
 
     private void configurePedidoEndpoints(AuthorizeHttpRequestsConfigurer<HttpSecurity>.AuthorizationManagerRequestMatcherRegistry authRequest) {
