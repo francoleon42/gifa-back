@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("/chofer")
 @RequiredArgsConstructor
+
 public class ChoferController {
     private final IChoferService choferService;
 
@@ -25,6 +26,7 @@ public class ChoferController {
         choferService.registro(choferRegistroDTO);
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
+
     @PatchMapping("/asignarChofer")
     public ResponseEntity<?> AsignarChofer(@RequestBody AsignarChoferDTO asignarChoferDTO) {
         choferService.asignarVehiculo(asignarChoferDTO);
@@ -33,13 +35,13 @@ public class ChoferController {
 
     @GetMapping("/verChoferes")
     public ResponseEntity<?> getAllChofers() {
-        return new ResponseEntity<>(choferService.obtenerAll(),HttpStatus.OK);
+        return new ResponseEntity<>(choferService.obtenerAll(), HttpStatus.OK);
     }
 
     @GetMapping("/verVehiculo")
     public ResponseEntity<?> getVerVehiculo() {
-        Usuario u =  getUserFromToken();
-        return new ResponseEntity<>(choferService.obtenerVehiculo(u.getId()),HttpStatus.OK);
+        Usuario u = getUserFromToken();
+        return new ResponseEntity<>(choferService.obtenerVehiculo(u.getId()), HttpStatus.OK);
 
     }
 
@@ -52,7 +54,7 @@ public class ChoferController {
 
         Usuario usuario = (Usuario) authentication.getPrincipal();
         if (usuario.getRol() != Rol.CHOFER) {
-            throw new BadRoleException("El usuario no corresponde a un operador.");
+            throw new BadRoleException("El usuario no corresponde a un chofer.");
         }
 
         return usuario;

@@ -3,6 +3,7 @@ package com.gifa_api.testUnitario.service;
 import com.gifa_api.dto.chofer.AsignarChoferDTO;
 import com.gifa_api.dto.chofer.ChoferRegistroDTO;
 import com.gifa_api.dto.chofer.ChoferResponseDTO;
+import com.gifa_api.dto.vehiculo.VehiculoResponseDTO;
 import com.gifa_api.exception.BadRequestException;
 import com.gifa_api.exception.NotFoundException;
 import com.gifa_api.model.Chofer;
@@ -11,14 +12,17 @@ import com.gifa_api.repository.IChoferRepository;
 import com.gifa_api.repository.IVehiculoRepository;
 import com.gifa_api.service.impl.ChoferServiceImpl;
 import com.gifa_api.utils.mappers.ChoferMapper;
+import com.gifa_api.utils.mappers.VehiculoMapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
@@ -37,8 +41,13 @@ class ChoferServiceImplTest {
 
     @Mock
     private  PasswordEncoder passwordEncoder;
+
     @Mock
     private  ChoferMapper choferMapper;
+
+    @Mock
+    private  VehiculoMapper vehiculoMapper;
+
     @InjectMocks
     private ChoferServiceImpl choferService;
 
@@ -46,6 +55,7 @@ class ChoferServiceImplTest {
     private Chofer chofer;
     private  AsignarChoferDTO asignarChoferDTO;
     private Vehiculo vehiculo;
+    private VehiculoResponseDTO vehiculoResponseDTO;
     @BeforeEach
     void setUp(){
         choferRegistro = ChoferRegistroDTO.builder().username("username").password("password").nombre("nombre").build();
@@ -58,13 +68,22 @@ class ChoferServiceImplTest {
                         .build()))
                 .id(1)
                 .patente("ABC123")
+                .antiguedad(10)
+                .modelo("TOYOTA")
+                .fechaVencimiento(LocalDate.now().plusDays(1))
                 .build();
 
+        vehiculoResponseDTO = VehiculoResponseDTO.builder()
+                .id(1)
+                .patente("ABC123")
+                .antiguedad(10)
+                .modelo("toyota")
+                .fechaVencimiento(LocalDate.now().plusDays(1))
+                .build();
         chofer = Chofer.builder().id(1).
                 nombre("chofer")
                 .vehiculo(vehiculo)
                 .build();
-
     }
 
     @Test
@@ -189,8 +208,6 @@ class ChoferServiceImplTest {
         verify(choferRepository, times(1)).save(any(Chofer.class));
     }
 
-
-
     @Test
     void obtenerTodosLosChoferes(){
         ChoferResponseDTO chofer1 = ChoferResponseDTO.builder().nombre("chofer1").build();
@@ -206,9 +223,22 @@ class ChoferServiceImplTest {
         assertEquals(choferesMostrados.get(1).getIdChofer(),choferes.get(1).getIdChofer());
     }
 
+    @Test
+    void obtenerVehiculo_devueveVehiculoAsociado(){
+        when(vehiculoMapper.toVehiculoResponseDTO(choferRepository.findVehiculoByChofer(chofer.getId()))).thenReturn(vehiculoResponseDTO);
+
+        VehiculoResponseDTO vehiculoDelChofer = choferService.obtenerVehiculo(chofer.getId());
+
+        assertEquals(vehiculoDelChofer.getId(),vehiculoResponseDTO.getId());
+        assertEquals(vehiculoDelChofer.getPatente(),vehiculoResponseDTO.getPatente());
+        assertEquals(vehiculoDelChofer.getAntiguedad(),vehiculoResponseDTO.getAntiguedad());
+        assertEquals(vehiculoDelChofer.getModelo(),vehiculoResponseDTO.getModelo());
+        assertEquals(vehiculoDelChofer.getFechaVencimiento(),vehiculoResponseDTO.getFechaVencimiento());
+
+    }
+
     public void verificarNoRegistroDeChoferInvalido(){
         assertThrows(BadRequestException.class, () -> choferService.registro(choferRegistro));
         verify(choferRepository, never()).save(any(Chofer.class));
     }
-
 }
