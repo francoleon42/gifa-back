@@ -18,5 +18,7 @@ public class RegistarVehiculoDTO {
     private Integer antiguedad;
     private Integer kilometraje;
     private String modelo;
+
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd/MM/yyyy")
     private LocalDate fechaRevision;
 }
