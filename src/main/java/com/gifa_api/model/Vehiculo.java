@@ -86,7 +86,7 @@ public class Vehiculo {
         }
     }
     public void actualizarKilometraje(Integer kilometraje){
-        this.kilometraje += kilometraje;
+        this.kilometraje = kilometraje;
     }
     public void addDispositivo(Dispositivo dispositivo){
         this.dispositivo = dispositivo;
