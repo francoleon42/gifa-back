@@ -184,7 +184,8 @@ public class VehiculoServiceImpl implements IVehiculoService {
             throw new BadRequestException("El modelo no puede estar vacío.");
         }
         // Validar fecha de revisión
-        if (vehiculoDTO.getFechaRevision() == null || vehiculoDTO.getFechaRevision().isBefore(LocalDate.now())) {
+        LocalDate fechaEsperada = LocalDate.now().plusDays(1);
+        if (vehiculoDTO.getFechaRevision() == null || vehiculoDTO.getFechaRevision().isBefore(fechaEsperada)) {
             throw new BadRequestException("La fecha de revisión debe ser posterior a la fecha actual.");
         }
 
