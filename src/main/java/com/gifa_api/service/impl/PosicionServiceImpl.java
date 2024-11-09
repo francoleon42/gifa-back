@@ -37,7 +37,7 @@ public class PosicionServiceImpl implements IPosicionService {
             for (PosicionDispositivoDTO posicionDTO : posicionesDeDispositivio) {
 
                 if (!estaPosicion(dispositivoDTO.getUniqueId(), posicionDTO.getServerTime()) && suficienteDiferencia(dispositivoDTO.getUniqueId(), posicionDTO.getLatitude(), posicionDTO.getLongitude())) {
-
+                    System.out.println("entre ");
                     Posicion posicion = Posicion
                             .builder()
                             .latitude(posicionDTO.getLatitude())
