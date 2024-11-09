@@ -67,9 +67,9 @@ public class PosicionServiceImpl implements IPosicionService {
             double diferenciaLatitud = Math.abs(ultimaPosicion.getLatitude() - latitude);
             double diferenciaLongitud = Math.abs(ultimaPosicion.getLongitude() - longitude);
 
-            // Umbrales de diferencia para latitud y longitud  ( umbral 60 metros)
-            double umbralLatitud = 0.000539;
-            double umbralLongitud = 0.000648;
+            // Umbrales de diferencia para latitud y longitud  ( umbral 30 metros)
+            double umbralLatitud = 0.00027;
+            double umbralLongitud = 0.000324;
 
             if (diferenciaLatitud > umbralLatitud || diferenciaLongitud > umbralLongitud) {
                 return true; // hay una diferencia significativa entre la ultima posicion y la actual
