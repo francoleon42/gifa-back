@@ -60,7 +60,7 @@ public class DispositivoServiceImpl implements IDispositivoService {
         return kmDeDispositivoDespuesDeFecha;
     }
 
-    @Scheduled(fixedRate = 8640)
+    @Scheduled(fixedRate = 86400000)
     private void actualizarKilometrajeDeVehiculos() {
         for (Dispositivo dispositivo : dispositivoRepository.findAll()) {
             List<Posicion> posisicionesDeVehiculo = posicionRepository.findByUnicoId(dispositivo.getUnicoId());

@@ -27,7 +27,7 @@ public class PosicionServiceImpl implements IPosicionService {
     private final IDispositivoService dispositivoService;
     private final PosicionMapper posicionMapper;
 
-    @Scheduled(fixedRate = 8640)
+    @Scheduled(fixedRate = 86400000)
     private void actualizarPosicionesDeDispositivo() {
 
         List<DispositivoResponseDTO> dispositivosDTO = traccarService.obtenerDispositivos();
