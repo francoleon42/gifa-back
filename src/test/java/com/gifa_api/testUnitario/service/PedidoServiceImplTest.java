@@ -100,7 +100,7 @@ class PedidoServiceImplTest {
     void testCreatePedido_ItemNoExistente() {
         when(itemDeInventarioRepository.findById(pedidoDTO.getIdItem())).thenReturn(Optional.empty());
 
-        assertThrows(NotFoundException.class, () -> pedidoService.createPedido(pedidoDTO));
+        assertThrows(NotFoundException.class, () -> pedidoService.crearPedidoManual(pedidoDTO));
         verify(pedidoRepository,never()).save(any(Pedido.class));
     }
 
@@ -157,17 +157,17 @@ class PedidoServiceImplTest {
         when(itemDeInventarioRepository.findById(itemDeInventario.getId())).thenReturn(Optional.of(itemDeInventario));
         when(gestorOperacionalService.getGestorOperacional()).thenReturn(gestor);
         when(proveedorDeItemService.proveedorMasEconomico(itemDeInventario.getId())).thenReturn(proveedorDeItemMasEconomico);
-        //BadRequest
-        assertThrows(RuntimeException.class,() -> pedidoService.hacerPedidos(itemDeInventario.getId()));
 
-        verify(pedidoRepository, never()).save(any(Pedido.class));
+        pedidoService.hacerPedidos(itemDeInventario.getId());
+
+        verify(pedidoRepository, times(1)).save(any(Pedido.class));
     }
 
     @Test
     void testCrearPedido_ItemExistente() {
         when(itemDeInventarioRepository.findById(pedidoDTO.getIdItem())).thenReturn(Optional.of(itemDeInventario));
 
-        pedidoService.createPedido(pedidoDTO);
+        pedidoService.crearPedidoManual(pedidoDTO);
 
         verify(itemDeInventarioRepository, times(1)).findById(pedidoDTO.getIdItem());
         verify(pedidoRepository, times(1)).save(any(Pedido.class));
@@ -221,13 +221,13 @@ class PedidoServiceImplTest {
                 PedidoResponseDTO.builder().estadoPedido("Rechazado").build(),
                 PedidoResponseDTO.builder().estadoPedido("Pendiente").build()
         );
-        when(pedidosMapper.mapToPedidoDTO(pedidoRepository.findPedidosByDosEstados(EstadoPedido.PENDIENTE,EstadoPedido.RECHAZADO))).thenReturn(pedidosResponseDTO);
+        when(pedidosMapper.mapToPedidoDTO(pedidoRepository.findPedidosByTresEstados(EstadoPedido.PENDIENTE,EstadoPedido.RECHAZADO,EstadoPedido.PRESUPUESTO_INSUFICIENTE))).thenReturn(pedidosResponseDTO);
 
         List<PedidoResponseDTO> result = pedidoService.obtenerPedidos();
 
         assertEquals(2, result.size());
         verify(pedidoRepository, times(1)).findAll();
-        verify(pedidosMapper, times(1)).mapToPedidoDTO(pedidoRepository.findPedidosByDosEstados(EstadoPedido.PENDIENTE,EstadoPedido.RECHAZADO));
+        verify(pedidosMapper, times(1)).mapToPedidoDTO(pedidoRepository.findPedidosByTresEstados(EstadoPedido.PENDIENTE,EstadoPedido.RECHAZADO,EstadoPedido.PRESUPUESTO_INSUFICIENTE));
     }
 
     @Test
@@ -241,7 +241,7 @@ class PedidoServiceImplTest {
     }
 
     public void  verificarNoRegistroDePedido(){
-        assertThrows(IllegalArgumentException.class, () -> pedidoService.createPedido(pedidoDTO));
+        assertThrows(BadRequestException.class, () -> pedidoService.crearPedidoManual(pedidoDTO));
         verify(pedidoRepository,never()).save(any(Pedido.class));
     }
 }

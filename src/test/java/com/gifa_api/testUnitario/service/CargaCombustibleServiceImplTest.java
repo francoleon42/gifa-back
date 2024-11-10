@@ -1,6 +1,7 @@
 package com.gifa_api.testUnitario.service;
 
 import com.gifa_api.dto.gestionDeCombustilble.CargaCombustibleRequestDTO;
+import com.gifa_api.exception.BadRequestException;
 import com.gifa_api.exception.NotFoundException;
 import com.gifa_api.model.CargaCombustible;
 import com.gifa_api.model.Tarjeta;
@@ -15,13 +16,16 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import java.time.OffsetDateTime;
+import java.time.LocalDate;
+import java.util.List;
 import java.util.Optional;
 
 import static java.util.Optional.empty;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.*;
 
+//corregirr
 @ExtendWith(MockitoExtension.class)
 class CargaCombustibleServiceImplTest {
 
@@ -34,55 +38,62 @@ class CargaCombustibleServiceImplTest {
     @InjectMocks
     private CargaCombustibleServiceImpl cargaCombustibleService;
 
-    private CargaCombustibleRequestDTO cargaCombustible;
+    private List<CargaCombustible> cargasDeCombustible ;
+    private CargaCombustibleRequestDTO cargaCombustibleDTO;
 
     @BeforeEach
     void setUp(){
-        cargaCombustible  = CargaCombustibleRequestDTO
+        cargaCombustibleDTO = CargaCombustibleRequestDTO
                 .builder()
                 .cantidadLitros(10)
-                .numeroTarjeta(12345678) // Usando un número entero para la tarjeta
-                .FechaYhora(OffsetDateTime.now())
+                .id(1)
                 .build();
+
+        CargaCombustible cargaCombustible = CargaCombustible.builder()
+                .tarjeta(null)
+                .precioPorLitro(1.0f)
+                .costoTotal(3.0f)
+                .fechaHora(LocalDate.now().plusDays(1))
+                .cantidadLitros(10)
+                .build();
+
+        CargaCombustible cargaCombustible2 = CargaCombustible.builder()
+                .tarjeta(null)
+                .precioPorLitro(1.0f)
+                .costoTotal(3.0f)
+                .fechaHora(LocalDate.now().plusDays(1))
+                .cantidadLitros(10)
+                .build();
+
+        cargasDeCombustible = List.of(cargaCombustible,cargaCombustible2);
+
     }
 
     @Test
     void cargarCombustible_cantidadDeLitrosNoPuedeSerNull() {
-        cargaCombustible.setCantidadLitros(null);
+        cargaCombustibleDTO.setCantidadLitros(null);
         verificarNoRegistroDeCargaDeCombustibleInvalida();
     }
 
     @Test
     void cargarCombustible_cantidadDeLitrosDebeSerPositiva() {
-        cargaCombustible.setCantidadLitros(0);
-        verificarNoRegistroDeCargaDeCombustibleInvalida() ;   }
+        cargaCombustibleDTO.setCantidadLitros(0);
+        verificarNoRegistroDeCargaDeCombustibleInvalida() ;
+    }
 
     @Test
-    void cargarCombustible_campoTarjetaNoPuedeSerNull() {
-        cargaCombustible.setNumeroTarjeta(null);
-        verificarNoRegistroDeCargaDeCombustibleInvalida();
+    void cargarCombustibleConCampoTarjetaVacio_lanzaBadRequestException(){
+        cargaCombustibleDTO.setId(null);
+        verificarNoRegistroDeCargaDeCombustibleInvalida() ;
     }
 
     @Test
     void cargarCombustible_tarjetaInvalidaLanzaExcepcion() {
-        when(tarjetaRepository.findById(cargaCombustible.getNumeroTarjeta())).thenReturn(empty());
+        when(tarjetaRepository.findById(cargaCombustibleDTO.getId())).thenReturn(empty());
 
-        assertThrows(NotFoundException.class, () -> cargaCombustibleService.cargarCombustible(cargaCombustible));
-        verify(tarjetaRepository, times(1)).findById(cargaCombustible.getNumeroTarjeta());
+        assertThrows(NotFoundException.class, () -> cargaCombustibleService.cargarCombustible(cargaCombustibleDTO));
+        verify(tarjetaRepository, times(1)).findById(cargaCombustibleDTO.getId());
         verify(cargaCombustibleRepository, never()).save(any(CargaCombustible.class));
-    }
-
-    @Test
-    void cargarCombustible_tarjetaValida_lanzaExcepcionSiTarjetaNoSeEncuentra() {
-        Tarjeta tarjeta = new Tarjeta();
-        tarjeta.setNumero(12345678); // Establecemos un número de tarjeta válido
-
-        when(tarjetaRepository.findById(cargaCombustible.getNumeroTarjeta())).thenReturn(Optional.of(tarjeta));
-        when(cargaCombustibleRepository.save(any(CargaCombustible.class))).thenReturn(new CargaCombustible());
-
-        cargaCombustibleService.cargarCombustible(cargaCombustible); // Llamada al método público
-
-        verify(cargaCombustibleRepository, times(1)).save(any(CargaCombustible.class));
     }
 
     @Test
@@ -90,16 +101,25 @@ class CargaCombustibleServiceImplTest {
         Tarjeta tarjeta = new Tarjeta();
         tarjeta.setNumero(12345678); // Establecemos un número de tarjeta válido
 
-        when(tarjetaRepository.findById(cargaCombustible.getNumeroTarjeta())).thenReturn(Optional.of(tarjeta));
-        when(cargaCombustibleRepository.save(any(CargaCombustible.class))).thenReturn(new CargaCombustible());
+        when(tarjetaRepository.findById(cargaCombustibleDTO.getId())).thenReturn(Optional.of(tarjeta));
 
-        cargaCombustibleService.cargarCombustible(cargaCombustible); // Llamada al método público
+        cargaCombustibleService.cargarCombustible(cargaCombustibleDTO); // Llamada al método público
 
         verify(cargaCombustibleRepository, times(1)).save(any(CargaCombustible.class));
     }
 
+    @Test
+    void combustibleCargadoEn_devuelveCombustibleCargadoDespuesDeEsaFecha(){
+        when(cargaCombustibleRepository.findByNumeroTarjetaAndFechaAfter(1,LocalDate.now()))
+                .thenReturn(cargasDeCombustible);
+
+        Double totalDeLitros = cargaCombustibleService.combustibleCargadoEn(1,LocalDate.now());
+
+        assertEquals(20,totalDeLitros);
+    }
+
     public void verificarNoRegistroDeCargaDeCombustibleInvalida(){
-        assertThrows(IllegalArgumentException.class, () -> cargaCombustibleService.cargarCombustible(cargaCombustible));
+        assertThrows(BadRequestException.class, () -> cargaCombustibleService.cargarCombustible(cargaCombustibleDTO));
         verify(cargaCombustibleRepository,never()).save(any(CargaCombustible.class));
     }
 

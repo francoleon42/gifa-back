@@ -14,4 +14,6 @@ public interface IVehiculoRepository extends JpaRepository<Vehiculo, Integer> {
     @Query("select v from Vehiculo v where v.patente=:patente")
     public Optional<Vehiculo> findByPatente(@Param("patente") String patente);
 
+
+
 }

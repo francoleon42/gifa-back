@@ -24,9 +24,9 @@ public class CargaCombustible {
     @Column(name = "cantidad_litros")
     private Integer cantidadLitros;
 
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
+
     @Column(name = "fecha_hora")
-    private OffsetDateTime fechaHora;
+    private LocalDate fechaHora;
 
     @Column(name = "precio_por_litro")
     private Float precioPorLitro;

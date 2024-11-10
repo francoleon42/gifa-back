@@ -8,10 +8,10 @@ import java.util.List;
 
 public interface IPedidoService {
 
-    void createPedido(CrearPedidoDTO pedidoManualDTO);
+    void crearPedidoManual(CrearPedidoDTO pedidoManualDTO);
     List<PedidoResponseDTO> obtenerPedidos();
     void hacerPedidos(Integer idItem);
     List<PedidoResponseDTO> obtenerPedidosAceptados();
-    List<PedidoResponseDTO> obtenerPedidosRechazadosYpendientes();
+    List<PedidoResponseDTO> obtenerPedidosRechazadosYpendientesYpresupuestoInsuficiente();
     void confirmarPedidoRecibido(Integer idPedido);
 }

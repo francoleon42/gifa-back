@@ -1,6 +1,7 @@
 package com.gifa_api.service.impl;
 
 import com.gifa_api.dto.gestionDeCombustilble.CargaCombustibleRequestDTO;
+import com.gifa_api.exception.BadRequestException;
 import com.gifa_api.exception.NotFoundException;
 import com.gifa_api.model.CargaCombustible;
 import com.gifa_api.model.Tarjeta;
@@ -38,8 +39,8 @@ public class CargaCombustibleServiceImpl implements ICargaCombustibleService {
         // Validar el DTO
         validarCargaCombustibleRequestDTO(cargaCombustibleRequestDTO);
 
-        Tarjeta tarjeta = tarjetaRepository.findById(cargaCombustibleRequestDTO.getNumeroTarjeta())
-                .orElseThrow(() -> new NotFoundException("No se encontró la tarjeta con id: " + cargaCombustibleRequestDTO.getNumeroTarjeta()));
+        Tarjeta tarjeta = tarjetaRepository.findById(cargaCombustibleRequestDTO.getId())
+                .orElseThrow(() -> new NotFoundException("No se encontró la tarjeta con id: " + cargaCombustibleRequestDTO.getId()));
 
         Float precioSuper = obtenerPrecioCombustible().get(0);
 
@@ -47,7 +48,7 @@ public class CargaCombustibleServiceImpl implements ICargaCombustibleService {
                 .builder()
                 .tarjeta(tarjeta)
                 .cantidadLitros(cargaCombustibleRequestDTO.getCantidadLitros())
-                .fechaHora(cargaCombustibleRequestDTO.getFechaYhora())
+                .fechaHora(LocalDate.now())
                 .precioPorLitro(precioSuper)
                 .costoTotal(precioSuper * cargaCombustibleRequestDTO.getCantidadLitros())
                 .build();
@@ -122,13 +123,10 @@ public class CargaCombustibleServiceImpl implements ICargaCombustibleService {
     }
 
     @Override
-    public double combustibleCargadoEn(Integer numeroTarjeta, OffsetDateTime fecha) {
-        System.out.println("fechaSolicitada" + fecha);
+    public double combustibleCargadoEn(Integer numeroTarjeta, LocalDate fecha) {
         int cargaTotal = 0;
         List<CargaCombustible> cargasCombustible = cargaCombustibleRepository.findByNumeroTarjetaAndFechaAfter(numeroTarjeta, fecha);
-        if(cargasCombustible.isEmpty()){
-            System.out.println("Esta vacia en las cargas las posiciones despues de fecha");
-        }
+
         for (CargaCombustible carga : cargasCombustible) {
             cargaTotal += carga.getCantidadLitros();
         }
@@ -137,10 +135,10 @@ public class CargaCombustibleServiceImpl implements ICargaCombustibleService {
 
     private void validarCargaCombustibleRequestDTO(CargaCombustibleRequestDTO cargaCombustibleRequestDTO) {
         if (cargaCombustibleRequestDTO.getCantidadLitros() == null || cargaCombustibleRequestDTO.getCantidadLitros() <= 0) {
-            throw new IllegalArgumentException("La cantidad de litros debe ser mayor a cero.");
+            throw new BadRequestException("La cantidad de litros debe ser mayor a cero.");
         }
-        if (cargaCombustibleRequestDTO.getNumeroTarjeta() == null || cargaCombustibleRequestDTO.getNumeroTarjeta().toString().isEmpty() ) {
-            throw new IllegalArgumentException("El número de tarjeta debe tener al menos 16 dígitos.");
+        if (cargaCombustibleRequestDTO.getId()  == null || cargaCombustibleRequestDTO.getId().toString().isEmpty() ) {
+            throw new BadRequestException("El número de tarjeta no debe estar vacio");
         }
     }
 }

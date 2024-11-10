@@ -15,7 +15,7 @@ public class PosicionMapper {
                 .id(posicion.getId())
                 .latitude(posicion.getLatitude())
                 .longitude(posicion.getLongitude())
-                .fechaHora(posicion.getFechaHora())
+                .fechaHora(posicion.getFechaHora().toLocalDate())
                 .build();
     }
 

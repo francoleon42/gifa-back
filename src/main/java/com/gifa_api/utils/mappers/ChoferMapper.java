@@ -30,7 +30,6 @@ public class ChoferMapper {
         choferResponseDTO.setIdChofer(chofer.getId());
         choferResponseDTO.setNombre(chofer.getNombre());
         choferResponseDTO.setIdVehiculo(chofer.getVehiculo() != null ? chofer.getVehiculo().getId() : null);
-        choferResponseDTO.setEstadoChofer(chofer.getEstadoChofer().name());
         choferResponseDTO.setPatente(chofer.getVehiculo() != null ? chofer.getVehiculo().getPatente() : null);
 
 

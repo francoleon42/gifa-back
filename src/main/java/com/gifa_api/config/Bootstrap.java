@@ -2,8 +2,7 @@ package com.gifa_api.config;
 
 import com.gifa_api.client.ITraccarCliente;
 import com.gifa_api.dto.gestionDeCombustilble.CargaCombustibleRequestDTO;
-import com.gifa_api.dto.traccar.CrearDispositivoRequestDTO;
-import com.gifa_api.dto.traccar.ObtenerDispositivoRequestDTO;
+import com.gifa_api.dto.traccar.DispositivoResponseDTO;
 import com.gifa_api.dto.vehiculo.RegistarVehiculoDTO;
 import com.gifa_api.model.*;
 import com.gifa_api.repository.*;
@@ -18,6 +17,7 @@ import org.springframework.stereotype.Component;
 
 import java.time.LocalDate;
 import java.time.OffsetDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 @Profile("!prod")
@@ -48,24 +48,28 @@ public class Bootstrap implements ApplicationRunner {
         Usuario admin = Usuario.builder()
                 .usuario("admin")
                 .contrasena("$2a$10$RRAzywJFxaAG3pRlHXep6u6VNKi5KOTT3M8GCxDPHpAyZ0ofX2Bcu")
+                .estadoUsuario(EstadoUsuario.HABILITADO)
                 .rol(Rol.ADMINISTRADOR)
                 .build();
 
         Usuario operador = Usuario.builder()
                 .usuario("operador")
                 .contrasena("$2a$10$RRAzywJFxaAG3pRlHXep6u6VNKi5KOTT3M8GCxDPHpAyZ0ofX2Bcu")
+                .estadoUsuario(EstadoUsuario.HABILITADO)
                 .rol(Rol.OPERADOR)
                 .build();
 
         Usuario supervisor = Usuario.builder()
                 .usuario("supervisor")
                 .contrasena("$2a$10$RRAzywJFxaAG3pRlHXep6u6VNKi5KOTT3M8GCxDPHpAyZ0ofX2Bcu")
+                .estadoUsuario(EstadoUsuario.HABILITADO)
                 .rol(Rol.SUPERVISOR)
                 .build();
 
         Usuario gerente = Usuario.builder()
                 .usuario("gerente")
                 .contrasena("$2a$10$RRAzywJFxaAG3pRlHXep6u6VNKi5KOTT3M8GCxDPHpAyZ0ofX2Bcu")
+                .estadoUsuario(EstadoUsuario.HABILITADO)
                 .rol(Rol.GERENTE)
                 .build();
 
@@ -112,11 +116,11 @@ public class Bootstrap implements ApplicationRunner {
                 .usuario("chofer")
                 .contrasena("$2a$10$RRAzywJFxaAG3pRlHXep6u6VNKi5KOTT3M8GCxDPHpAyZ0ofX2Bcu")
                 .rol(Rol.CHOFER)
+                .estadoUsuario(EstadoUsuario.HABILITADO)
                 .build();
 
         Chofer chofer = Chofer.builder()
                 .usuario(usuarioChofer)
-                .estadoChofer(EstadoChofer.HABILITADO)
                 .nombre("chofer1")
                 .vehiculo(vehiculo1)
                 .build();
@@ -124,52 +128,46 @@ public class Bootstrap implements ApplicationRunner {
         choferRepository.saveAll(List.of(chofer));
 
         // Crear cargas de combustible con builder
-        for (int i = 1; i <= 60; i++) {
+        for (int i = 1; i <= 7; i++) {
             OffsetDateTime fechaHora = OffsetDateTime.now().plusDays(i).plusHours(i);
             CargaCombustibleRequestDTO carga = CargaCombustibleRequestDTO.builder()
-                    .numeroTarjeta(i % 2 == 0 ? 1 : 2)
-                    .FechaYhora(fechaHora)
-                    .cantidadLitros(i * 5)
+                    .id(i % 2 == 0 ? 1 : 2)
+                    .cantidadLitros(i * 2)
                     .build();
             cargaCombustibleService.cargarCombustible(carga);
         }
 
-        List<ObtenerDispositivoRequestDTO> dispositivosEnTraccar = traccarCliente.getDispositivos();
+        List<DispositivoResponseDTO> dispositivosEnTraccar = traccarCliente.getDispositivos();
 
         if(dispositivosEnTraccar == null || dispositivosEnTraccar.isEmpty()) {
-            List<CrearDispositivoRequestDTO> dispositivosParaCrear = List.of(
-                    CrearDispositivoRequestDTO.builder()
-                            .name("vehiculazo")
-                            .uniqueId("1")
-                            .build(),
-                    CrearDispositivoRequestDTO.builder()
-                            .name("vehiculito")
-                            .uniqueId("2")
-                            .build()
-            );
+            List<Dispositivo> dispositivosParaCrear = new ArrayList();
 
-            for(CrearDispositivoRequestDTO request : dispositivosParaCrear) {
-                traccarCliente.postCrearDispositivoTraccar(request);
+            int cont = 1;
+            for(DispositivoResponseDTO dispositivoTraccar : dispositivosEnTraccar) {
+                Dispositivo dispositivo = Dispositivo.builder()
+                        .unicoId(dispositivoTraccar.getUniqueId())
+                        .nombre(dispositivoTraccar.getName())
+                        .vehiculo(cont == 1 ? vehiculo1 : vehiculo2)
+                        .build();
+
+                dispositivosParaCrear.add(dispositivo);
+
+                if (cont == 1) {
+                    vehiculo1.setDispositivo(dispositivo);
+                } else {
+                    vehiculo2.setDispositivo(dispositivo);
+                }
+
+                cont++;
             }
 
-            dispositivosEnTraccar = traccarCliente.getDispositivos();
-        }
-
-        List<Vehiculo> vehiculos = vehiculoRepository.findAll();
-        for(ObtenerDispositivoRequestDTO dispositivoTraccar : dispositivosEnTraccar) {
-            Dispositivo dispositivo = Dispositivo.builder()
-                    .unicoId(dispositivoTraccar.getUniqueId())
-                    .nombre(dispositivoTraccar.getName())
-                    .vehiculo(vehiculos.get(Integer.parseInt(dispositivoTraccar.getUniqueId()) - 1))
-                    .build();
-
-            dispositivoRepository.save(dispositivo);
-
-            vehiculos.get(Integer.parseInt(dispositivoTraccar.getUniqueId()) - 1).setDispositivo(dispositivo);
+            for(Dispositivo request : dispositivosParaCrear) {
+                traccarCliente.postCrearDispositivoTraccar(request);
+            }
         }
 
         //Agrego dispositivos
-        vehiculoRepository.saveAll(vehiculos);
+        vehiculoRepository.saveAll(List.of(vehiculo1, vehiculo2));
 
         // Crear ítems de inventario con builder
         ItemDeInventario item1 = ItemDeInventario.builder()

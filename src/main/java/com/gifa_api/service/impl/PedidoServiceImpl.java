@@ -28,7 +28,7 @@ public class PedidoServiceImpl implements IPedidoService {
     private final PedidosMapper pedidosMapper;
 
     @Override
-    public void createPedido(CrearPedidoDTO crearPedidoDTO) {
+    public void crearPedidoManual(CrearPedidoDTO crearPedidoDTO) {
         validarCrearPedidoDTO(crearPedidoDTO);
         ItemDeInventario item = itemDeInventarioRepository.findById(crearPedidoDTO.getIdItem())
                 .orElseThrow(() -> new NotFoundException("No se encontró el item con id: " + crearPedidoDTO.getIdItem()));
@@ -44,6 +44,20 @@ public class PedidoServiceImpl implements IPedidoService {
 
     }
 
+    private void crearPedidoAutomatico(Integer idItem, Integer cantidad, EstadoPedido estado){
+        ItemDeInventario item = itemDeInventarioRepository.findById(idItem)
+                .orElseThrow(() -> new NotFoundException("No se encontró el item con id: " + idItem));
+
+        Pedido pedido = Pedido
+                .builder()
+                .item(item)
+                .cantidad(cantidad)
+                .motivo("Solcitud de stock automatica")
+                .estadoPedido(estado)
+                .fecha(LocalDate.now())
+                .build();
+        pedidoRepository.save(pedido);
+    }
 
     @Override
     public void hacerPedidos(Integer idItem) {
@@ -55,15 +69,9 @@ public class PedidoServiceImpl implements IPedidoService {
         ProveedorDeItem proveerDeItemMasEconomico = proveedorDeItemService.proveedorMasEconomico(item.getId());
         if (item.getUmbral() > item.getStock()) {
             if ((proveerDeItemMasEconomico.getPrecio() * cantidad) < gestorOperacional.getPresupuesto()) {
-                CrearPedidoDTO pedidoManualDTO = CrearPedidoDTO
-                        .builder()
-                        .idItem(item.getId())
-                        .cantidad(cantidad)
-                        .motivo("Solcitud de stock automatica")
-                        .build();
-                createPedido(pedidoManualDTO);
+                crearPedidoAutomatico(item.getId(),cantidad, EstadoPedido.PENDIENTE);
             }else{
-                throw new RuntimeException("Presupuesto insuficiente para realizar el pedido.");
+                crearPedidoAutomatico(item.getId(),cantidad, EstadoPedido.PRESUPUESTO_INSUFICIENTE);
             }
         }
     }
@@ -74,8 +82,8 @@ public class PedidoServiceImpl implements IPedidoService {
     }
 
     @Override
-    public List<PedidoResponseDTO> obtenerPedidosRechazadosYpendientes() {
-        return pedidosMapper.mapToPedidoDTO(pedidoRepository.findPedidosByDosEstados(EstadoPedido.PENDIENTE,EstadoPedido.RECHAZADO));
+    public List<PedidoResponseDTO> obtenerPedidosRechazadosYpendientesYpresupuestoInsuficiente() {
+        return pedidosMapper.mapToPedidoDTO(pedidoRepository.findPedidosByTresEstados(EstadoPedido.PENDIENTE,EstadoPedido.RECHAZADO,EstadoPedido.PRESUPUESTO_INSUFICIENTE));
     }
 
     @Override
@@ -101,10 +109,10 @@ public class PedidoServiceImpl implements IPedidoService {
 
     private void validarCrearPedidoDTO(CrearPedidoDTO crearPedidoDTO) {
         if (crearPedidoDTO.getCantidad() == null || crearPedidoDTO.getCantidad() <= 0) {
-            throw new IllegalArgumentException("La cantidad debe ser mayor a cero.");
+            throw new BadRequestException("La cantidad debe ser mayor a cero.");
         }
         if (crearPedidoDTO.getMotivo() == null || crearPedidoDTO.getMotivo().trim().isEmpty()) {
-            throw new IllegalArgumentException("El motivo no puede estar vacío.");
+            throw new BadRequestException("El motivo no puede estar vacío.");
         }
     }
 }

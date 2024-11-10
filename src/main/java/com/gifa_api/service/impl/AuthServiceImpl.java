@@ -2,9 +2,12 @@ package com.gifa_api.service.impl;
 
 import com.gifa_api.config.jwt.JwtService;
 import com.gifa_api.dto.login.*;
+import com.gifa_api.exception.LoginException;
 import com.gifa_api.exception.NotFoundException;
 import com.gifa_api.model.Chofer;
 import com.gifa_api.repository.IChoferRepository;
+import com.gifa_api.service.IChoferService;
+import com.gifa_api.utils.enums.EstadoUsuario;
 import com.gifa_api.utils.enums.Rol;
 import com.gifa_api.exception.RegisterException;
 import com.gifa_api.model.Usuario;
@@ -27,6 +30,7 @@ public class AuthServiceImpl implements IAuthService {
     private final PasswordEncoder passwordEncoder;
     private final AuthenticationManager authenticationManager;
     private final IChoferRepository choferRepository;
+    private final IChoferService choferService;
 
     @Override
     public LoginResponseDTO login(LoginRequestDTO userDto) {
@@ -37,6 +41,9 @@ public class AuthServiceImpl implements IAuthService {
                 .findByUsuario(userDto.getUsername())
                 .orElseThrow(() -> new NotFoundException("No se encontro el usuario con username: " + userDto.getUsername()));
 
+        if(user.getEstadoUsuario() == EstadoUsuario.INHABILITADO){
+           throw new LoginException("El usuario esta inhabilitado");
+        }
         String token = jwtService.getToken(user);
 
         return LoginResponseDTO
@@ -65,6 +72,8 @@ public class AuthServiceImpl implements IAuthService {
         return ChoferLoginResponseDTO.builder()
                 .id(chofer.getId())
                 .nombre(chofer.getNombre())
+                .numeroTarjeta(chofer.getVehiculo().getTarjeta().getNumero())
+                .tarjetaId(chofer.getVehiculo().getTarjeta().getId())
                 .build();
     }
 
@@ -78,6 +87,7 @@ public class AuthServiceImpl implements IAuthService {
                 .usuario(userToRegisterDto.getUsername())
                 .contrasena(passwordEncoder.encode(userToRegisterDto.getPassword()))
                 .rol(Rol.getRol(userToRegisterDto.getRole()))
+                .estadoUsuario(EstadoUsuario.HABILITADO)
                 .build();
 
         userRepository.save(user);
@@ -107,6 +117,34 @@ public class AuthServiceImpl implements IAuthService {
     }
 
     @Override
+    public void habilitar(Integer id) {
+        Usuario user = userRepository.findById(id).orElseThrow(() -> new NotFoundException("No se encontró el usuario con id: " + id));
+        if(user.getEstadoUsuario() == EstadoUsuario.INHABILITADO) {
+            user.setEstadoUsuario(EstadoUsuario.HABILITADO);
+            userRepository.save(user);
+        }
+    }
+
+    @Override
+    public void inhabilitar(Integer id) {
+        Usuario user = userRepository.findById(id).orElseThrow(() -> new NotFoundException("No se encontró el usuario con id: " + id));
+        if(user.getEstadoUsuario() == EstadoUsuario.HABILITADO) {
+            user.setEstadoUsuario(EstadoUsuario.INHABILITADO);
+            userRepository.save(user);
+            if(user.getRol().equals(Rol.CHOFER)){
+                choferService.inhabilitarUsuarioChofer(user.getId());
+            }
+        }
+    }
+
+//    @Override
+//    public void remove(Integer id) {
+//        Usuario user = userRepository.findById(id).orElseThrow(() -> new NotFoundException("No se encontró el usuario con id: " + id));
+//        userRepository.delete(user);
+//    }
+
+
+    @Override
     public List<GetUserDTO> getAll() {
         return userRepository.findAll().stream()
                 .map(this::convertToGetUserDTO)
@@ -118,6 +156,7 @@ public class AuthServiceImpl implements IAuthService {
                 .id(user.getId())
                 .username(user.getUsuario())
                 .role(user.getRol())
+                .estado(user.getEstadoUsuario().toString())
                 .build();
     }
 }

@@ -1,17 +1,23 @@
 package com.gifa_api.service.impl;
 
+import com.gifa_api.client.ITraccarCliente;
 import com.gifa_api.dto.mantenimiento.RegistrarMantenimientoDTO;
 import com.gifa_api.dto.vehiculo.ListaVehiculosResponseDTO;
 import com.gifa_api.dto.vehiculo.RegistarVehiculoDTO;
 import com.gifa_api.dto.vehiculo.VehiculoResponseConQrDTO;
+import com.gifa_api.exception.BadRequestException;
 import com.gifa_api.exception.NotFoundException;
+import com.gifa_api.model.Dispositivo;
 import com.gifa_api.model.Mantenimiento;
 import com.gifa_api.model.Tarjeta;
 import com.gifa_api.model.Vehiculo;
+import com.gifa_api.repository.IDispositivoRepository;
 import com.gifa_api.repository.ITarjetaRepository;
 import com.gifa_api.repository.IVehiculoRepository;
 import com.gifa_api.repository.ItemDeInventarioRepository;
+import com.gifa_api.service.IDispositivoService;
 import com.gifa_api.service.IMantenimientoService;
+import com.gifa_api.service.ITraccarService;
 import com.gifa_api.service.IVehiculoService;
 import com.gifa_api.utils.enums.EstadoDeHabilitacion;
 import com.gifa_api.utils.enums.EstadoVehiculo;
@@ -43,6 +49,8 @@ public class VehiculoServiceImpl implements IVehiculoService {
     private final ITarjetaRepository tarjetaRepository;
     private final VehiculoMapper vehiculoMapper;
     private final VehiculoResponseConQrMapper vehiculoResponseConQrMapper;
+    private  final ITraccarService traccarService;
+    private final IDispositivoRepository dispositivoRepository;
 
 
     @Override
@@ -52,13 +60,20 @@ public class VehiculoServiceImpl implements IVehiculoService {
 
     @Override
     public void registrar(RegistarVehiculoDTO vehiculoDTO) {
-        // Validar el DTO
         validarRegistrarVehiculoDTO(vehiculoDTO);
+
         Tarjeta tarjeta = Tarjeta.builder()
                 .numero(generarNumeroTarjeta())
                 .build();
-        tarjetaRepository.save(tarjeta);
 
+        Dispositivo dispositivo = Dispositivo
+                .builder()
+                .unicoId(vehiculoDTO.getPatente())
+                .nombre("Creacion automatica")
+                .build();
+
+
+        byte[] qr = obtenerQR(vehiculoDTO.getPatente());
         Vehiculo vehiculo = Vehiculo
                 .builder()
                 .patente(vehiculoDTO.getPatente())
@@ -69,16 +84,19 @@ public class VehiculoServiceImpl implements IVehiculoService {
                 .estadoVehiculo(EstadoVehiculo.REPARADO)
                 .fechaVencimiento(vehiculoDTO.getFechaRevision())
                 .tarjeta(tarjeta)
+                .dispositivo(dispositivo)
+                .qr(qr)
                 .build();
 
-        vehiculoRepository.save(vehiculo);
+        // Asigna el vehículo a la tarjeta para establecer la relación bidireccional
+        tarjeta.setVehiculo(vehiculo);
+        dispositivo.setVehiculo(vehiculo);
 
-        vehiculo.setQr(obtenerQR(vehiculo.getId().toString()));
-
         vehiculoRepository.save(vehiculo);
+        traccarService.crearDispositivo(dispositivo);
     }
 
-    private  byte[] obtenerQR(String id) {
+    private byte[] obtenerQR(String id) {
         String contenidoQR = id; // O cualquier otro identificador
         BufferedImage qrImage = generarQRCode(contenidoQR);
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
@@ -125,9 +143,9 @@ public class VehiculoServiceImpl implements IVehiculoService {
 
     // mejorar fix
     @Override
-    public VehiculoResponseConQrDTO obtenerHistorialDeVehiculo(Integer vehiculoId) {
-        Vehiculo vehiculo = vehiculoRepository.findById(vehiculoId)
-                .orElseThrow(() -> new NotFoundException("No se encontró el vehiculo con id: " + vehiculoId));
+    public VehiculoResponseConQrDTO obtenerHistorialDeVehiculo(String patente) {
+        Vehiculo vehiculo = vehiculoRepository.findByPatente(patente)
+                .orElseThrow(() -> new NotFoundException("No se encontró el vehiculo con la patente : " + patente));
 
         List<Mantenimiento> listaMantenimientos = new ArrayList<>(vehiculo.getMantenimientos());
         return vehiculoResponseConQrMapper.toVehiculoResponseConQrDTO(vehiculo, listaMantenimientos);
@@ -154,20 +172,24 @@ public class VehiculoServiceImpl implements IVehiculoService {
 //         Validar patente
         String patenteRegex = "^(?:[A-Za-z]{3}\\d{3}|[A-Za-z]{2}\\d{3}[A-Za-z]{2})$";
         if (vehiculoDTO.getPatente() == null || !vehiculoDTO.getPatente().matches(patenteRegex)) {
-            throw new IllegalArgumentException("La patente debe tener el formato correcto (3 letras, 3 números )  or (2 letras, 3 dígitos, 2 letras).");
+            throw new BadRequestException("La patente debe tener el formato correcto (3 letras, 3 números )  or (2 letras, 3 dígitos, 2 letras).");
         }
         if (vehiculoDTO.getAntiguedad() == null || vehiculoDTO.getAntiguedad() < 0) {
-            throw new IllegalArgumentException("La antigüedad debe ser mayor o igual a 0.");
+            throw new BadRequestException("La antigüedad debe ser mayor o igual a 0.");
         }
         if (vehiculoDTO.getKilometraje() == null || vehiculoDTO.getKilometraje() < 0) {
-            throw new IllegalArgumentException("El kilometraje debe ser mayor o igual a 0.");
+            throw new BadRequestException("El kilometraje debe ser mayor o igual a 0.");
         }
         if (vehiculoDTO.getModelo() == null || vehiculoDTO.getModelo().trim().isEmpty()) {
-            throw new IllegalArgumentException("El modelo no puede estar vacío.");
+            throw new BadRequestException("El modelo no puede estar vacío.");
         }
         // Validar fecha de revisión
-        if (vehiculoDTO.getFechaRevision() == null || vehiculoDTO.getFechaRevision().isBefore(LocalDate.now())) {
-            throw new IllegalArgumentException("La fecha de revisión debe ser posterior a la fecha actual.");
+        LocalDate fechaEsperada = LocalDate.now().plusDays(1);
+        if (vehiculoDTO.getFechaRevision() == null || vehiculoDTO.getFechaRevision().isBefore(fechaEsperada)) {
+            throw new BadRequestException("La fecha de revisión debe ser posterior a la fecha actual.");
         }
+
+
     }
+
 }

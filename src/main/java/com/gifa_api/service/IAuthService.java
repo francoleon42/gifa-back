@@ -9,5 +9,7 @@ public interface IAuthService {
     LoginResponseDTO register(RegisterRequestDTO userToRegisterDto);
     void logout(String token);
     void update(Integer id, UpdateRequestDTO userToUpdateDto);
+    void habilitar(Integer id);
+    void inhabilitar(Integer id);
     List<GetUserDTO> getAll();
 }

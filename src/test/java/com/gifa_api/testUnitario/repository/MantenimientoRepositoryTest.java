@@ -6,10 +6,7 @@ import com.gifa_api.model.Usuario;
 import com.gifa_api.repository.IMantenimientoRepository;
 import com.gifa_api.repository.IUsuarioRepository;
 import com.gifa_api.repository.IVehiculoRepository;
-import com.gifa_api.utils.enums.EstadoMantenimiento;
-import com.gifa_api.utils.enums.EstadoDeHabilitacion;
-import com.gifa_api.utils.enums.EstadoVehiculo;
-import com.gifa_api.utils.enums.Rol;
+import com.gifa_api.utils.enums.*;
 import jakarta.transaction.Transactional;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -145,6 +142,7 @@ class MantenimientoRepositoryTest {
                 .usuario("operador")
                 .contrasena("$2a$10$RRAzywJFxaAG3pRlHXep6u6VNKi5KOTT3M8GCxDPHpAyZ0ofX2Bcu")
                 .rol(Rol.OPERADOR)
+                .estadoUsuario(EstadoUsuario.HABILITADO)
                 .build();
 
         usuarioRepository.save(operador);
@@ -190,6 +188,7 @@ class MantenimientoRepositoryTest {
                 .usuario("operador")
                 .contrasena("$2a$10$RRAzywJFxaAG3pRlHXep6u6VNKi5KOTT3M8GCxDPHpAyZ0ofX2Bcu")
                 .rol(Rol.OPERADOR)
+                .estadoUsuario(EstadoUsuario.HABILITADO)
                 .build();
         usuarioRepository.save(operador);
 

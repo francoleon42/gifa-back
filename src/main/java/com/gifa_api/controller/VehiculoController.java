@@ -2,11 +2,14 @@ package com.gifa_api.controller;
 
 import com.gifa_api.dto.vehiculo.ListaVehiculosResponseDTO;
 import com.gifa_api.dto.vehiculo.RegistarVehiculoDTO;
+import com.gifa_api.exception.BadRequestException;
 import com.gifa_api.service.IVehiculoService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.time.LocalDate;
 
 @RestController
 @RequestMapping("/vehiculo")
@@ -36,10 +39,10 @@ public class VehiculoController {
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
-    @GetMapping("/historialVehiculo/{vehiculoId}")
-    public ResponseEntity<?> historialVehiculo(@PathVariable Integer vehiculoId) {
-        return new ResponseEntity<>(vehiculoService.obtenerHistorialDeVehiculo(vehiculoId), HttpStatus.OK);
+    @GetMapping("/historialVehiculo/{patente}")
+    public ResponseEntity<?> historialVehiculo(@PathVariable String patente) {
+        return new ResponseEntity<>(vehiculoService.obtenerHistorialDeVehiculo(patente), HttpStatus.OK);
     }
 
 
-}
+    }

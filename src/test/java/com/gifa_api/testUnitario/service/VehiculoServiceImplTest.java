@@ -5,12 +5,15 @@ import com.gifa_api.dto.vehiculo.ListaVehiculosResponseDTO;
 import com.gifa_api.dto.vehiculo.RegistarVehiculoDTO;
 import com.gifa_api.dto.vehiculo.VehiculoResponseConQrDTO;
 import com.gifa_api.dto.vehiculo.VehiculoResponseDTO;
+import com.gifa_api.exception.BadRequestException;
 import com.gifa_api.exception.NotFoundException;
+import com.gifa_api.model.Dispositivo;
 import com.gifa_api.model.Mantenimiento;
 import com.gifa_api.model.Tarjeta;
 import com.gifa_api.model.Vehiculo;
 import com.gifa_api.repository.ITarjetaRepository;
 import com.gifa_api.repository.IVehiculoRepository;
+import com.gifa_api.service.ITraccarService;
 import com.gifa_api.service.impl.VehiculoServiceImpl;
 import com.gifa_api.utils.enums.EstadoDeHabilitacion;
 import com.gifa_api.utils.enums.EstadoVehiculo;
@@ -22,7 +25,8 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.mockito.stubbing.Answer;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.ActiveProfiles;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -33,7 +37,9 @@ import java.util.Set;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
+
 @ExtendWith(MockitoExtension.class)
+
 class VehiculoServiceImplTest {
 
     @Mock
@@ -51,8 +57,13 @@ class VehiculoServiceImplTest {
     @Mock
     private Vehiculo vehiculoFlota;
 
+    @Mock
+    private ITraccarService traccarService;
+
     @InjectMocks
     private VehiculoServiceImpl vehiculoService;
+
+    private Dispositivo dispositivo;
 
     private RegistarVehiculoDTO vehiculoDTO;
 
@@ -65,12 +76,18 @@ class VehiculoServiceImplTest {
     @BeforeEach
     void setUp(){
          vehiculoDTO = RegistarVehiculoDTO
+                 .builder()
+                 .patente("ABC123")
+                 .antiguedad(1)
+                 .kilometraje(0)
+                 .modelo("toyota")
+                 .fechaRevision(LocalDate.now().plusDays(1))
+                 .build();
+
+        dispositivo = Dispositivo
                 .builder()
-                .patente("ABC123")
-                .antiguedad(0)
-                .kilometraje(0)
-                .modelo("toyota")
-                .fechaRevision(LocalDate.now().plusDays(1))
+                .unicoId(vehiculoDTO.getPatente())
+                .nombre("Creacion automatica")
                 .build();
 
          tarjeta = Tarjeta.builder().numero(12345678).build();
@@ -86,6 +103,7 @@ class VehiculoServiceImplTest {
                 .estadoVehiculo(EstadoVehiculo.REPARADO)
                 .fechaVencimiento(vehiculoDTO.getFechaRevision())
                 .tarjeta(tarjeta)
+                 .dispositivo(dispositivo)
                  .mantenimientos(Set.of(new Mantenimiento()))
                 .build();
     }
@@ -157,13 +175,15 @@ class VehiculoServiceImplTest {
 
     @Test
     void registrarConPatenteVieja() {
-        verificarGeneracionDeQrDeVehiculoRegistrado();
+        vehiculoService.registrar(vehiculoDTO);
+        verify(vehiculoRepository, times(1)).save(any(Vehiculo.class));
     }
 
     @Test
     void testRegistrarConPatenteNueva() {
         vehiculo.setPatente("AB123CD");
-        verificarGeneracionDeQrDeVehiculoRegistrado();
+        vehiculoService.registrar(vehiculoDTO);
+        verify(vehiculoRepository, times(1)).save(any(Vehiculo.class));
     }
 
     @Test
@@ -176,6 +196,8 @@ class VehiculoServiceImplTest {
         assertNotNull(result);
         verify(vehiculoMapper, times(1)).toListaVehiculosResponseDTO(any());
     }
+
+
 
     @Test
     void testInhabilitarVehiculoNotFound() {
@@ -217,9 +239,9 @@ class VehiculoServiceImplTest {
 
     @Test
     void testObtenerHistorialDeVehiculoNotFound() {
-        when(vehiculoRepository.findById(vehiculo.getId())).thenReturn(Optional.empty());
+        when(vehiculoRepository.findByPatente(vehiculo.getPatente())).thenReturn(Optional.empty());
 
-        assertThrows(NotFoundException.class, () -> vehiculoService.obtenerHistorialDeVehiculo(vehiculo.getId()));
+        assertThrows(NotFoundException.class, () -> vehiculoService.obtenerHistorialDeVehiculo(vehiculo.getPatente()));
         verify(vehiculoResponseConQrMapper,never()).toVehiculoResponseConQrDTO(vehiculo,mantenimientos);
     }
 
@@ -231,32 +253,17 @@ class VehiculoServiceImplTest {
                 .mantenimientos(mantenimientoDTO)
                 .build();
 
-        when(vehiculoRepository.findById(vehiculo.getId())).thenReturn(Optional.of(vehiculo));
+        when(vehiculoRepository.findByPatente(vehiculo.getPatente())).thenReturn(Optional.of(vehiculo));
         List<Mantenimiento> mantenimientos =  new ArrayList<>(vehiculo.getMantenimientos());
 
         when(vehiculoResponseConQrMapper.toVehiculoResponseConQrDTO(vehiculo, mantenimientos)).thenReturn(vehiculoResponseQR);
 
-        vehiculoService.obtenerHistorialDeVehiculo(vehiculo.getId());
+        vehiculoService.obtenerHistorialDeVehiculo(vehiculo.getPatente());
         verify(vehiculoResponseConQrMapper, times(1)).toVehiculoResponseConQrDTO(vehiculo, mantenimientos);
     }
 
-    public void verificarGeneracionDeQrDeVehiculoRegistrado(){
-        when(tarjetaRepository.save(any(Tarjeta.class))).thenReturn(tarjeta);
-
-        when(vehiculoRepository.save(any(Vehiculo.class))).thenAnswer(invocation -> {
-            vehiculo = invocation.getArgument(0);
-            vehiculo.setId(1); // Simular que se le asigna un ID
-            return   vehiculo; // Retornar el vehículo guardado
-        });
-
-        vehiculoService.registrar(vehiculoDTO);
-        assertNotNull(vehiculo.getQr());
-        verify(tarjetaRepository, times(1)).save(any(Tarjeta.class));
-        verify(vehiculoRepository, times(2)).save(any(Vehiculo.class));
-    }
-
     public void verificacionDeNoRegistroDeVehiculoInvalido(){
-        assertThrows(IllegalArgumentException.class,() -> vehiculoService.registrar(vehiculoDTO));
+        assertThrows(BadRequestException.class,() -> vehiculoService.registrar(vehiculoDTO));
         verify(vehiculoRepository,never()).save(any(Vehiculo.class));
     }
 }

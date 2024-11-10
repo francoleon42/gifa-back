@@ -18,16 +18,16 @@ public class PedidoController {
     // Pedidos
     @PostMapping("/generarPedido")
     public ResponseEntity<?> generarPedidoManual(@RequestBody CrearPedidoDTO pedidoManualDTO){
-        pedidoService.createPedido(pedidoManualDTO);
+        pedidoService.crearPedidoManual(pedidoManualDTO);
         return ResponseEntity.ok(HttpStatus.CREATED);
     }
     @GetMapping("/aceptados")
     public ResponseEntity<List<PedidoResponseDTO>> verPedidosAceptados() {
         return new ResponseEntity<>(pedidoService.obtenerPedidosAceptados(),HttpStatus.OK);
     }
-    @GetMapping("/rechazadosYpendientes")
-    public ResponseEntity<List<PedidoResponseDTO>> verPedidosRechazadosYpendientes() {
-        return new ResponseEntity<>(pedidoService.obtenerPedidosRechazadosYpendientes(),HttpStatus.OK);
+    @GetMapping("/getRechazadosPendientesPresupuestoInsuficiente")
+    public ResponseEntity<List<PedidoResponseDTO>> verPedidosRechazadosYpendientesYpresupuestoInsuficiente() {
+        return new ResponseEntity<>(pedidoService.obtenerPedidosRechazadosYpendientesYpresupuestoInsuficiente(),HttpStatus.OK);
     }
     @GetMapping("/verAll")
     public ResponseEntity<List<PedidoResponseDTO>> verPedidos(){

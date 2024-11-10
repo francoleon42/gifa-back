@@ -1,6 +1,7 @@
 package com.gifa_api.testUnitario.service;
 
 import com.gifa_api.dto.proveedor.RegistroProveedorRequestDTO;
+import com.gifa_api.exception.BadRequestException;
 import com.gifa_api.exception.NotFoundException;
 import com.gifa_api.utils.enums.EstadoPedido;
 import com.gifa_api.model.Pedido;
@@ -183,7 +184,7 @@ class ProvedorServiceImplTest {
     }
 
     public void verificarQueNoseRegistreProveedorInvalido(){
-        assertThrows(IllegalArgumentException.class,() -> provedorService.registrarProveedor(proveedorRequestDTO));
+        assertThrows(BadRequestException.class,() -> provedorService.registrarProveedor(proveedorRequestDTO));
         verify(proveedorRepository, never() ).save(any(Proveedor.class));
     }
 

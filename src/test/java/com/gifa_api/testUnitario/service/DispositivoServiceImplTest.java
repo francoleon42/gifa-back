@@ -1,6 +1,7 @@
 package com.gifa_api.testUnitario.service;
 
 import com.gifa_api.dto.traccar.CrearDispositivoRequestDTO;
+import com.gifa_api.exception.BadRequestException;
 import com.gifa_api.exception.NotFoundException;
 
 import com.gifa_api.model.Dispositivo;
@@ -155,19 +156,16 @@ public class DispositivoServiceImplTest {
         assertEquals(0, km);
         verify(posicionRepository, times(1)).findByUnicoIdAndDespuesFecha(unicoIdDispositivo, fecha);
     }
-    public void verificarNoRegistroDeDispositivo(){
-        assertThrows(IllegalArgumentException.class,() -> serviceDispositivo.crearDispositivo(dispositivoRequestDTO,1));
-        verify(dispositivoRepository,never()).save(any(Dispositivo.class));
-    }
+
+
 
 //    @Test
 //    void actualizarKilometrajeDeVehiculos_actualizaKilometrajeCorrectamente() {
 //        List<Dispositivo> dispositivos = List.of(dispositivo);
 //        List<Posicion> posiciones = List.of(
 //                 Posicion.builder().id(1).latitude(34.0).longitude(-58.0).build(),
-//                Posicion.builder().id(2).latitude(34.1).longitude(-58.1).build())
+//                Posicion.builder().id(2).latitude(34.1).longitude(-58.1).build());
 //
-//        ;
 //        when(dispositivoRepository.findAll()).thenReturn(dispositivos);
 //        when(posicionRepository.findByUnicoId(unicoIdDispositivo)).thenReturn(posiciones);
 //        when(dispositivoRepository.findVehiculosDeDispositivo(unicoIdDispositivo)).thenReturn(Optional.of(vehiculo));
@@ -194,5 +192,10 @@ public class DispositivoServiceImplTest {
 //        assertThrows(NotFoundException.class, () -> serviceDispositivo.actualizarKilometrajeDeVehiculos());
 //        verify(vehiculoRepository, never()).save(any(Vehiculo.class));
 //    }
+
+    public void verificarNoRegistroDeDispositivo(){
+        assertThrows(BadRequestException.class,() -> serviceDispositivo.crearDispositivo(dispositivoRequestDTO,1));
+        verify(dispositivoRepository,never()).save(any(Dispositivo.class));
+    }
 
 }

@@ -9,6 +9,11 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
+
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
 
 @RestController
 @RequiredArgsConstructor
@@ -18,21 +23,15 @@ public class TraccarController {
     private  final IDispositivoService dispositivoService;
     private  final IPosicionService posicionService;
 
-    @PostMapping("/crearDispositivo")
-    public ResponseEntity<?> crearDispositivo(@RequestBody CrearDispositivoRequestDTO crearDispositivoRequestDTO,@RequestParam("idVehiculo") Integer idVehiculo){
-        traccarService.crearDispositivo(crearDispositivoRequestDTO);
-        dispositivoService.crearDispositivo(crearDispositivoRequestDTO,idVehiculo);
-        return new ResponseEntity<>(HttpStatus.CREATED);
-    }
 
     @GetMapping("/getDispositivos")
     public ResponseEntity<?> getDispositivos(){
         return new ResponseEntity<>(traccarService.obtenerDispositivos(),HttpStatus.OK);
     }
 
-    @GetMapping("/verInconsistenciasDeCombustible")
-    public ResponseEntity<?> verInconsistenciasDeCombustible(@RequestBody  VerInconsistenciasRequestDTO verInconsistenciasRequestDTO){
-        return new ResponseEntity<>(traccarService.getInconsistencias(verInconsistenciasRequestDTO.getFecha()),HttpStatus.OK);
+    @GetMapping("/verInconsistenciasDeCombustible/{fecha}")
+    public ResponseEntity<?> verInconsistenciasDeCombustible(@PathVariable LocalDate fecha){
+        return new ResponseEntity<>(traccarService.getInconsistencias(fecha),HttpStatus.OK);
     }
 
     @GetMapping("/getPosiciones/{unicoId}")

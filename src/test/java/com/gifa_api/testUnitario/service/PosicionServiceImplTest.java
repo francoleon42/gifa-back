@@ -2,6 +2,7 @@ package com.gifa_api.testUnitario.service;
 
 import com.gifa_api.client.ITraccarCliente;
 
+import com.gifa_api.dto.traccar.PosicionResponseDTO;
 import com.gifa_api.model.Posicion;
 import com.gifa_api.repository.IPosicionRepository;
 import com.gifa_api.service.IDispositivoService;
@@ -15,7 +16,6 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.time.OffsetDateTime;
 import java.util.List;
-import java.util.Optional;
 
 import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.*;
@@ -40,7 +40,7 @@ class PosicionServiceImplTest {
 
 //    @Test
 //    void actualizarPosicionesDeDispositivo_deberiaActualizarPosiciones() {
-//        List<ObtenerDispositivoRequestDTO> dispositivosDTO = List.of(new ObtenerDispositivoRequestDTO(1, "uniqueId","name","status"));
+//        List<DispositivoResponseDTO> dispositivosDTO = List.of(new DispositivoResponseDTO(1, "uniqueId","name","status"));
 //        when(traccarService.obtenerDispositivos()).thenReturn(dispositivosDTO);
 //
 //        Dispositivo dispositivo = new Dispositivo();
@@ -61,7 +61,7 @@ class PosicionServiceImplTest {
 //
 //    @Test
 //    void actualizarPosicionesDeDispositivo_noDeberiaGuardarSiLaPosicionYaExiste() {
-//        List<ObtenerDispositivoRequestDTO> dispositivosDTO = List.of(new ObtenerDispositivoRequestDTO(1, "uniqueId","name","status"));
+//        List<DispositivoResponseDTO> dispositivosDTO = List.of(new DispositivoResponseDTO(1, "uniqueId","name","status"));
 //        when(traccarService.obtenerDispositivos()).thenReturn(dispositivosDTO);
 //
 //        Dispositivo dispositivo = new Dispositivo();
@@ -100,4 +100,16 @@ class PosicionServiceImplTest {
         verify(posicionRepository, times(1)).findByUnicoIdAndDespuesFecha("uniqueId", fecha);
         assertEquals(posiciones, result);
     }
+
+//    @Test
+//    void getPosicionesDeDispositivo_deberiaRetornarListaDePosiciones() {
+//        OffsetDateTime fecha = OffsetDateTime.now();
+//        List<Posicion> posiciones = List.of(new Posicion());
+//        when(posicionRepository.findByUnicoId("uniqueId")).thenReturn(posiciones);
+//
+//        List<PosicionResponseDTO> result = posicionService.getPosicionesDeDispositivo("uniqueId");
+//
+//        verify(posicionRepository, times(1)).findByUnicoIdAndDespuesFecha("uniqueId", fecha);
+//        assertEquals(posiciones, result);
+//    }
 }

@@ -1,16 +1,19 @@
 package com.gifa_api.service;
 
-import com.gifa_api.dto.traccar.CrearDispositivoRequestDTO;
 import com.gifa_api.dto.traccar.InconsistenciasKMconCombustiblesResponseDTO;
-import com.gifa_api.dto.traccar.ObtenerDispositivoRequestDTO;
+import com.gifa_api.dto.traccar.DispositivoResponseDTO;
+import com.gifa_api.model.Dispositivo;
 
-import java.time.OffsetDateTime;
+import java.time.LocalDate;
 import java.util.List;
 
 public interface ITraccarService {
 
-    void crearDispositivo(CrearDispositivoRequestDTO crearDispositivoRequestDTO);
-    List<ObtenerDispositivoRequestDTO> obtenerDispositivos();
+//    void crearDispositivo(CrearDispositivoRequestDTO crearDispositivoRequestDTO);
 
-    List<InconsistenciasKMconCombustiblesResponseDTO> getInconsistencias(OffsetDateTime fecha);
+    void crearDispositivo(Dispositivo dispositivo);
+
+    List<DispositivoResponseDTO> obtenerDispositivos();
+
+    List<InconsistenciasKMconCombustiblesResponseDTO> getInconsistencias(LocalDate fecha);
 }

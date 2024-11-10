@@ -3,22 +3,26 @@ package com.gifa_api.testUnitario.service;
 import com.gifa_api.dto.chofer.AsignarChoferDTO;
 import com.gifa_api.dto.chofer.ChoferRegistroDTO;
 import com.gifa_api.dto.chofer.ChoferResponseDTO;
+import com.gifa_api.dto.vehiculo.VehiculoResponseDTO;
+import com.gifa_api.exception.BadRequestException;
 import com.gifa_api.exception.NotFoundException;
 import com.gifa_api.model.Chofer;
 import com.gifa_api.model.Vehiculo;
 import com.gifa_api.repository.IChoferRepository;
 import com.gifa_api.repository.IVehiculoRepository;
 import com.gifa_api.service.impl.ChoferServiceImpl;
-import com.gifa_api.utils.enums.EstadoChofer;
 import com.gifa_api.utils.mappers.ChoferMapper;
+import com.gifa_api.utils.mappers.VehiculoMapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
@@ -26,8 +30,8 @@ import java.util.Set;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
+//agregar metodos que faltan
 @ExtendWith(MockitoExtension.class)
-
 class ChoferServiceImplTest {
     @Mock
     private IVehiculoRepository vehiculoRepository;
@@ -37,8 +41,13 @@ class ChoferServiceImplTest {
 
     @Mock
     private  PasswordEncoder passwordEncoder;
+
     @Mock
     private  ChoferMapper choferMapper;
+
+    @Mock
+    private  VehiculoMapper vehiculoMapper;
+
     @InjectMocks
     private ChoferServiceImpl choferService;
 
@@ -46,24 +55,43 @@ class ChoferServiceImplTest {
     private Chofer chofer;
     private  AsignarChoferDTO asignarChoferDTO;
     private Vehiculo vehiculo;
+    private VehiculoResponseDTO vehiculoResponseDTO;
     @BeforeEach
     void setUp(){
         choferRegistro = ChoferRegistroDTO.builder().username("username").password("password").nombre("nombre").build();
-        asignarChoferDTO =  AsignarChoferDTO.builder().idChofer(1).idVehiculo(1).build();
+        asignarChoferDTO = AsignarChoferDTO.builder().idChofer(1).idVehiculo(1).build();
 
-        chofer = Chofer.builder().id(1).nombre("chofer").build();
         vehiculo = Vehiculo.builder()
-                .chofers(Set.of(chofer))
+                .chofers(Set.of(Chofer.builder().id(1).
+                        nombre("chofer")
+                        .vehiculo(vehiculo)
+                        .build()))
                 .id(1)
                 .patente("ABC123")
+                .antiguedad(10)
+                .modelo("TOYOTA")
+                .fechaVencimiento(LocalDate.now().plusDays(1))
+                .build();
+
+        vehiculoResponseDTO = VehiculoResponseDTO.builder()
+                .id(1)
+                .patente("ABC123")
+                .antiguedad(10)
+                .modelo("toyota")
+                .fechaVencimiento(LocalDate.now().plusDays(1))
+                .build();
+        chofer = Chofer.builder().id(1).
+                nombre("chofer")
+                .vehiculo(vehiculo)
                 .build();
     }
 
     @Test
-    void campoUserNameNoPuedeEstarVacio(){
+    void registrarChofer_userNameVacioLanzaExcepcion(){
         choferRegistro.setUsername("");
         verificarNoRegistroDeChoferInvalido();
     }
+
     @Test
     void campoUserNameNoPuedeSerNulo(){
         choferRegistro.setUsername(null);
@@ -77,7 +105,7 @@ class ChoferServiceImplTest {
     }
 
     @Test
-    void campoContraseniaoPuedeSerNulo(){
+    void campoContraseniaoNoPuedeSerNulo(){
         choferRegistro.setPassword(null);
         verificarNoRegistroDeChoferInvalido();
     }
@@ -89,10 +117,11 @@ class ChoferServiceImplTest {
     }
 
     @Test
-    void campoNombreNoPuedeEstarVacio(){
+    void registrarChofer_nombreVacioLanzaExcepcion(){
         choferRegistro.setNombre("");
         verificarNoRegistroDeChoferInvalido();
     }
+
 
     @Test
     void campoNombreNoPuedeSerNulo(){
@@ -101,19 +130,35 @@ class ChoferServiceImplTest {
     }
 
     @Test
-    void habilitarChofer_debeLanzarExcepcionSiNoExiste() {
-        when(choferRepository.findById(1)).thenReturn(Optional.empty());
-        assertThrows(NotFoundException.class, () -> choferService.habilitar(1));
-        verify(choferRepository, never()).save(any(Chofer.class));
+    void registrarChofer_usuarioConCaracteresEspecialesLanzaExcepcion(){
+        choferRegistro.setUsername("diegote#");
+        verificarNoRegistroDeChoferInvalido();
+    }
+    @Test
+    void registrarChofer_contraseniaVaciaLanzaExcepcion(){
+        choferRegistro.setPassword("");
+        verificarNoRegistroDeChoferInvalido();
     }
 
-
     @Test
-    void inhabilitarChofer_debeLanzarExcepcionSiNoExiste() {
-        Integer idChofer = 1;
-        when(choferRepository.findByIdWithVehiculo(idChofer)).thenReturn(Optional.empty());
-        assertThrows(NotFoundException.class, () -> choferService.inhabilitar(1));
-        verify(choferRepository, never()).save(any(Chofer.class));
+    void inhabilitarUsuarioChoferConUsuarioInvalido_lanzaExcepcion(){
+        when(choferRepository.findByUsuario_Id(1)).thenReturn(Optional.empty());
+
+        assertThrows(NotFoundException.class, () -> choferService.inhabilitarUsuarioChofer(1));
+
+        verify(choferRepository,never()).save(any(Chofer.class));
+
+    }
+    @Test
+    void inhabilitarUsuario_inhabilitaUsuarioExitosamente(){
+        when(choferRepository.findByUsuario_Id(1)).thenReturn(Optional.of(chofer));
+
+        choferService.inhabilitarUsuarioChofer(1);
+
+        assertEquals(0,vehiculo.getChofers().size());
+        assertEquals(chofer.getId(),1);
+        verify(choferRepository,times(1)).save(any(Chofer.class));
+
     }
 
     @Test
@@ -140,33 +185,6 @@ class ChoferServiceImplTest {
     }
 
     @Test
-    void registrarChofer_usuarioVacioLanzaExcepcion(){
-        choferRegistro.setUsername("");
-        assertThrows(IllegalArgumentException.class,() ->choferService.registro(choferRegistro)) ;
-        verify(choferRepository,never()).save(any(Chofer.class));
-    }
-
-    @Test
-    void registrarChofer_usuarioConCaracteresEspecialesLanzaExcepcion(){
-        choferRegistro.setUsername("diegote#");
-        assertThrows(IllegalArgumentException.class,() ->choferService.registro(choferRegistro)) ;
-        verify(choferRepository,never()).save(any(Chofer.class));
-    }
-    @Test
-    void registrarChofer_contraseniaVaciaLanzaExcepcion(){
-        choferRegistro.setPassword("");
-        assertThrows(IllegalArgumentException.class,() ->choferService.registro(choferRegistro)) ;
-        verify(choferRepository,never()).save(any(Chofer.class));
-    }
-
-    @Test
-    void registrarChofer_nombreVacioLanzaExcepcion(){
-        choferRegistro.setNombre("");
-        assertThrows(IllegalArgumentException.class,() ->choferService.registro(choferRegistro)) ;
-        verify(choferRepository,never()).save(any(Chofer.class));
-    }
-
-    @Test
     void asignarVehiculo(){
         Vehiculo vehiculo = new Vehiculo();
         when(vehiculoRepository.findById(asignarChoferDTO.getIdVehiculo())).thenReturn(Optional.of(vehiculo));
@@ -189,42 +207,6 @@ class ChoferServiceImplTest {
 
         verify(choferRepository, times(1)).save(any(Chofer.class));
     }
-    @Test
-    void inhabilitarChofer_debeInhabilitarSiEstaHabilitado() {
-        chofer.setEstadoChofer(EstadoChofer.HABILITADO);
-        chofer.setVehiculo(vehiculo);
-        when(choferRepository.findByIdWithVehiculo(1)).thenReturn(Optional.of(chofer));
-
-        choferService.inhabilitar(1);
-
-        assertEquals(EstadoChofer.INHABILITADO, chofer.getEstadoChofer());
-        verify(choferRepository, times(1)).findByIdWithVehiculo(1);
-        verify(choferRepository, times(1)).save(any(Chofer.class));
-    }
-
-    @Test
-    void habilitarChofer_debeHabilitarSiEstaInhabilitado() {
-        chofer.setEstadoChofer(EstadoChofer.INHABILITADO);
-
-        when(choferRepository.findById(1)).thenReturn(Optional.of(chofer));
-
-        choferService.habilitar(1);
-
-        assertEquals(EstadoChofer.HABILITADO, chofer.getEstadoChofer());
-        verify(choferRepository, times(1)).save(any(Chofer.class));
-        verify(choferRepository, times(1)).findById(1);
-    }
-
-    @Test
-    void designarVehiculoDeChoferInhabilitado() {
-        chofer.setEstadoChofer(EstadoChofer.HABILITADO);
-        chofer.setVehiculo(vehiculo);
-        when(choferRepository.findByIdWithVehiculo(1)).thenReturn(Optional.of(chofer));
-        choferService.inhabilitar(1);
-
-        verify(vehiculoRepository,times(1)).save(any(Vehiculo.class));
-        assertNull(chofer.getVehiculo());
-    }
 
     @Test
     void obtenerTodosLosChoferes(){
@@ -241,9 +223,22 @@ class ChoferServiceImplTest {
         assertEquals(choferesMostrados.get(1).getIdChofer(),choferes.get(1).getIdChofer());
     }
 
-    public void verificarNoRegistroDeChoferInvalido(){
-        assertThrows(IllegalArgumentException.class, () -> choferService.registro(choferRegistro));
-        verify(choferRepository, never()).save(any(Chofer.class));
+    @Test
+    void obtenerVehiculo_devueveVehiculoAsociado(){
+        when(vehiculoMapper.toVehiculoResponseDTO(choferRepository.findVehiculoByChofer(chofer.getId()))).thenReturn(vehiculoResponseDTO);
+
+        VehiculoResponseDTO vehiculoDelChofer = choferService.obtenerVehiculo(chofer.getId());
+
+        assertEquals(vehiculoDelChofer.getId(),vehiculoResponseDTO.getId());
+        assertEquals(vehiculoDelChofer.getPatente(),vehiculoResponseDTO.getPatente());
+        assertEquals(vehiculoDelChofer.getAntiguedad(),vehiculoResponseDTO.getAntiguedad());
+        assertEquals(vehiculoDelChofer.getModelo(),vehiculoResponseDTO.getModelo());
+        assertEquals(vehiculoDelChofer.getFechaVencimiento(),vehiculoResponseDTO.getFechaVencimiento());
+
     }
 
+    public void verificarNoRegistroDeChoferInvalido(){
+        assertThrows(BadRequestException.class, () -> choferService.registro(choferRegistro));
+        verify(choferRepository, never()).save(any(Chofer.class));
+    }
 }

@@ -1,10 +1,10 @@
 package com.gifa_api.service.impl;
 
 import com.gifa_api.client.ITraccarCliente;
-import com.gifa_api.dto.traccar.CrearDispositivoRequestDTO;
 import com.gifa_api.dto.traccar.InconsistenciasKMconCombustiblesResponseDTO;
-import com.gifa_api.dto.traccar.ObtenerDispositivoRequestDTO;
+import com.gifa_api.dto.traccar.DispositivoResponseDTO;
 import com.gifa_api.dto.vehiculo.VehiculoResponseDTO;
+import com.gifa_api.model.Dispositivo;
 import com.gifa_api.model.Vehiculo;
 import com.gifa_api.repository.IChoferRepository;
 import com.gifa_api.repository.IDispositivoRepository;
@@ -14,8 +14,10 @@ import com.gifa_api.service.IDispositivoService;
 import com.gifa_api.service.ITraccarService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-
+import java.time.format.DateTimeFormatter;
+import java.time.LocalDate;
 import java.time.OffsetDateTime;
+import java.time.ZoneOffset;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -31,21 +33,34 @@ public class TraccarServiceImpl implements ITraccarService {
 
     private final IDispositivoRepository dispositivoRepository;
 
+
     @Override
-    public void crearDispositivo(CrearDispositivoRequestDTO crearDispositivoRequestDTO) {
-        traccarCliente.postCrearDispositivoTraccar(crearDispositivoRequestDTO);
+    public void crearDispositivo(Dispositivo dispositivo) {
+        if(!existeDispositivoEnTraccar(dispositivo.getUnicoId())) {
+            traccarCliente.postCrearDispositivoTraccar(dispositivo);
+        }
+
+    }
+    private boolean existeDispositivoEnTraccar(String uniqueId){
+        for ( DispositivoResponseDTO dispositivo : obtenerDispositivos() ){
+            if (dispositivo.getUniqueId().equals(uniqueId))
+                return true;
+        }
+        return false;
     }
 
     @Override
-    public List<ObtenerDispositivoRequestDTO> obtenerDispositivos() {
+    public List<DispositivoResponseDTO> obtenerDispositivos() {
         return traccarCliente.getDispositivos();
     }
 
     @Override
-    public List<InconsistenciasKMconCombustiblesResponseDTO> getInconsistencias(OffsetDateTime fecha) {
+    public List<InconsistenciasKMconCombustiblesResponseDTO> getInconsistencias(LocalDate fecha) {
+
         List<InconsistenciasKMconCombustiblesResponseDTO> inconsistencias = new ArrayList<>();
         for (Vehiculo vehiculo : vehiculoRepository.findAll()) {
-            int kmRecorridos = dispositivoService.calcularKmDeDispositivoDespuesDeFecha(vehiculo.getDispositivo().getUnicoId(), fecha);
+            OffsetDateTime fechaCasteadaAOffset = fecha.atStartOfDay().atOffset(ZoneOffset.UTC);
+            int kmRecorridos = dispositivoService.calcularKmDeDispositivoDespuesDeFecha(vehiculo.getDispositivo().getUnicoId(), fechaCasteadaAOffset);
             double litrosCargados = cargaCombustibleService.combustibleCargadoEn(vehiculo.getTarjeta().getNumero(), fecha);
 
             if (calculoDeCombustiblePorKilometro(kmRecorridos, litrosCargados)) {
@@ -53,6 +68,7 @@ public class TraccarServiceImpl implements ITraccarService {
                 List<String> nombreDeresponsables = choferRepository.obtenerNombreDeChofersDeVehiculo(vehiculo.getId());
                 VehiculoResponseDTO vehiculoResponseDTO = VehiculoResponseDTO
                         .builder()
+                        .id(vehiculo.getId())
                         .modelo(vehiculo.getModelo())
                         .antiguedad(vehiculo.getAntiguedad())
                         .estadoVehiculo(vehiculo.getEstadoVehiculo())
@@ -68,7 +84,7 @@ public class TraccarServiceImpl implements ITraccarService {
                         .kilometrajeRecorrido(kmRecorridos)
                         .nombresDeResponsables(nombreDeresponsables)
                         .vehiculo(vehiculoResponseDTO)
-//                        .litrosInconsistente()
+                        .litrosInconsistente(litrosCargados - kmRecorridos)
                         .build();
                 inconsistencias.add(inconsistencia);
             }
@@ -78,8 +94,10 @@ public class TraccarServiceImpl implements ITraccarService {
     }
 
     private boolean calculoDeCombustiblePorKilometro(int kilometrajeRecorrido, double combustibleCargado) {
-        int kmPorLitro = 10;
+        int kmPorLitro = 1;
         return kilometrajeRecorrido < combustibleCargado * kmPorLitro;
     }
+
+
 
 }

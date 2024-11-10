@@ -1,7 +1,7 @@
 package com.gifa_api.service.impl;
 
 import com.gifa_api.client.ITraccarCliente;
-import com.gifa_api.dto.traccar.ObtenerDispositivoRequestDTO;
+import com.gifa_api.dto.traccar.DispositivoResponseDTO;
 import com.gifa_api.dto.traccar.PosicionDispositivoDTO;
 import com.gifa_api.dto.traccar.PosicionResponseDTO;
 import com.gifa_api.model.Dispositivo;
@@ -30,8 +30,8 @@ public class PosicionServiceImpl implements IPosicionService {
     @Scheduled(fixedRate = 86400000)
     private void actualizarPosicionesDeDispositivo() {
 
-        List<ObtenerDispositivoRequestDTO> dispositivosDTO = traccarService.obtenerDispositivos();
-        for (ObtenerDispositivoRequestDTO dispositivoDTO : dispositivosDTO) {
+        List<DispositivoResponseDTO> dispositivosDTO = traccarService.obtenerDispositivos();
+        for (DispositivoResponseDTO dispositivoDTO : dispositivosDTO) {
             Dispositivo dispositivo = dispositivoService.obtenerDispositivo(dispositivoDTO.getUniqueId());
             List<PosicionDispositivoDTO> posicionesDeDispositivio = traccarCliente.getPosicionDispositivoTraccar(dispositivoDTO.getId());
             for (PosicionDispositivoDTO posicionDTO : posicionesDeDispositivio) {

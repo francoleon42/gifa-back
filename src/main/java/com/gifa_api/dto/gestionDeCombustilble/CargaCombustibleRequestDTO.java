@@ -16,7 +16,5 @@ import java.time.OffsetDateTime;
 @NoArgsConstructor
 public class CargaCombustibleRequestDTO {
      Integer cantidadLitros;
-     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
-     OffsetDateTime FechaYhora;
-     Integer numeroTarjeta;
+     Integer id;
 }
