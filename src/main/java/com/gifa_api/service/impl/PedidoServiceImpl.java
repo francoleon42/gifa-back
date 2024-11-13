@@ -30,49 +30,49 @@ public class PedidoServiceImpl implements IPedidoService {
     @Override
     public void crearPedidoManual(CrearPedidoDTO crearPedidoDTO) {
         validarCrearPedidoDTO(crearPedidoDTO);
-        ItemDeInventario item = itemDeInventarioRepository.findById(crearPedidoDTO.getIdItem())
-                .orElseThrow(() -> new NotFoundException("No se encontró el item con id: " + crearPedidoDTO.getIdItem()));
-        Pedido pedido = Pedido
-                .builder()
-                .estadoPedido(EstadoPedido.PENDIENTE)
-                .item(item)
-                .cantidad(crearPedidoDTO.getCantidad())
-                .fecha(LocalDate.now())
-                .motivo(crearPedidoDTO.getMotivo())
-                .build();
-        pedidoRepository.save(pedido);
 
-    }
-
-    private void crearPedidoAutomatico(Integer idItem, Integer cantidad, EstadoPedido estado){
-        ItemDeInventario item = itemDeInventarioRepository.findById(idItem)
-                .orElseThrow(() -> new NotFoundException("No se encontró el item con id: " + idItem));
-
-        Pedido pedido = Pedido
-                .builder()
-                .item(item)
-                .cantidad(cantidad)
-                .motivo("Solcitud de stock automatica")
-                .estadoPedido(estado)
-                .fecha(LocalDate.now())
-                .build();
-        pedidoRepository.save(pedido);
-    }
-
-    @Override
-    public void hacerPedidos(Integer idItem) {
-        ItemDeInventario item = itemDeInventarioRepository.findById(idItem)
-                .orElseThrow(() -> new NotFoundException("No se encontró el item con id: " + idItem));
+        ItemDeInventario item = obtenerItemPorId(crearPedidoDTO.getIdItem());
 
         GestorOperacional gestorOperacional = gestorOperacionalService.getGestorOperacional();
         int cantidad = item.getCantCompraAutomatica() + item.getUmbral();
-        ProveedorDeItem proveerDeItemMasEconomico = proveedorDeItemService.proveedorMasEconomico(item.getId());
+        ProveedorDeItem proveedorMasEconomico = proveedorDeItemService.proveedorMasEconomico(item.getId());
+
+        EstadoPedido estadoPedido = calcularEstadoPedido(cantidad, proveedorMasEconomico.getPrecio(), gestorOperacional.getPresupuesto());
+        crearPedido(item, crearPedidoDTO.getCantidad(), estadoPedido, crearPedidoDTO.getMotivo());
+    }
+
+    private void crearPedido(ItemDeInventario item, int cantidad, EstadoPedido estadoPedido, String motivo) {
+        Pedido pedido = Pedido.builder()
+                .estadoPedido(estadoPedido)
+                .item(item)
+                .cantidad(cantidad)
+                .fecha(LocalDate.now())
+                .motivo(motivo)
+                .build();
+        pedidoRepository.save(pedido);
+    }
+
+    private EstadoPedido calcularEstadoPedido(int cantidad, double precioProveedor, double presupuesto) {
+        return (precioProveedor * cantidad) < presupuesto ? EstadoPedido.PENDIENTE : EstadoPedido.PRESUPUESTO_INSUFICIENTE;
+    }
+
+    private ItemDeInventario obtenerItemPorId(Integer idItem) {
+        return itemDeInventarioRepository.findById(idItem)
+                .orElseThrow(() -> new NotFoundException("No se encontró el item con id: " + idItem));
+    }
+
+    @Override
+    public void hacerPedidoAutomatico(Integer idItem) {
+        ItemDeInventario item = obtenerItemPorId(idItem);
+
+        GestorOperacional gestorOperacional = gestorOperacionalService.getGestorOperacional();
+        int cantidad = item.getCantCompraAutomatica() + item.getUmbral();
+        ProveedorDeItem proveedorMasEconomico = proveedorDeItemService.proveedorMasEconomico(item.getId());
+
         if (item.getUmbral() > item.getStock()) {
-            if ((proveerDeItemMasEconomico.getPrecio() * cantidad) < gestorOperacional.getPresupuesto()) {
-                crearPedidoAutomatico(item.getId(),cantidad, EstadoPedido.PENDIENTE);
-            }else{
-                crearPedidoAutomatico(item.getId(),cantidad, EstadoPedido.PRESUPUESTO_INSUFICIENTE);
-            }
+            EstadoPedido estadoPedido = calcularEstadoPedido(cantidad, proveedorMasEconomico.getPrecio(), gestorOperacional.getPresupuesto());
+
+            crearPedido(item, cantidad, estadoPedido, "Solicitud de stock automática");
         }
     }
 

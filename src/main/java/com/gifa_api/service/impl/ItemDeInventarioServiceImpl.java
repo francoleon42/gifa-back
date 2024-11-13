@@ -51,7 +51,7 @@ public class ItemDeInventarioServiceImpl implements IItemDeIventarioService {
         }
     }
     private void revisarNecesidadDePedido(Integer idItemDeInventario){
-        pedidoService.hacerPedidos(idItemDeInventario);
+        pedidoService.hacerPedidoAutomatico(idItemDeInventario);
     }
     @Override
     public ItemDeInventario obtenerById(Integer id) {
