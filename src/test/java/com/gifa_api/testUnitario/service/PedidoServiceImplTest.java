@@ -166,11 +166,14 @@ class PedidoServiceImplTest {
     @Test
     void testCrearPedido_ItemExistente() {
         when(itemDeInventarioRepository.findById(pedidoDTO.getIdItem())).thenReturn(Optional.of(itemDeInventario));
-
+        when(proveedorDeItemService.proveedorMasEconomico(pedidoDTO.getIdItem())).thenReturn(proveedorDeItemMasEconomico);
+        when(gestorOperacionalService.getGestorOperacional()).thenReturn(gestor);
         pedidoService.crearPedidoManual(pedidoDTO);
 
         verify(itemDeInventarioRepository, times(1)).findById(pedidoDTO.getIdItem());
         verify(pedidoRepository, times(1)).save(any(Pedido.class));
+        verify(gestorOperacionalService,times(1)).getGestorOperacional();
+        verify(proveedorDeItemService,times(1)).proveedorMasEconomico(itemDeInventario.getId());
     }
 
 
@@ -184,6 +187,7 @@ class PedidoServiceImplTest {
         pedidoService.hacerPedidoAutomatico(itemDeInventario.getId());
 
         verify(pedidoRepository, times(1)).save(any(Pedido.class));
+
     }
 
     @Test
