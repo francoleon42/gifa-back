@@ -47,7 +47,7 @@ public class ProvedorServiceImpl implements IProvedorService {
         return proveedorMapper.mapToProveedorResponseDTO(iProveedorRepository.findAll());
     }
 
-    @Scheduled(fixedRate = 864)
+    @Scheduled(fixedRate = 86400000)
     public void simulacionDeAceptacionORechazoProovedor() {
         List<Pedido> pedidos = pedidoRepository.findPedidosByEstado(EstadoPedido.PENDIENTE);
         for (Pedido pedido : pedidos) {
