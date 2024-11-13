@@ -10,7 +10,7 @@ public interface IPedidoService {
 
     void crearPedidoManual(CrearPedidoDTO pedidoManualDTO);
     List<PedidoResponseDTO> obtenerPedidos();
-    void hacerPedidos(Integer idItem);
+    void hacerPedidoAutomatico(Integer idItem);
     List<PedidoResponseDTO> obtenerPedidosAceptados();
     List<PedidoResponseDTO> obtenerPedidosRechazadosYpendientesYpresupuestoInsuficiente();
     void confirmarPedidoRecibido(Integer idPedido);

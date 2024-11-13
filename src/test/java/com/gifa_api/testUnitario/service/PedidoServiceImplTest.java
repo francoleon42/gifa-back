@@ -105,10 +105,10 @@ class PedidoServiceImplTest {
     }
 
     @Test
-    void testHacerPedidos_lanzaNotFoundException() {
+    void testHacerPedidoAutomatico_lanzaNotFoundException() {
         Integer idItem = 1;
         when(itemDeInventarioRepository.findById(idItem)).thenReturn(Optional.empty());
-        assertThrows(NotFoundException.class, () -> pedidoService.hacerPedidos(1));
+        assertThrows(NotFoundException.class, () -> pedidoService.hacerPedidoAutomatico(1));
         verify(pedidoRepository,never()).save(any(Pedido.class));
     }
 
@@ -151,14 +151,14 @@ class PedidoServiceImplTest {
     }
 
     @Test
-    void testHacerPedidos_PresupuestoInvalido() {
+    void testHacerPedidoAutomatico_PresupuestoInvalido() {
         itemDeInventario.setUmbral(10);
         gestor.setPresupuesto(0.0);
         when(itemDeInventarioRepository.findById(itemDeInventario.getId())).thenReturn(Optional.of(itemDeInventario));
         when(gestorOperacionalService.getGestorOperacional()).thenReturn(gestor);
         when(proveedorDeItemService.proveedorMasEconomico(itemDeInventario.getId())).thenReturn(proveedorDeItemMasEconomico);
 
-        pedidoService.hacerPedidos(itemDeInventario.getId());
+        pedidoService.hacerPedidoAutomatico(itemDeInventario.getId());
 
         verify(pedidoRepository, times(1)).save(any(Pedido.class));
     }
@@ -166,24 +166,28 @@ class PedidoServiceImplTest {
     @Test
     void testCrearPedido_ItemExistente() {
         when(itemDeInventarioRepository.findById(pedidoDTO.getIdItem())).thenReturn(Optional.of(itemDeInventario));
-
+        when(proveedorDeItemService.proveedorMasEconomico(pedidoDTO.getIdItem())).thenReturn(proveedorDeItemMasEconomico);
+        when(gestorOperacionalService.getGestorOperacional()).thenReturn(gestor);
         pedidoService.crearPedidoManual(pedidoDTO);
 
         verify(itemDeInventarioRepository, times(1)).findById(pedidoDTO.getIdItem());
         verify(pedidoRepository, times(1)).save(any(Pedido.class));
+        verify(gestorOperacionalService,times(1)).getGestorOperacional();
+        verify(proveedorDeItemService,times(1)).proveedorMasEconomico(itemDeInventario.getId());
     }
 
 
     @Test
-    void testHacerPedidos_DatosValidos() {
+    void testHacerPedidoAutomatico_DatosValidos() {
         itemDeInventario.setUmbral(6);
         when(itemDeInventarioRepository.findById(itemDeInventario.getId())).thenReturn(Optional.of(itemDeInventario));
         when(gestorOperacionalService.getGestorOperacional()).thenReturn(gestor);
         when(proveedorDeItemService.proveedorMasEconomico(itemDeInventario.getId())).thenReturn(proveedorDeItemMasEconomico);
 
-        pedidoService.hacerPedidos(itemDeInventario.getId());
+        pedidoService.hacerPedidoAutomatico(itemDeInventario.getId());
 
         verify(pedidoRepository, times(1)).save(any(Pedido.class));
+
     }
 
     @Test
