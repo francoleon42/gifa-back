@@ -42,14 +42,13 @@ public class ItemDeInventarioServiceImpl implements IItemDeIventarioService {
     public void utilizarItem(Integer itemId, UtilizarItemDeInventarioDTO utilizarItemDeInventarioDTO) {
         ItemDeInventario itemIventario = obtenerById(itemId);
 
-        if(0 <=  itemIventario.getStock() - utilizarItemDeInventarioDTO.getCantidadADisminuir() ){
+        if(itemIventario.getStock() - utilizarItemDeInventarioDTO.getCantidadADisminuir() >= 0){
             itemIventario.desminuirStock(utilizarItemDeInventarioDTO.getCantidadADisminuir());
+            itemDeInventarioRepository.save(itemIventario);
+            revisarNecesidadDePedido(itemIventario.getId());
         }else{
-
             throw new BadRequestException("Stock insuficiente esta en cero");
         }
-        itemDeInventarioRepository.save(itemIventario);
-        revisarNecesidadDePedido(itemIventario.getId());
     }
     private void revisarNecesidadDePedido(Integer idItemDeInventario){
         pedidoService.hacerPedidos(idItemDeInventario);
