@@ -27,56 +27,7 @@ public class PosicionServiceImpl implements IPosicionService {
     private final IDispositivoService dispositivoService;
     private final PosicionMapper posicionMapper;
 
-//    @Scheduled(fixedRate = 86400)
-//    private void actualizarPosicionesDeDispositivo() {
-//
-//        List<DispositivoResponseDTO> dispositivosDTO = traccarService.obtenerDispositivos();
-//        for (DispositivoResponseDTO dispositivoDTO : dispositivosDTO) {
-//            Dispositivo dispositivo = dispositivoService.obtenerDispositivo(dispositivoDTO.getUniqueId());
-//            List<PosicionRequestDTO> posicionesDeDispositivio = traccarCliente.getPosicionDispositivoTraccar(dispositivoDTO.getId());
-//            for (PosicionRequestDTO posicionDTO : posicionesDeDispositivio) {
-//
-//                if (!estaPosicion(dispositivoDTO.getUniqueId(), posicionDTO.getServerTime()) && suficienteDiferencia(dispositivoDTO.getUniqueId(), posicionDTO.getLatitude(), posicionDTO.getLongitude())) {
-//                    Posicion posicion = Posicion
-//                            .builder()
-//                            .latitude(posicionDTO.getLatitude())
-//                            .dispositivo(dispositivo)
-//                            .longitude(posicionDTO.getLongitude())
-//                            .fechaHora(posicionDTO.getServerTime())
-//                            .build();
-//                    posicionRepository.save(posicion);
-//
-//
-//                }
-//
-//            }
-//        }
-//    }
 
-    private boolean estaPosicion(String unicoId, OffsetDateTime fecha) {
-        return posicionRepository.obtenerPosicionDeDispositivoPorFecha(unicoId, fecha).isPresent();
-    }
-
-    private boolean suficienteDiferencia(String dispositivoId, double latitude, double longitude) {
-        List<Posicion> posiciones = posicionRepository.obtenerUltimaPosicion(dispositivoId);
-        if (posiciones.isEmpty()) {
-            return true;  // Si no hay posición previa, retornamos true
-        } else {
-            Posicion ultimaPosicion = posiciones.get(0);
-            double diferenciaLatitud = Math.abs(ultimaPosicion.getLatitude() - latitude);
-            double diferenciaLongitud = Math.abs(ultimaPosicion.getLongitude() - longitude);
-
-            // Umbrales de diferencia para latitud y longitud  ( umbral 60 metros)
-            double umbralLatitud = 0.000539;
-            double umbralLongitud = 0.000648;
-
-            if (diferenciaLatitud > umbralLatitud || diferenciaLongitud > umbralLongitud) {
-                return true; // hay una diferencia significativa entre la ultima posicion y la actual
-            } else {
-                return false; // no hay una diferencia significativa
-            }
-        }
-    }
 
 
     @Override
