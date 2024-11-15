@@ -2,12 +2,10 @@ package com.gifa_api.testUnitario.service;
 
 import com.gifa_api.client.ITraccarCliente;
 
-import com.gifa_api.dto.traccar.PosicionResponseDTO;
 import com.gifa_api.model.Posicion;
 import com.gifa_api.repository.IPosicionRepository;
 import com.gifa_api.service.IDispositivoService;
 import com.gifa_api.service.ITraccarService;
-import com.gifa_api.service.impl.PosicionServiceImpl;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
