@@ -23,7 +23,6 @@ import java.util.List;
 public class DispositivoServiceImpl implements IDispositivoService {
     private final IDispositivoRepository dispositivoRepository;
     private final IVehiculoRepository vehiculoRepository;
-    private final IPosicionRepository posicionRepository;
     private final IKilometrajeVehiculoService kilometrajeVehiculoService;
     private final ITraccarService traccarService;
 
