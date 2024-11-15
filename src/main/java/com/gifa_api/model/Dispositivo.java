@@ -29,5 +29,4 @@ public class Dispositivo {
     @JoinColumn(name = "vehiculo_id")
     private Vehiculo vehiculo;
 
-
 }
