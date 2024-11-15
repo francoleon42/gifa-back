@@ -29,9 +29,9 @@ public class TraccarController {
         return new ResponseEntity<>(traccarService.obtenerDispositivos(),HttpStatus.OK);
     }
 
-    @GetMapping("/verInconsistenciasDeCombustible/{fecha}")
-    public ResponseEntity<?> verInconsistenciasDeCombustible(@PathVariable LocalDate fecha){
-        return new ResponseEntity<>(traccarService.getInconsistencias(fecha),HttpStatus.OK);
+    @GetMapping("/verInconsistenciasDeCombustible")
+    public ResponseEntity<?> verInconsistenciasDeCombustible(@RequestParam LocalDate from,  @RequestParam LocalDate to) {
+        return new ResponseEntity<>(traccarService.getInconsistencias(from, to), HttpStatus.OK);
     }
 
     @GetMapping("/getPosiciones/{unicoId}")

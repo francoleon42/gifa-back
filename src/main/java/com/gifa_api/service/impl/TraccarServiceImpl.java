@@ -29,9 +29,9 @@ public class TraccarServiceImpl implements ITraccarService {
 
     private final ITraccarCliente traccarCliente;
     private final ICargaCombustibleService cargaCombustibleService;
-//    private final IDispositivoService dispositivoService;
     private final IVehiculoRepository vehiculoRepository;
     private final IChoferRepository choferRepository;
+
 
     private final IDispositivoRepository dispositivoRepository;
 
@@ -44,10 +44,6 @@ public class TraccarServiceImpl implements ITraccarService {
 
     }
 
-    @Override
-    public Integer obtenerdeviceIdByUniqueId(String uniqueId) {
-        return traccarCliente.obtenerDispositivoByUniqueId(uniqueId).getId();
-    }
 
     private boolean existeDispositivoEnTraccar(String uniqueId){
         for ( DispositivoResponseDTO dispositivo : obtenerDispositivos() ){
@@ -66,16 +62,17 @@ public class TraccarServiceImpl implements ITraccarService {
                 .filter(dispositivo -> vehiculoRepository.findByPatente(dispositivo.getUniqueId()).isPresent())
                 .collect(Collectors.toList());
     }
-
     @Override
-    public List<InconsistenciasKMconCombustiblesResponseDTO> getInconsistencias(LocalDate fecha) {
+    public List<InconsistenciasKMconCombustiblesResponseDTO> getInconsistencias(LocalDate from,LocalDate to) {
 
         List<InconsistenciasKMconCombustiblesResponseDTO> inconsistencias = new ArrayList<>();
         for (Vehiculo vehiculo : vehiculoRepository.findAll()) {
-            OffsetDateTime fechaCasteadaAOffset = fecha.atStartOfDay().atOffset(ZoneOffset.UTC);
-//            int kmRecorridos = dspositivoService.calcularKmDeDispositivoDespuesDeFecha(vehiculo.getDispositivo().getUnicoId(), fechaCasteadaAOffset);
-            int kmRecorridos =0;
-            double litrosCargados = cargaCombustibleService.combustibleCargadoEn(vehiculo.getTarjeta().getNumero(), fecha);
+
+            OffsetDateTime fromCasteado = from.atStartOfDay().atOffset(ZoneOffset.UTC);
+            OffsetDateTime toCasteado = to.atStartOfDay().atOffset(ZoneOffset.UTC);
+
+            double kmRecorridos = calcularKmDeDispositivoEntreFechas(vehiculo.getDispositivo().getUnicoId(), fromCasteado,toCasteado);
+            double litrosCargados = cargaCombustibleService.combustibleCargadoEntreFechas(vehiculo.getTarjeta().getNumero(), from,to);
 
             if (calculoDeCombustiblePorKilometro(kmRecorridos, litrosCargados)) {
 
@@ -107,13 +104,21 @@ public class TraccarServiceImpl implements ITraccarService {
         return inconsistencias;
     }
 
+
+    private double calcularKmDeDispositivoEntreFechas(String unicoIdDeDispositivo, OffsetDateTime from,OffsetDateTime to) {
+        Integer deviceId = obtenerdeviceIdByUniqueId(unicoIdDeDispositivo);
+        return getKilometros(deviceId, from, to).getDistance();
+    }
+
+    private Integer obtenerdeviceIdByUniqueId(String uniqueId) {
+        return traccarCliente.obtenerDispositivoByUniqueId(uniqueId).getId();
+    }
     @Override
     public KilometrosResponseDTO getKilometros(Integer deviceId, OffsetDateTime from, OffsetDateTime to) {
         return traccarCliente.getKilometros(deviceId, from, to);
     }
 
-
-    private boolean calculoDeCombustiblePorKilometro(int kilometrajeRecorrido, double combustibleCargado) {
+    private boolean calculoDeCombustiblePorKilometro(double kilometrajeRecorrido, double combustibleCargado) {
         int kmPorLitro = 1;
         return kilometrajeRecorrido < combustibleCargado * kmPorLitro;
     }

@@ -14,10 +14,9 @@ public interface ITraccarService {
 //    void crearDispositivo(CrearDispositivoRequestDTO crearDispositivoRequestDTO);
 
     void crearDispositivo(Dispositivo dispositivo);
-    Integer obtenerdeviceIdByUniqueId(String uniqueId);
     List<DispositivoResponseDTO> obtenerDispositivos();
 
-    List<InconsistenciasKMconCombustiblesResponseDTO> getInconsistencias(LocalDate fecha);
+    List<InconsistenciasKMconCombustiblesResponseDTO> getInconsistencias(LocalDate from, LocalDate to );
 
     KilometrosResponseDTO getKilometros(Integer deviceId, OffsetDateTime from, OffsetDateTime to);
 }

@@ -57,11 +57,6 @@ public class DispositivoServiceImpl implements IDispositivoService {
         return dispositivo;
     }
 
-    @Override
-    public double calcularKmDeDispositivoEntreFechas(String unicoIdDeDispositivo, OffsetDateTime from,OffsetDateTime to) {
-        Integer deviceId = traccarService.obtenerdeviceIdByUniqueId(unicoIdDeDispositivo);
-        return traccarService.getKilometros(deviceId, from, to).getDistance();
-    }
 
     @Scheduled(fixedRate = 8640)
     private void actualizarKilometrajeDeVehiculos() {
