@@ -72,35 +72,7 @@ public class DispositivoServiceImpl implements IDispositivoService {
         }
     }
 
-    private int formulaDeHaversine(List<Posicion> posiciones) {
-        double distanciaTotal = 0.0;
-
-        for (int i = 1; i < posiciones.size(); i++) {
-            Posicion pos1 = posiciones.get(i - 1);
-            Posicion pos2 = posiciones.get(i);
-
-            double lat1 = Math.toRadians(pos1.getLatitude());
-            double lon1 = Math.toRadians(pos1.getLongitude());
-            double lat2 = Math.toRadians(pos2.getLatitude());
-            double lon2 = Math.toRadians(pos2.getLongitude());
-
-            double deltaLat = lat2 - lat1;
-            double deltaLon = lon2 - lon1;
-
-            // Fórmula del Haversine
-            double a = Math.sin(deltaLat / 2) * Math.sin(deltaLat / 2) +
-                    Math.cos(lat1) * Math.cos(lat2) *
-                            Math.sin(deltaLon / 2) * Math.sin(deltaLon / 2);
-            double c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
-            double distancia = 6371 * c; // Radio de la Tierra en km
-
-            distanciaTotal += distancia;
-        }
-        int kilometros = (int) distanciaTotal;
-
-        return kilometros;
-    }
-
+    
     private void validarCrearDispositivoRequestDTO(CrearDispositivoRequestDTO crearDispositivoRequestDTO) {
         if (crearDispositivoRequestDTO.getName() == null || crearDispositivoRequestDTO.getName().trim().isEmpty()) {
             throw new BadRequestException("El nombre del dispositivo no puede estar vacío.");
