@@ -1,12 +1,10 @@
 package com.gifa_api.dto.traccar;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.time.LocalDateTime;
 import java.time.OffsetDateTime;
 import java.util.List;
 import java.util.Map;
@@ -15,7 +13,7 @@ import java.util.Map;
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
-public class PosicionDispositivoDTO {
+public class PosicionRequestDTO {
     private int id;
     private int deviceId;
     private String protocol;

@@ -46,8 +46,8 @@ class PosicionServiceImplTest {
 //        Dispositivo dispositivo = new Dispositivo();
 //        when(dispositivoService.obtenerDispositivo("uniqueId")).thenReturn(dispositivo);
 //
-//        PosicionDispositivoDTO posicionDTO = new PosicionDispositivoDTO(12.34, 56.78, OffsetDateTime.now());
-//        List<PosicionDispositivoDTO> posiciones = List.of(posicionDTO);
+//        PosicionRequestDTO posicionDTO = new PosicionRequestDTO(12.34, 56.78, OffsetDateTime.now());
+//        List<PosicionRequestDTO> posiciones = List.of(posicionDTO);
 //
 //        when(traccarCliente.getPosicionDispositivoTraccar(eq(1), anyString(), anyString())).thenReturn(posiciones);
 //
@@ -67,8 +67,8 @@ class PosicionServiceImplTest {
 //        Dispositivo dispositivo = new Dispositivo();
 //        when(dispositivoService.obtenerDispositivo("uniqueId")).thenReturn(dispositivo);
 //
-//        PosicionDispositivoDTO posicionDTO = new PosicionDispositivoDTO(12.34, 56.78, OffsetDateTime.now());
-//        List<PosicionDispositivoDTO> posiciones = List.of(posicionDTO);
+//        PosicionRequestDTO posicionDTO = new PosicionRequestDTO(12.34, 56.78, OffsetDateTime.now());
+//        List<PosicionRequestDTO> posiciones = List.of(posicionDTO);
 //        when(traccarCliente.getPosicionDispositivoTraccar(1, anyString(), anyString())).thenReturn(posiciones);
 //
 //        when(posicionRepository.obtenerPosicionDeDispositivoPorFecha(anyString(), any(OffsetDateTime.class))).thenReturn(Optional.of(new Posicion()));

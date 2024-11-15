@@ -21,7 +21,7 @@ public interface ITraccarService {
     List<InconsistenciasKMconCombustiblesResponseDTO> getInconsistencias(LocalDate from, LocalDate to);
 
     KilometrosResponseDTO getKilometros(Integer deviceId, OffsetDateTime from, OffsetDateTime to);
-    List<PosicionResponseDTO> obtenerPosicionesEnVivo(String uniqueId, LocalDate from);
+    List<PosicionResponseDTO> obtenerPosicionesEnVivo(String uniqueId);
     List<PosicionResponseDTO> obtenerPosicionesEnRangoDeFechas(String uniqueId, LocalDate from,LocalDate to);
 
 }

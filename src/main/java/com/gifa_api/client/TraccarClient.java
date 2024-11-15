@@ -14,9 +14,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import java.nio.charset.StandardCharsets;
-import java.time.LocalDate;
 import java.time.OffsetDateTime;
-import java.time.ZoneOffset;
 import java.util.Arrays;
 import java.util.Base64;
 import java.util.List;
@@ -59,7 +57,7 @@ public class TraccarClient implements ITraccarCliente {
     }
 
     @Override
-    public List<PosicionDispositivoDTO> getPosicionesDispositivoTraccar(Integer deviceId, OffsetDateTime from ,OffsetDateTime to) {
+    public List<PosicionRequestDTO> getPosicionesDispositivoTraccar(Integer deviceId, OffsetDateTime from , OffsetDateTime to) {
 
         HttpHeaders headers = getHeaders();
         HttpEntity<CrearDispositivoRequestDTO> entity = new HttpEntity<>(headers);
@@ -67,15 +65,15 @@ public class TraccarClient implements ITraccarCliente {
         UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(baseUrl + "/positions");
         if (deviceId != null) {
             builder.queryParam("deviceId", deviceId);
-            builder.queryParam("from", fromCasteado);
-            builder.queryParam("to", toCasteado);
+            builder.queryParam("from", from);
+            builder.queryParam("to", to);
         }
 
-        ResponseEntity<PosicionDispositivoDTO[]> response = restTemplate.exchange(
+        ResponseEntity<PosicionRequestDTO[]> response = restTemplate.exchange(
                 builder.toUriString(),
                 HttpMethod.GET,
                 entity,
-                PosicionDispositivoDTO[].class
+                PosicionRequestDTO[].class
         );
 
         if (response.getStatusCode() == HttpStatus.OK) {

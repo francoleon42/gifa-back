@@ -2,7 +2,7 @@ package com.gifa_api.service.impl;
 
 import com.gifa_api.client.ITraccarCliente;
 import com.gifa_api.dto.traccar.DispositivoResponseDTO;
-import com.gifa_api.dto.traccar.PosicionDispositivoDTO;
+import com.gifa_api.dto.traccar.PosicionRequestDTO;
 import com.gifa_api.dto.traccar.PosicionResponseDTO;
 import com.gifa_api.model.Dispositivo;
 import com.gifa_api.model.Posicion;
@@ -27,31 +27,31 @@ public class PosicionServiceImpl implements IPosicionService {
     private final IDispositivoService dispositivoService;
     private final PosicionMapper posicionMapper;
 
-    @Scheduled(fixedRate = 86400)
-    private void actualizarPosicionesDeDispositivo() {
-
-        List<DispositivoResponseDTO> dispositivosDTO = traccarService.obtenerDispositivos();
-        for (DispositivoResponseDTO dispositivoDTO : dispositivosDTO) {
-            Dispositivo dispositivo = dispositivoService.obtenerDispositivo(dispositivoDTO.getUniqueId());
-            List<PosicionDispositivoDTO> posicionesDeDispositivio = traccarCliente.getPosicionDispositivoTraccar(dispositivoDTO.getId());
-            for (PosicionDispositivoDTO posicionDTO : posicionesDeDispositivio) {
-
-                if (!estaPosicion(dispositivoDTO.getUniqueId(), posicionDTO.getServerTime()) && suficienteDiferencia(dispositivoDTO.getUniqueId(), posicionDTO.getLatitude(), posicionDTO.getLongitude())) {
-                    Posicion posicion = Posicion
-                            .builder()
-                            .latitude(posicionDTO.getLatitude())
-                            .dispositivo(dispositivo)
-                            .longitude(posicionDTO.getLongitude())
-                            .fechaHora(posicionDTO.getServerTime())
-                            .build();
-                    posicionRepository.save(posicion);
-
-
-                }
-
-            }
-        }
-    }
+//    @Scheduled(fixedRate = 86400)
+//    private void actualizarPosicionesDeDispositivo() {
+//
+//        List<DispositivoResponseDTO> dispositivosDTO = traccarService.obtenerDispositivos();
+//        for (DispositivoResponseDTO dispositivoDTO : dispositivosDTO) {
+//            Dispositivo dispositivo = dispositivoService.obtenerDispositivo(dispositivoDTO.getUniqueId());
+//            List<PosicionRequestDTO> posicionesDeDispositivio = traccarCliente.getPosicionDispositivoTraccar(dispositivoDTO.getId());
+//            for (PosicionRequestDTO posicionDTO : posicionesDeDispositivio) {
+//
+//                if (!estaPosicion(dispositivoDTO.getUniqueId(), posicionDTO.getServerTime()) && suficienteDiferencia(dispositivoDTO.getUniqueId(), posicionDTO.getLatitude(), posicionDTO.getLongitude())) {
+//                    Posicion posicion = Posicion
+//                            .builder()
+//                            .latitude(posicionDTO.getLatitude())
+//                            .dispositivo(dispositivo)
+//                            .longitude(posicionDTO.getLongitude())
+//                            .fechaHora(posicionDTO.getServerTime())
+//                            .build();
+//                    posicionRepository.save(posicion);
+//
+//
+//                }
+//
+//            }
+//        }
+//    }
 
     private boolean estaPosicion(String unicoId, OffsetDateTime fecha) {
         return posicionRepository.obtenerPosicionDeDispositivoPorFecha(unicoId, fecha).isPresent();
