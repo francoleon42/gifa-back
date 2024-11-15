@@ -12,8 +12,6 @@ import java.util.List;
 
 public interface ITraccarService {
 
-//    void crearDispositivo(CrearDispositivoRequestDTO crearDispositivoRequestDTO);
-
     void crearDispositivo(Dispositivo dispositivo);
 
     List<DispositivoResponseDTO> obtenerDispositivos();
