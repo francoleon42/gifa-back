@@ -34,9 +34,9 @@ public class TraccarController {
         return new ResponseEntity<>(traccarService.getInconsistencias(from, to), HttpStatus.OK);
     }
 
-    @GetMapping("/getPosiciones/{unicoId}")
-    public ResponseEntity<?> getPosiciones(@PathVariable String unicoId){
-        return new ResponseEntity<>(posicionService.getPosicionesDeDispositivo(unicoId),HttpStatus.OK);
+    @GetMapping("/getPosicionesEnVivo/{unicoId}")
+    public ResponseEntity<?> getPosicionesEnVivo(@PathVariable String unicoId){
+        return new ResponseEntity<>(traccarService.obtenerPosicionesEnVivo(unicoId),HttpStatus.OK);
     }
 
 }

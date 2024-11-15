@@ -117,7 +117,7 @@ public class TraccarServiceImpl implements ITraccarService {
     public KilometrosResponseDTO getKilometros(Integer deviceId, OffsetDateTime from, OffsetDateTime to) {
         return traccarCliente.getKilometros(deviceId, from, to);
     }
-    
+
     @Override
     public List<PosicionResponseDTO> obtenerPosicionesEnVivo(String uniqueId) {
         OffsetDateTime fromActual = OffsetDateTime.now(ZoneOffset.UTC);
