@@ -4,6 +4,7 @@ import com.gifa_api.client.ITraccarCliente;
 import com.gifa_api.dto.traccar.InconsistenciasKMconCombustiblesResponseDTO;
 import com.gifa_api.dto.traccar.DispositivoResponseDTO;
 import com.gifa_api.dto.traccar.KilometrosResponseDTO;
+import com.gifa_api.dto.traccar.PosicionResponseDTO;
 import com.gifa_api.dto.vehiculo.VehiculoResponseDTO;
 import com.gifa_api.model.Dispositivo;
 import com.gifa_api.model.Vehiculo;
@@ -31,8 +32,6 @@ public class TraccarServiceImpl implements ITraccarService {
     private final ICargaCombustibleService cargaCombustibleService;
     private final IVehiculoRepository vehiculoRepository;
     private final IChoferRepository choferRepository;
-
-
     private final IDispositivoRepository dispositivoRepository;
 
 
@@ -109,12 +108,32 @@ public class TraccarServiceImpl implements ITraccarService {
         return getKilometros(deviceId, from, to).getDistance();
     }
 
-    private Integer obtenerdeviceIdByUniqueId(String uniqueId) {
-        return traccarCliente.obtenerDispositivoByUniqueId(uniqueId).getId();
-    }
     @Override
     public KilometrosResponseDTO getKilometros(Integer deviceId, OffsetDateTime from, OffsetDateTime to) {
         return traccarCliente.getKilometros(deviceId, from, to);
+    }
+
+    @Override
+    public List<PosicionResponseDTO> obtenerPosicionesEnVivo(String uniqueId, LocalDate from) {
+        OffsetDateTime fromCasteado = from.atStartOfDay().atOffset(ZoneOffset.UTC);
+        OffsetDateTime toHardcodeado = OffsetDateTime.parse("2030-12-31T23:59:59Z");
+        Integer idDevice = obtenerdeviceIdByUniqueId(uniqueId);
+        traccarCliente.getPosicionesDispositivoTraccar(idDevice,fromCasteado,toHardcodeado);
+        // convertir un posisiconDTO a response.
+        return null;
+    }
+
+    @Override
+    public List<PosicionResponseDTO> obtenerPosicionesEnRangoDeFechas(String uniqueId, LocalDate from, LocalDate to) {
+        OffsetDateTime fromCasteado = from.atStartOfDay().atOffset(ZoneOffset.UTC);
+        OffsetDateTime toCasteado = to.atStartOfDay().atOffset(ZoneOffset.UTC);
+        Integer idDevice = obtenerdeviceIdByUniqueId(uniqueId);
+        traccarCliente.getPosicionesDispositivoTraccar(idDevice,fromCasteado,toCasteado);
+        // convertir un posisiconDTO a response.
+        return null;
+    }
+    private Integer obtenerdeviceIdByUniqueId(String uniqueId) {
+        return traccarCliente.obtenerDispositivoByUniqueId(uniqueId).getId();
     }
 
     private boolean calculoDeCombustiblePorKilometro(double kilometrajeRecorrido, double combustibleCargado) {
