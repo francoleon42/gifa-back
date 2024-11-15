@@ -29,6 +29,5 @@ public class Dispositivo {
     @JoinColumn(name = "vehiculo_id")
     private Vehiculo vehiculo;
 
-    @OneToMany(mappedBy = "dispositivo", cascade = CascadeType.ALL)
-    private Set<Posicion> posiciones;
+
 }

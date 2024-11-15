@@ -2,7 +2,6 @@ package com.gifa_api.testUnitario.service;
 
 import com.gifa_api.client.ITraccarCliente;
 
-import com.gifa_api.model.Posicion;
 import com.gifa_api.repository.IPosicionRepository;
 import com.gifa_api.service.IDispositivoService;
 import com.gifa_api.service.ITraccarService;
