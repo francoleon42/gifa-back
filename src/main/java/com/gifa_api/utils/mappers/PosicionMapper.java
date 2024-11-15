@@ -26,6 +26,7 @@ public class PosicionMapper {
                 .collect(Collectors.toList());
     }
 
+
     public PosicionResponseDTO toPoscicionResponseFromPosicionRequest(PosicionRequestDTO posicionRequestDTO) {
         return PosicionResponseDTO.builder()
                 .id(posicionRequestDTO.getId())

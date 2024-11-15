@@ -16,6 +16,7 @@ import com.gifa_api.service.IDispositivoService;
 import com.gifa_api.service.ITraccarService;
 import com.gifa_api.utils.mappers.PosicionMapper;
 import lombok.RequiredArgsConstructor;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
 import java.time.format.DateTimeFormatter;
@@ -116,7 +117,7 @@ public class TraccarServiceImpl implements ITraccarService {
     public KilometrosResponseDTO getKilometros(Integer deviceId, OffsetDateTime from, OffsetDateTime to) {
         return traccarCliente.getKilometros(deviceId, from, to);
     }
-
+    
     @Override
     public List<PosicionResponseDTO> obtenerPosicionesEnVivo(String uniqueId) {
         OffsetDateTime fromActual = OffsetDateTime.now(ZoneOffset.UTC);
