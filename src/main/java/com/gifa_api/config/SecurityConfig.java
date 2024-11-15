@@ -160,7 +160,8 @@ public class SecurityConfig {
                 .requestMatchers(HttpMethod.POST, "/traccar/crearDispositivo").hasRole(ADMINISTRADOR)
                 .requestMatchers(HttpMethod.GET, "/traccar/getDispositivos").hasRole(ADMINISTRADOR)
                 .requestMatchers(HttpMethod.GET, "/traccar/verInconsistenciasDeCombustible").hasRole(ADMINISTRADOR)
-                .requestMatchers(HttpMethod.GET, "/traccar/getPosicionesEnVivo/{unicoId}").hasRole(ADMINISTRADOR);
+                .requestMatchers(HttpMethod.GET, "/traccar/getPosicionesEnVivo/{unicoId}").hasRole(ADMINISTRADOR)
+                .requestMatchers(HttpMethod.GET, "/traccar/getPosicionesEnRangoDeFechas/{unicoId}").hasRole(ADMINISTRADOR);
 
 
     }
