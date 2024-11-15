@@ -15,6 +15,7 @@ import org.springframework.web.util.UriComponentsBuilder;
 
 import java.nio.charset.StandardCharsets;
 import java.time.OffsetDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Arrays;
 import java.util.Base64;
 import java.util.List;
@@ -57,10 +58,11 @@ public class TraccarClient implements ITraccarCliente {
     }
 
     @Override
-    public List<PosicionRequestDTO> getPosicionesDispositivoTraccar(Integer deviceId, OffsetDateTime from , OffsetDateTime to) {
-
+    public List<PosicionRequestDTO> getPosicionesDispositivoTraccar(Integer deviceId, OffsetDateTime from, OffsetDateTime to) {
         HttpHeaders headers = getHeaders();
         HttpEntity<CrearDispositivoRequestDTO> entity = new HttpEntity<>(headers);
+
+        // Formatear los tiempos para que estén en ISO-8601, como "1963-11-22T18:30:00Z"
 
         UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(baseUrl + "/positions");
         if (deviceId != null) {
@@ -83,6 +85,7 @@ public class TraccarClient implements ITraccarCliente {
             throw new RuntimeException("Error al obtener las posiciones: " + response.getStatusCode());
         }
     }
+
 
 
     @Override

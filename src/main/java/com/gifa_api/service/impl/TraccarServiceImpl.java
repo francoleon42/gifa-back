@@ -19,6 +19,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
+import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.LocalDate;
 import java.time.OffsetDateTime;
@@ -120,10 +121,10 @@ public class TraccarServiceImpl implements ITraccarService {
 
     @Override
     public List<PosicionResponseDTO> obtenerPosicionesEnVivo(String uniqueId) {
-        
-        OffsetDateTime fromActual = OffsetDateTime.now(ZoneOffset.UTC);
+        OffsetDateTime fromActual = OffsetDateTime.now(ZoneOffset.UTC).minusMinutes(1);
         OffsetDateTime toHardcodeado = OffsetDateTime.parse("2030-12-31T23:59:59Z");
         Integer idDevice = obtenerdeviceIdByUniqueId(uniqueId);
+        System.out.println(traccarCliente.getPosicionesDispositivoTraccar(idDevice, fromActual, toHardcodeado));
         return posicionMapper.mapPosicionesRequestToPosicionesResponseDTO(traccarCliente.getPosicionesDispositivoTraccar(idDevice, fromActual, toHardcodeado));
     }
 
