@@ -60,10 +60,12 @@ public class DispositivoServiceImpl implements IDispositivoService {
     @Override
     public double calcularKmDeDispositivoEntreFechas(String unicoIdDeDispositivo, OffsetDateTime from,OffsetDateTime to) {
 //        DispositivoResponseDTO dispositivoResponseDTO = traccarService.
+        return 0.00;
     }
 
     @Scheduled(fixedRate = 8640)
     private void actualizarKilometrajeDeVehiculos() {
+        
         for (DispositivoResponseDTO dispositivoResponseDTO : traccarService.obtenerDispositivos()) {
 
             OffsetDateTime from = OffsetDateTime.parse("1970-01-01T00:00:00Z");

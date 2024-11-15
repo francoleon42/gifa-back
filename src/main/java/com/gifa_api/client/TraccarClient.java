@@ -26,9 +26,9 @@ public class TraccarClient implements ITraccarCliente {
 
     private final RestTemplate restTemplate;
 
-    private  String username = System.getenv("TRACCAR_USERNAME");
+    private String username = System.getenv("TRACCAR_USERNAME");
 
-    private  String password = System.getenv("TRACCAR_PASSWORD");
+    private String password = System.getenv("TRACCAR_PASSWORD");
 
     private String baseUrl = System.getenv("TRACCAR_BASE_URL");
 
@@ -82,7 +82,6 @@ public class TraccarClient implements ITraccarCliente {
     }
 
 
-
     @Override
     public List<DispositivoResponseDTO> getDispositivos() {
         HttpHeaders headers = getHeaders();
@@ -109,11 +108,8 @@ public class TraccarClient implements ITraccarCliente {
     public DispositivoResponseDTO obtenerDispositivoByUniqueId(String uniqueId) {
         HttpHeaders headers = getHeaders();
         HttpEntity<Void> entity = new HttpEntity<>(headers);
-        UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(baseUrl + "/devices");
-
-        if (deviceId != null) {
-            builder.queryParam("id", deviceId);
-        }
+        UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(baseUrl + "/devices")
+                .queryParam("uniqueId", uniqueId);  // Cambiar el parámetro a uniqueId
 
         ResponseEntity<DispositivoResponseDTO[]> response = restTemplate.exchange(
                 builder.toUriString(),
@@ -124,14 +120,16 @@ public class TraccarClient implements ITraccarCliente {
 
         if (response.getStatusCode() == HttpStatus.OK && response.getBody() != null) {
             DispositivoResponseDTO[] dispositivos = response.getBody();
-            return Arrays.stream(dispositivos)
-                    .filter(dispositivo -> dispositivo.getId().equals(deviceId)) // Comparar los IDs
-                    .findFirst()
-                    .orElseThrow(() -> new RuntimeException("No se encontró el dispositivo con ID: " + deviceId));
+            if (dispositivos.length > 0) {
+                return dispositivos[0];  // Retornar el primer dispositivo encontrado con el uniqueId
+            } else {
+                throw new RuntimeException("No se encontró el dispositivo con uniqueId: " + uniqueId);
+            }
         } else {
             throw new RuntimeException("Error al obtener los dispositivos: " + response.getStatusCode());
         }
     }
+
 
     @Override
     public KilometrosResponseDTO getKilometros(Integer deviceId, OffsetDateTime from, OffsetDateTime to) {
@@ -155,7 +153,8 @@ public class TraccarClient implements ITraccarCliente {
                 builder.toUriString(),
                 HttpMethod.GET,
                 entity,
-                new ParameterizedTypeReference<List<KilometrosResponseDTO>>() {}
+                new ParameterizedTypeReference<List<KilometrosResponseDTO>>() {
+                }
         );
 
         // Verificar el estado de la respuesta y retornar el primer objeto si existe
