@@ -3,6 +3,7 @@ package com.gifa_api.client;
 import com.gifa_api.dto.traccar.*;
 import com.gifa_api.model.Dispositivo;
 import lombok.RequiredArgsConstructor;
+import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
@@ -140,28 +141,30 @@ public class TraccarClient implements ITraccarCliente {
 
         // Construir la URL con parámetros de consulta
         UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(baseUrl + "/reports/summary")
-                .queryParam("from", from) // Agregar parámetro "from"
-                .queryParam("to", to); // Agregar parámetro "to"
+                .queryParam("from", from)
+                .queryParam("to", to);
 
         if (deviceId != null) {
-            builder.queryParam("deviceId", deviceId); // Agregar el ID del dispositivo como parámetro
+            builder.queryParam("deviceId", deviceId);
         } else {
             throw new IllegalArgumentException("Se debe proporcionar un deviceId.");
         }
 
-        // Realizar la solicitud HTTP con RestTemplate
-        ResponseEntity<KilometrosResponseDTO> response = restTemplate.exchange(
+        // Realizar la solicitud HTTP con RestTemplate, esperando una lista en la respuesta
+        ResponseEntity<List<KilometrosResponseDTO>> response = restTemplate.exchange(
                 builder.toUriString(),
                 HttpMethod.GET,
                 entity,
-                KilometrosResponseDTO.class // Esperar un único objeto en la respuesta
+                new ParameterizedTypeReference<List<KilometrosResponseDTO>>() {}
         );
 
-        // Verificar el estado de la respuesta y retornar el objeto
-        if (response.getStatusCode() == HttpStatus.OK && response.getBody() != null) {
-            return response.getBody();
+        // Verificar el estado de la respuesta y retornar el primer objeto si existe
+        if (response.getStatusCode() == HttpStatus.OK && response.getBody() != null && !response.getBody().isEmpty()) {
+            return response.getBody().get(0); // Retornar el primer elemento de la lista
+        } else if (response.getBody() == null || response.getBody().isEmpty()) {
+            throw new RuntimeException("El Dispositivo todavia no se movio su id es : " + deviceId);
         } else {
-            throw new RuntimeException("Error al obtener los kilometros del dispositivo con ID: " + deviceId + ". Código de respuesta: " + response.getStatusCode());
+            throw new RuntimeException("Error al obtener los kilómetros del dispositivo con ID: " + deviceId + ". Código de respuesta: " + response.getStatusCode());
         }
     }
 

@@ -113,7 +113,7 @@ public class DispositivoRepositoryTest {
 
         dispositivoRepository.save(dispositivo);
 
-        Optional<Vehiculo> vehiculoEncontrado = dispositivoRepository.findVehiculosDeDispositivo("1");
+        Optional<Vehiculo> vehiculoEncontrado = dispositivoRepository.findVehiculoDeDispositivo("1");
 
         assertTrue(vehiculoEncontrado.isPresent());
         assertEquals(vehiculoGuardado.getPatente(), vehiculoEncontrado.get().getPatente());

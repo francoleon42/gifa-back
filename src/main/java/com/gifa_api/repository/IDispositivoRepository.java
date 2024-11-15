@@ -13,7 +13,7 @@ public interface IDispositivoRepository extends JpaRepository<Dispositivo, Integ
     public Optional<Dispositivo> findByUnicoId(@Param("id") String id);
 
     @Query("select d.vehiculo from Dispositivo d where d.unicoId=:unicoId")
-    public Optional<Vehiculo> findVehiculosDeDispositivo(@Param("unicoId") String unicoId);
+    public Optional<Vehiculo> findVehiculoDeDispositivo(@Param("unicoId") String unicoId);
 
 
     boolean existsByUnicoId(String unicoId);

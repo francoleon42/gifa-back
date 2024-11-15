@@ -20,7 +20,7 @@ public class KilometrajeVehiculo {
     private Integer id;
 
     @Column(name = "kilometros_recorridos")
-    private Integer kilometrosRecorridos;
+    private double kilometrosRecorridos;
 
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
     @Column(name = "fecha_inicio")

@@ -21,6 +21,7 @@ import java.time.OffsetDateTime;
 import java.time.ZoneOffset;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -28,7 +29,7 @@ public class TraccarServiceImpl implements ITraccarService {
 
     private final ITraccarCliente traccarCliente;
     private final ICargaCombustibleService cargaCombustibleService;
-    private final IDispositivoService dispositivoService;
+//    private final IDispositivoService dispositivoService;
     private final IVehiculoRepository vehiculoRepository;
     private final IChoferRepository choferRepository;
 
@@ -52,7 +53,12 @@ public class TraccarServiceImpl implements ITraccarService {
 
     @Override
     public List<DispositivoResponseDTO> obtenerDispositivos() {
-        return traccarCliente.getDispositivos();
+        List<DispositivoResponseDTO> todosLosDispositivos = traccarCliente.getDispositivos();
+
+        // Filtrar dispositivos que estén en el repositorio de vehículos
+        return todosLosDispositivos.stream()
+                .filter(dispositivo -> vehiculoRepository.findByPatente(dispositivo.getUniqueId()).isPresent())
+                .collect(Collectors.toList());
     }
 
     @Override
@@ -61,7 +67,8 @@ public class TraccarServiceImpl implements ITraccarService {
         List<InconsistenciasKMconCombustiblesResponseDTO> inconsistencias = new ArrayList<>();
         for (Vehiculo vehiculo : vehiculoRepository.findAll()) {
             OffsetDateTime fechaCasteadaAOffset = fecha.atStartOfDay().atOffset(ZoneOffset.UTC);
-            int kmRecorridos = dispositivoService.calcularKmDeDispositivoDespuesDeFecha(vehiculo.getDispositivo().getUnicoId(), fechaCasteadaAOffset);
+//            int kmRecorridos = dspositivoService.calcularKmDeDispositivoDespuesDeFecha(vehiculo.getDispositivo().getUnicoId(), fechaCasteadaAOffset);
+            int kmRecorridos =0;
             double litrosCargados = cargaCombustibleService.combustibleCargadoEn(vehiculo.getTarjeta().getNumero(), fecha);
 
             if (calculoDeCombustiblePorKilometro(kmRecorridos, litrosCargados)) {

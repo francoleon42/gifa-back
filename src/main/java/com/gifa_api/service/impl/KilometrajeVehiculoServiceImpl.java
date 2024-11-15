@@ -18,7 +18,7 @@ public class KilometrajeVehiculoServiceImpl implements IKilometrajeVehiculoServi
     private final IVehiculoRepository vehiculoRepository;
 
     @Override
-    public void addKilometrajeVehiculo(Integer kilometraje, OffsetDateTime fecha, Integer idVehiculo) {
+    public void addKilometrajeVehiculo(double kilometraje, OffsetDateTime fecha, Integer idVehiculo) {
         Vehiculo vehiculo = vehiculoRepository.findById(idVehiculo)
                 .orElseThrow(() -> new NotFoundException("No se encontró el vehiculo para KilometrajeVehiculo " + idVehiculo));
         KilometrajeVehiculo kilometrajeVehiculo = KilometrajeVehiculo

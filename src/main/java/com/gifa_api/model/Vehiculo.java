@@ -32,7 +32,7 @@ public class Vehiculo {
     private Integer antiguedad;
 
     @Column(name = "kilometraje")
-    private Integer kilometraje;
+    private double kilometraje;
 
     @Column(name = "modelo", length = 50)
     private String modelo;
@@ -85,7 +85,7 @@ public class Vehiculo {
                     .collect(Collectors.toSet());
         }
     }
-    public void actualizarKilometraje(Integer kilometraje){
+    public void actualizarKilometraje(double kilometraje){
         this.kilometraje = kilometraje;
     }
     public void addDispositivo(Dispositivo dispositivo){
