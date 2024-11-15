@@ -62,6 +62,7 @@ public class DispositivoServiceImpl implements IDispositivoService {
 
     @Scheduled(fixedRate = 86400)
     private void actualizarKilometrajeDeVehiculos() {
+
         for (Dispositivo dispositivo : dispositivoRepository.findAll()) {
             List<Posicion> posisicionesDeVehiculo = posicionRepository.findByUnicoId(dispositivo.getUnicoId());
             int kilometrajeRecorridoActual = formulaDeHaversine(posisicionesDeVehiculo);

@@ -93,6 +93,8 @@ public class TraccarServiceImpl implements ITraccarService {
         return inconsistencias;
     }
 
+    
+
     private boolean calculoDeCombustiblePorKilometro(int kilometrajeRecorrido, double combustibleCargado) {
         int kmPorLitro = 1;
         return kilometrajeRecorrido < combustibleCargado * kmPorLitro;

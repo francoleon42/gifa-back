@@ -133,9 +133,38 @@ public class TraccarClient implements ITraccarCliente {
     }
 
     @Override
-    public KilometrosResponseDTO getKilometros(Integer deviceId,OffsetDateTime from, OffsetDateTime to) {
-        return null;
+    public KilometrosResponseDTO getKilometros(Integer deviceId, OffsetDateTime from, OffsetDateTime to) {
+        // Crear encabezados HTTP necesarios para la solicitud
+        HttpHeaders headers = getHeaders();
+        HttpEntity<Void> entity = new HttpEntity<>(headers);
+
+        // Construir la URL con parámetros de consulta
+        UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(baseUrl + "/reports/summary")
+                .queryParam("from", from) // Agregar parámetro "from"
+                .queryParam("to", to); // Agregar parámetro "to"
+
+        if (deviceId != null) {
+            builder.queryParam("deviceId", deviceId); // Agregar el ID del dispositivo como parámetro
+        } else {
+            throw new IllegalArgumentException("Se debe proporcionar un deviceId.");
+        }
+
+        // Realizar la solicitud HTTP con RestTemplate
+        ResponseEntity<KilometrosResponseDTO> response = restTemplate.exchange(
+                builder.toUriString(),
+                HttpMethod.GET,
+                entity,
+                KilometrosResponseDTO.class // Esperar un único objeto en la respuesta
+        );
+
+        // Verificar el estado de la respuesta y retornar el objeto
+        if (response.getStatusCode() == HttpStatus.OK && response.getBody() != null) {
+            return response.getBody();
+        } else {
+            throw new RuntimeException("Error al obtener los kilometros del dispositivo con ID: " + deviceId + ". Código de respuesta: " + response.getStatusCode());
+        }
     }
+
 
 
     private String getBasicAuthHeader() {
