@@ -15,7 +15,6 @@ import java.time.LocalDate;
 public class TraccarController {
     private final ITraccarService traccarService;
     private  final IDispositivoService dispositivoService;
-    private  final IPosicionService posicionService;
 
 
     @GetMapping("/getDispositivos")

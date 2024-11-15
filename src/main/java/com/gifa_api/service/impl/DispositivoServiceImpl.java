@@ -72,7 +72,6 @@ public class DispositivoServiceImpl implements IDispositivoService {
         }
     }
 
-    
     private void validarCrearDispositivoRequestDTO(CrearDispositivoRequestDTO crearDispositivoRequestDTO) {
         if (crearDispositivoRequestDTO.getName() == null || crearDispositivoRequestDTO.getName().trim().isEmpty()) {
             throw new BadRequestException("El nombre del dispositivo no puede estar vacío.");
