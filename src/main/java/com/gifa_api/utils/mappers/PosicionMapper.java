@@ -11,7 +11,6 @@ import java.util.stream.Collectors;
 public class PosicionMapper {
 
 
-
     public PosicionResponseDTO toPoscicionResponseFromPosicionRequest(PosicionRequestDTO posicionRequestDTO) {
         return PosicionResponseDTO.builder()
                 .id(posicionRequestDTO.getId())
