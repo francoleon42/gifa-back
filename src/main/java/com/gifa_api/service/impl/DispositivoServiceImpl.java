@@ -7,7 +7,6 @@ import com.gifa_api.exception.NotFoundException;
 import com.gifa_api.model.Dispositivo;
 import com.gifa_api.model.Vehiculo;
 import com.gifa_api.repository.IDispositivoRepository;
-import com.gifa_api.repository.IPosicionRepository;
 import com.gifa_api.repository.IVehiculoRepository;
 import com.gifa_api.service.IDispositivoService;
 import com.gifa_api.service.IKilometrajeVehiculoService;
