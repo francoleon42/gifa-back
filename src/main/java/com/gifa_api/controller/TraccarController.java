@@ -39,4 +39,9 @@ public class TraccarController {
         return new ResponseEntity<>(traccarService.obtenerPosicionesEnVivo(unicoId),HttpStatus.OK);
     }
 
+    @GetMapping("/getPosicionesEnRangoDeFechas/{unicoId}")
+    public ResponseEntity<?> obtenerPosicionesEnRangoDeFechas(@PathVariable String unicoId, @RequestParam LocalDate from,  @RequestParam LocalDate to){
+        return new ResponseEntity<>(traccarService.obtenerPosicionesEnRangoDeFechas(unicoId,from,to),HttpStatus.OK);
+    }
+
 }
