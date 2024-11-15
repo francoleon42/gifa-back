@@ -70,7 +70,6 @@ public class TraccarServiceImpl implements ITraccarService {
 
             OffsetDateTime fromCasteado = from.atStartOfDay().atOffset(ZoneOffset.UTC);
             OffsetDateTime toCasteado = to.atStartOfDay().atOffset(ZoneOffset.UTC);
-
             double kmRecorridos = calcularKmDeDispositivoEntreFechas(vehiculo.getDispositivo().getUnicoId(), fromCasteado,toCasteado);
             double litrosCargados = cargaCombustibleService.combustibleCargadoEntreFechas(vehiculo.getTarjeta().getNumero(), from,to);
 

@@ -16,12 +16,13 @@ public interface ICargaCombustibleRepository extends JpaRepository<CargaCombusti
 //    @Query("SELECT c FROM CargaCombustible c WHERE c.tarjeta.numero = :numeroTarjeta AND c.fechaHora > :fecha")
 //    public List<CargaCombustible> findByNumeroTarjetaAndFechaAfter(@Param("numeroTarjeta") Integer numeroTarjeta, @Param("fecha") LocalDate fecha);
 
-    @Query("SELECT c FROM CargaCombustible c WHERE c.tarjeta.numero = :numeroTarjeta AND c.fechaHora BETWEEN :from AND :to")
+    @Query("SELECT c FROM CargaCombustible c WHERE c.tarjeta.numero = :numeroTarjeta AND c.fechaHora > :fechaInicio AND c.fechaHora < :fechaFin")
     public List<CargaCombustible> findByNumeroTarjetaAndFechaBetween(
             @Param("numeroTarjeta") Integer numeroTarjeta,
-            @Param("from") LocalDate from,
-            @Param("to") LocalDate to
+            @Param("fechaInicio") LocalDate fechaInicio,
+            @Param("fechaFin") LocalDate fechaFin
     );
+
 
 
 }

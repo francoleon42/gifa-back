@@ -126,7 +126,6 @@ public class CargaCombustibleServiceImpl implements ICargaCombustibleService {
     public double combustibleCargadoEntreFechas(Integer numeroTarjeta, LocalDate from ,LocalDate to) {
         int cargaTotal = 0;
         List<CargaCombustible> cargasCombustible = cargaCombustibleRepository.findByNumeroTarjetaAndFechaBetween(numeroTarjeta, from,to);
-
         for (CargaCombustible carga : cargasCombustible) {
             cargaTotal += carga.getCantidadLitros();
         }
