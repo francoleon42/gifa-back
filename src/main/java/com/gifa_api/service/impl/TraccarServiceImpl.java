@@ -120,6 +120,7 @@ public class TraccarServiceImpl implements ITraccarService {
 
     @Override
     public List<PosicionResponseDTO> obtenerPosicionesEnVivo(String uniqueId) {
+        
         OffsetDateTime fromActual = OffsetDateTime.now(ZoneOffset.UTC);
         OffsetDateTime toHardcodeado = OffsetDateTime.parse("2030-12-31T23:59:59Z");
         Integer idDevice = obtenerdeviceIdByUniqueId(uniqueId);
