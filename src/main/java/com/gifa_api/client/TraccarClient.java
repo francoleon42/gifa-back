@@ -82,6 +82,8 @@ public class TraccarClient implements ITraccarCliente {
         }
     }
 
+
+
     @Override
     public List<DispositivoResponseDTO> getDispositivos() {
         HttpHeaders headers = getHeaders();

@@ -12,4 +12,5 @@ public interface ITraccarCliente {
     List<PosicionDispositivoDTO> getPosicionDispositivoTraccar(Integer deviceId);
     List<DispositivoResponseDTO> getDispositivos();
     DispositivoResponseDTO getDispositivo(Integer id);
+
 }
