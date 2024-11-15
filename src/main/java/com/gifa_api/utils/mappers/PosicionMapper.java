@@ -3,7 +3,6 @@ package com.gifa_api.utils.mappers;
 
 import com.gifa_api.dto.traccar.PosicionRequestDTO;
 import com.gifa_api.dto.traccar.PosicionResponseDTO;
-import com.gifa_api.model.Posicion;
 import org.springframework.stereotype.Component;
 import java.util.List;
 import java.util.stream.Collectors;
