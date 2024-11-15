@@ -162,12 +162,15 @@ public class TraccarClient implements ITraccarCliente {
         if (response.getStatusCode() == HttpStatus.OK && response.getBody() != null && !response.getBody().isEmpty()) {
             return response.getBody().get(0); // Retornar el primer elemento de la lista
         } else if (response.getBody() == null || response.getBody().isEmpty()) {
-            throw new RuntimeException("El Dispositivo todavia no se movio su id es : " + deviceId);
+            KilometrosResponseDTO kilometrosVacios = KilometrosResponseDTO
+                    .builder()
+                    .distance(0)
+                    .build();
+            return kilometrosVacios;
         } else {
             throw new RuntimeException("Error al obtener los kilómetros del dispositivo con ID: " + deviceId + ". Código de respuesta: " + response.getStatusCode());
         }
     }
-
 
 
     private String getBasicAuthHeader() {

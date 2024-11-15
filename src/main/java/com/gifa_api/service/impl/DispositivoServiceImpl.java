@@ -67,22 +67,20 @@ public class DispositivoServiceImpl implements IDispositivoService {
 
     @Scheduled(fixedRate = 8640)
     private void actualizarKilometrajeDeVehiculos() {
-        for(DispositivoResponseDTO dispositivoResponseDTO : traccarService.obtenerDispositivos()){
-//                if(validarSiVehiculoSeMovio(dispositivoResponseDTO.getId()))
-                OffsetDateTime from = OffsetDateTime.parse("1970-01-01T00:00:00Z");
-                OffsetDateTime to = OffsetDateTime.parse("2100-01-01T00:00:00Z");
-                Integer metrosActual = traccarService.getKilometros(dispositivoResponseDTO.getId(),from,to).getDistance();
-                Vehiculo vehiculo = dispositivoRepository.findVehiculoDeDispositivo(dispositivoResponseDTO.getUniqueId())
-                        .orElseThrow(() -> new NotFoundException("No se encontró el vehiculo con id: " + dispositivoResponseDTO.getUniqueId()));
+        for (DispositivoResponseDTO dispositivoResponseDTO : traccarService.obtenerDispositivos()) {
+
+            OffsetDateTime from = OffsetDateTime.parse("1970-01-01T00:00:00Z");
+            OffsetDateTime to = OffsetDateTime.parse("2100-01-01T00:00:00Z");
+            Integer metrosActual = traccarService.getKilometros(dispositivoResponseDTO.getId(), from, to).getDistance();
+            Vehiculo vehiculo = dispositivoRepository.findVehiculoDeDispositivo(dispositivoResponseDTO.getUniqueId())
+                    .orElseThrow(() -> new NotFoundException("No se encontró el vehiculo con id: " + dispositivoResponseDTO.getUniqueId()));
 
             double kmActual = metrosActual / 1000.0;
             double kilometrosAgregados = kmActual - vehiculo.getKilometraje();
-                if( kilometrosAgregados  > 0 ) {
-                    kilometrajeVehiculoService.addKilometrajeVehiculo(kilometrosAgregados,OffsetDateTime.now(),vehiculo.getId());
-                    vehiculo.actualizarKilometraje(kmActual);
-                    vehiculoRepository.save(vehiculo);
-                }
 
+            kilometrajeVehiculoService.addKilometrajeVehiculo(kilometrosAgregados, OffsetDateTime.now(), vehiculo.getId());
+            vehiculo.actualizarKilometraje(kmActual);
+            vehiculoRepository.save(vehiculo);
 
 
         }
@@ -117,7 +115,7 @@ public class DispositivoServiceImpl implements IDispositivoService {
         return kilometros;
     }
 
-    private void validarCrearDispositivoRequestDTO(CrearDispositivoRequestDTO crearDispositivoRequestDTO){
+    private void validarCrearDispositivoRequestDTO(CrearDispositivoRequestDTO crearDispositivoRequestDTO) {
         if (crearDispositivoRequestDTO.getName() == null || crearDispositivoRequestDTO.getName().trim().isEmpty()) {
             throw new BadRequestException("El nombre del dispositivo no puede estar vacío.");
         }
