@@ -1,9 +1,6 @@
 package com.gifa_api.client;
 
-import com.gifa_api.dto.traccar.CrearDispositivoRequestDTO;
-import com.gifa_api.dto.traccar.CrearDispositivoResponseDTO;
-import com.gifa_api.dto.traccar.DispositivoResponseDTO;
-import com.gifa_api.dto.traccar.PosicionDispositivoDTO;
+import com.gifa_api.dto.traccar.*;
 import com.gifa_api.model.Dispositivo;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpEntity;
@@ -16,6 +13,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import java.nio.charset.StandardCharsets;
+import java.time.OffsetDateTime;
 import java.util.Arrays;
 import java.util.Base64;
 import java.util.List;
@@ -132,6 +130,11 @@ public class TraccarClient implements ITraccarCliente {
         } else {
             throw new RuntimeException("Error al obtener los dispositivos: " + response.getStatusCode());
         }
+    }
+
+    @Override
+    public KilometrosResponseDTO getKilometros(OffsetDateTime from, OffsetDateTime to) {
+        return null;
     }
 
 
