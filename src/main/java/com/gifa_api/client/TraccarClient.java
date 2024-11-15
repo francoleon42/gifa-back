@@ -106,7 +106,7 @@ public class TraccarClient implements ITraccarCliente {
     }
 
     @Override
-    public DispositivoResponseDTO getDispositivo(Integer deviceId) {
+    public DispositivoResponseDTO obtenerDispositivoByUniqueId(String uniqueId) {
         HttpHeaders headers = getHeaders();
         HttpEntity<Void> entity = new HttpEntity<>(headers);
         UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(baseUrl + "/devices");

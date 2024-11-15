@@ -58,11 +58,8 @@ public class DispositivoServiceImpl implements IDispositivoService {
     }
 
     @Override
-    public int calcularKmDeDispositivoDespuesDeFecha(String unicoIdDeDispositivo, OffsetDateTime fecha) {
-
-        List<Posicion> posiciones = posicionRepository.findByUnicoIdAndDespuesFecha(unicoIdDeDispositivo, fecha);
-        int kmDeDispositivoDespuesDeFecha = formulaDeHaversine(posiciones);
-        return kmDeDispositivoDespuesDeFecha;
+    public double calcularKmDeDispositivoEntreFechas(String unicoIdDeDispositivo, OffsetDateTime from,OffsetDateTime to) {
+//        DispositivoResponseDTO dispositivoResponseDTO = traccarService.
     }
 
     @Scheduled(fixedRate = 8640)

@@ -10,6 +10,6 @@ public interface IDispositivoService {
     void crearDispositivo(CrearDispositivoRequestDTO crearDispositivoRequestDTO,Integer idVehiculo);
     Dispositivo obtenerDispositivo(String unicoId);
 //    void actualizarKilometrajeDeVehiculos();
-    int calcularKmDeDispositivoDespuesDeFecha(String unicoId, OffsetDateTime fecha );
+double calcularKmDeDispositivoEntreFechas(String unicoId, OffsetDateTime from,OffsetDateTime to );
 
 }

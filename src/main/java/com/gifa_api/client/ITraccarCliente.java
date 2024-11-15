@@ -13,7 +13,7 @@ public interface ITraccarCliente {
     public CrearDispositivoResponseDTO postCrearDispositivoTraccar(Dispositivo  dispositivo) ;
     List<PosicionDispositivoDTO> getPosicionDispositivoTraccar(Integer deviceId);
     List<DispositivoResponseDTO> getDispositivos();
-    DispositivoResponseDTO getDispositivo(Integer id);
+    DispositivoResponseDTO obtenerDispositivoByUniqueId(String uniqueId);
     KilometrosResponseDTO getKilometros(Integer deviceId,OffsetDateTime from, OffsetDateTime to);
 
 }

@@ -43,6 +43,12 @@ public class TraccarServiceImpl implements ITraccarService {
         }
 
     }
+
+    @Override
+    public Integer obtenerdeviceIdByUniqueId(String uniqueId) {
+        return traccarCliente.obtenerDispositivoByUniqueId(uniqueId).getId();
+    }
+
     private boolean existeDispositivoEnTraccar(String uniqueId){
         for ( DispositivoResponseDTO dispositivo : obtenerDispositivos() ){
             if (dispositivo.getUniqueId().equals(uniqueId))
