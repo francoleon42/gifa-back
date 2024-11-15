@@ -3,6 +3,7 @@ package com.gifa_api.service.impl;
 import com.gifa_api.client.ITraccarCliente;
 import com.gifa_api.dto.traccar.InconsistenciasKMconCombustiblesResponseDTO;
 import com.gifa_api.dto.traccar.DispositivoResponseDTO;
+import com.gifa_api.dto.traccar.KilometrosResponseDTO;
 import com.gifa_api.dto.vehiculo.VehiculoResponseDTO;
 import com.gifa_api.model.Dispositivo;
 import com.gifa_api.model.Vehiculo;
@@ -93,7 +94,11 @@ public class TraccarServiceImpl implements ITraccarService {
         return inconsistencias;
     }
 
-    
+    @Override
+    public KilometrosResponseDTO getKilometros(Integer deviceId, OffsetDateTime from, OffsetDateTime to) {
+        return traccarCliente.getKilometros(deviceId, from, to);
+    }
+
 
     private boolean calculoDeCombustiblePorKilometro(int kilometrajeRecorrido, double combustibleCargado) {
         int kmPorLitro = 1;
