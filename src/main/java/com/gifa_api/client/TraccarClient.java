@@ -133,7 +133,7 @@ public class TraccarClient implements ITraccarCliente {
     }
 
     @Override
-    public KilometrosResponseDTO getKilometros(OffsetDateTime from, OffsetDateTime to) {
+    public KilometrosResponseDTO getKilometros(Integer deviceId,OffsetDateTime from, OffsetDateTime to) {
         return null;
     }
 

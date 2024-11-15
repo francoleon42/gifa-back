@@ -14,6 +14,6 @@ public interface ITraccarCliente {
     List<PosicionDispositivoDTO> getPosicionDispositivoTraccar(Integer deviceId);
     List<DispositivoResponseDTO> getDispositivos();
     DispositivoResponseDTO getDispositivo(Integer id);
-    KilometrosResponseDTO getKilometros(OffsetDateTime from, OffsetDateTime to);
+    KilometrosResponseDTO getKilometros(Integer deviceId,OffsetDateTime from, OffsetDateTime to);
 
 }
