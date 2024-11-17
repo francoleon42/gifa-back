@@ -69,10 +69,12 @@ public class TraccarServiceImplTest {
                 .tarjeta(tarjeta)
                 .dispositivo(dispositivo)
                 .build();
+
         vehiculos = List.of(vehiculo1);
 
 
     }
+
     @Test
     void crearDispositivo(){
         Dispositivo dispositivo = new Dispositivo();
@@ -114,39 +116,28 @@ public class TraccarServiceImplTest {
    //hacer los que faltan
 
 //    @Test
-//    void getInconsistencias_noDevuelveNada(){
-//        LocalDate fecha = LocalDate.now();
-//        OffsetDateTime fechaCasteadaAOffset = fecha.atStartOfDay().atOffset(ZoneOffset.UTC);
+//    void testGetInconsistencias_ConInconsistencias() {
 //        when(vehiculoRepository.findAll()).thenReturn(vehiculos);
-//        when(dispositivoService.calcularKmDeDispositivoDespuesDeFecha(vehiculos.get(0).getDispositivo().getUnicoId(),fechaCasteadaAOffset))
-//                .thenReturn(11);
-//        when(cargaCombustibleService.combustibleCargadoEn(vehiculos.get(0).getTarjeta().getNumero(),LocalDate.now()))
-//                .thenReturn(10.0);
+//        when(cargaCombustibleService.combustibleCargadoEntreFechas(any(), any(), any())).thenReturn(50.0);
+//        when(traccarCliente.getKilometros(anyInt(), any(), any())).thenReturn(new KilometrosResponseDTO(30));
+//        when(choferRepository.obtenerNombreDeChofersDeVehiculo(1)).thenReturn(List.of("Chofer 1"));
 //
-//        List<InconsistenciasKMconCombustiblesResponseDTO> inconsistencias = serviceTraccar.getInconsistencias(fecha);
+//        List<InconsistenciasKMconCombustiblesResponseDTO> inconsistencias = traccarService.getInconsistencias(LocalDate.now(), LocalDate.now());
 //
-//        assertEquals(inconsistencias.size(),0);
-//
+//        assertEquals(1, inconsistencias.size());
+//        assertEquals(20.0, inconsistencias.get(0).getLitrosInconsistente());
 //    }
+//
 //    @Test
-//    void getInconsistencias_devueleInconsistencias(){
-//        LocalDate fecha = LocalDate.now();
-//        OffsetDateTime fechaCasteadaAOffset = fecha.atStartOfDay().atOffset(ZoneOffset.UTC);
-//        List<String> nombresChoferesInconsistencias =  List.of("mono1","mono2");
+//    void testObtenerPosicionesEnVivo() {
+//        PosicionResponseDTO posicion = new PosicionResponseDTO();
+//        when(traccarCliente.getPosicionesDispositivoTraccar(anyInt(), any(), any())).thenReturn(List.of(posicion));
+//        when(posicionMapper.mapPosicionesRequestToPosicionesResponseDTO(anyList())).thenReturn(List.of(posicion));
+//        when(traccarCliente.obtenerDispositivoByUniqueId("DISP123")).thenReturn(new DispositivoResponseDTO(1, "DISP123"));
 //
-//        when(vehiculoRepository.findAll()).thenReturn(vehiculos);
-//        when(dispositivoService.calcularKmDeDispositivoDespuesDeFecha(vehiculos.get(0).getDispositivo().getUnicoId(),fechaCasteadaAOffset))
-//                .thenReturn(10);
-//        when(cargaCombustibleService.combustibleCargadoEn(vehiculos.get(0).getTarjeta().getNumero(),LocalDate.now()))
-//                .thenReturn(11.0);
-//        when(choferRepository.obtenerNombreDeChofersDeVehiculo(vehiculos.get(0).getId())).thenReturn(nombresChoferesInconsistencias);
+//        List<PosicionResponseDTO> posiciones = traccarService.obtenerPosicionesEnVivo("DISP123");
 //
-//        List<InconsistenciasKMconCombustiblesResponseDTO> inconsistencias = serviceTraccar.getInconsistencias(fecha);
-//
-//        assertEquals(inconsistencias.size(),1);
-//        assertEquals(inconsistencias.get(0).getNombresDeResponsables().get(0),"mono1");
-//        assertEquals(inconsistencias.get(0).getNombresDeResponsables().get(1),"mono2");
-//
+//        assertEquals(1, posiciones.size());
 //    }
 
 
