@@ -3,6 +3,8 @@ package com.gifa_api.service.impl;
 import com.gifa_api.client.ITraccarCliente;
 import com.gifa_api.dto.traccar.InconsistenciasKMconCombustiblesResponseDTO;
 import com.gifa_api.dto.traccar.DispositivoResponseDTO;
+import com.gifa_api.dto.traccar.KilometrosResponseDTO;
+import com.gifa_api.dto.traccar.PosicionResponseDTO;
 import com.gifa_api.dto.vehiculo.VehiculoResponseDTO;
 import com.gifa_api.model.Dispositivo;
 import com.gifa_api.model.Vehiculo;
@@ -12,14 +14,19 @@ import com.gifa_api.repository.IVehiculoRepository;
 import com.gifa_api.service.ICargaCombustibleService;
 import com.gifa_api.service.IDispositivoService;
 import com.gifa_api.service.ITraccarService;
+import com.gifa_api.utils.mappers.PosicionMapper;
 import lombok.RequiredArgsConstructor;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
+
+import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.LocalDate;
 import java.time.OffsetDateTime;
 import java.time.ZoneOffset;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -27,22 +34,23 @@ public class TraccarServiceImpl implements ITraccarService {
 
     private final ITraccarCliente traccarCliente;
     private final ICargaCombustibleService cargaCombustibleService;
-    private final IDispositivoService dispositivoService;
     private final IVehiculoRepository vehiculoRepository;
     private final IChoferRepository choferRepository;
-
     private final IDispositivoRepository dispositivoRepository;
+    private final PosicionMapper posicionMapper;
 
 
     @Override
     public void crearDispositivo(Dispositivo dispositivo) {
-        if(!existeDispositivoEnTraccar(dispositivo.getUnicoId())) {
+        if (!existeDispositivoEnTraccar(dispositivo.getUnicoId())) {
             traccarCliente.postCrearDispositivoTraccar(dispositivo);
         }
 
     }
-    private boolean existeDispositivoEnTraccar(String uniqueId){
-        for ( DispositivoResponseDTO dispositivo : obtenerDispositivos() ){
+
+
+    private boolean existeDispositivoEnTraccar(String uniqueId) {
+        for (DispositivoResponseDTO dispositivo : obtenerDispositivos()) {
             if (dispositivo.getUniqueId().equals(uniqueId))
                 return true;
         }
@@ -51,17 +59,24 @@ public class TraccarServiceImpl implements ITraccarService {
 
     @Override
     public List<DispositivoResponseDTO> obtenerDispositivos() {
-        return traccarCliente.getDispositivos();
+        List<DispositivoResponseDTO> todosLosDispositivos = traccarCliente.getDispositivos();
+
+        // Filtrar dispositivos que estén en el repositorio de vehículos
+        return todosLosDispositivos.stream()
+                .filter(dispositivo -> vehiculoRepository.findByPatente(dispositivo.getUniqueId()).isPresent())
+                .collect(Collectors.toList());
     }
 
     @Override
-    public List<InconsistenciasKMconCombustiblesResponseDTO> getInconsistencias(LocalDate fecha) {
+    public List<InconsistenciasKMconCombustiblesResponseDTO> getInconsistencias(LocalDate from, LocalDate to) {
 
         List<InconsistenciasKMconCombustiblesResponseDTO> inconsistencias = new ArrayList<>();
         for (Vehiculo vehiculo : vehiculoRepository.findAll()) {
-            OffsetDateTime fechaCasteadaAOffset = fecha.atStartOfDay().atOffset(ZoneOffset.UTC);
-            int kmRecorridos = dispositivoService.calcularKmDeDispositivoDespuesDeFecha(vehiculo.getDispositivo().getUnicoId(), fechaCasteadaAOffset);
-            double litrosCargados = cargaCombustibleService.combustibleCargadoEn(vehiculo.getTarjeta().getNumero(), fecha);
+
+            OffsetDateTime fromCasteado = from.atStartOfDay().atOffset(ZoneOffset.UTC);
+            OffsetDateTime toCasteado = to.atStartOfDay().atOffset(ZoneOffset.UTC);
+            double kmRecorridos = calcularKmDeDispositivoEntreFechas(vehiculo.getDispositivo().getUnicoId(), fromCasteado, toCasteado);
+            double litrosCargados = cargaCombustibleService.combustibleCargadoEntreFechas(vehiculo.getTarjeta().getNumero(), from, to);
 
             if (calculoDeCombustiblePorKilometro(kmRecorridos, litrosCargados)) {
 
@@ -74,7 +89,7 @@ public class TraccarServiceImpl implements ITraccarService {
                         .estadoVehiculo(vehiculo.getEstadoVehiculo())
                         .estadoDeHabilitacion(vehiculo.getEstadoDeHabilitacion())
                         .fechaVencimiento(vehiculo.getFechaVencimiento())
-                        .kilometraje(vehiculo.getKilometraje())
+                        .kilometrajeTotal(vehiculo.getKilometrajeUsado() + vehiculo.getKilometrajeRecorrido())
                         .patente(vehiculo.getPatente())
                         .build();
 
@@ -93,11 +108,41 @@ public class TraccarServiceImpl implements ITraccarService {
         return inconsistencias;
     }
 
-    private boolean calculoDeCombustiblePorKilometro(int kilometrajeRecorrido, double combustibleCargado) {
+
+    private double calcularKmDeDispositivoEntreFechas(String unicoIdDeDispositivo, OffsetDateTime from, OffsetDateTime to) {
+        Integer deviceId = obtenerdeviceIdByUniqueId(unicoIdDeDispositivo);
+        return getKilometros(deviceId, from, to).getDistance();
+    }
+
+    @Override
+    public KilometrosResponseDTO getKilometros(Integer deviceId, OffsetDateTime from, OffsetDateTime to) {
+        return traccarCliente.getKilometros(deviceId, from, to);
+    }
+
+    @Override
+    public List<PosicionResponseDTO> obtenerPosicionesEnVivo(String uniqueId) {
+        OffsetDateTime fromActual = OffsetDateTime.now(ZoneOffset.UTC).minusMinutes(1);
+        OffsetDateTime toHardcodeado = OffsetDateTime.parse("2030-12-31T23:59:59Z");
+        Integer idDevice = obtenerdeviceIdByUniqueId(uniqueId);
+        return posicionMapper.mapPosicionesRequestToPosicionesResponseDTO(traccarCliente.getPosicionesDispositivoTraccar(idDevice, fromActual, toHardcodeado));
+    }
+
+    @Override
+    public List<PosicionResponseDTO> obtenerPosicionesEnRangoDeFechas(String uniqueId, LocalDate from, LocalDate to) {
+        OffsetDateTime fromCasteado = from.atStartOfDay().atOffset(ZoneOffset.UTC);
+        OffsetDateTime toCasteado = to.atStartOfDay().atOffset(ZoneOffset.UTC);
+        Integer idDevice = obtenerdeviceIdByUniqueId(uniqueId);
+        return posicionMapper.mapPosicionesRequestToPosicionesResponseDTO(traccarCliente.getPosicionesDispositivoTraccar(idDevice, fromCasteado, toCasteado));
+    }
+
+    private Integer obtenerdeviceIdByUniqueId(String uniqueId) {
+        return traccarCliente.obtenerDispositivoByUniqueId(uniqueId).getId();
+    }
+
+    private boolean calculoDeCombustiblePorKilometro(double kilometrajeRecorrido, double combustibleCargado) {
         int kmPorLitro = 1;
         return kilometrajeRecorrido < combustibleCargado * kmPorLitro;
     }
-
 
 
 }

@@ -1,11 +1,9 @@
 package com.gifa_api.client;
 
-import com.gifa_api.dto.traccar.CrearDispositivoRequestDTO;
-import com.gifa_api.dto.traccar.CrearDispositivoResponseDTO;
-import com.gifa_api.dto.traccar.DispositivoResponseDTO;
-import com.gifa_api.dto.traccar.PosicionDispositivoDTO;
+import com.gifa_api.dto.traccar.*;
 import com.gifa_api.model.Dispositivo;
 import lombok.RequiredArgsConstructor;
+import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
@@ -16,6 +14,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import java.nio.charset.StandardCharsets;
+import java.time.OffsetDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Arrays;
 import java.util.Base64;
 import java.util.List;
@@ -27,9 +27,9 @@ public class TraccarClient implements ITraccarCliente {
 
     private final RestTemplate restTemplate;
 
-    private  String username = System.getenv("TRACCAR_USERNAME");
+    private String username = System.getenv("TRACCAR_USERNAME");
 
-    private  String password = System.getenv("TRACCAR_PASSWORD");
+    private String password = System.getenv("TRACCAR_PASSWORD");
 
     private String baseUrl = System.getenv("TRACCAR_BASE_URL");
 
@@ -58,20 +58,24 @@ public class TraccarClient implements ITraccarCliente {
     }
 
     @Override
-    public List<PosicionDispositivoDTO> getPosicionDispositivoTraccar(Integer deviceId) {
+    public List<PosicionRequestDTO> getPosicionesDispositivoTraccar(Integer deviceId, OffsetDateTime from, OffsetDateTime to) {
         HttpHeaders headers = getHeaders();
         HttpEntity<CrearDispositivoRequestDTO> entity = new HttpEntity<>(headers);
+
+        // Formatear los tiempos para que estén en ISO-8601, como "1963-11-22T18:30:00Z"
 
         UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(baseUrl + "/positions");
         if (deviceId != null) {
             builder.queryParam("deviceId", deviceId);
+            builder.queryParam("from", from);
+            builder.queryParam("to", to);
         }
 
-        ResponseEntity<PosicionDispositivoDTO[]> response = restTemplate.exchange(
+        ResponseEntity<PosicionRequestDTO[]> response = restTemplate.exchange(
                 builder.toUriString(),
                 HttpMethod.GET,
                 entity,
-                PosicionDispositivoDTO[].class
+                PosicionRequestDTO[].class
         );
 
         if (response.getStatusCode() == HttpStatus.OK) {
@@ -81,6 +85,8 @@ public class TraccarClient implements ITraccarCliente {
             throw new RuntimeException("Error al obtener las posiciones: " + response.getStatusCode());
         }
     }
+
+
 
     @Override
     public List<DispositivoResponseDTO> getDispositivos() {
@@ -105,14 +111,11 @@ public class TraccarClient implements ITraccarCliente {
     }
 
     @Override
-    public DispositivoResponseDTO getDispositivo(Integer deviceId) {
+    public DispositivoResponseDTO obtenerDispositivoByUniqueId(String uniqueId) {
         HttpHeaders headers = getHeaders();
         HttpEntity<Void> entity = new HttpEntity<>(headers);
-        UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(baseUrl + "/devices");
-
-        if (deviceId != null) {
-            builder.queryParam("id", deviceId);
-        }
+        UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(baseUrl + "/devices")
+                .queryParam("uniqueId", uniqueId);  // Cambiar el parámetro a uniqueId
 
         ResponseEntity<DispositivoResponseDTO[]> response = restTemplate.exchange(
                 builder.toUriString(),
@@ -123,12 +126,54 @@ public class TraccarClient implements ITraccarCliente {
 
         if (response.getStatusCode() == HttpStatus.OK && response.getBody() != null) {
             DispositivoResponseDTO[] dispositivos = response.getBody();
-            return Arrays.stream(dispositivos)
-                    .filter(dispositivo -> dispositivo.getId().equals(deviceId)) // Comparar los IDs
-                    .findFirst()
-                    .orElseThrow(() -> new RuntimeException("No se encontró el dispositivo con ID: " + deviceId));
+            if (dispositivos.length > 0) {
+                return dispositivos[0];  // Retornar el primer dispositivo encontrado con el uniqueId
+            } else {
+                throw new RuntimeException("No se encontró el dispositivo con uniqueId: " + uniqueId);
+            }
         } else {
             throw new RuntimeException("Error al obtener los dispositivos: " + response.getStatusCode());
+        }
+    }
+
+
+    @Override
+    public KilometrosResponseDTO getKilometros(Integer deviceId, OffsetDateTime from, OffsetDateTime to) {
+        // Crear encabezados HTTP necesarios para la solicitud
+        HttpHeaders headers = getHeaders();
+        HttpEntity<Void> entity = new HttpEntity<>(headers);
+
+        // Construir la URL con parámetros de consulta
+        UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(baseUrl + "/reports/summary")
+                .queryParam("from", from)
+                .queryParam("to", to);
+
+        if (deviceId != null) {
+            builder.queryParam("deviceId", deviceId);
+        } else {
+            throw new IllegalArgumentException("Se debe proporcionar un deviceId.");
+        }
+
+        // Realizar la solicitud HTTP con RestTemplate, esperando una lista en la respuesta
+        ResponseEntity<List<KilometrosResponseDTO>> response = restTemplate.exchange(
+                builder.toUriString(),
+                HttpMethod.GET,
+                entity,
+                new ParameterizedTypeReference<List<KilometrosResponseDTO>>() {
+                }
+        );
+
+        // Verificar el estado de la respuesta y retornar el primer objeto si existe
+        if (response.getStatusCode() == HttpStatus.OK && response.getBody() != null && !response.getBody().isEmpty()) {
+            return response.getBody().get(0); // Retornar el primer elemento de la lista
+        } else if (response.getBody() == null || response.getBody().isEmpty()) {
+            KilometrosResponseDTO kilometrosVacios = KilometrosResponseDTO
+                    .builder()
+                    .distance(0)
+                    .build();
+            return kilometrosVacios;
+        } else {
+            throw new RuntimeException("Error al obtener los kilómetros del dispositivo con ID: " + deviceId + ". Código de respuesta: " + response.getStatusCode());
         }
     }
 

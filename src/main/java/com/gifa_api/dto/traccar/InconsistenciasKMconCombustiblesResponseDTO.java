@@ -17,7 +17,7 @@ public class InconsistenciasKMconCombustiblesResponseDTO {
 
     List<String> nombresDeResponsables;
     VehiculoResponseDTO vehiculo;
-    Integer kilometrajeRecorrido;
+    double kilometrajeRecorrido;
     Double litrosCargados;
     Double litrosInconsistente;
 

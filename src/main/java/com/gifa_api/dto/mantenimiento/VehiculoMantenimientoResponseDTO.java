@@ -16,7 +16,7 @@ public class VehiculoMantenimientoResponseDTO {
     private Integer id;
     private String patente;
     private Integer antiguedad;
-    private Integer kilometraje;
+    private double kilometraje;
     private Integer litrosDeTanque;
     private String modelo;
     private String estadoVehiculo;

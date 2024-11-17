@@ -16,7 +16,7 @@ import java.util.Date;
 public class RegistarVehiculoDTO {
     private String patente;
     private Integer antiguedad;
-    private Integer kilometraje;
+    private Integer kilometrajeUsado;
     private String modelo;
 
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd/MM/yyyy")

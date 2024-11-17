@@ -49,7 +49,7 @@ public class VehiculoResponseConQrMapper {
                 .id(vehiculo.getId())
                 .patente(vehiculo.getPatente())
                 .antiguedad(vehiculo.getAntiguedad())
-                .kilometraje(vehiculo.getKilometraje())
+                .kilometrajeTotal(vehiculo.getKilometrajeUsado() + vehiculo.getKilometrajeRecorrido())
                 .modelo(vehiculo.getModelo())
                 .estadoVehiculo(vehiculo.getEstadoVehiculo())
                 .estadoDeHabilitacion(vehiculo.getEstadoDeHabilitacion())

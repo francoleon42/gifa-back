@@ -3,5 +3,5 @@ package com.gifa_api.service;
 import java.time.OffsetDateTime;
 
 public interface IKilometrajeVehiculoService {
-    void addKilometrajeVehiculo(Integer kilometraje, OffsetDateTime fcha , Integer idVehiculo);
+    void addKilometrajeVehiculo(double kilometraje, OffsetDateTime fcha , Integer idVehiculo);
 }

@@ -1,8 +1,8 @@
 package com.gifa_api.utils.mappers;
 
 
+import com.gifa_api.dto.traccar.PosicionRequestDTO;
 import com.gifa_api.dto.traccar.PosicionResponseDTO;
-import com.gifa_api.model.Posicion;
 import org.springframework.stereotype.Component;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -10,18 +10,19 @@ import java.util.stream.Collectors;
 @Component
 public class PosicionMapper {
 
-    public PosicionResponseDTO toPosicionResponseDTO(Posicion posicion) {
+
+    public PosicionResponseDTO toPoscicionResponseFromPosicionRequest(PosicionRequestDTO posicionRequestDTO) {
         return PosicionResponseDTO.builder()
-                .id(posicion.getId())
-                .latitude(posicion.getLatitude())
-                .longitude(posicion.getLongitude())
-                .fechaHora(posicion.getFechaHora().toLocalDate())
+                .id(posicionRequestDTO.getId())
+                .latitude(posicionRequestDTO.getLatitude())
+                .longitude(posicionRequestDTO.getLongitude())
+                .fechaHora(posicionRequestDTO.getFixTime().toLocalDate()) // Convierte OffsetDateTime a LocalDate
                 .build();
     }
 
-    public List<PosicionResponseDTO> toPosicionResponseDTOList(List<Posicion> posiciones) {
+    public List<PosicionResponseDTO> mapPosicionesRequestToPosicionesResponseDTO(List<PosicionRequestDTO> posiciones) {
         return posiciones.stream()
-                .map(this::toPosicionResponseDTO)
+                .map(this:: toPoscicionResponseFromPosicionRequest)
                 .collect(Collectors.toList());
     }
 }

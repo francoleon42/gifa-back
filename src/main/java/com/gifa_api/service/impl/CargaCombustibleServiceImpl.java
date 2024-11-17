@@ -123,10 +123,9 @@ public class CargaCombustibleServiceImpl implements ICargaCombustibleService {
     }
 
     @Override
-    public double combustibleCargadoEn(Integer numeroTarjeta, LocalDate fecha) {
+    public double combustibleCargadoEntreFechas(Integer numeroTarjeta, LocalDate from ,LocalDate to) {
         int cargaTotal = 0;
-        List<CargaCombustible> cargasCombustible = cargaCombustibleRepository.findByNumeroTarjetaAndFechaAfter(numeroTarjeta, fecha);
-
+        List<CargaCombustible> cargasCombustible = cargaCombustibleRepository.findByNumeroTarjetaAndFechaBetween(numeroTarjeta, from,to);
         for (CargaCombustible carga : cargasCombustible) {
             cargaTotal += carga.getCantidadLitros();
         }

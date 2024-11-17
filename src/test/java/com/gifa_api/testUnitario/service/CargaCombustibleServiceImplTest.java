@@ -10,6 +10,7 @@ import com.gifa_api.repository.ITarjetaRepository;
 import com.gifa_api.service.impl.CargaCombustibleServiceImpl;
 
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -109,13 +110,17 @@ class CargaCombustibleServiceImplTest {
     }
 
     @Test
-    void combustibleCargadoEn_devuelveCombustibleCargadoDespuesDeEsaFecha(){
-        when(cargaCombustibleRepository.findByNumeroTarjetaAndFechaAfter(1,LocalDate.now()))
+    void combustibleCargadoEntreFechas_devuelveListaDeCombustibles(){
+        when(cargaCombustibleRepository.findByNumeroTarjetaAndFechaBetween(1,LocalDate.now(),
+                        LocalDate.now().plusDays(1)))
                 .thenReturn(cargasDeCombustible);
 
-        Double totalDeLitros = cargaCombustibleService.combustibleCargadoEn(1,LocalDate.now());
+        Double totalDeLitros = cargaCombustibleService.combustibleCargadoEntreFechas(1,LocalDate.now(),
+                LocalDate.now().plusDays(1));
 
         assertEquals(20,totalDeLitros);
+        verify(cargaCombustibleRepository,times(1)).findByNumeroTarjetaAndFechaBetween(1,LocalDate.now(),
+                LocalDate.now().plusDays(1));
     }
 
     public void verificarNoRegistroDeCargaDeCombustibleInvalida(){

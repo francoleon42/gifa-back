@@ -81,28 +81,19 @@ public class Bootstrap implements ApplicationRunner {
 
         iGestorOperacionalRepository.save(gestorDePedidos);
 
-        // Crear tarjetas con builder
-        Tarjeta tarjeta1 = Tarjeta.builder()
-                .numero(12345)
-                .build();
 
-        Tarjeta tarjeta2 = Tarjeta.builder()
-                .numero(54321)
-                .build();
-
-        tarjetaRepository.saveAll(List.of(tarjeta1, tarjeta2));
 
         RegistarVehiculoDTO dto1 = new RegistarVehiculoDTO();
         dto1.setPatente("ABC123");
         dto1.setAntiguedad(5);
-        dto1.setKilometraje(0);
+        dto1.setKilometrajeUsado(0);
         dto1.setModelo("Modelo X");
         dto1.setFechaRevision(LocalDate.now().plusYears(1));
 
         RegistarVehiculoDTO dto2 = new RegistarVehiculoDTO();
         dto2.setPatente("XYZ789");
         dto2.setAntiguedad(3);
-        dto2.setKilometraje(0);
+        dto2.setKilometrajeUsado(0);
         dto2.setModelo("Modelo Y");
         dto2.setFechaRevision(LocalDate.now().plusYears(1));
 
