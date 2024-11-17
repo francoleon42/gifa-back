@@ -86,14 +86,14 @@ public class Bootstrap implements ApplicationRunner {
         RegistarVehiculoDTO dto1 = new RegistarVehiculoDTO();
         dto1.setPatente("ABC123");
         dto1.setAntiguedad(5);
-        dto1.setKilometraje(0);
+        dto1.setKilometrajeUsado(0);
         dto1.setModelo("Modelo X");
         dto1.setFechaRevision(LocalDate.now().plusYears(1));
 
         RegistarVehiculoDTO dto2 = new RegistarVehiculoDTO();
         dto2.setPatente("XYZ789");
         dto2.setAntiguedad(3);
-        dto2.setKilometraje(0);
+        dto2.setKilometrajeUsado(0);
         dto2.setModelo("Modelo Y");
         dto2.setFechaRevision(LocalDate.now().plusYears(1));
 
