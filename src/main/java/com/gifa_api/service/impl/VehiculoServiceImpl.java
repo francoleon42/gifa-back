@@ -79,7 +79,7 @@ public class VehiculoServiceImpl implements IVehiculoService {
                 .patente(vehiculoDTO.getPatente())
                 .antiguedad(vehiculoDTO.getAntiguedad())
                 .kilometrajeRecorrido(0)
-                .kilometrajeUsado(vehiculoDTO.getKilometraje())
+                .kilometrajeUsado(vehiculoDTO.getKilometrajeUsado())
                 .modelo(vehiculoDTO.getModelo())
                 .estadoDeHabilitacion(EstadoDeHabilitacion.HABILITADO)
                 .estadoVehiculo(EstadoVehiculo.REPARADO)
@@ -178,7 +178,7 @@ public class VehiculoServiceImpl implements IVehiculoService {
         if (vehiculoDTO.getAntiguedad() == null || vehiculoDTO.getAntiguedad() < 0) {
             throw new BadRequestException("La antigüedad debe ser mayor o igual a 0.");
         }
-        if (vehiculoDTO.getKilometraje() == null || vehiculoDTO.getKilometraje() < 0) {
+        if (vehiculoDTO.getKilometrajeUsado() == null || vehiculoDTO.getKilometrajeUsado() < 0) {
             throw new BadRequestException("El kilometraje debe ser mayor o igual a 0.");
         }
         if (vehiculoDTO.getModelo() == null || vehiculoDTO.getModelo().trim().isEmpty()) {
