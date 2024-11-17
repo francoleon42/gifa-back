@@ -7,6 +7,7 @@ import com.gifa_api.exception.NotFoundException;
 import com.gifa_api.model.Dispositivo;
 import com.gifa_api.model.Vehiculo;
 import com.gifa_api.repository.IDispositivoRepository;
+import com.gifa_api.repository.IKilometrajeVehiculoRepository;
 import com.gifa_api.repository.IVehiculoRepository;
 import com.gifa_api.service.IDispositivoService;
 import com.gifa_api.service.IKilometrajeVehiculoService;
@@ -25,6 +26,7 @@ public class DispositivoServiceImpl implements IDispositivoService {
     private final IVehiculoRepository vehiculoRepository;
     private final IKilometrajeVehiculoService kilometrajeVehiculoService;
     private final ITraccarService traccarService;
+    private final IKilometrajeVehiculoRepository kilometrajeVehiculoRepository;
 
     @Override
     public void crearDispositivo(CrearDispositivoRequestDTO crearDispositivoRequestDTO, Integer idVehiculo) {
@@ -62,12 +64,11 @@ public class DispositivoServiceImpl implements IDispositivoService {
                     .orElseThrow(() -> new NotFoundException("No se encontró el vehiculo con id: " + dispositivoResponseDTO.getUniqueId()));
 
             double kmActual = metrosActual / 1000.0;
-            double kilometrosAgregados = kmActual - vehiculo.getKilometraje();
+            double kilometrosAgregados = kmActual - vehiculo.getKilometrajeRecorrido();
 
             kilometrajeVehiculoService.addKilometrajeVehiculo(kilometrosAgregados, OffsetDateTime.now(), vehiculo.getId());
-            vehiculo.actualizarKilometraje(kmActual);
+            vehiculo.setKilometrajeRecorrido(kmActual);
             vehiculoRepository.save(vehiculo);
-
 
         }
     }

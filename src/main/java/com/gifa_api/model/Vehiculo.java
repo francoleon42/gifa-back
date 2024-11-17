@@ -5,6 +5,7 @@ import com.gifa_api.utils.enums.EstadoDeHabilitacion;
 import com.gifa_api.utils.enums.EstadoVehiculo;
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.annotations.Formula;
 
 import java.time.LocalDate;
 import java.util.LinkedHashSet;
@@ -31,8 +32,11 @@ public class Vehiculo {
     @Column(name = "antiguedad")
     private Integer antiguedad;
 
-    @Column(name = "kilometraje")
-    private double kilometraje;
+    @Column(name = "kilometraje_recorrido")
+    private double kilometrajeRecorrido;
+
+    @Column(name = "kilometrajeUsado")
+    private double kilometrajeUsado;
 
     @Column(name = "modelo", length = 50)
     private String modelo;
@@ -85,9 +89,7 @@ public class Vehiculo {
                     .collect(Collectors.toSet());
         }
     }
-    public void actualizarKilometraje(double kilometraje){
-        this.kilometraje = kilometraje;
-    }
+    
     public void addDispositivo(Dispositivo dispositivo){
         this.dispositivo = dispositivo;
     }

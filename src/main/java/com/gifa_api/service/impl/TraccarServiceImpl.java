@@ -89,7 +89,7 @@ public class TraccarServiceImpl implements ITraccarService {
                         .estadoVehiculo(vehiculo.getEstadoVehiculo())
                         .estadoDeHabilitacion(vehiculo.getEstadoDeHabilitacion())
                         .fechaVencimiento(vehiculo.getFechaVencimiento())
-                        .kilometraje(vehiculo.getKilometraje())
+                        .kilometraje(vehiculo.getKilometrajeUsado() + vehiculo.getKilometrajeRecorrido())
                         .patente(vehiculo.getPatente())
                         .build();
 
