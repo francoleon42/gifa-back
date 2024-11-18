@@ -20,7 +20,7 @@ import java.time.OffsetDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
-
+@Profile("!prod")
 @Component
 @RequiredArgsConstructor
 public class Bootstrap implements ApplicationRunner {
