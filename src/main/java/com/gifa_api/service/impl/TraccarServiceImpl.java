@@ -70,14 +70,13 @@ public class TraccarServiceImpl implements ITraccarService {
     }
 
     @Override
-    public List<InconsistenciasKMconCombustiblesResponseDTO> getInconsistencias(LocalDate from, LocalDate to) {
+    public List<InconsistenciasKMconCombustiblesResponseDTO> getInconsistencias(OffsetDateTime from, OffsetDateTime to) {
 
         List<InconsistenciasKMconCombustiblesResponseDTO> inconsistencias = new ArrayList<>();
         for (Vehiculo vehiculo : vehiculoRepository.findAll()) {
 
-            OffsetDateTime fromCasteado = from.atStartOfDay().atOffset(ZoneOffset.UTC);
-            OffsetDateTime toCasteado = to.atStartOfDay().atOffset(ZoneOffset.UTC);
-            double kmRecorridos = calcularKmDeDispositivoEntreFechas(vehiculo.getDispositivo().getUnicoId(), fromCasteado, toCasteado);
+
+            double kmRecorridos = calcularKmDeDispositivoEntreFechas(vehiculo.getDispositivo().getUnicoId(), from, to);
             double litrosCargados = cargaCombustibleService.combustibleCargadoEntreFechas(vehiculo.getTarjeta().getNumero(), from, to);
 
             if (calculoDeCombustiblePorKilometro(kmRecorridos, litrosCargados)) {

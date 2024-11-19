@@ -16,7 +16,7 @@ public interface ITraccarService {
 
     List<DispositivoResponseDTO> obtenerDispositivos();
 
-    List<InconsistenciasKMconCombustiblesResponseDTO> getInconsistencias(LocalDate from, LocalDate to);
+    List<InconsistenciasKMconCombustiblesResponseDTO> getInconsistencias(OffsetDateTime from, OffsetDateTime to);
 
     KilometrosResponseDTO getKilometros(Integer deviceId, OffsetDateTime from, OffsetDateTime to);
     List<PosicionResponseDTO> obtenerPosicionesEnVivo(String uniqueId);
