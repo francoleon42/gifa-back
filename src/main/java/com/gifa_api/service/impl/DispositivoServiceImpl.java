@@ -63,7 +63,6 @@ public class DispositivoServiceImpl implements IDispositivoService {
             Vehiculo vehiculo = dispositivoRepository.findVehiculoDeDispositivo(dispositivoResponseDTO.getUniqueId())
                     .orElseThrow(() -> new NotFoundException("No se encontró el vehiculo con id: " + dispositivoResponseDTO.getUniqueId()));
 
-//            double kmActual = metrosActual / 1000.0;
             double kilometrosAgregados = kmActual - vehiculo.getKilometrajeRecorrido();
 
             kilometrajeVehiculoService.addKilometrajeVehiculo(kilometrosAgregados, OffsetDateTime.now(), vehiculo.getId());
