@@ -49,12 +49,18 @@ public class VehiculoResponseConQrMapper {
                 .id(vehiculo.getId())
                 .patente(vehiculo.getPatente())
                 .antiguedad(vehiculo.getAntiguedad())
-                .kilometrajeTotal(vehiculo.getKilometrajeUsado() + vehiculo.getKilometrajeRecorrido())
+                .kilometrajeTotal(formatKilometraje(vehiculo.getKilometrajeUsado() + vehiculo.getKilometrajeRecorrido()))
                 .modelo(vehiculo.getModelo())
                 .estadoVehiculo(vehiculo.getEstadoVehiculo())
                 .estadoDeHabilitacion(vehiculo.getEstadoDeHabilitacion())
                 .qr(vehiculo.getQr())
                 .fechaVencimiento(vehiculo.getFechaVencimiento())
                 .build();
+    }
+
+    private String formatKilometraje(double kilometraje) {
+        int kilometros = (int) kilometraje / 1000; // Divide entre 1000 para obtener los km
+        int metros = (int) kilometraje % 1000;    // El resto son los metros
+        return String.format("%d,%03d", kilometros, metros); // Formato con ceros iniciales para los metros
     }
 }
