@@ -111,6 +111,8 @@ public class TraccarServiceImpl implements ITraccarService {
 
     private double calcularKmDeDispositivoEntreFechas(String unicoIdDeDispositivo, OffsetDateTime from, OffsetDateTime to) {
         Integer deviceId = obtenerdeviceIdByUniqueId(unicoIdDeDispositivo);
+        Integer km = getKilometros(deviceId, from, to).getDistance();
+        System.out.println(unicoIdDeDispositivo +"sus km son : " +km);
         return getKilometros(deviceId, from, to).getDistance();
     }
 
