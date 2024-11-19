@@ -8,6 +8,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
+import java.time.OffsetDateTime;
 
 @RestController
 @RequiredArgsConstructor
@@ -33,7 +34,7 @@ public class TraccarController {
     }
 
     @GetMapping("/getPosicionesEnRangoDeFechas/{unicoId}")
-    public ResponseEntity<?> obtenerPosicionesEnRangoDeFechas(@PathVariable String unicoId, @RequestParam LocalDate from,  @RequestParam LocalDate to){
+    public ResponseEntity<?> obtenerPosicionesEnRangoDeFechas(@PathVariable String unicoId, @RequestParam OffsetDateTime from, @RequestParam OffsetDateTime to){
         return new ResponseEntity<>(traccarService.obtenerPosicionesEnRangoDeFechas(unicoId,from,to),HttpStatus.OK);
     }
 
