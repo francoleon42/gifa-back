@@ -120,11 +120,9 @@ public class TraccarServiceImpl implements ITraccarService {
     }
 
     @Override
-    public List<PosicionResponseDTO> obtenerPosicionesEnRangoDeFechas(String uniqueId, LocalDate from, LocalDate to) {
-        OffsetDateTime fromCasteado = from.atStartOfDay().atOffset(ZoneOffset.UTC);
-        OffsetDateTime toCasteado = to.atStartOfDay().atOffset(ZoneOffset.UTC);
+    public List<PosicionResponseDTO> obtenerPosicionesEnRangoDeFechas(String uniqueId, OffsetDateTime from, OffsetDateTime to) {
         Integer idDevice = obtenerdeviceIdByUniqueId(uniqueId);
-        return posicionMapper.mapPosicionesRequestToPosicionesResponseDTO(traccarCliente.getPosicionesDispositivoTraccar(idDevice, fromCasteado, toCasteado));
+        return posicionMapper.mapPosicionesRequestToPosicionesResponseDTO(traccarCliente.getPosicionesDispositivoTraccar(idDevice, from, to));
     }
 
     private Integer obtenerdeviceIdByUniqueId(String uniqueId) {

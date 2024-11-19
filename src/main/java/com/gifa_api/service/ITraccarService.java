@@ -20,6 +20,6 @@ public interface ITraccarService {
 
     KilometrosResponseDTO getKilometros(Integer deviceId, OffsetDateTime from, OffsetDateTime to);
     List<PosicionResponseDTO> obtenerPosicionesEnVivo(String uniqueId);
-    List<PosicionResponseDTO> obtenerPosicionesEnRangoDeFechas(String uniqueId, LocalDate from,LocalDate to);
+    List<PosicionResponseDTO> obtenerPosicionesEnRangoDeFechas(String uniqueId, OffsetDateTime from,OffsetDateTime to);
 
 }
