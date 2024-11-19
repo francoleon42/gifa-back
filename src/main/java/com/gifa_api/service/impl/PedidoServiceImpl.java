@@ -99,8 +99,6 @@ public class PedidoServiceImpl implements IPedidoService {
             pedido.setEstadoPedido(EstadoPedido.FINALIZADO);
             pedidoRepository.save(pedido);
         }else{
-
-            //aca es bad request, porque estas pasando un pedido que no esta aceptado
              throw new BadRequestException("No se pudo confirmar el pedido recibido.");
         }
     }
