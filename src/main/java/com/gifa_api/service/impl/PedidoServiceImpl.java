@@ -52,9 +52,6 @@ public class PedidoServiceImpl implements IPedidoService {
         pedidoRepository.save(pedido);
     }
 
-    private EstadoPedido calcularEstadoPedidoPorPresupuesto(int cantidad, double precioProveedor, double presupuesto) {
-        return (precioProveedor * cantidad) < presupuesto ? EstadoPedido.PENDIENTE : EstadoPedido.PRESUPUESTO_INSUFICIENTE;
-    }
 
     private ItemDeInventario obtenerItemPorId(Integer idItem) {
         return itemDeInventarioRepository.findById(idItem)
@@ -70,10 +67,16 @@ public class PedidoServiceImpl implements IPedidoService {
         ProveedorDeItem proveedorMasEconomico = proveedorDeItemService.proveedorMasEconomico(item.getId());
 
         if (item.getUmbral() > item.getStock()) {
-            EstadoPedido estadoPedido = calcularEstadoPedidoPorPresupuesto(cantidad, proveedorMasEconomico.getPrecio(), gestorOperacional.getPresupuesto());
-
-            crearPedido(item, cantidad, estadoPedido, "Solicitud de stock automática");
+            if(proveedorMasEconomico == null){
+                crearPedido(item, cantidad, EstadoPedido.SIN_PROVEEDOR, "Solicitud de stock automática");
+            }else{
+                EstadoPedido estadoPedido = calcularEstadoPedidoPorPresupuesto(cantidad, proveedorMasEconomico.getPrecio(), gestorOperacional.getPresupuesto());
+                crearPedido(item, cantidad, estadoPedido, "Solicitud de stock automática");
+            }
         }
+    }
+    private EstadoPedido calcularEstadoPedidoPorPresupuesto(int cantidad, double precioProveedor, double presupuesto) {
+        return (precioProveedor * cantidad) < presupuesto ? EstadoPedido.PENDIENTE : EstadoPedido.PRESUPUESTO_INSUFICIENTE;
     }
 
     @Override
