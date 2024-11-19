@@ -79,7 +79,7 @@ public class VehiculoServiceImpl implements IVehiculoService {
                 .patente(vehiculoDTO.getPatente())
                 .antiguedad(vehiculoDTO.getAntiguedad())
                 .kilometrajeRecorrido(0)
-                .kilometrajeUsado(vehiculoDTO.getKilometrajeUsado())
+                .kilometrajeUsado(vehiculoDTO.getKilometrajeUsado()*1000)
                 .modelo(vehiculoDTO.getModelo())
                 .estadoDeHabilitacion(EstadoDeHabilitacion.HABILITADO)
                 .estadoVehiculo(EstadoVehiculo.REPARADO)
