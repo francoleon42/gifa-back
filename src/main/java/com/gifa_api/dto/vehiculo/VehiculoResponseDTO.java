@@ -18,7 +18,7 @@ public class VehiculoResponseDTO {
     private Integer id;
     private String patente;
     private Integer antiguedad;
-    private double kilometrajeTotal;
+    private String kilometrajeTotal;
     private String modelo;
     private EstadoVehiculo estadoVehiculo;
     private EstadoDeHabilitacion estadoDeHabilitacion;

@@ -81,24 +81,24 @@ public class TraccarServiceImpl implements ITraccarService {
             if (calculoDeCombustiblePorKilometro(kmRecorridos, litrosCargados)) {
 
                 List<String> nombreDeresponsables = choferRepository.obtenerNombreDeChofersDeVehiculo(vehiculo.getId());
-                VehiculoResponseDTO vehiculoResponseDTO = VehiculoResponseDTO
-                        .builder()
-                        .id(vehiculo.getId())
-                        .modelo(vehiculo.getModelo())
-                        .antiguedad(vehiculo.getAntiguedad())
-                        .estadoVehiculo(vehiculo.getEstadoVehiculo())
-                        .estadoDeHabilitacion(vehiculo.getEstadoDeHabilitacion())
-                        .fechaVencimiento(vehiculo.getFechaVencimiento())
-                        .kilometrajeTotal(vehiculo.getKilometrajeUsado() + vehiculo.getKilometrajeRecorrido())
-                        .patente(vehiculo.getPatente())
-                        .build();
+//                VehiculoResponseDTO vehiculoResponseDTO = VehiculoResponseDTO
+//                        .builder()
+//                        .id(vehiculo.getId())
+//                        .modelo(vehiculo.getModelo())
+//                        .antiguedad(vehiculo.getAntiguedad())
+//                        .estadoVehiculo(vehiculo.getEstadoVehiculo())
+//                        .estadoDeHabilitacion(vehiculo.getEstadoDeHabilitacion())
+//                        .fechaVencimiento(vehiculo.getFechaVencimiento())
+//                        .kilometrajeTotal(vehiculo.getKilometrajeUsado() + vehiculo.getKilometrajeRecorrido())
+//                        .patente(vehiculo.getPatente())
+//                        .build();
 
                 InconsistenciasKMconCombustiblesResponseDTO inconsistencia = InconsistenciasKMconCombustiblesResponseDTO
                         .builder()
                         .litrosCargados(litrosCargados)
                         .kilometrajeRecorrido(kmRecorridos)
                         .nombresDeResponsables(nombreDeresponsables)
-                        .vehiculo(vehiculoResponseDTO)
+//                        .vehiculo(vehiculoResponseDTO)
                         .litrosInconsistente(litrosCargados - kmRecorridos)
                         .build();
                 inconsistencias.add(inconsistencia);
