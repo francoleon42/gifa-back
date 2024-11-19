@@ -42,6 +42,8 @@ public class VehiculoMapper {
                 .patente(vehiculo.getPatente())
                 .antiguedad(vehiculo.getAntiguedad())
                 .kilometrajeTotal(formatKilometraje(vehiculo.getKilometrajeUsado() + vehiculo.getKilometrajeRecorrido()))
+                .kilometrajeRecorridos(formatKilometraje(vehiculo.getKilometrajeRecorrido()))
+                .kilometrajeUsado(formatKilometraje(vehiculo.getKilometrajeUsado()))
                 .modelo(vehiculo.getModelo())
                 .estadoVehiculo(vehiculo.getEstadoVehiculo())
                 .estadoDeHabilitacion(vehiculo.getEstadoDeHabilitacion())
