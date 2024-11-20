@@ -49,7 +49,7 @@ public class GestorOperacionalServiceImpl implements IGestorOperacionalService {
     }
     @Override
     public void actualizarconsumoDeLitrosPorKm(GestorOperacionalConsumoDeLitrosPorKmRequestDTO gestorOperacionalConsumoDeLitrosPorKmRequestDTO) {
-        if(gestorOperacionalConsumoDeLitrosPorKmRequestDTO.getConsumoDeLitrosPorKm() < 0){
+        if(gestorOperacionalConsumoDeLitrosPorKmRequestDTO.getConsumoDeLitrosPorKm() <= 0){
             throw new BadRequestException("La cantidad debe ser mayor a cero.");
         }
         GestorOperacional gestorOperacional = getGestorOperacional();
