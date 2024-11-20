@@ -1,7 +1,7 @@
 package com.gifa_api.utils.mappers;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.gifa_api.dto.GestorOperacionalDTO;
+import com.gifa_api.dto.gestorOperacional.GestorOperacionalResponseDTO;
 import com.gifa_api.model.GestorOperacional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -15,16 +15,16 @@ public class GestorOperacionalMapper {
         this.objectMapper = objectMapper;
     }
 
-    public GestorOperacionalDTO obtenerGestorOperacionalDTO(GestorOperacional gestorDePedidos) {
+    public GestorOperacionalResponseDTO obtenerGestorOperacionalDTO(GestorOperacional gestorDePedidos) {
         if (gestorDePedidos == null) {
             return null;
         }
 
-        GestorOperacionalDTO gestorDePedidosDTO = GestorOperacionalDTO
+        return GestorOperacionalResponseDTO
                  .builder()
                  .presupuesto(gestorDePedidos.getPresupuesto())
+                .consumoDeLitrosPorKm(gestorDePedidos.getConsumoDeLitrosPorKm())
                  .build();
-        return  gestorDePedidosDTO;
     }
 
 }
