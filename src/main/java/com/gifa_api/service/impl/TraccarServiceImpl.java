@@ -13,6 +13,7 @@ import com.gifa_api.repository.IDispositivoRepository;
 import com.gifa_api.repository.IVehiculoRepository;
 import com.gifa_api.service.ICargaCombustibleService;
 import com.gifa_api.service.IDispositivoService;
+import com.gifa_api.service.IGestorOperacionalService;
 import com.gifa_api.service.ITraccarService;
 import com.gifa_api.utils.mappers.PosicionMapper;
 import com.gifa_api.utils.mappers.VehiculoMapper;
@@ -40,6 +41,8 @@ public class TraccarServiceImpl implements ITraccarService {
     private final IDispositivoRepository dispositivoRepository;
     private final PosicionMapper posicionMapper;
     private final VehiculoMapper vehiculoMapper;
+    private final IGestorOperacionalService gestorOperacionalService;
+
 
 
     @Override
@@ -129,7 +132,7 @@ public class TraccarServiceImpl implements ITraccarService {
     }
 
     private boolean calculoDeCombustiblePorKilometro(double kilometrajeRecorrido, double combustibleCargado) {
-        int kmPorLitro = 1;
+        int kmPorLitro = gestorOperacionalService.getGestorOperacional().getConsumoDeLitrosPorKm();
         return kilometrajeRecorrido < combustibleCargado * kmPorLitro;
     }
 
