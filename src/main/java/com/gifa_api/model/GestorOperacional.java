@@ -21,4 +21,7 @@ public class GestorOperacional  {
     @Column(name = "presupuesto")
     private Double presupuesto;
 
+    @Column(name = "consumo_de_litros_por_km")
+    private int consumoDeLitrosPorKm;
+
 }

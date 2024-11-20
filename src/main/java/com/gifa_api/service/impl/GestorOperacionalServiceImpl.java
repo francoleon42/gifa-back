@@ -2,7 +2,10 @@ package com.gifa_api.service.impl;
 
 
 
-import com.gifa_api.dto.GestorOperacionalDTO;
+import com.gifa_api.dto.gestorOperacional.GestorOperacionalConsumoDeLitrosPorKmRequestDTO;
+import com.gifa_api.dto.gestorOperacional.GestorOperacionalPresupuestoRequestDTO;
+import com.gifa_api.dto.gestorOperacional.GestorOperacionalResponseDTO;
+import com.gifa_api.exception.BadRequestException;
 import com.gifa_api.exception.NotFoundException;
 
 import com.gifa_api.model.GestorOperacional;
@@ -23,9 +26,12 @@ public class GestorOperacionalServiceImpl implements IGestorOperacionalService {
 
 
     @Override
-    public GestorOperacionalDTO obtenerGestorOperacional() {
+    public GestorOperacionalResponseDTO obtenerGestorOperacional() {
         return gestorOperacionalMapper.obtenerGestorOperacionalDTO(getGestorOperacional());
     }
+
+
+
 
     @Override
     public GestorOperacional getGestorOperacional() {
@@ -36,9 +42,18 @@ public class GestorOperacionalServiceImpl implements IGestorOperacionalService {
 
 
     @Override
-    public void actualizarGestorOperacional(GestorOperacionalDTO gestorDePedidosDTO) {
+    public void actualizarPresupuesto(GestorOperacionalPresupuestoRequestDTO gestorOperacionalPresupuestoRequestDTO) {
         GestorOperacional gestorOperacional = getGestorOperacional();
-        gestorOperacional.setPresupuesto(gestorDePedidosDTO.getPresupuesto());
+        gestorOperacional.setPresupuesto(gestorOperacionalPresupuestoRequestDTO.getPresupuesto());
+        gestorOperacionalRepository.save(gestorOperacional);
+    }
+    @Override
+    public void actualizarconsumoDeLitrosPorKm(GestorOperacionalConsumoDeLitrosPorKmRequestDTO gestorOperacionalConsumoDeLitrosPorKmRequestDTO) {
+        if(gestorOperacionalConsumoDeLitrosPorKmRequestDTO.getConsumoDeLitrosPorKm() < 0){
+            throw new BadRequestException("La cantidad debe ser mayor a cero.");
+        }
+        GestorOperacional gestorOperacional = getGestorOperacional();
+        gestorOperacional.setConsumoDeLitrosPorKm(gestorOperacionalConsumoDeLitrosPorKmRequestDTO.getConsumoDeLitrosPorKm());
         gestorOperacionalRepository.save(gestorOperacional);
     }
 

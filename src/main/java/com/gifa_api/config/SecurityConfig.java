@@ -127,8 +127,9 @@ public class SecurityConfig {
 
     private void configureGestorOperacionalEndpoints(AuthorizeHttpRequestsConfigurer<HttpSecurity>.AuthorizationManagerRequestMatcherRegistry authRequest) {
         authRequest
-                .requestMatchers(HttpMethod.PATCH, "/gestorOperacional/actualizar").hasRole(SUPERVISOR)
-                .requestMatchers(HttpMethod.GET, "/gestorOperacional/obtener").hasRole(SUPERVISOR);
+                .requestMatchers(HttpMethod.PATCH, "/gestorOperacional/actualizarPresupuesto").hasRole(SUPERVISOR)
+                .requestMatchers(HttpMethod.PATCH, "/gestorOperacional/actualizarConsumoDeLitrosPorKm").hasRole(ADMINISTRADOR)
+                .requestMatchers(HttpMethod.GET, "/gestorOperacional/obtener").hasAnyRole(SUPERVISOR,ADMINISTRADOR);
     }
 
     private void configureInventarioEndpoints(AuthorizeHttpRequestsConfigurer<HttpSecurity>.AuthorizationManagerRequestMatcherRegistry authRequest) {

@@ -1,4 +1,4 @@
-package com.gifa_api.dto;
+package com.gifa_api.dto.gestorOperacional;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -9,6 +9,6 @@ import lombok.NoArgsConstructor;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class GestorOperacionalDTO {
+public class GestorOperacionalPresupuestoRequestDTO {
     Double presupuesto;
 }

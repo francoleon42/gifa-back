@@ -75,11 +75,12 @@ public class Bootstrap implements ApplicationRunner {
 
         userRepository.saveAll(List.of(admin, operador, supervisor, gerente));
 
-        GestorOperacional gestorDePedidos = GestorOperacional.builder()
+        GestorOperacional gestorOperacional = GestorOperacional.builder()
                 .presupuesto(100.00)
+                .consumoDeLitrosPorKm(1)
                 .build();
 
-        iGestorOperacionalRepository.save(gestorDePedidos);
+        iGestorOperacionalRepository.save(gestorOperacional);
 
 
 
