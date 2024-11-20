@@ -26,7 +26,7 @@ public class CargaCombustible {
 
 
     @Column(name = "fecha_hora")
-    private LocalDate fechaHora;
+    private OffsetDateTime fechaHora;
 
     @Column(name = "precio_por_litro")
     private Float precioPorLitro;

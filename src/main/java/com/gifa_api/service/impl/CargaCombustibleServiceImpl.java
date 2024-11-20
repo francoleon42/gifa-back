@@ -19,6 +19,7 @@ import org.jsoup.select.Elements;
 import java.io.IOException;
 import java.time.LocalDate;
 import java.time.OffsetDateTime;
+import java.time.ZoneOffset;
 import java.time.format.TextStyle;
 import java.util.ArrayList;
 import java.util.List;
@@ -48,7 +49,7 @@ public class CargaCombustibleServiceImpl implements ICargaCombustibleService {
                 .builder()
                 .tarjeta(tarjeta)
                 .cantidadLitros(cargaCombustibleRequestDTO.getCantidadLitros())
-                .fechaHora(LocalDate.now())
+                .fechaHora(OffsetDateTime.now(ZoneOffset.UTC))
                 .precioPorLitro(precioSuper)
                 .costoTotal(precioSuper * cargaCombustibleRequestDTO.getCantidadLitros())
                 .build();
@@ -123,7 +124,7 @@ public class CargaCombustibleServiceImpl implements ICargaCombustibleService {
     }
 
     @Override
-    public double combustibleCargadoEntreFechas(Integer numeroTarjeta, LocalDate from ,LocalDate to) {
+    public double combustibleCargadoEntreFechas(Integer numeroTarjeta, OffsetDateTime from ,OffsetDateTime to) {
         int cargaTotal = 0;
         List<CargaCombustible> cargasCombustible = cargaCombustibleRepository.findByNumeroTarjetaAndFechaBetween(numeroTarjeta, from,to);
         for (CargaCombustible carga : cargasCombustible) {

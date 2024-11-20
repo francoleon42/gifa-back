@@ -24,7 +24,7 @@ public class TraccarController {
     }
 
     @GetMapping("/verInconsistenciasDeCombustible")
-    public ResponseEntity<?> verInconsistenciasDeCombustible(@RequestParam LocalDate from,  @RequestParam LocalDate to) {
+    public ResponseEntity<?> verInconsistenciasDeCombustible(@RequestParam OffsetDateTime from,  @RequestParam OffsetDateTime to) {
         return new ResponseEntity<>(traccarService.getInconsistencias(from, to), HttpStatus.OK);
     }
 

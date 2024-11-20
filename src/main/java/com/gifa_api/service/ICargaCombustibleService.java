@@ -9,5 +9,5 @@ import java.time.OffsetDateTime;
 public interface ICargaCombustibleService {
 
     void cargarCombustible(CargaCombustibleRequestDTO cargaCombustibleRequestDTO);
-    public double combustibleCargadoEntreFechas(Integer numeroTarjeta, LocalDate from ,LocalDate to) ;
+    public double combustibleCargadoEntreFechas(Integer numeroTarjeta, OffsetDateTime from ,OffsetDateTime to) ;
 }

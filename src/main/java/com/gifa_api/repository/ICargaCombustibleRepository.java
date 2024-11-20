@@ -19,10 +19,8 @@ public interface ICargaCombustibleRepository extends JpaRepository<CargaCombusti
     @Query("SELECT c FROM CargaCombustible c WHERE c.tarjeta.numero = :numeroTarjeta AND c.fechaHora > :fechaInicio AND c.fechaHora < :fechaFin")
     public List<CargaCombustible> findByNumeroTarjetaAndFechaBetween(
             @Param("numeroTarjeta") Integer numeroTarjeta,
-            @Param("fechaInicio") LocalDate fechaInicio,
-            @Param("fechaFin") LocalDate fechaFin
+            @Param("fechaInicio") OffsetDateTime fechaInicio,
+            @Param("fechaFin") OffsetDateTime fechaFin
     );
-
-
 
 }
