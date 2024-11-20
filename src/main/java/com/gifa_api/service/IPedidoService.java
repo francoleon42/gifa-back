@@ -12,6 +12,6 @@ public interface IPedidoService {
     List<PedidoResponseDTO> obtenerPedidos();
     void hacerPedidoAutomatico(Integer idItem);
     List<PedidoResponseDTO> obtenerPedidosAceptados();
-    List<PedidoResponseDTO> obtenerPedidosRechazadosYpendientesYpresupuestoInsuficiente();
+    List<PedidoResponseDTO> obtenerPedidosRechazadosYpendientesYpresupuestoInsuficienteSinProveedor();
     void confirmarPedidoRecibido(Integer idPedido);
 }

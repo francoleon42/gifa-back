@@ -89,8 +89,10 @@ public class PedidoServiceImpl implements IPedidoService {
     }
 
     @Override
-    public List<PedidoResponseDTO> obtenerPedidosRechazadosYpendientesYpresupuestoInsuficiente() {
-        return pedidosMapper.mapToPedidoDTO(pedidoRepository.findPedidosByTresEstados(EstadoPedido.PENDIENTE,EstadoPedido.RECHAZADO,EstadoPedido.PRESUPUESTO_INSUFICIENTE));
+    public List<PedidoResponseDTO> obtenerPedidosRechazadosYpendientesYpresupuestoInsuficienteSinProveedor() {
+        return pedidosMapper.mapToPedidoDTO(pedidoRepository.findPedidosByCuatroEstados(EstadoPedido.PENDIENTE,EstadoPedido.RECHAZADO
+                ,EstadoPedido.PRESUPUESTO_INSUFICIENTE, EstadoPedido.SIN_PROVEEDOR));
+
     }
 
     @Override

@@ -14,7 +14,9 @@ public interface IPedidoRepository extends JpaRepository<Pedido, Integer> {
     @Query("SELECT p FROM Pedido p WHERE p.estadoPedido = :estado")
     List<Pedido> findPedidosByEstado(@Param("estado") EstadoPedido estado);
 
-    @Query("SELECT p FROM Pedido p WHERE p.estadoPedido = :estado1 OR p.estadoPedido = :estado2 OR p.estadoPedido = :estado3")
-    List<Pedido> findPedidosByTresEstados(@Param("estado1") EstadoPedido estado1, @Param("estado2") EstadoPedido estado2,@Param("estado3") EstadoPedido estado3);
+    @Query("SELECT p FROM Pedido p WHERE p.estadoPedido = :estado1 OR p.estadoPedido = :estado2 OR p.estadoPedido = :estado3 OR p.estadoPedido = :estado4")
+    List<Pedido> findPedidosByCuatroEstados(@Param("estado1") EstadoPedido estado1, @Param("estado2") EstadoPedido estado2
+            ,@Param("estado3") EstadoPedido estado3
+            , @Param("estado4") EstadoPedido estado4);
 
 }

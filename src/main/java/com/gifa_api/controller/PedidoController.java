@@ -25,9 +25,9 @@ public class PedidoController {
     public ResponseEntity<List<PedidoResponseDTO>> verPedidosAceptados() {
         return new ResponseEntity<>(pedidoService.obtenerPedidosAceptados(),HttpStatus.OK);
     }
-    @GetMapping("/getRechazadosPendientesPresupuestoInsuficiente")
-    public ResponseEntity<List<PedidoResponseDTO>> verPedidosRechazadosYpendientesYpresupuestoInsuficiente() {
-        return new ResponseEntity<>(pedidoService.obtenerPedidosRechazadosYpendientesYpresupuestoInsuficiente(),HttpStatus.OK);
+    @GetMapping("/getRechazadosPendientesPresupuestoInsuficienteSinProveedor")
+    public ResponseEntity<List<PedidoResponseDTO>> verPedidosRechazadosYpendientesYpresupuestoInsuficienteSinProveedor() {
+        return new ResponseEntity<>(pedidoService.obtenerPedidosRechazadosYpendientesYpresupuestoInsuficienteSinProveedor(),HttpStatus.OK);
     }
     @GetMapping("/verAll")
     public ResponseEntity<List<PedidoResponseDTO>> verPedidos(){
