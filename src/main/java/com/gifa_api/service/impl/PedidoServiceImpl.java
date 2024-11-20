@@ -38,9 +38,11 @@ public class PedidoServiceImpl implements IPedidoService {
         ProveedorDeItem proveedorMasEconomico = proveedorDeItemService.proveedorMasEconomico(item.getId());
         if(proveedorMasEconomico == null){
             crearPedido(item, cantidad, EstadoPedido.SIN_PROVEEDOR, "Solicitud de stock automática");
+        }else{
+            EstadoPedido estadoPedido = calcularEstadoPedidoPorPresupuesto(cantidad, proveedorMasEconomico.getPrecio(), gestorOperacional.getPresupuesto());
+            crearPedido(item, crearPedidoDTO.getCantidad(), estadoPedido, crearPedidoDTO.getMotivo());
         }
-        EstadoPedido estadoPedido = calcularEstadoPedidoPorPresupuesto(cantidad, proveedorMasEconomico.getPrecio(), gestorOperacional.getPresupuesto());
-        crearPedido(item, crearPedidoDTO.getCantidad(), estadoPedido, crearPedidoDTO.getMotivo());
+
     }
 
     private void crearPedido(ItemDeInventario item, int cantidad, EstadoPedido estadoPedido, String motivo) {
