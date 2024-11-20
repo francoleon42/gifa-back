@@ -5,7 +5,7 @@ public enum Rol {
     SUPERVISOR,
     GERENTE,
     OPERADOR,
-    CHOFER;
+        CHOFER;
 
     public static Rol getRol(String rol) {
         return Rol.valueOf(rol.toUpperCase());
