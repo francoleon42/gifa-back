@@ -10,8 +10,8 @@ import com.gifa_api.service.IChoferService;
 import com.gifa_api.service.impl.AuthServiceImpl;
 import com.gifa_api.utils.enums.EstadoUsuario;
 import com.gifa_api.utils.enums.Rol;
-import org.aspectj.lang.annotation.Before;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -33,7 +33,7 @@ import static org.mockito.Mockito.*;
 @ExtendWith(MockitoExtension.class)
 @MockitoSettings(strictness = Strictness.LENIENT)
 class AuthServiceImplTest {
-
+// completar tests relacionados al chofer
     @Mock
     private IUsuarioRepository userRepository;
 
@@ -52,16 +52,16 @@ class AuthServiceImplTest {
     @InjectMocks
     private AuthServiceImpl authService;
 
-    private final String password = "1234"; // Contraseña fija
-    private final String encodedPassword = "encodedPassword"; // Simulación de la contraseña encriptada
+    private final String password = "1234";
+    private final String encodedPassword = "encodedPassword";
 
     private final String mockedJwtToken = "mockedJwtToken";
 
-    // Usuarios
     private final String adminUsername = "admin";
     private final String supervisorUsername = "supervisor";
     private final String operadorUsername = "operador";
     private final String gerenteUsername = "gerente";
+    private final String choferUsername = "chofer";
 
     private UpdateRequestDTO updateUsuarioDTO;
     private  Usuario usuario;
@@ -90,26 +90,17 @@ class AuthServiceImplTest {
     }
 
    @Test
-   void habilitar_lanzaNotFoundException(){
+   @DisplayName("habilitar usuario que no existe lanza NotFoundException")
+   void habilitarUsuarioInvalido(){
        when(userRepository.findById(anyInt())).thenReturn(Optional.empty());
        assertThrows(NotFoundException.class,() -> authService.habilitar(anyInt()));
 
        verify(userRepository,never()).save(any(Usuario.class));
-
    }
 
     @Test
-    void habilitar_cambiaEstadoDelUsuarioAhabilitado(){
-        when(userRepository.findById(usuario.getId())).thenReturn(Optional.of(usuario));
-        authService.habilitar(usuario.getId());
-
-        assertEquals(usuario.getEstadoUsuario(),EstadoUsuario.HABILITADO);
-        verify(userRepository,times(1)).save(any(Usuario.class));
-
-    }
-
-    @Test
-    void inhabilitar_lanzaNotFoundException(){
+    @DisplayName("inhabilitar usuario que no existe lanza NotFoundException")
+    void inhabilitarUsuarioInvalido(){
         when(userRepository.findById(usuario.getId())).thenReturn(Optional.empty());
         assertThrows(NotFoundException.class,() -> authService.inhabilitar(usuario.getId()));
 
@@ -117,7 +108,56 @@ class AuthServiceImplTest {
     }
 
     @Test
-    void inhabilitar_cambiaEstadoDelUsuarioAinhabilitado(){
+    @DisplayName("actualizar usuario que no existe lanza NotFoundException")
+    void actualizarUsuarioInvalidoInvalido(){
+        when(userRepository.findById(usuario.getId())).thenReturn(Optional.empty());
+        assertThrows(NotFoundException.class,() -> authService.update(usuario.getId(),updateUsuarioDTO));
+
+        verify(userRepository,never()).save(any(Usuario.class));
+    }
+
+    @Test
+    @DisplayName("loguearse con nombre de usuario que no existe lanza NotFoundException")
+    void testLoginUsuarioNoExiste() {
+        String usuarioInexistente = "unknown";
+        LoginRequestDTO loginRequest = new LoginRequestDTO();
+        loginRequest.setUsername(usuarioInexistente);
+        loginRequest.setPassword(password);
+
+        when(authenticationManager.authenticate(any(UsernamePasswordAuthenticationToken.class)))
+                .thenReturn(null); // Simular autenticación NO exitosa
+        when(userRepository.findByUsuario(usuarioInexistente)).thenReturn(Optional.empty());
+
+        assertThrows(NotFoundException.class, () -> authService.login(loginRequest));
+        verify(authenticationManager).authenticate(any(UsernamePasswordAuthenticationToken.class));
+        verify(userRepository).findByUsuario(usuarioInexistente);
+    }
+
+    @Test
+    @DisplayName("Se registra usuario existente, lanza RegisterException")
+    void testRegisterUsuarioYaExiste() {
+        String usuarioAdmin = adminUsername;
+        RegisterRequestDTO registerRequest = new RegisterRequestDTO(usuarioAdmin, password, Rol.ADMINISTRADOR.toString());
+
+        when(userRepository.existsByUsuario(usuarioAdmin)).thenReturn(true);
+
+        assertThrows(RegisterException.class, () -> authService.register(registerRequest));
+        verify(userRepository, never()).save(any(Usuario.class));
+    }
+
+    @Test
+    @DisplayName("Se habilita usuario exitosamente")
+    void habilitarUsuario(){
+        when(userRepository.findById(usuario.getId())).thenReturn(Optional.of(usuario));
+        authService.habilitar(usuario.getId());
+
+        assertEquals(usuario.getEstadoUsuario(),EstadoUsuario.HABILITADO);
+        verify(userRepository,times(1)).save(any(Usuario.class));
+    }
+
+    @Test
+    @DisplayName("Se inhabilita usuario exitosamente")
+    void inhabilitarUsuario(){
         usuario.setEstadoUsuario(EstadoUsuario.HABILITADO);
         when(userRepository.findById(usuario.getId())).thenReturn(Optional.of(usuario));
         authService.inhabilitar(usuario.getId());
@@ -125,10 +165,10 @@ class AuthServiceImplTest {
         assertEquals(usuario.getEstadoUsuario(),EstadoUsuario.INHABILITADO);
         verify(userRepository,times(1)).save(any(Usuario.class));
         verify(choferService,never()).inhabilitarUsuarioChofer(usuario.getId());
-
     }
 
     @Test
+    @DisplayName("Se inhabilita chofer exitosamente")
     void inhabilitar_cambiaEstadoDelUsuarioYchoferAinhabilitado(){
         chofer.setEstadoUsuario(EstadoUsuario.HABILITADO);
         when(userRepository.findById(chofer.getId())).thenReturn(Optional.of(chofer));
@@ -141,7 +181,8 @@ class AuthServiceImplTest {
     }
 
     @Test
-    void getAll_devuelveTodosLosUsuarios(){
+    @DisplayName("Se ve todos los usuarios correctamente")
+    void getAll(){
         when(userRepository.findAll()).thenReturn(usuarios);
         List<GetUserDTO> usuariosRegistrados = authService.getAll();
 
@@ -150,16 +191,11 @@ class AuthServiceImplTest {
         assertEquals(usuariosRegistrados.get(1).getId(),usuarios.get(1).getId());
     }
 
-    @Test
-    void updateUsuarioInvalido_lanzaNotFounException(){
-        when(userRepository.findById(usuario.getId())).thenReturn(Optional.empty());
-        assertThrows(NotFoundException.class,() -> authService.update(usuario.getId(),updateUsuarioDTO));
 
-        verify(userRepository,never()).save(any(Usuario.class));
-    }
 
     @Test
-    void update_seActualizaUsuario(){
+    @DisplayName("Se actualiza usuario correctamente")
+    void actualizarUsuario(){
         when(userRepository.findById(usuario.getId())).thenReturn(Optional.of(usuario));
         when(passwordEncoder.encode(updateUsuarioDTO.getPassword())).thenReturn(updateUsuarioDTO.getPassword());
         authService.update(usuario.getId(),updateUsuarioDTO);
@@ -170,41 +206,49 @@ class AuthServiceImplTest {
     }
 
     @Test
-    void testLogin_Success_Admin() {
+    @DisplayName("Administrador se logue exitosamente")
+    void loginAdmin() {
         loginTestHelper(adminUsername, Rol.ADMINISTRADOR);
     }
 
     @Test
+    @DisplayName("Supervisor se logue exitosamente")
     void testLogin_Success_Supervisor() {
         loginTestHelper(supervisorUsername, Rol.SUPERVISOR);
     }
 
     @Test
+    @DisplayName("Operador se logue exitosamente")
     void testLogin_Success_Operador() {
         loginTestHelper(operadorUsername, Rol.OPERADOR);
     }
 
     @Test
+    @DisplayName("Gerente se logue exitosamente")
     void testLogin_Success_Gerente() {
         loginTestHelper(gerenteUsername, Rol.GERENTE);
     }
 
     @Test
+    @DisplayName("Administrador se registra exitosamente")
     void testRegister_Success_Admin() {
         registerTestHelper(adminUsername, Rol.ADMINISTRADOR);
     }
 
     @Test
+    @DisplayName("Supervisor se registra exitosamente")
     void testRegister_Success_Supervisor() {
         registerTestHelper(supervisorUsername, Rol.SUPERVISOR);
     }
 
     @Test
+    @DisplayName("Operador se registra exitosamente")
     void testRegister_Success_Operador() {
         registerTestHelper(operadorUsername, Rol.OPERADOR);
     }
 
     @Test
+    @DisplayName("Gerente se registra exitosamente")
     void testRegister_Success_Gerente() {
         registerTestHelper(gerenteUsername, Rol.GERENTE);
     }
@@ -255,33 +299,4 @@ class AuthServiceImplTest {
         assertEquals(role, response.getRole());
         verify(userRepository).save(any(Usuario.class));
     }
-
-    @Test
-    void testLoginUsuarioNoExiste() {
-        String usuarioInexistente = "unknown";
-        LoginRequestDTO loginRequest = new LoginRequestDTO();
-        loginRequest.setUsername(usuarioInexistente);
-        loginRequest.setPassword(password);
-
-        when(authenticationManager.authenticate(any(UsernamePasswordAuthenticationToken.class)))
-                .thenReturn(null); // Simular autenticación NO exitosa
-        when(userRepository.findByUsuario(usuarioInexistente)).thenReturn(Optional.empty());
-
-        assertThrows(NotFoundException.class, () -> authService.login(loginRequest));
-        verify(authenticationManager).authenticate(any(UsernamePasswordAuthenticationToken.class));
-        verify(userRepository).findByUsuario(usuarioInexistente);
-    }
-
-    @Test
-    void testRegisterUsuarioYaExiste() {
-        String usuarioAdmin = adminUsername;
-        RegisterRequestDTO registerRequest = new RegisterRequestDTO(usuarioAdmin, password, Rol.ADMINISTRADOR.toString());
-
-        when(userRepository.existsByUsuario(usuarioAdmin)).thenReturn(true);
-
-        assertThrows(RegisterException.class, () -> authService.register(registerRequest));
-        verify(userRepository, never()).save(any(Usuario.class));
-    }
-
-
 }

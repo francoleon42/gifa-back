@@ -10,6 +10,7 @@ import com.gifa_api.repository.ITarjetaRepository;
 import com.gifa_api.service.impl.CargaCombustibleServiceImpl;
 
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -69,24 +70,28 @@ class CargaCombustibleServiceImplTest {
     }
 
     @Test
-    void cargarCombustible_cantidadDeLitrosNoPuedeSerNull() {
+    @DisplayName("cargar combustible con campo litros igual a null lanza BadRequestException")
+    void cargarCombustibleCantidadLitrosNulo() {
         cargaCombustibleDTO.setCantidadLitros(null);
         verificarNoRegistroDeCargaDeCombustibleInvalida();
     }
 
     @Test
-    void cargarCombustible_cantidadDeLitrosDebeSerPositiva() {
+    @DisplayName("cargar combustible con campo litros igual a 0 lanza BadRequestException")
+    void cargarCombustibleSinLitros() {
         cargaCombustibleDTO.setCantidadLitros(0);
         verificarNoRegistroDeCargaDeCombustibleInvalida() ;
     }
 
     @Test
+    @DisplayName("cargar combustible con campo tarjeta igual a null lanza BadRequestException")
     void cargarCombustibleConCampoTarjetaVacio_lanzaBadRequestException(){
         cargaCombustibleDTO.setId(null);
         verificarNoRegistroDeCargaDeCombustibleInvalida() ;
     }
 
     @Test
+    @DisplayName("cargar combustible con tarjeta que no existe en la base de datos lanza NotFoundException")
     void cargarCombustible_tarjetaInvalidaLanzaExcepcion() {
         when(tarjetaRepository.findById(cargaCombustibleDTO.getId())).thenReturn(empty());
 
@@ -96,7 +101,8 @@ class CargaCombustibleServiceImplTest {
     }
 
     @Test
-    void cargarCombustible_tarjetaValida_yCargaExitosa() {
+    @DisplayName("cargar combustible correctamente con tarjeta existente")
+    void cargarCombustible() {
         Tarjeta tarjeta = new Tarjeta();
         tarjeta.setNumero(12345678); // Establecemos un número de tarjeta válido
 
@@ -108,7 +114,8 @@ class CargaCombustibleServiceImplTest {
     }
 
     @Test
-    void combustibleCargadoEntreFechas_devuelveListaDeCombustibles(){
+    @DisplayName("Ver combustible entre un rango de fechas")
+    void combustibleCargadoEntreFechas(){
         OffsetDateTime fechaActual= OffsetDateTime.now();
         OffsetDateTime fechaPosterior= OffsetDateTime.now().plusDays(1);
         Integer numeroDeTarjeta = 1;
